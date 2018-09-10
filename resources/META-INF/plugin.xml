@@ -1,35 +1,37 @@
 <idea-plugin>
-  <id>com.your.company.unique.plugin.id</id>
-  <name>Plugin display name here</name>
-  <version>1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+    <id>be.ugent.piedcler.dodona</id>
+    <name>Dodona Submit</name>
+    <version>0.1</version>
+    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io">Pieter De Clercq</vendor>
 
-  <description><![CDATA[
+    <description><![CDATA[
       Enter short description for your plugin here.<br>
       <em>most HTML tags may be used</em>
     ]]></description>
 
-  <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
-    ]]>
-  </change-notes>
+    <change-notes>Initial development version.</change-notes>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="173.0"/>
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="162.0"/>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-       on how to target different products -->
-  <!-- uncomment to enable plugin in all products
-  <depends>com.intellij.modules.lang</depends>
-  -->
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
 
-  <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
-  </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
 
-  <actions>
-    <!-- Add your actions here -->
-  </actions>
+    <actions>
+        <group id="be.ugent.piedcler.dodona.actions.DodonaActions" text="UGent Dodona" popup="false">
+            <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop" />
+            <action id="be.ugent.piedcler.dodona.submit" class="be.ugent.piedcler.dodona.actions.SubmitAction"
+                    text="Submit to Dodona" description="Submits the current file to Dodona."
+                    icon="ActionIcons.SUBMIT_ACTION">
+            </action>
+        </group>
+    </actions>
 
 </idea-plugin>
