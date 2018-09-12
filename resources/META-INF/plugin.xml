@@ -1,12 +1,11 @@
 <idea-plugin>
     <id>be.ugent.piedcler.dodona</id>
-    <name>Dodona Submit</name>
+    <name>Dodona</name>
     <version>0.1</version>
     <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io">Pieter De Clercq</vendor>
 
     <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+      This plugin allows you to submit your exercise to Dodona right from within your favourite JetBrains IDE.
     ]]></description>
 
     <change-notes>Initial development version.</change-notes>
@@ -21,7 +20,9 @@
     -->
 
     <extensions defaultExtensionNs="com.intellij">
-        <!-- Add your extensions here -->
+        <applicationConfigurable
+            displayName="Dodona Settings"
+            instance="be.ugent.piedcler.dodona.settings.DodonaSettings" />
     </extensions>
 
     <actions>
