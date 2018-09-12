@@ -26,7 +26,7 @@ public enum NotificationReporter {
 	 * @param message the message to display
 	 */
 	public static void error(final String message) {
-		NotificationReporter.showBalloon(NotificationType.ERROR, message);
+		NotificationReporter.showBalloon("Error", NotificationType.ERROR, message);
 	}
 	
 	/**
@@ -35,7 +35,7 @@ public enum NotificationReporter {
 	 * @param message the message to display
 	 */
 	public static void info(final String message) {
-		NotificationReporter.showBalloon(NotificationType.INFORMATION, message);
+		NotificationReporter.showBalloon("Information", NotificationType.INFORMATION, message);
 	}
 	
 	/**
@@ -44,9 +44,13 @@ public enum NotificationReporter {
 	 * @param type    the type of the message
 	 * @param message the message to display
 	 */
-	private static void showBalloon(final NotificationType type, final String message) {
+	private static void showBalloon(final String title, final NotificationType type, final String message) {
 		ApplicationManager.getApplication().invokeLater(() -> {
-			final Notification notification = NotificationReporter.NOTIFICATION_GROUP.createNotification(message, type);
+			final Notification notification = NotificationReporter.NOTIFICATION_GROUP.createNotification(
+					title,
+					message,
+					type,
+					NotificationListener.URL_OPENING_LISTENER);
 			Notifications.Bus.notify(notification);
 		});
 	}
@@ -57,6 +61,6 @@ public enum NotificationReporter {
 	 * @param message the message to display
 	 */
 	public static void warning(final String message) {
-		NotificationReporter.showBalloon(NotificationType.WARNING, message);
+		NotificationReporter.showBalloon("Warning", NotificationType.WARNING, message);
 	}
 }
