@@ -28,7 +28,6 @@ public class SubmitAction extends AnAction {
 		
 		final Course course = new UnknownCourse(58L);
 		final Exercise exercise = new UnknownExercise(516928727L, course);
-		SubmitExercise.submit(exercise, code);
 		
 		if (code != null) {
 			SubmitExercise.submit(exercise, code);

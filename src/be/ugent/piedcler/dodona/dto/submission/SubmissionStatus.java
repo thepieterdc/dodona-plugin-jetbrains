@@ -12,15 +12,15 @@ package be.ugent.piedcler.dodona.dto.submission;
  */
 public enum SubmissionStatus {
 	/**
-	 * The solution was accepted.
+	 * The solution was correct.
 	 */
-	ACCEPTED,
+	CORRECT("correct"),
 	/**
 	 * The solution was incorrect.
 	 */
-	INCORRECT,
+	INCORRECT("wrong/compilation error"),
 	/**
 	 * The solution has not yet been evaluated.
 	 */
-	PENDING;
+	PENDING("running");
 }
