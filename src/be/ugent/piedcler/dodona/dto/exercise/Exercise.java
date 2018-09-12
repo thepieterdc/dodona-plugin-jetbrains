@@ -7,16 +7,22 @@
  */
 package be.ugent.piedcler.dodona.dto.exercise;
 
+import be.ugent.piedcler.dodona.Configuration;
+import be.ugent.piedcler.dodona.dto.Resource;
 import be.ugent.piedcler.dodona.dto.course.Course;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * An exercise for Dodona.
  */
-public interface Exercise {
+public interface Exercise extends Resource {
+	@NonNls
+	String ENDPOINT_ID = Configuration.DODONA_URL + "/exercises/%d";
+	
 	/**
 	 * Gets the course this exercise belongs to.
 	 *
-	 * @return the exercise
+	 * @return the course
 	 */
 	Course getCourse();
 	
@@ -27,10 +33,8 @@ public interface Exercise {
 	 */
 	String getDisplayName();
 	
-	/**
-	 * Gets the id of the exercise.
-	 *
-	 * @return the id
-	 */
-	long getId();
+	@Override
+	default String getUrl() {
+		return String.format(Exercise.ENDPOINT_ID, this.getId());
+	}
 }
