@@ -7,12 +7,14 @@
  */
 package be.ugent.piedcler.dodona.api.responses;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NonNls;
 
 /**
  * The response of getting a Submission from Dodona.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SubmissionResponse {
 	@NonNls
 	public static final String STATUS_PENDING = "running";
