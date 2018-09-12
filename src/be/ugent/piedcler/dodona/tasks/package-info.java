@@ -7,6 +7,6 @@
  */
 
 /**
- * Watchers for status changes.
+ * Background tasks.
  */
-package be.ugent.piedcler.dodona.watchers;
+package be.ugent.piedcler.dodona.tasks;

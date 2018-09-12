@@ -26,12 +26,8 @@ public interface Exercise extends Resource {
 	 */
 	Course getCourse();
 	
-	/**
-	 * Gets the display name of the exercise.
-	 *
-	 * @return the display name
-	 */
-	String getDisplayName();
+	@Override
+	String toString();
 	
 	@Override
 	default String getUrl() {

@@ -8,10 +8,8 @@
 package be.ugent.piedcler.dodona.api;
 
 import be.ugent.piedcler.dodona.exceptions.warnings.MissingApiKeyException;
-import be.ugent.piedcler.dodona.reporting.NotificationReporter;
 import be.ugent.piedcler.dodona.settings.SettingsHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jetbrains.annotations.NonNls;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
@@ -30,10 +28,33 @@ import java.util.stream.Collectors;
 enum Http {
 	;
 	
-	@NonNls
-	private static final String BASE_URL = "https://dodona.ugent.be";
+	private static final String HEADER_AUTHORIZATION = "Authorization";
 	
 	private static final ObjectMapper mapper = new ObjectMapper();
+	
+	/**
+	 * Sends an authenticated HTTP GET request.
+	 *
+	 * @param endpoint  the endpoint to call
+	 * @param resultCls the result class
+	 */
+	static <T> T get(final String endpoint, final Class<T> resultCls) {
+		final String apiKey = SettingsHelper.getApiKey();
+		if (apiKey.isEmpty()) {
+			throw new MissingApiKeyException();
+		}
+		
+		try {
+			final URL url = new URL(endpoint);
+			
+			final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setRequestProperty(Http.HEADER_AUTHORIZATION, apiKey);
+			
+			return Http.mapper.readValue(connection.getInputStream(), resultCls);
+		} catch (final IOException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
 	
 	/**
 	 * Sends an authenticated HTTP POST request.
@@ -42,20 +63,19 @@ enum Http {
 	 * @param body      the request body to send
 	 * @param resultCls the result class
 	 */
-	//TODO check if an api token exists.
-	static <T> T post(final String endpoint, final Map<String, ?> body, Class<T> resultCls) {
+	static <T> T post(final String endpoint, final Map<String, ?> body, final Class<T> resultCls) {
 		final String apiKey = SettingsHelper.getApiKey();
 		if (apiKey.isEmpty()) {
 			throw new MissingApiKeyException();
 		}
 		
 		try {
-			final URL url = new URL(Http.BASE_URL + endpoint);
+			final URL url = new URL(endpoint);
 			
 			final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Authorization", apiKey);
+			connection.setRequestProperty(Http.HEADER_AUTHORIZATION, apiKey);
 			connection.setRequestProperty("Content-Type", "multipart/form-data");
 			
 			try (final OutputStream out = connection.getOutputStream()) {
@@ -64,8 +84,6 @@ enum Http {
 			
 			return Http.mapper.readValue(connection.getInputStream(), resultCls);
 		} catch (final IOException ex) {
-			//TODO improve this, lots
-			NotificationReporter.error("Something went wrong submitting your code. Please ensure your api token is valid.");
 			throw new RuntimeException(ex);
 		}
 	}

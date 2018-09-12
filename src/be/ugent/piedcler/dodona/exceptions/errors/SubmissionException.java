@@ -25,7 +25,7 @@ public class SubmissionException extends ErrorMessageException {
 	 */
 	public SubmissionException(final Submission submission) {
 		super(String.format(
-				"Something went wrong while submitting your solution. <a href=\"%s\">More info</a>",
+				"Something went wrong while submitting your solution. <a href=\"%s\">More details</a>",
 				submission.getUrl()
 		));
 	}

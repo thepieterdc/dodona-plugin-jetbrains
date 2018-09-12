@@ -18,12 +18,8 @@ public interface Course extends Resource {
 	@NonNls
 	String ENDPOINT_ID = Configuration.DODONA_URL + "/courses/%d";
 	
-	/**
-	 * Gets the display name of the course.
-	 *
-	 * @return the display name
-	 */
-	String getDisplayName();
+	@Override
+	String toString();
 	
 	@Override
 	default String getUrl() {

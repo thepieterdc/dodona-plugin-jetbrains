@@ -21,6 +21,6 @@ public class MissingApiKeyException extends WarningMessageException {
 	 * MissingApiKeyException constructor.
 	 */
 	public MissingApiKeyException() {
-		super("Please set your api token in the plugin settings. See the README at https://github.com/thepieterdc/ugent-dodona/ for instructions.");
+		super("Please set your api token in the plugin settings. See the README at <a href=\"https://github.com/thepieterdc/ugent-dodona/\">https://github.com/thepieterdc/ugent-dodona/</a> for instructions.");
 	}
 }
