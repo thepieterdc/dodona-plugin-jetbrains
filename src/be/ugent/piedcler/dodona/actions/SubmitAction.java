@@ -12,6 +12,7 @@ import be.ugent.piedcler.dodona.dto.course.Course;
 import be.ugent.piedcler.dodona.dto.course.UnknownCourse;
 import be.ugent.piedcler.dodona.dto.exercise.Exercise;
 import be.ugent.piedcler.dodona.dto.exercise.UnknownExercise;
+import be.ugent.piedcler.dodona.reporting.NotificationReporter;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -32,7 +33,7 @@ public class SubmitAction extends AnAction {
 		if (code != null) {
 			SubmitExercise.submit(exercise, code);
 		} else {
-			throw new RuntimeException("Code is null");
+			NotificationReporter.error("Failed to fetch the code.");
 		}
 	}
 }

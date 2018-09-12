@@ -7,6 +7,8 @@
  */
 package be.ugent.piedcler.dodona.api;
 
+import be.ugent.piedcler.dodona.exceptions.warnings.MissingApiKeyException;
+import be.ugent.piedcler.dodona.reporting.NotificationReporter;
 import be.ugent.piedcler.dodona.settings.SettingsHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NonNls;
@@ -42,13 +44,18 @@ enum Http {
 	 */
 	//TODO check if an api token exists.
 	static <T> T post(final String endpoint, final Map<String, ?> body, Class<T> resultCls) {
+		final String apiKey = SettingsHelper.getApiKey();
+		if (apiKey.isEmpty()) {
+			throw new MissingApiKeyException();
+		}
+		
 		try {
 			final URL url = new URL(Http.BASE_URL + endpoint);
 			
 			final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
-			connection.setRequestProperty("Authorization", SettingsHelper.getApiKey());
+			connection.setRequestProperty("Authorization", apiKey);
 			connection.setRequestProperty("Content-Type", "multipart/form-data");
 			
 			try (final OutputStream out = connection.getOutputStream()) {
@@ -57,7 +64,8 @@ enum Http {
 			
 			return Http.mapper.readValue(connection.getInputStream(), resultCls);
 		} catch (final IOException ex) {
-			System.out.println(ex.getMessage());
+			//TODO improve this, lots
+			NotificationReporter.error("Something went wrong submitting your code. Please ensure your api token is valid.");
 			throw new RuntimeException(ex);
 		}
 	}

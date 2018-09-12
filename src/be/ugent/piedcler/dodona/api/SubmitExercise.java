@@ -9,6 +9,7 @@ package be.ugent.piedcler.dodona.api;
 
 import be.ugent.piedcler.dodona.api.responses.SubmitResponse;
 import be.ugent.piedcler.dodona.dto.exercise.Exercise;
+import be.ugent.piedcler.dodona.reporting.NotificationReporter;
 import org.jetbrains.annotations.NonNls;
 
 import java.io.UnsupportedEncodingException;
@@ -47,9 +48,9 @@ public enum SubmitExercise {
 		final SubmitResponse response = Http.post(SubmitExercise.ENDPOINT_SUBMIT, body, SubmitResponse.class);
 		
 		if (response.getStatus().equals(SubmitResponse.STATUS_OK)) {
-			System.out.println("Woehoew!");
+			NotificationReporter.info("Solution successfully submitted.");
 		} else {
-			System.out.println("Nope");
+			NotificationReporter.error("Something went wrong while submitting your solution.");
 		}
 	}
 }
