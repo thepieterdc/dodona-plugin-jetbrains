@@ -19,6 +19,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import static be.ugent.piedcler.dodona.Configuration.DODONA_URL;
+
 /**
  * Utilities to submit exercises to Dodona.
  */
@@ -26,7 +28,7 @@ public enum Exercises {
 	;
 	
 	@NonNls
-	private static final String ENDPOINT_SUBMIT = "/submissions.json";
+	private static final String ENDPOINT_SUBMIT = DODONA_URL + "/submissions.json";
 	
 	/**
 	 * Submits an exercise to Dodona (synchronously).
