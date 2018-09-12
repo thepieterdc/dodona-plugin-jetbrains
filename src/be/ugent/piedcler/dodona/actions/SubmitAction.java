@@ -7,10 +7,8 @@
  */
 package be.ugent.piedcler.dodona.actions;
 
-import be.ugent.piedcler.dodona.dto.course.Course;
-import be.ugent.piedcler.dodona.dto.course.UnknownCourse;
+import be.ugent.piedcler.dodona.code.ExerciseIdentifier;
 import be.ugent.piedcler.dodona.dto.exercise.Exercise;
-import be.ugent.piedcler.dodona.dto.exercise.UnknownExercise;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.exceptions.errors.CodeReadException;
@@ -29,11 +27,10 @@ public class SubmitAction extends AnAction {
 	public void actionPerformed(final AnActionEvent event) {
 		final String code = event.getData(PlatformDataKeys.FILE_TEXT);
 		
-		final Course course = new UnknownCourse(58L);
-		final Exercise exercise = new UnknownExercise(516928727L, course);
-		
 		try {
 			if (code != null) {
+				final Exercise exercise = ExerciseIdentifier.identify(code).orElseThrow(() -> new RuntimeException("Unknown exercise"));
+				
 				ProgressManager.getInstance().run(new SubmitSolutionTask(event.getProject(), exercise, code));
 			} else {
 				throw new CodeReadException();
