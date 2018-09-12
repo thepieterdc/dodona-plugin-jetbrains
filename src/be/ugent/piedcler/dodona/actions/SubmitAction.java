@@ -9,7 +9,7 @@ package be.ugent.piedcler.dodona.actions;
 
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.DataKeys;
+import com.intellij.openapi.actionSystem.PlatformDataKeys;
 
 /**
  * Action that submits the current file to Dodona.
@@ -17,8 +17,8 @@ import com.intellij.openapi.actionSystem.DataKeys;
 public class SubmitAction extends AnAction {
 	
 	@Override
-	public void actionPerformed(AnActionEvent e) {
-		final String code = e.getData(DataKeys.FILE_TEXT);
+	public void actionPerformed(final AnActionEvent anActionEvent) {
+		final String code = anActionEvent.getData(PlatformDataKeys.FILE_TEXT);
 		
 		if (code != null) {
 			//extract course/exercise from code
