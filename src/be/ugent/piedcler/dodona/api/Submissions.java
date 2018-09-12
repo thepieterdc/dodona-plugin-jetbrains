@@ -25,9 +25,7 @@ public enum Submissions {
 	 * @return the updated submission
 	 */
 	public static Submission get(final Submission submission) {
-		final String url = String.format("%s.json", submission.getUrl());
-		
-		final SubmissionResponse response = Http.get(url, SubmissionResponse.class);
+		final SubmissionResponse response = Http.get(submission.getUrl(), SubmissionResponse.class);
 		
 		if (response.isAccepted()) {
 			return new AcceptedSubmission(submission.getId(), submission.getExercise());

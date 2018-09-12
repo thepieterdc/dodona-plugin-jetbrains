@@ -39,7 +39,12 @@ public final class UnknownExercise implements Exercise {
 	}
 	
 	@Override
-	public String toString() {
+	public String getName() {
 		return String.format("Exercise %d", this.id);
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("Exercise{id=%d}", this.id);
 	}
 }

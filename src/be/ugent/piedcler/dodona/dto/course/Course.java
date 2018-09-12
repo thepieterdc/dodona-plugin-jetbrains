@@ -18,11 +18,29 @@ public interface Course extends Resource {
 	@NonNls
 	String ENDPOINT_ID = Configuration.DODONA_URL + "/courses/%d";
 	
-	@Override
-	String toString();
+	/**
+	 * Gets the name of the course.
+	 *
+	 * @return the name
+	 */
+	String getName();
+	
+	/**
+	 * Gets the teacher of the course.
+	 *
+	 * @return the teacher
+	 */
+	String getTeacher();
 	
 	@Override
 	default String getUrl() {
 		return String.format(Course.ENDPOINT_ID, this.getId());
 	}
+	
+	/**
+	 * Gets the academic year this course is taught.
+	 *
+	 * @return the academic year
+	 */
+	String getYear();
 }

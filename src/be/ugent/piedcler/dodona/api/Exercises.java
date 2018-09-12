@@ -28,7 +28,7 @@ public enum Exercises {
 	;
 	
 	@NonNls
-	private static final String ENDPOINT_SUBMIT = DODONA_URL + "/submissions.json";
+	private static final String ENDPOINT_SUBMIT = DODONA_URL + "/submissions";
 	
 	/**
 	 * Submits an exercise to Dodona (synchronously).

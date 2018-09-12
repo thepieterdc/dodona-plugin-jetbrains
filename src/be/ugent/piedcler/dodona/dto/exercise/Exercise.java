@@ -26,8 +26,12 @@ public interface Exercise extends Resource {
 	 */
 	Course getCourse();
 	
-	@Override
-	String toString();
+	/**
+	 * Gets the name of the exercise.
+	 *
+	 * @return the name
+	 */
+	String getName();
 	
 	@Override
 	default String getUrl() {

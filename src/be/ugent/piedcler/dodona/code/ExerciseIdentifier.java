@@ -11,6 +11,7 @@ import be.ugent.piedcler.dodona.dto.course.Course;
 import be.ugent.piedcler.dodona.dto.course.UnknownCourse;
 import be.ugent.piedcler.dodona.dto.exercise.Exercise;
 import be.ugent.piedcler.dodona.dto.exercise.UnknownExercise;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -34,7 +35,8 @@ public enum ExerciseIdentifier {
 	 * @param code the code to process
 	 * @return the exercise found
 	 */
-	public static Optional<Exercise> identify(final CharSequence code) {
+	@NotNull
+	public static Optional<Exercise> identify(@NotNull final CharSequence code) {
 		final Matcher matcher = ExerciseIdentifier.regex.matcher(code);
 		if (matcher.find() && (matcher.groupCount() == 2)) {
 			final String courseId = matcher.group(ExerciseIdentifier.GROUP_COURSE);

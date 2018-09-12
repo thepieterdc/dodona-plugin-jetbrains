@@ -28,6 +28,8 @@ import java.util.stream.Collectors;
 enum Http {
 	;
 	
+	private static final String HEADER_ACCEPT_KEY = "Accept";
+	private static final String HEADER_ACCEPT_VALUE = "application/json";
 	private static final String HEADER_AUTHORIZATION = "Authorization";
 	
 	private static final ObjectMapper mapper = new ObjectMapper();
@@ -48,6 +50,7 @@ enum Http {
 			final URL url = new URL(endpoint);
 			
 			final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setRequestProperty(Http.HEADER_ACCEPT_KEY, Http.HEADER_ACCEPT_VALUE);
 			connection.setRequestProperty(Http.HEADER_AUTHORIZATION, apiKey);
 			
 			return Http.mapper.readValue(connection.getInputStream(), resultCls);
@@ -75,6 +78,7 @@ enum Http {
 			final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 			connection.setDoOutput(true);
 			connection.setRequestMethod("POST");
+			connection.setRequestProperty(Http.HEADER_ACCEPT_KEY, Http.HEADER_ACCEPT_VALUE);
 			connection.setRequestProperty(Http.HEADER_AUTHORIZATION, apiKey);
 			connection.setRequestProperty("Content-Type", "multipart/form-data");
 			

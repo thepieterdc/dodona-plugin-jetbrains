@@ -29,7 +29,22 @@ public final class UnknownCourse implements Course {
 	}
 	
 	@Override
-	public String toString() {
+	public String getName() {
 		return String.format("Course %d", this.id);
+	}
+	
+	@Override
+	public String getTeacher() {
+		return "Unknown";
+	}
+	
+	@Override
+	public String getYear() {
+		return "Unknown";
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("UnknownCourse{id=%d}", this.id);
 	}
 }

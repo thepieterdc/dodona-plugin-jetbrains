@@ -40,7 +40,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 	 * @param solution the solution
 	 */
 	public SubmitSolutionTask(final Project project, final Exercise exercise, final String solution) {
-		super(project, String.format("Evaluation for %s", exercise));
+		super(project, String.format("Evaluation for %s", exercise.getName()));
 		this.exercise = exercise;
 		this.solution = solution;
 	}
@@ -75,7 +75,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			progressIndicator.setText("Evaluation completed");
 			
 			if (submission.getStatus() == SubmissionStatus.CORRECT) {
-				NotificationReporter.info(String.format("Solution to %s was correct!", submission.getExercise()));
+				NotificationReporter.info(String.format("Solution to %s was correct!", submission.getExercise().getName()));
 			} else {
 				throw new IncorrectSubmissionException(submission);
 			}
