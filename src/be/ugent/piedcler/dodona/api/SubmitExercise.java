@@ -7,9 +7,12 @@
  */
 package be.ugent.piedcler.dodona.api;
 
+import be.ugent.piedcler.dodona.api.responses.SubmitResponse;
 import be.ugent.piedcler.dodona.dto.exercise.Exercise;
 import org.jetbrains.annotations.NonNls;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,14 +34,22 @@ public enum SubmitExercise {
 	//TODO provide feedback. Issue #2.
 	public static void submit(final Exercise exercise, final String code) {
 		final Map<String, Object> body = new HashMap<>(3);
-		body.put("submission[code]", code);
+		
+		try {
+			body.put("submission[code]", URLEncoder.encode(code, "UTF-8"));
+		} catch (final UnsupportedEncodingException ex) {
+			throw new RuntimeException(ex);
+		}
+		
 		body.put("submission[course_id]", exercise.getCourse().getId());
 		body.put("submission[exercise_id]", exercise.getId());
 		
-		try {
-			Http.post(SubmitExercise.ENDPOINT_SUBMIT, body);
-		} catch(final Exception ex) {
-			ex.printStackTrace();
+		final SubmitResponse response = Http.post(SubmitExercise.ENDPOINT_SUBMIT, body, SubmitResponse.class);
+		
+		if (response.getStatus().equals(SubmitResponse.STATUS_OK)) {
+			System.out.println("Woehoew!");
+		} else {
+			System.out.println("Nope");
 		}
 	}
 }

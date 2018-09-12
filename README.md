@@ -21,4 +21,5 @@ You can access the settings by selecting `Settings` in the `File` menu, or by pr
 ## Credits
 - Plugin developed by Pieter De Clercq <piedcler.declercq@ugent.be>.
 - Thanks to [Rien Maertens](https://github.com/rien) for explaining the authentication procedure.
+- JSON library by [Sean Leary](https://github.com/stleary/JSON-java).
 - Icons are property of [FontAwesome](http://fontawesome.io).

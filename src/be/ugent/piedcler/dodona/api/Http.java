@@ -8,6 +8,7 @@
 package be.ugent.piedcler.dodona.api;
 
 import be.ugent.piedcler.dodona.settings.SettingsHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jetbrains.annotations.NonNls;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -30,27 +31,35 @@ enum Http {
 	@NonNls
 	private static final String BASE_URL = "https://dodona.ugent.be";
 	
+	private static final ObjectMapper mapper = new ObjectMapper();
+	
 	/**
 	 * Sends an authenticated HTTP POST request.
 	 *
-	 * @param endpoint the endpoint to call
-	 * @param body     the request body to send
+	 * @param endpoint  the endpoint to call
+	 * @param body      the request body to send
+	 * @param resultCls the result class
 	 */
 	//TODO check if an api token exists.
-	static void post(final String endpoint, final Map<String, ?> body) throws IOException {
-		final URL url = new URL(Http.BASE_URL + endpoint);
-		
-		final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-		connection.setDoOutput(true);
-		connection.setRequestMethod("POST");
-		connection.setRequestProperty("Authorization", SettingsHelper.getApiKey());
-		connection.setRequestProperty("Content-Type", "multipart/form-data");
-		
-		try(final OutputStream out = connection.getOutputStream()) {
-			out.write(Http.toQueryString(body).getBytes(Charset.defaultCharset()));
+	static <T> T post(final String endpoint, final Map<String, ?> body, Class<T> resultCls) {
+		try {
+			final URL url = new URL(Http.BASE_URL + endpoint);
+			
+			final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setDoOutput(true);
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("Authorization", SettingsHelper.getApiKey());
+			connection.setRequestProperty("Content-Type", "multipart/form-data");
+			
+			try (final OutputStream out = connection.getOutputStream()) {
+				out.write(Http.toQueryString(body).getBytes(Charset.defaultCharset()));
+			}
+			
+			return Http.mapper.readValue(connection.getInputStream(), resultCls);
+		} catch (final IOException ex) {
+			System.out.println(ex.getMessage());
+			throw new RuntimeException(ex);
 		}
-		
-		connection.disconnect();
 	}
 	
 	/**
@@ -64,6 +73,6 @@ enum Http {
 				.entrySet()
 				.stream()
 				.map(e -> String.format("%s=%s", e.getKey(), e.getValue()))
-				.collect(Collectors.joining());
+				.collect(Collectors.joining("&"));
 	}
 }
