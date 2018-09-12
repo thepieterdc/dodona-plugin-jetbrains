@@ -14,13 +14,13 @@ public enum SubmissionStatus {
 	/**
 	 * The solution was correct.
 	 */
-	CORRECT("correct"),
+	CORRECT,
 	/**
 	 * The solution was incorrect.
 	 */
-	INCORRECT("wrong/compilation error"),
+	INCORRECT,
 	/**
 	 * The solution has not yet been evaluated.
 	 */
-	PENDING("running");
+	PENDING;
 }

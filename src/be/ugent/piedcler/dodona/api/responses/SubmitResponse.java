@@ -10,6 +10,9 @@ package be.ugent.piedcler.dodona.api.responses;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NonNls;
 
+/**
+ * The response from a submitting a solution to Dodona.
+ */
 public class SubmitResponse {
 	@NonNls
 	public static final String STATUS_OK = "ok";

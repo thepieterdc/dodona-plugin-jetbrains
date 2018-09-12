@@ -33,6 +33,7 @@ public enum Exercises {
 	 *
 	 * @param exercise the exercise to submit
 	 * @param code     the solution to submit
+	 * @return the submission (pending)
 	 */
 	public static Submission submit(final Exercise exercise, final String code) {
 		final Map<String, Object> body = new HashMap<>(3);

@@ -20,7 +20,7 @@ public final class UnknownExercise implements Exercise {
 	/**
 	 * UnknownExercise constructor.
 	 *
-	 * @param id the id of the exercise
+	 * @param id     the id of the exercise
 	 * @param course the course
 	 */
 	public UnknownExercise(final long id, final Course course) {
@@ -34,12 +34,12 @@ public final class UnknownExercise implements Exercise {
 	}
 	
 	@Override
-	public String getDisplayName() {
-		return String.format("Exercise %d", this.id);
+	public long getId() {
+		return this.id;
 	}
 	
 	@Override
-	public long getId() {
-		return this.id;
+	public String toString() {
+		return String.format("Exercise %d", this.id);
 	}
 }

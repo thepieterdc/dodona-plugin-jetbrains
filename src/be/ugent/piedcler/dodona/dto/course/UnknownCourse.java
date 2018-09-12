@@ -17,19 +17,19 @@ public final class UnknownCourse implements Course {
 	/**
 	 * UnknownCourse constructor.
 	 *
-	 * @param id     the id of the course
+	 * @param id the id of the course
 	 */
 	public UnknownCourse(final long id) {
 		this.id = id;
 	}
 	
 	@Override
-	public String getDisplayName() {
-		return String.format("Course %d", this.id);
+	public long getId() {
+		return this.id;
 	}
 	
 	@Override
-	public long getId() {
-		return this.id;
+	public String toString() {
+		return String.format("Course %d", this.id);
 	}
 }
