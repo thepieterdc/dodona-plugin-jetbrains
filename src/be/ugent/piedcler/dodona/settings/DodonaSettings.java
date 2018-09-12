@@ -1,11 +1,9 @@
 /*
- * Copyright (c) 2018 - Singular-IT. All rights reserved.
+ * Copyright (c) 2018. All rights reserved.
  *
  * @author Pieter De Clercq
- * @author Julie De Meyer
- * @author Robbe Vanhaesebroeck
  *
- * https://www.limpio.online/
+ * https://github.com/thepieterdc/ugent-dodona/
  */
 package be.ugent.piedcler.dodona.settings;
 
@@ -23,19 +21,24 @@ public class DodonaSettings implements Configurable {
 	private JPanel panelRoot;
 	private JLabel lblFormDescription;
 	private JLabel lblApiKey;
+	private JLabel lblApiKeyInstructions;
 	private JTextField fieldApiKey;
 	
 	@Override
 	public void apply() {
-		System.out.println(this.fieldApiKey.getText().trim());
+		SettingsHelper.setApiKey(this.fieldApiKey.getText().trim());
 	}
 	
 	@Nullable
 	@Override
 	public JComponent createComponent() {
 		this.lblFormDescription.setText(DodonaBundle.message("settings.description"));
+		
 		this.lblApiKey.setText(DodonaBundle.message("settings.apikey.title"));
+		this.lblApiKeyInstructions.setText(DodonaBundle.message("settings.apikey.instructions"));
 		this.fieldApiKey.setToolTipText(DodonaBundle.message("settings.apikey.tooltip"));
+		this.updateApiKeyFromSettings();
+		
 		return this.panelRoot;
 	}
 	
@@ -52,11 +55,18 @@ public class DodonaSettings implements Configurable {
 	
 	@Override
 	public boolean isModified() {
-		return false;
+		return !SettingsHelper.getApiKey().equals(this.fieldApiKey.getText().trim());
 	}
 	
 	@Override
 	public void reset() {
 	
+	}
+	
+	/**
+	 * Sets the value of the API key field.
+	 */
+	private void updateApiKeyFromSettings() {
+		this.fieldApiKey.setText(SettingsHelper.getApiKey());
 	}
 }

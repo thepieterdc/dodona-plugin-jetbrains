@@ -5,11 +5,8 @@
  *
  * https://github.com/thepieterdc/ugent-dodona/
  */
-package be.ugent.piedcler.dodona.dto;
 
 /**
- * DTO: An exercise on Dodona.
+ * Simple DTO objects.
  */
-public class Exercise {
-
-}
+package be.ugent.piedcler.dodona.dto;

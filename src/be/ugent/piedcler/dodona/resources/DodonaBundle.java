@@ -1,11 +1,9 @@
 /*
- * Copyright (c) 2018 - Singular-IT. All rights reserved.
+ * Copyright (c) 2018. All rights reserved.
  *
  * @author Pieter De Clercq
- * @author Julie De Meyer
- * @author Robbe Vanhaesebroeck
  *
- * https://www.limpio.online/
+ * https://github.com/thepieterdc/ugent-dodona/
  */
 package be.ugent.piedcler.dodona.resources;
 
@@ -21,10 +19,10 @@ import java.util.ResourceBundle;
 /**
  * Provides access to the properties file.
  */
-public class DodonaBundle {
+public final class DodonaBundle {
 	@NonNls
 	private static final String BUNDLE = "resources.dodona";
-	private static Reference<ResourceBundle> bundle;
+	private static Reference<ResourceBundle> bundle = null;
 	
 	/**
 	 * DodonaBundle constructor.
@@ -40,9 +38,9 @@ public class DodonaBundle {
 	 * @param params additional formatting parameters
 	 * @return the formatted string
 	 */
-	public static String message(@NotNull @NonNls @PropertyKey(resourceBundle = BUNDLE) final String key,
+	public static String message(@NotNull @NonNls @PropertyKey(resourceBundle = DodonaBundle.BUNDLE) final String key,
 	                             @NotNull final Object... params) {
-		return CommonBundle.message(getBundle(), key, params);
+		return CommonBundle.message(DodonaBundle.getBundle(), key, params);
 	}
 	
 	/**
@@ -51,10 +49,10 @@ public class DodonaBundle {
 	 * @return the properties file
 	 */
 	private static ResourceBundle getBundle() {
-		ResourceBundle ret = SoftReference.dereference(bundle);
+		ResourceBundle ret = SoftReference.dereference(DodonaBundle.bundle);
 		if (ret == null) {
-			ret = ResourceBundle.getBundle(BUNDLE);
-			bundle = new java.lang.ref.SoftReference<>(ret);
+			ret = ResourceBundle.getBundle(DodonaBundle.BUNDLE);
+			DodonaBundle.bundle = new java.lang.ref.SoftReference<>(ret);
 		}
 		
 		return ret;
