@@ -8,7 +8,6 @@
 package be.ugent.piedcler.dodona.api;
 
 import be.ugent.piedcler.dodona.Configuration;
-import be.ugent.piedcler.dodona.api.responses.RootResponse;
 import be.ugent.piedcler.dodona.api.responses.SubmitResponse;
 import be.ugent.piedcler.dodona.dto.course.Course;
 import be.ugent.piedcler.dodona.dto.exercise.Exercise;
@@ -20,6 +19,7 @@ import org.jetbrains.annotations.NonNls;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +39,7 @@ public enum Exercises {
 	 * @return the exercises
 	 */
 	public static Collection<Exercise> getAll(final Course course) {
-		return Http.get(Configuration.DODONA_URL, RootResponse.class).getUser().getSubscribedCourses();
+		return Collections.emptySet();
 	}
 	
 	/**

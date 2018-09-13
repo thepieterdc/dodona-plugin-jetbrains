@@ -13,7 +13,6 @@ import java.util.Collection;
  */
 public class SelectCourseDialog extends JDialog {
 	private JPanel contentPane;
-	private JButton confirmButton;
 	private JBList<Course> coursesList;
 	
 	@Nullable
@@ -21,6 +20,8 @@ public class SelectCourseDialog extends JDialog {
 	
 	/**
 	 * SelectCourseDialog constructor.
+	 *
+	 * @param courses the courses to select from
 	 */
 	public SelectCourseDialog(final Collection<Course> courses) {
 		this.createComponents();
@@ -36,7 +37,6 @@ public class SelectCourseDialog extends JDialog {
 	private void createComponents() {
 		this.setContentPane(this.contentPane);
 		this.setModal(true);
-		this.getRootPane().setDefaultButton(this.confirmButton);
 	}
 	
 	/**
