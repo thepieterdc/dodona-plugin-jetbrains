@@ -5,11 +5,12 @@
  *
  * https://github.com/thepieterdc/ugent-dodona/
  */
-package be.ugent.piedcler.dodona.dto.course;
+package be.ugent.piedcler.dodona.dto;
 
 import be.ugent.piedcler.dodona.Configuration;
-import be.ugent.piedcler.dodona.dto.Resource;
 import org.jetbrains.annotations.NonNls;
+
+import java.util.Collection;
 
 /**
  * A course on Dodona.
@@ -24,6 +25,13 @@ public interface Course extends Resource {
 	 * @return the name
 	 */
 	String getName();
+	
+	/**
+	 * Gets the series in this course.
+	 *
+	 * @return the series
+	 */
+	Collection<Series> getSeries();
 	
 	/**
 	 * Gets the teacher of the course.

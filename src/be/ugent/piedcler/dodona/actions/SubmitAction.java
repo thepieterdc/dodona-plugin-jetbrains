@@ -8,7 +8,7 @@
 package be.ugent.piedcler.dodona.actions;
 
 import be.ugent.piedcler.dodona.code.ExerciseIdentifier;
-import be.ugent.piedcler.dodona.dto.exercise.Exercise;
+import be.ugent.piedcler.dodona.dto.Exercise;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.exceptions.errors.CodeReadException;

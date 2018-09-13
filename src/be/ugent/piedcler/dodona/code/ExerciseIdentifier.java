@@ -7,9 +7,9 @@
  */
 package be.ugent.piedcler.dodona.code;
 
-import be.ugent.piedcler.dodona.dto.course.Course;
+import be.ugent.piedcler.dodona.dto.Course;
 import be.ugent.piedcler.dodona.dto.course.UnknownCourse;
-import be.ugent.piedcler.dodona.dto.exercise.Exercise;
+import be.ugent.piedcler.dodona.dto.Exercise;
 import be.ugent.piedcler.dodona.dto.exercise.UnknownExercise;
 import org.jetbrains.annotations.NotNull;
 

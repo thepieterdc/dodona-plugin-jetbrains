@@ -7,7 +7,7 @@
  */
 package be.ugent.piedcler.dodona.dto.submission;
 
-import be.ugent.piedcler.dodona.dto.exercise.Exercise;
+import be.ugent.piedcler.dodona.dto.Exercise;
 
 /**
  * A submission for Dodona which is accepted.

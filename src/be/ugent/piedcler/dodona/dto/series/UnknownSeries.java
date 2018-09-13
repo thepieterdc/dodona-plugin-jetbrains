@@ -7,8 +7,9 @@
  */
 package be.ugent.piedcler.dodona.dto.series;
 
-import be.ugent.piedcler.dodona.dto.course.Course;
-import be.ugent.piedcler.dodona.dto.exercise.Exercise;
+import be.ugent.piedcler.dodona.dto.Course;
+import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.dto.Series;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NotNull;

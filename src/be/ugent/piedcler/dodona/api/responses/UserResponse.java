@@ -7,8 +7,6 @@
  */
 package be.ugent.piedcler.dodona.api.responses;
 
-import be.ugent.piedcler.dodona.dto.course.Course;
-import be.ugent.piedcler.dodona.dto.course.KnownCourse;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -21,14 +19,14 @@ import java.util.HashSet;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserResponse {
-	private final Collection<Course> subscribed_courses;
+	private final Collection<CourseResponse> subscribed_courses;
 	
 	/**
 	 * UserResponse constructor.
 	 *
 	 * @param subscribedCourses the subscribed courses of the user
 	 */
-	public UserResponse(@JsonProperty("subscribed_courses") final Collection<KnownCourse> subscribedCourses) {
+	public UserResponse(@JsonProperty("subscribed_courses") final Collection<CourseResponse> subscribedCourses) {
 		this.subscribed_courses = new HashSet<>(subscribedCourses);
 	}
 	
@@ -37,7 +35,7 @@ public class UserResponse {
 	 *
 	 * @return the subscribed courses
 	 */
-	public Collection<Course> getSubscribedCourses() {
+	public Collection<CourseResponse> getSubscribedCourses() {
 		return Collections.unmodifiableCollection(this.subscribed_courses);
 	}
 }

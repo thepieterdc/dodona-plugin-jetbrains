@@ -10,7 +10,8 @@ package be.ugent.piedcler.dodona.api;
 import be.ugent.piedcler.dodona.Configuration;
 import be.ugent.piedcler.dodona.api.responses.SeriesResponse;
 import be.ugent.piedcler.dodona.api.responses.SubmitResponse;
-import be.ugent.piedcler.dodona.dto.exercise.Exercise;
+import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.dto.Series;
 import be.ugent.piedcler.dodona.dto.submission.PendingSubmission;
 import be.ugent.piedcler.dodona.dto.submission.Submission;
 import be.ugent.piedcler.dodona.exceptions.errors.SubmissionException;
@@ -37,7 +38,7 @@ public enum Exercises {
 	 * @param series the series
 	 * @return the exercises
 	 */
-	public static Collection<Exercise> getAll(final be.ugent.piedcler.dodona.dto.series.Series series) {
+	public static Collection<Exercise> getAll(final Series series) {
 		return Http.get(series.getUrl(), SeriesResponse.class).getExercises();
 	}
 	

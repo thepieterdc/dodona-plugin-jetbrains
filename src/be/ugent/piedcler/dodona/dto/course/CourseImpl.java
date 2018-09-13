@@ -7,33 +7,36 @@
  */
 package be.ugent.piedcler.dodona.dto.course;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import be.ugent.piedcler.dodona.dto.Course;
+import be.ugent.piedcler.dodona.dto.Series;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 
 /**
- * A course of which all details are known since it was fetched from Dodona.
+ * Implementation class of Course.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public final class KnownCourse implements Course {
+public final class CourseImpl implements Course {
 	private final long id;
 	private final String name;
+	private final Collection<Series> series;
 	private final String teacher;
 	private final String year;
 	
 	/**
-	 * KnownCourse constructor.
+	 * CourseImpl constructor.
 	 *
 	 * @param id      the id of the course
 	 * @param name    the name of the course
 	 * @param teacher the teacher of the course
 	 * @param year    the academic year
 	 */
-	public KnownCourse(@JsonProperty("id") final long id,
-	                   @JsonProperty("name") final String name,
-	                   @JsonProperty("teacher") final String teacher,
-	                   @JsonProperty("year") final String year) {
+	public CourseImpl(final long id, final String name, final String teacher, final String year) {
 		this.id = id;
 		this.name = name;
+		this.series = new HashSet<>(10);
 		this.teacher = teacher;
 		this.year = year;
 	}
@@ -49,6 +52,11 @@ public final class KnownCourse implements Course {
 	}
 	
 	@Override
+	public Collection<Series> getSeries() {
+		return Collections.unmodifiableCollection(this.series);
+	}
+	
+	@Override
 	public String getTeacher() {
 		return this.teacher;
 	}
@@ -56,6 +64,19 @@ public final class KnownCourse implements Course {
 	@Override
 	public String getYear() {
 		return this.year;
+	}
+	
+	/**
+	 * Sets the exercise series of this course.
+	 *
+	 * @param series the exercise series
+	 * @return fluent setter
+	 */
+	@NotNull
+	public Course setSeries(final Collection<Series> series) {
+		this.series.clear();
+		this.series.addAll(series);
+		return this;
 	}
 	
 	@Override

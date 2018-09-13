@@ -23,6 +23,8 @@
         <applicationConfigurable
             displayName="Dodona Settings"
             instance="be.ugent.piedcler.dodona.settings.DodonaSettings" />
+        <applicationService serviceInterface="be.ugent.piedcler.dodona.services.CourseService"
+                            serviceImplementation="be.ugent.piedcler.dodona.services.impl.CourseServiceImpl"/>
     </extensions>
 
     <actions>

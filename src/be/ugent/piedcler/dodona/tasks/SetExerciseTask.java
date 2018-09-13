@@ -9,9 +9,9 @@ package be.ugent.piedcler.dodona.tasks;
 
 import be.ugent.piedcler.dodona.api.Courses;
 import be.ugent.piedcler.dodona.api.Exercises;
-import be.ugent.piedcler.dodona.dto.course.Course;
-import be.ugent.piedcler.dodona.dto.exercise.Exercise;
-import be.ugent.piedcler.dodona.dto.series.Series;
+import be.ugent.piedcler.dodona.dto.Course;
+import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.dto.Series;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.reporting.NotificationReporter;

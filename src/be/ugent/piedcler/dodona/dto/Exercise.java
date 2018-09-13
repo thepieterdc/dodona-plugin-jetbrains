@@ -5,11 +5,9 @@
  *
  * https://github.com/thepieterdc/ugent-dodona/
  */
-package be.ugent.piedcler.dodona.dto.exercise;
+package be.ugent.piedcler.dodona.dto;
 
 import be.ugent.piedcler.dodona.Configuration;
-import be.ugent.piedcler.dodona.dto.Resource;
-import be.ugent.piedcler.dodona.dto.course.Course;
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -18,13 +16,6 @@ import org.jetbrains.annotations.NonNls;
 public interface Exercise extends Resource {
 	@NonNls
 	String ENDPOINT_ID = Configuration.DODONA_URL + "/exercises/%d";
-	
-	/**
-	 * Gets the course this exercise belongs to.
-	 *
-	 * @return the course
-	 */
-	Course getCourse();
 	
 	/**
 	 * Gets the name of the exercise.

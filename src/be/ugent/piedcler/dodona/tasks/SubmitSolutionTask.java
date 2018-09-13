@@ -9,7 +9,7 @@ package be.ugent.piedcler.dodona.tasks;
 
 import be.ugent.piedcler.dodona.api.Exercises;
 import be.ugent.piedcler.dodona.api.Submissions;
-import be.ugent.piedcler.dodona.dto.exercise.Exercise;
+import be.ugent.piedcler.dodona.dto.Exercise;
 import be.ugent.piedcler.dodona.dto.submission.Submission;
 import be.ugent.piedcler.dodona.dto.submission.SubmissionStatus;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
@@ -50,6 +50,9 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 		try {
 			progressIndicator.setFraction(0.10);
 			progressIndicator.setText("Submitting to Dodona...");
+			
+			// TODO: check if the course and exercise exist and throw an error if not,
+			// TODO  not entirely required but would probably be a nice improvement.
 			
 			Submission submission = Exercises.submit(this.exercise, this.solution);
 			NotificationReporter.info("Solution successfully submitted, awaiting evaluation.");

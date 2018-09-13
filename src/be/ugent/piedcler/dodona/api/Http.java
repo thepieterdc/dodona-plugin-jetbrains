@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * TODO: rework this using a HTTP library, issue #5.
  * TODO: better error handling, issue #7.
  */
-enum Http {
+public enum Http {
 	;
 	
 	private static final String HEADER_ACCEPT_KEY = "Accept";
@@ -40,7 +40,7 @@ enum Http {
 	 * @param endpoint  the endpoint to call
 	 * @param resultCls the result class
 	 */
-	static <T> T get(final String endpoint, final Class<T> resultCls) {
+	public static <T> T get(final String endpoint, final Class<T> resultCls) {
 		final String apiKey = SettingsHelper.getApiKey();
 		if (apiKey.isEmpty()) {
 			throw new MissingApiKeyException();
@@ -66,7 +66,7 @@ enum Http {
 	 * @param body      the request body to send
 	 * @param resultCls the result class
 	 */
-	static <T> T post(final String endpoint, final Map<String, ?> body, final Class<T> resultCls) {
+	public static <T> T post(final String endpoint, final Map<String, ?> body, final Class<T> resultCls) {
 		final String apiKey = SettingsHelper.getApiKey();
 		if (apiKey.isEmpty()) {
 			throw new MissingApiKeyException();

@@ -16,5 +16,5 @@ public enum Configuration {
 	;
 	
 	@NonNls
-	public static final String DODONA_URL = "https://naos.ugent.be/en";
+	public static final String DODONA_URL = "https://naos.ugent.be";
 }

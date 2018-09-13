@@ -9,7 +9,7 @@ package be.ugent.piedcler.dodona.dto.submission;
 
 import be.ugent.piedcler.dodona.Configuration;
 import be.ugent.piedcler.dodona.dto.Resource;
-import be.ugent.piedcler.dodona.dto.exercise.Exercise;
+import be.ugent.piedcler.dodona.dto.Exercise;
 import org.jetbrains.annotations.NonNls;
 
 /**

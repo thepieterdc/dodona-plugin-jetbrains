@@ -7,12 +7,9 @@
  */
 package be.ugent.piedcler.dodona.api.responses;
 
-import be.ugent.piedcler.dodona.dto.course.Course;
-import be.ugent.piedcler.dodona.dto.course.KnownCourse;
+import be.ugent.piedcler.dodona.dto.course.CourseImpl;
 import be.ugent.piedcler.dodona.dto.course.UnknownCourse;
-import be.ugent.piedcler.dodona.dto.exercise.Exercise;
-import be.ugent.piedcler.dodona.dto.series.Series;
-import be.ugent.piedcler.dodona.dto.series.UnknownSeries;
+import be.ugent.piedcler.dodona.dto.Series;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,9 +22,9 @@ import java.util.HashSet;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SeriesResponse {
-	private final Course course;
-	private final Collection<Exercise> exercises;
+	private final
 	private final long id;
+	private final String name;
 	
 	/**
 	 * SeriesResponse constructor.
@@ -37,7 +34,7 @@ public class SeriesResponse {
 	 * @param id        the id of the series
 	 */
 	public SeriesResponse(@JsonProperty("id") final long id,
-	                      @JsonProperty("exercises") final Collection<KnownCourse> series) {
+	                      @JsonProperty("exercises") final Collection<CourseImpl> series) {
 		series.forEach(unknownSeries -> unknownSeries.setCourse(new UnknownCourse(id)));
 		
 		this.id = id;
