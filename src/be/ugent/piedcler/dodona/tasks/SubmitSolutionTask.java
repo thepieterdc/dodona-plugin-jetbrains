@@ -10,7 +10,7 @@ package be.ugent.piedcler.dodona.tasks;
 import be.ugent.piedcler.dodona.api.Exercises;
 import be.ugent.piedcler.dodona.api.Submissions;
 import be.ugent.piedcler.dodona.dto.Exercise;
-import be.ugent.piedcler.dodona.dto.submission.Submission;
+import be.ugent.piedcler.dodona.dto.Submission;
 import be.ugent.piedcler.dodona.dto.submission.SubmissionStatus;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.exceptions.WarningMessageException;

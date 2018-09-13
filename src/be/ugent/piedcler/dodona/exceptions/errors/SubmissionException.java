@@ -7,7 +7,7 @@
  */
 package be.ugent.piedcler.dodona.exceptions.errors;
 
-import be.ugent.piedcler.dodona.dto.submission.Submission;
+import be.ugent.piedcler.dodona.dto.Submission;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 
 /**

@@ -8,21 +8,23 @@
 package be.ugent.piedcler.dodona.dto.submission;
 
 import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.dto.Submission;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * A submission for Dodona which is rejected.
+ * A submission for Dodona which is accepted and correct.
  */
-public class RejectedSubmission implements Submission {
+public class CorrectSubmission implements Submission {
 	private final Exercise exercise;
 	private final long id;
 	
 	/**
-	 * RejectedSubmission constructor.
+	 * PendingSubmission constructor.
 	 *
 	 * @param id       the id of the submission
 	 * @param exercise the exercise
 	 */
-	public RejectedSubmission(final long id, final Exercise exercise) {
+	public CorrectSubmission(final long id, final Exercise exercise) {
 		this.exercise = exercise;
 		this.id = id;
 	}
@@ -38,7 +40,8 @@ public class RejectedSubmission implements Submission {
 	}
 	
 	@Override
+	@NotNull
 	public SubmissionStatus getStatus() {
-		return SubmissionStatus.INCORRECT;
+		return SubmissionStatus.CORRECT;
 	}
 }

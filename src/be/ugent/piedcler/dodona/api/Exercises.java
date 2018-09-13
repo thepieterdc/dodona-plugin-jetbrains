@@ -9,6 +9,7 @@ package be.ugent.piedcler.dodona.api;
 
 import be.ugent.piedcler.dodona.Configuration;
 import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.dto.Submission;
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -27,7 +28,7 @@ public enum Exercises {
 	 * @param code     the solution to submit
 	 * @return the submission (pending)
 	 */
-	public static Submissions submit(final Exercise exercise, final String code) {
+	public static Submission submit(final Exercise exercise, final String code) {
 		System.out.println("test");
 		return null;
 	}

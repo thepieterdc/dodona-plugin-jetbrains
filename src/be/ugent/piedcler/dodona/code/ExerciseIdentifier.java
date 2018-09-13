@@ -7,7 +7,9 @@
  */
 package be.ugent.piedcler.dodona.code;
 
+import be.ugent.piedcler.dodona.dto.Course;
 import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.services.CourseService;
 import be.ugent.piedcler.dodona.services.ExerciseService;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +27,7 @@ public enum ExerciseIdentifier {
 	private static final int GROUP_EXERCISE = 2;
 	
 	private static final Pattern regex =
-			Pattern.compile("dodona.*exercise\\D*(\\d+)", Pattern.CASE_INSENSITIVE);
+			Pattern.compile("dodona:?\\s*course\\D*(\\d+)\\D*exercise\\D*(\\d+)", Pattern.CASE_INSENSITIVE);
 	
 	/**
 	 * Identifies the current exercise given some code.
@@ -37,9 +39,11 @@ public enum ExerciseIdentifier {
 	public static Optional<Exercise> identify(@NotNull final CharSequence code) {
 		final Matcher matcher = ExerciseIdentifier.regex.matcher(code);
 		if (matcher.find() && (matcher.groupCount() == 2)) {
+			final String courseId = matcher.group(ExerciseIdentifier.GROUP_COURSE);
 			final String exerciseId = matcher.group(ExerciseIdentifier.GROUP_EXERCISE);
 			
-			final Exercise exercise = ExerciseService.getInstance().get(Long.valueOf(exerciseId));
+			final Course course = CourseService.getInstance().get(Long.parseLong(courseId));
+			final Exercise exercise = ExerciseService.getInstance().get(Long.parseLong(exerciseId));
 			
 			return Optional.of(exercise);
 		}

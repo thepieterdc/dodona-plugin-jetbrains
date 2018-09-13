@@ -8,9 +8,11 @@
 package be.ugent.piedcler.dodona.dto.submission;
 
 import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.dto.Submission;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * A submission for Dodona which is pending.
+ * A submission for Dodona which is pending evaluation.
  */
 public class PendingSubmission implements Submission {
 	private final Exercise exercise;
@@ -38,6 +40,7 @@ public class PendingSubmission implements Submission {
 	}
 	
 	@Override
+	@NotNull
 	public SubmissionStatus getStatus() {
 		return SubmissionStatus.PENDING;
 	}

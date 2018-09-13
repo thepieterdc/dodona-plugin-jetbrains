@@ -5,12 +5,12 @@
  *
  * https://github.com/thepieterdc/ugent-dodona/
  */
-package be.ugent.piedcler.dodona.dto.submission;
+package be.ugent.piedcler.dodona.dto;
 
 import be.ugent.piedcler.dodona.Configuration;
-import be.ugent.piedcler.dodona.dto.Resource;
-import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.dto.submission.SubmissionStatus;
 import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An exercise for Dodona.
@@ -31,6 +31,7 @@ public interface Submission extends Resource {
 	 *
 	 * @return the status
 	 */
+	@NotNull
 	SubmissionStatus getStatus();
 	
 	/**

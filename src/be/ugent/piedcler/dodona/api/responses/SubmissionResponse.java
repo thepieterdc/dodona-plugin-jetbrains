@@ -7,6 +7,12 @@
  */
 package be.ugent.piedcler.dodona.api.responses;
 
+import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.dto.Submission;
+import be.ugent.piedcler.dodona.dto.submission.CorrectSubmission;
+import be.ugent.piedcler.dodona.dto.submission.PendingSubmission;
+import be.ugent.piedcler.dodona.dto.submission.WrongSubmission;
+import be.ugent.piedcler.dodona.services.ExerciseService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.NonNls;
@@ -20,6 +26,7 @@ public class SubmissionResponse {
 	public static final String STATUS_PENDING = "running";
 	
 	private final boolean accepted;
+	private final ExerciseResponse exercise;
 	private final long id;
 	private final String status;
 	
@@ -31,37 +38,28 @@ public class SubmissionResponse {
 	 * @param status   the status
 	 */
 	public SubmissionResponse(@JsonProperty("accepted") final boolean accepted,
+	                          @JsonProperty("exercise") final ExerciseResponse exercise,
 	                          @JsonProperty("id") final long id,
 	                          @JsonProperty("status") final String status) {
 		this.accepted = accepted;
+		this.exercise = exercise;
 		this.id = id;
 		this.status = status;
 	}
 	
 	/**
-	 * Gets the id of the submission.
+	 * Converts the submission response to a submission.
 	 *
-	 * @return the id
+	 * @return the submission
 	 */
-	public long getId() {
-		return this.id;
-	}
-	
-	/**
-	 * Gets the status.
-	 *
-	 * @return the status
-	 */
-	public String getStatus() {
-		return this.status;
-	}
-	
-	/**
-	 * Gets the acceptance status.
-	 *
-	 * @return the acceptance status
-	 */
-	public boolean isAccepted() {
-		return this.accepted;
+	public Submission toSubmission() {
+		final Exercise convertedExercise = ExerciseService.getInstance().get(this.exercise.getId());
+		
+		if (this.accepted) {
+			return new CorrectSubmission(this.id, convertedExercise);
+		} else if(SubmissionResponse.STATUS_PENDING.equals(this.status)) {
+			return new PendingSubmission(this.id, convertedExercise);
+		}
+		return new WrongSubmission(this.id, convertedExercise);
 	}
 }

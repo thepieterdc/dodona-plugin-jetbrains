@@ -7,19 +7,19 @@
  */
 package be.ugent.piedcler.dodona.services;
 
-import be.ugent.piedcler.dodona.dto.Series;
+import be.ugent.piedcler.dodona.dto.Submission;
 import com.intellij.openapi.components.ServiceManager;
 
 /**
  * Service for Series entities.
  */
-public interface SeriesService extends ResourceService<Series> {
+public interface SubmissionService extends ResourceService<Submission> {
 	/**
-	 * Gets an instance of a SeriesService.
+	 * Gets an instance of a SubmissionService.
 	 *
 	 * @return singleton instance
 	 */
-	static SeriesService getInstance() {
-		return ServiceManager.getService(SeriesService.class);
+	static SubmissionService getInstance() {
+		return ServiceManager.getService(SubmissionService.class);
 	}
 }

@@ -23,13 +23,22 @@ public class ExerciseResponse {
 	/**
 	 * ExerciseResponse constructor.
 	 *
-	 * @param id      the id of the exercise
-	 * @param name    the name of the exercise
+	 * @param id   the id of the exercise
+	 * @param name the name of the exercise
 	 */
 	public ExerciseResponse(@JsonProperty("id") final long id,
 	                        @JsonProperty("name") final String name) {
 		this.id = id;
 		this.name = name;
+	}
+	
+	/**
+	 * Gets the id.
+	 *
+	 * @return the id
+	 */
+	public long getId() {
+		return this.id;
 	}
 	
 	/**
