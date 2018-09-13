@@ -8,8 +8,8 @@
 package be.ugent.piedcler.dodona.api;
 
 import be.ugent.piedcler.dodona.Configuration;
+import be.ugent.piedcler.dodona.api.responses.SeriesResponse;
 import be.ugent.piedcler.dodona.api.responses.SubmitResponse;
-import be.ugent.piedcler.dodona.dto.course.Course;
 import be.ugent.piedcler.dodona.dto.exercise.Exercise;
 import be.ugent.piedcler.dodona.dto.submission.PendingSubmission;
 import be.ugent.piedcler.dodona.dto.submission.Submission;
@@ -19,7 +19,6 @@ import org.jetbrains.annotations.NonNls;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,13 +32,13 @@ public enum Exercises {
 	private static final String ENDPOINT_SUBMIT = Configuration.DODONA_URL + "/submissions";
 	
 	/**
-	 * Gets all exercises in a given course.
+	 * Gets all exercises in a given series.
 	 *
-	 * @param course the course
+	 * @param series the series
 	 * @return the exercises
 	 */
-	public static Collection<Exercise> getAll(final Course course) {
-		return Collections.emptySet();
+	public static Collection<Exercise> getAll(final be.ugent.piedcler.dodona.dto.series.Series series) {
+		return Http.get(series.getUrl(), SeriesResponse.class).getExercises();
 	}
 	
 	/**

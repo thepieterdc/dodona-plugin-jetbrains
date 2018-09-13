@@ -8,12 +8,15 @@
 package be.ugent.piedcler.dodona.tasks;
 
 import be.ugent.piedcler.dodona.api.Courses;
+import be.ugent.piedcler.dodona.api.Exercises;
 import be.ugent.piedcler.dodona.dto.course.Course;
+import be.ugent.piedcler.dodona.dto.exercise.Exercise;
 import be.ugent.piedcler.dodona.dto.series.Series;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.reporting.NotificationReporter;
 import be.ugent.piedcler.dodona.ui.SelectCourseDialog;
+import be.ugent.piedcler.dodona.ui.SelectExerciseDialog;
 import be.ugent.piedcler.dodona.ui.SelectSeriesDialog;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
@@ -34,6 +37,7 @@ import static be.ugent.piedcler.dodona.api.Series.getAll;
  */
 public class SetExerciseTask extends Task.Backgroundable {
 	private Course selectedCourse;
+	private Exercise selectedExercise;
 	private Series selectedSeries;
 	
 	/**
@@ -63,6 +67,28 @@ public class SetExerciseTask extends Task.Backgroundable {
 		
 		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
 			return selectCourseDialog.getSelectedCourse();
+		}
+		return null;
+	}
+	
+	/**
+	 * Asks the user about the exercise.
+	 *
+	 * @param exercises all exercises
+	 * @return the selected exercise
+	 */
+	@Nullable
+	private static Exercise askExercise(final Collection<Exercise> exercises) {
+		final SelectExerciseDialog selectExerciseDialog = new SelectExerciseDialog(exercises);
+		final DialogBuilder coursesBuilder = new DialogBuilder();
+		coursesBuilder.setCenterPanel(selectExerciseDialog.getRootPane());
+		coursesBuilder.setTitle("Select Exercise");
+		coursesBuilder.removeAllActions();
+		coursesBuilder.addOkAction();
+		coursesBuilder.addCancelAction();
+		
+		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
+			return selectExerciseDialog.getSelectedExercise();
 		}
 		return null;
 	}
@@ -118,22 +144,22 @@ public class SetExerciseTask extends Task.Backgroundable {
 			
 			progressIndicator.setFraction(0.60);
 			progressIndicator.setText("Retrieving exercises...");
-
-//			final Collection<Exercise> exercises = Exercises.getAll(series);
-//
-//			progressIndicator.setFraction(0.75);
-//			progressIndicator.setText("Waiting for exercise selection...");
-//
-//			final Exercise selectedExercise = SetExerciseTask.askExercise(exercises);
-//
-//			if (selectedExercise == null) return;
-//
-//			progressIndicator.setFraction(0.90);
-//			progressIndicator.setText("Setting exercise...");
-//
-//			NotificationReporter.info("Exercise successfully set.");
 			
-			// Modify the code
+			final Collection<Exercise> exercises = Exercises.getAll(series);
+			
+			progressIndicator.setFraction(0.75);
+			progressIndicator.setText("Waiting for exercise selection...");
+			
+			EventQueue.invokeAndWait(() -> this.setExercise(SetExerciseTask.askExercise(exercises)));
+			
+			if (this.selectedExercise == null) return;
+			
+			progressIndicator.setFraction(0.90);
+			progressIndicator.setText("Setting exercise...");
+			
+			// Modify the code.
+			
+			NotificationReporter.info("Exercise successfully set.");
 		} catch (final WarningMessageException warning) {
 			NotificationReporter.warning(warning.getMessage());
 		} catch (final ErrorMessageException error) {
@@ -150,6 +176,15 @@ public class SetExerciseTask extends Task.Backgroundable {
 	 */
 	private void setCourse(@Nullable final Course course) {
 		this.selectedCourse = course;
+	}
+	
+	/**
+	 * Sets the selected exercise.
+	 *
+	 * @param exercise the exercise to set
+	 */
+	private void setExercise(@Nullable final Exercise exercise) {
+		this.selectedExercise = exercise;
 	}
 	
 	/**
