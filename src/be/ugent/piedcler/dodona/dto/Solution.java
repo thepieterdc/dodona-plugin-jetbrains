@@ -11,21 +11,31 @@ package be.ugent.piedcler.dodona.dto;
  * A solution to submit to Dodona.
  */
 public class Solution {
-	private final String code;
+	private String code;
 	private final Course course;
 	private final Exercise exercise;
 	
 	/**
 	 * Solution constructor.
 	 *
-	 * @param code     the code to submit
 	 * @param course   the course
 	 * @param exercise the exercise
+	 * @param code     the code to submit
 	 */
 	public Solution(final Course course, final Exercise exercise, final String code) {
 		this.code = code;
 		this.course = course;
 		this.exercise = exercise;
+	}
+	
+	/**
+	 * Solution constructor.
+	 *
+	 * @param course   the course
+	 * @param exercise the exercise
+	 */
+	public Solution(final Course course, final Exercise exercise) {
+		this(course, exercise, "");
 	}
 	
 	/**
@@ -53,5 +63,16 @@ public class Solution {
 	 */
 	public Exercise getExercise() {
 		return this.exercise;
+	}
+	
+	/**
+	 * Sets the code of the solution.
+	 *
+	 * @param code the code
+	 * @return fluent setter
+	 */
+	public Solution setCode(final String code) {
+		this.code = code;
+		return this;
 	}
 }

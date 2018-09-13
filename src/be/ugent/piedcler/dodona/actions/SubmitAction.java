@@ -8,7 +8,7 @@
 package be.ugent.piedcler.dodona.actions;
 
 import be.ugent.piedcler.dodona.code.ExerciseIdentifier;
-import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.dto.Solution;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.exceptions.errors.CodeReadException;
@@ -32,8 +32,9 @@ public class SubmitAction extends AnAction {
 		
 		try {
 			if (code != null) {
-				final Exercise exercise = ExerciseIdentifier.identify(code).orElseThrow(ExerciseNotSetException::new);
-				ProgressManager.getInstance().run(new SubmitSolutionTask(event.getProject(), exercise, code));
+				final Solution solution = ExerciseIdentifier.identify(code).map(sol -> sol.setCode(code))
+						.orElseThrow(ExerciseNotSetException::new);
+				ProgressManager.getInstance().run(new SubmitSolutionTask(event.getProject(), solution));
 			} else {
 				throw new CodeReadException();
 			}
