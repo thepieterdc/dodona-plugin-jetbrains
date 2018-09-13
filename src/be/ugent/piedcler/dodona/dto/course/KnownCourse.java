@@ -7,11 +7,13 @@
  */
 package be.ugent.piedcler.dodona.dto.course;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A course of which all detail are known since it was not fetched from Dodona.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class KnownCourse implements Course {
 	private final long id;
 	private final String name;

@@ -1,0 +1,51 @@
+package be.ugent.piedcler.dodona.ui;
+
+import be.ugent.piedcler.dodona.dto.course.Course;
+import com.intellij.ui.CollectionListModel;
+import com.intellij.ui.components.JBList;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.util.Collection;
+
+/**
+ * A dialog that allows the user to select a course.
+ */
+public class SelectCourseDialog extends JDialog {
+	private JPanel contentPane;
+	private JButton confirmButton;
+	private JBList<Course> coursesList;
+	
+	@Nullable
+	private Course selectedCourse;
+	
+	/**
+	 * SelectCourseDialog constructor.
+	 */
+	public SelectCourseDialog(final Collection<Course> courses) {
+		this.createComponents();
+		this.coursesList.addListSelectionListener(e -> this.selectedCourse = this.coursesList.getSelectedValue());
+		this.coursesList.setEmptyText("No courses were found for your account.");
+		this.coursesList.setModel(new CollectionListModel<>(courses));
+		this.coursesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+	
+	/**
+	 * Creates the form components.
+	 */
+	private void createComponents() {
+		this.setContentPane(this.contentPane);
+		this.setModal(true);
+		this.getRootPane().setDefaultButton(this.confirmButton);
+	}
+	
+	/**
+	 * Gets the selected course.
+	 *
+	 * @return the selected course
+	 */
+	@Nullable
+	public Course getSelectedCourse() {
+		return this.selectedCourse;
+	}
+}

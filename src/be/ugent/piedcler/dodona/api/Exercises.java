@@ -7,7 +7,10 @@
  */
 package be.ugent.piedcler.dodona.api;
 
+import be.ugent.piedcler.dodona.Configuration;
+import be.ugent.piedcler.dodona.api.responses.RootResponse;
 import be.ugent.piedcler.dodona.api.responses.SubmitResponse;
+import be.ugent.piedcler.dodona.dto.course.Course;
 import be.ugent.piedcler.dodona.dto.exercise.Exercise;
 import be.ugent.piedcler.dodona.dto.submission.PendingSubmission;
 import be.ugent.piedcler.dodona.dto.submission.Submission;
@@ -16,10 +19,9 @@ import org.jetbrains.annotations.NonNls;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
-import static be.ugent.piedcler.dodona.Configuration.DODONA_URL;
 
 /**
  * Utilities to submit exercises to Dodona.
@@ -28,7 +30,17 @@ public enum Exercises {
 	;
 	
 	@NonNls
-	private static final String ENDPOINT_SUBMIT = DODONA_URL + "/submissions";
+	private static final String ENDPOINT_SUBMIT = Configuration.DODONA_URL + "/submissions";
+	
+	/**
+	 * Gets all exercises in a given course.
+	 *
+	 * @param course the course
+	 * @return the exercises
+	 */
+	public static Collection<Exercise> getAll(final Course course) {
+		return Http.get(Configuration.DODONA_URL, RootResponse.class).getUser().getSubscribedCourses();
+	}
 	
 	/**
 	 * Submits an exercise to Dodona (synchronously).
