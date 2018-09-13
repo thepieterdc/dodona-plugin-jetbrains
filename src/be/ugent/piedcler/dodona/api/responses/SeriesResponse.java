@@ -7,46 +7,56 @@
  */
 package be.ugent.piedcler.dodona.api.responses;
 
-import be.ugent.piedcler.dodona.dto.course.CourseImpl;
-import be.ugent.piedcler.dodona.dto.course.UnknownCourse;
+import be.ugent.piedcler.dodona.dto.Course;
+import be.ugent.piedcler.dodona.dto.Exercise;
 import be.ugent.piedcler.dodona.dto.Series;
+import be.ugent.piedcler.dodona.dto.series.SeriesImpl;
+import be.ugent.piedcler.dodona.services.CourseService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.stream.Collectors;
 
 /**
  * The response from fetching a series.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SeriesResponse {
-	private final
+	private final long courseId;
+	private final Collection<ExerciseResponse> exercises;
 	private final long id;
 	private final String name;
 	
 	/**
 	 * SeriesResponse constructor.
 	 *
-	 * @param course_id the id of the course of the series
+	 * @param courseId  the id of the course of the series
 	 * @param exercises the exercises in this series
 	 * @param id        the id of the series
+	 * @param name      the name of the series
 	 */
-	public SeriesResponse(@JsonProperty("id") final long id,
-	                      @JsonProperty("exercises") final Collection<CourseImpl> series) {
-		series.forEach(unknownSeries -> unknownSeries.setCourse(new UnknownCourse(id)));
-		
+	public SeriesResponse(@JsonProperty("course_id") final long courseId,
+	                      @JsonProperty("exercises") final Collection<ExerciseResponse> exercises,
+	                      @JsonProperty("id") final long id,
+	                      @JsonProperty("name") final String name) {
+		this.courseId = courseId;
+		this.exercises = Collections.unmodifiableCollection(exercises);
 		this.id = id;
-		this.series = new HashSet<>(series);
+		this.name = name;
 	}
 	
 	/**
-	 * Gets the series of the course.
+	 * Converts the series response to a series.
 	 *
 	 * @return the series
 	 */
-	public Collection<Series> getSeries() {
-		return Collections.unmodifiableCollection(this.series);
+	public Series toSeries() {
+		final Course course = CourseService.getInstance().get(this.courseId);
+		final Collection<Exercise> convertedExercises = this.exercises.stream()
+				.map(ExerciseResponse::toExercise)
+				.collect(Collectors.toSet());
+		return new SeriesImpl(course, this.id, this.name).setExercises(convertedExercises);
 	}
 }

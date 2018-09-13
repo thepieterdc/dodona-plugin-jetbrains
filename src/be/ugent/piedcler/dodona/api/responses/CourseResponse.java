@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class CourseResponse {
 	private final long id;
 	private final String name;
-	private final String teacher
+	private final String teacher;
 	private final Collection<SeriesResponse> series;
 	private final String year;
 	
@@ -55,9 +55,9 @@ public class CourseResponse {
 	 * @return the course
 	 */
 	public Course toCourse() {
-		final Collection<Series> series = this.series.stream()
+		final Collection<Series> convertedSeries = this.series.stream()
 				.map(SeriesResponse::toSeries)
 				.collect(Collectors.toSet());
-		return new CourseImpl(this.id, this.name, this.teacher, this.year).setSeries(series);
+		return new CourseImpl(this.id, this.name, this.teacher, this.year).setSeries(convertedSeries);
 	}
 }
