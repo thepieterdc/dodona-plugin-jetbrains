@@ -7,7 +7,6 @@
  */
 package be.ugent.piedcler.dodona.exceptions.errors;
 
-import be.ugent.piedcler.dodona.dto.Submission;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 
 /**
@@ -18,13 +17,8 @@ public class SubmissionException extends ErrorMessageException {
 	
 	/**
 	 * SubmissionException constructor.
-	 *
-	 * @param submission the failed submission
 	 */
-	public SubmissionException(final Submission submission) {
-		super(String.format(
-				"Something went wrong while submitting your solution. <a href=\"%s\">More details</a>",
-				submission.getUrl()
-		));
+	public SubmissionException() {
+		super("Something went wrong while submitting your solution.");
 	}
 }

@@ -17,7 +17,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Submission extends Resource {
 	@NonNls
-	String ENDPOINT_ID = Configuration.DODONA_URL + "/submissions/%d";
+	String ENDPOINT = Configuration.DODONA_URL + "/submissions";
+	
+	@NonNls
+	String ENDPOINT_ID = Submission.ENDPOINT + "/%d";
 	
 	/**
 	 * Gets the exercise this submission belongs to.

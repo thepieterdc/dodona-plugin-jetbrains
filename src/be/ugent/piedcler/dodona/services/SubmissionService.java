@@ -7,6 +7,7 @@
  */
 package be.ugent.piedcler.dodona.services;
 
+import be.ugent.piedcler.dodona.dto.Solution;
 import be.ugent.piedcler.dodona.dto.Submission;
 import com.intellij.openapi.components.ServiceManager;
 
@@ -22,4 +23,12 @@ public interface SubmissionService extends ResourceService<Submission> {
 	static SubmissionService getInstance() {
 		return ServiceManager.getService(SubmissionService.class);
 	}
+	
+	/**
+	 * Submits a solution.
+	 *
+	 * @param solution the solution to submit
+	 * @return the submission
+	 */
+	Submission submit(final Solution solution);
 }

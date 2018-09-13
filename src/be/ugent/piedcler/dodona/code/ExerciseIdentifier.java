@@ -9,6 +9,7 @@ package be.ugent.piedcler.dodona.code;
 
 import be.ugent.piedcler.dodona.dto.Course;
 import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.dto.Solution;
 import be.ugent.piedcler.dodona.services.CourseService;
 import be.ugent.piedcler.dodona.services.ExerciseService;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,7 @@ public enum ExerciseIdentifier {
 	 * @return the exercise found
 	 */
 	@NotNull
-	public static Optional<Exercise> identify(@NotNull final CharSequence code) {
+	public static Optional<Solution> identify(@NotNull final CharSequence code) {
 		final Matcher matcher = ExerciseIdentifier.regex.matcher(code);
 		if (matcher.find() && (matcher.groupCount() == 2)) {
 			final String courseId = matcher.group(ExerciseIdentifier.GROUP_COURSE);
@@ -45,7 +46,7 @@ public enum ExerciseIdentifier {
 			final Course course = CourseService.getInstance().get(Long.parseLong(courseId));
 			final Exercise exercise = ExerciseService.getInstance().get(Long.parseLong(exerciseId));
 			
-			return Optional.of(exercise);
+			return Optional.of(new Solution(course, exercise));
 		}
 		return Optional.empty();
 	}

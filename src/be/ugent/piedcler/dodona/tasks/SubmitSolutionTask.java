@@ -7,15 +7,14 @@
  */
 package be.ugent.piedcler.dodona.tasks;
 
-import be.ugent.piedcler.dodona.api.Exercises;
-import be.ugent.piedcler.dodona.api.Submissions;
-import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.dto.Solution;
 import be.ugent.piedcler.dodona.dto.Submission;
 import be.ugent.piedcler.dodona.dto.submission.SubmissionStatus;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.exceptions.warnings.IncorrectSubmissionException;
 import be.ugent.piedcler.dodona.reporting.NotificationReporter;
+import be.ugent.piedcler.dodona.services.SubmissionService;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
@@ -29,20 +28,19 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 	private static final long DELAY_MAX = 35_000L;
 	private static final long DELAY_INITIAL = 2_000L;
 	
-	private final Exercise exercise;
-	private final String solution;
+	private final Solution solution;
+	private final SubmissionService submissions;
 	
 	/**
 	 * SubmitSolutionTask constructor.
 	 *
 	 * @param project  the project to display notifications in
-	 * @param exercise the exercise to solve
-	 * @param solution the solution
+	 * @param solution the solution to submit
 	 */
-	public SubmitSolutionTask(final Project project, final Exercise exercise, final String solution) {
-		super(project, String.format("Evaluation for %s", exercise.getName()));
-		this.exercise = exercise;
+	public SubmitSolutionTask(final Project project, final Solution solution) {
+		super(project, String.format("Evaluation for %s", solution.getExercise().getName()));
 		this.solution = solution;
+		this.submissions = SubmissionService.getInstance();
 	}
 	
 	@Override
@@ -51,10 +49,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.10);
 			progressIndicator.setText("Submitting to Dodona...");
 			
-			// TODO: check if the course and exercise exist and throw an error if not,
-			// TODO  not entirely required but would probably be a nice improvement.
-			
-			Submission submission = Exercises.submit(this.exercise, this.solution);
+			Submission submission = this.submissions.submit(this.solution);
 			NotificationReporter.info("Solution successfully submitted, awaiting evaluation.");
 			
 			progressIndicator.setFraction(0.50);
@@ -66,7 +61,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			while (submission.getStatus() == SubmissionStatus.PENDING) {
 				Thread.sleep(delay);
 				
-				submission = Submissions.get(submission);
+				submission = this.submissions.get(submission.getId());
 				
 				delay = Math.min(
 						(long) (delay * SubmitSolutionTask.DELAY_BACKOFF_FACTOR),

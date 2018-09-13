@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NonNls;
  * The response from a submitting a solution to Dodona.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SubmitResponse {
+public class SubmissionPostResponse {
 	@NonNls
 	public static final String STATUS_OK = "ok";
 	
@@ -28,8 +28,8 @@ public class SubmitResponse {
 	 * @param id     the id of the submission
 	 * @param status the status
 	 */
-	public SubmitResponse(@JsonProperty("id") final long id,
-	                      @JsonProperty("status") final String status) {
+	public SubmissionPostResponse(@JsonProperty("id") final long id,
+	                              @JsonProperty("status") final String status) {
 		this.id = id;
 		this.status = status;
 	}
