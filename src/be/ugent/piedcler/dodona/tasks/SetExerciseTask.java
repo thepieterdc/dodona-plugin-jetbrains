@@ -7,14 +7,14 @@
  */
 package be.ugent.piedcler.dodona.tasks;
 
-import be.ugent.piedcler.dodona.api.Courses;
-import be.ugent.piedcler.dodona.api.Exercises;
 import be.ugent.piedcler.dodona.dto.Course;
 import be.ugent.piedcler.dodona.dto.Exercise;
 import be.ugent.piedcler.dodona.dto.Series;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.reporting.NotificationReporter;
+import be.ugent.piedcler.dodona.services.CourseService;
+import be.ugent.piedcler.dodona.services.SeriesService;
 import be.ugent.piedcler.dodona.ui.SelectCourseDialog;
 import be.ugent.piedcler.dodona.ui.SelectExerciseDialog;
 import be.ugent.piedcler.dodona.ui.SelectSeriesDialog;
@@ -30,12 +30,13 @@ import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
-import static be.ugent.piedcler.dodona.api.Series.getAll;
-
 /**
  * Sets the course and exercise id in the header of the code.
  */
 public class SetExerciseTask extends Task.Backgroundable {
+	private final CourseService courses;
+	private final SeriesService series;
+	
 	private Course selectedCourse;
 	private Exercise selectedExercise;
 	private Series selectedSeries;
@@ -47,6 +48,8 @@ public class SetExerciseTask extends Task.Backgroundable {
 	 */
 	public SetExerciseTask(final Project project) {
 		super(project, "Configure Exercise.");
+		this.courses = CourseService.getInstance();
+		this.series = SeriesService.getInstance();
 	}
 	
 	/**
@@ -121,31 +124,31 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.10);
 			progressIndicator.setText("Retrieving courses...");
 			
-			final Collection<Course> courses = Courses.getAllSubscribed();
+			final Collection<Course> myCourses = this.courses.getSubscribed();
 			
 			progressIndicator.setFraction(0.15);
 			progressIndicator.setText("Waiting for course selection...");
 			
-			EventQueue.invokeAndWait(() -> this.setCourse(SetExerciseTask.askCourse(courses)));
+			EventQueue.invokeAndWait(() -> this.setCourse(SetExerciseTask.askCourse(myCourses)));
 			
 			if (this.selectedCourse == null) return;
 			
 			progressIndicator.setFraction(0.30);
 			progressIndicator.setText("Retrieving series...");
 			
-			final Collection<Series> series = getAll(this.selectedCourse);
+			final Collection<Series> courseSeries = this.courses.get(this.selectedCourse.getId()).getSeries();
 			
 			progressIndicator.setFraction(0.45);
 			progressIndicator.setText("Waiting for series selection...");
 			
-			EventQueue.invokeAndWait(() -> this.setSeries(SetExerciseTask.askSeries(series)));
+			EventQueue.invokeAndWait(() -> this.setSeries(SetExerciseTask.askSeries(courseSeries)));
 			
 			if (this.selectedSeries == null) return;
 			
 			progressIndicator.setFraction(0.60);
 			progressIndicator.setText("Retrieving exercises...");
 			
-			final Collection<Exercise> exercises = Exercises.getAll(series);
+			final Collection<Exercise> exercises = this.series.get(this.selectedSeries.getId()).getExercises();
 			
 			progressIndicator.setFraction(0.75);
 			progressIndicator.setText("Waiting for exercise selection...");

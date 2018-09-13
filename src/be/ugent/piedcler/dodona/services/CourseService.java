@@ -13,7 +13,7 @@ import com.intellij.openapi.components.ServiceManager;
 import java.util.Collection;
 
 /**
- * Service for course entities.
+ * Service for Course entities.
  */
 public interface CourseService extends ResourceService<Course> {
 	/**
