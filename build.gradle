@@ -23,5 +23,5 @@ intellij {
 }
 
 patchPluginXml {
-    version ${version}
+    version project.version
 }
