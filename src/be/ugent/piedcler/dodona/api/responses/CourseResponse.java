@@ -8,13 +8,15 @@
 package be.ugent.piedcler.dodona.api.responses;
 
 import be.ugent.piedcler.dodona.dto.Course;
-import be.ugent.piedcler.dodona.dto.course.CourseImpl;
 import be.ugent.piedcler.dodona.dto.Series;
+import be.ugent.piedcler.dodona.dto.course.CourseImpl;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -40,12 +42,12 @@ public class CourseResponse {
 	public CourseResponse(@JsonProperty("id") final long id,
 	                      @JsonProperty("name") final String name,
 	                      @JsonProperty("teacher") final String teacher,
-	                      @JsonProperty("series") final Collection<SeriesResponse> series,
+	                      @Nullable @JsonProperty("series") final Collection<SeriesResponse> series,
 	                      @JsonProperty("year") final String year) {
 		this.id = id;
 		this.name = name;
 		this.teacher = teacher;
-		this.series = Collections.unmodifiableCollection(series);
+		this.series = Optional.ofNullable(series).orElseGet(() -> new HashSet<>(10));
 		this.year = year;
 	}
 	
@@ -56,8 +58,8 @@ public class CourseResponse {
 	 */
 	public Course toCourse() {
 		final Collection<Series> convertedSeries = this.series.stream()
-				.map(SeriesResponse::toSeries)
-				.collect(Collectors.toSet());
+			.map(SeriesResponse::toSeries)
+			.collect(Collectors.toSet());
 		return new CourseImpl(this.id, this.name, this.teacher, this.year).setSeries(convertedSeries);
 	}
 }

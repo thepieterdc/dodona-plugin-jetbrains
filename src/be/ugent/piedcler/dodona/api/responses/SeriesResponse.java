@@ -14,9 +14,11 @@ import be.ugent.piedcler.dodona.dto.series.SeriesImpl;
 import be.ugent.piedcler.dodona.services.CourseService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -38,11 +40,11 @@ public class SeriesResponse {
 	 * @param name      the name of the series
 	 */
 	public SeriesResponse(@JsonProperty("course_id") final long courseId,
-	                      @JsonProperty("exercises") final Collection<ExerciseResponse> exercises,
+	                      @Nullable @JsonProperty("exercises") final Collection<ExerciseResponse> exercises,
 	                      @JsonProperty("id") final long id,
 	                      @JsonProperty("name") final String name) {
 		this.courseId = courseId;
-		this.exercises = Collections.unmodifiableCollection(exercises);
+		this.exercises = Optional.ofNullable(exercises).orElseGet(() -> new HashSet<>(30));
 		this.id = id;
 		this.name = name;
 	}
