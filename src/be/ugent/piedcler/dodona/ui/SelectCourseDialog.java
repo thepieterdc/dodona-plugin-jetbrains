@@ -33,9 +33,9 @@ public class SelectCourseDialog extends JDialog {
 	public SelectCourseDialog(final Collection<Course> courses) {
 		this.createComponents();
 		this.coursesList.addListSelectionListener(e -> this.selectedCourse = this.coursesList.getSelectedValue());
+		this.coursesList.setCellRenderer(new CourseListRenderer());
 		this.coursesList.setEmptyText("No courses were found for your account.");
 		this.coursesList.setModel(new CollectionListModel<>(courses));
-		this.coursesList.setCellRenderer(new CourseListRenderer());
 		this.coursesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 	

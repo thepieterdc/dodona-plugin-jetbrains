@@ -33,6 +33,7 @@ public class SelectExerciseDialog extends JDialog {
 	public SelectExerciseDialog(final Collection<Exercise> exercises) {
 		this.createComponents();
 		this.exercisesList.addListSelectionListener(e -> this.selectedExercise = this.exercisesList.getSelectedValue());
+		this.exercisesList.setCellRenderer(new ExerciseListRenderer());
 		this.exercisesList.setEmptyText("No exercises were found in this series.");
 		this.exercisesList.setModel(new CollectionListModel<>(exercises));
 		this.exercisesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

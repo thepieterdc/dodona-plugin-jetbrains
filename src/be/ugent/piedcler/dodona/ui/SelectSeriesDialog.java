@@ -33,6 +33,7 @@ public class SelectSeriesDialog extends JDialog {
 	public SelectSeriesDialog(final Collection<Series> series) {
 		this.createComponents();
 		this.seriesList.addListSelectionListener(e -> this.selectedSeries = this.seriesList.getSelectedValue());
+		this.seriesList.setCellRenderer(new SeriesListRenderer());
 		this.seriesList.setEmptyText("No series were found in this course.");
 		this.seriesList.setModel(new CollectionListModel<>(series));
 		this.seriesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
