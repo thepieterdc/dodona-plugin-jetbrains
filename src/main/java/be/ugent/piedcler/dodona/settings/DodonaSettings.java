@@ -7,7 +7,6 @@
  */
 package be.ugent.piedcler.dodona.settings;
 
-import be.ugent.piedcler.dodona.resources.DodonaBundle;
 import com.intellij.openapi.options.Configurable;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
@@ -32,11 +31,11 @@ public class DodonaSettings implements Configurable {
 	@Nullable
 	@Override
 	public JComponent createComponent() {
-		this.lblFormDescription.setText(DodonaBundle.message("settings.description"));
+		this.lblFormDescription.setText("These settings configure the Dodona plugin.");
 		
-		this.lblApiKey.setText(DodonaBundle.message("settings.apikey.title"));
-		this.lblApiKeyInstructions.setText(DodonaBundle.message("settings.apikey.instructions"));
-		this.fieldApiKey.setToolTipText(DodonaBundle.message("settings.apikey.tooltip"));
+		this.lblApiKey.setText("API token");
+		this.lblApiKeyInstructions.setText("See the README at https://github.com/thepieterdc/ugent-dodona for guidance on how to generate an API token.");
+		this.fieldApiKey.setToolTipText("API token used to sign in to Dodona.");
 		this.updateApiKeyFromSettings();
 		
 		return this.panelRoot;
@@ -50,7 +49,7 @@ public class DodonaSettings implements Configurable {
 	@Nls
 	@Override
 	public String getDisplayName() {
-		return DodonaBundle.message("settings.display.name");
+		return "Dodona Settings";
 	}
 	
 	@Override
