@@ -39,7 +39,6 @@ public class SubmitAction extends AnAction {
 				throw new CodeReadException();
 			}
 		} catch (final ExerciseNotSetException exception) {
-			NotificationReporter.warning(exception.getMessage());
 			ProgressManager.getInstance().run(new SetExerciseTask(event.getProject()));
 		} catch (final WarningMessageException warning) {
 			NotificationReporter.warning(warning.getMessage());
