@@ -17,7 +17,6 @@ import be.ugent.piedcler.dodona.services.CourseService;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -35,9 +34,21 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Override
 	public Course get(final long id) {
-		return Optional.ofNullable(this.cache.get(id))
-				.filter(course -> !course.getSeries().isEmpty())
-				.orElseGet(() -> this.cache.put(id, CourseServiceImpl.getFromApi(id)));
+		final Course fromCache = this.cache.get(id);
+		System.out.println(fromCache);
+		
+		if(fromCache == null || fromCache.getSeries().isEmpty()) {
+			System.out.println("api");
+			final Course fromApi = getFromApi(id);
+			System.out.println(fromApi);
+			System.out.println(fromApi.getSeries());
+			this.cache.put(id, fromApi);
+			return fromApi;
+		} else {
+			System.out.println("cache");
+			System.out.println(fromCache.getSeries());
+			return fromCache;
+		}
 	}
 	
 	/**

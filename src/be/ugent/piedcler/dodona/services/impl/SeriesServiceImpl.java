@@ -14,7 +14,6 @@ import be.ugent.piedcler.dodona.services.SeriesService;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Implementation class for SeriesService.
@@ -31,9 +30,21 @@ public class SeriesServiceImpl implements SeriesService {
 	
 	@Override
 	public Series get(final long id) {
-		return Optional.ofNullable(this.cache.get(id))
-				.filter(series -> !series.getExercises().isEmpty())
-				.orElseGet(() -> this.cache.put(id, SeriesServiceImpl.getFromApi(id)));
+		final Series fromCache = this.cache.get(id);
+		System.out.println(fromCache);
+		
+		if(fromCache == null || fromCache.getExercises().isEmpty()) {
+			System.out.println("api");
+			final Series fromApi = getFromApi(id);
+			System.out.println(fromApi);
+			System.out.println(fromApi.getExercises());
+			this.cache.put(id, fromApi);
+			return fromApi;
+		} else {
+			System.out.println("cache");
+			System.out.println(fromCache.getExercises());
+			return fromCache;
+		}
 	}
 	
 	/**

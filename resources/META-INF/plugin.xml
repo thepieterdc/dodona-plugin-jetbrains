@@ -25,6 +25,12 @@
             instance="be.ugent.piedcler.dodona.settings.DodonaSettings" />
         <applicationService serviceInterface="be.ugent.piedcler.dodona.services.CourseService"
                             serviceImplementation="be.ugent.piedcler.dodona.services.impl.CourseServiceImpl"/>
+        <applicationService serviceInterface="be.ugent.piedcler.dodona.services.ExerciseService"
+                            serviceImplementation="be.ugent.piedcler.dodona.services.impl.ExerciseServiceImpl"/>
+        <applicationService serviceInterface="be.ugent.piedcler.dodona.services.SeriesService"
+                            serviceImplementation="be.ugent.piedcler.dodona.services.impl.SeriesServiceImpl"/>
+        <applicationService serviceInterface="be.ugent.piedcler.dodona.services.SubmissionService"
+                            serviceImplementation="be.ugent.piedcler.dodona.services.impl.SubmissionServiceImpl"/>
     </extensions>
 
     <actions>

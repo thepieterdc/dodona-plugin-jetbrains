@@ -14,7 +14,6 @@ import be.ugent.piedcler.dodona.services.ExerciseService;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Implementation class for ExerciseService.
@@ -31,8 +30,19 @@ public class ExerciseServiceImpl implements ExerciseService {
 	
 	@Override
 	public Exercise get(final long id) {
-		return Optional.ofNullable(this.cache.get(id))
-				.orElseGet(() -> this.cache.put(id, ExerciseServiceImpl.getFromApi(id)));
+		final Exercise fromCache = this.cache.get(id);
+		System.out.println(fromCache);
+		
+		if(fromCache == null) {
+			System.out.println("api");
+			final Exercise fromApi = getFromApi(id);
+			System.out.println(fromApi);
+			this.cache.put(id, fromApi);
+			return fromApi;
+		} else {
+			System.out.println("cache");
+			return fromCache;
+		}
 	}
 	
 	/**

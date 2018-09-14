@@ -136,6 +136,10 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.30);
 			progressIndicator.setText("Retrieving series...");
 			
+			System.out.println(this.selectedCourse);
+			System.out.println(this.selectedCourse.getId());
+			System.out.println(this.selectedCourse.getSeries());
+			
 			final Collection<Series> courseSeries = this.courses.get(this.selectedCourse.getId()).getSeries();
 			
 			progressIndicator.setFraction(0.45);
