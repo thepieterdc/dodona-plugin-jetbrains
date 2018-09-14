@@ -43,7 +43,11 @@ public class SubmissionServiceImpl implements SubmissionService {
 	public Submission get(final long id) {
 		return Optional.ofNullable(this.cache.get(id))
 			.filter(submission -> submission.getStatus() != SubmissionStatus.PENDING)
-			.orElseGet(() -> this.cache.put(id, SubmissionServiceImpl.getFromApi(id)));
+			.orElseGet(() -> {
+				final Submission ret = SubmissionServiceImpl.getFromApi(id);
+				this.cache.put(id, ret);
+				return ret;
+			});
 	}
 	
 	/**

@@ -33,7 +33,11 @@ public class SeriesServiceImpl implements SeriesService {
 	public Series get(final long id) {
 		return Optional.ofNullable(this.cache.get(id))
 			.filter(series -> !series.getExercises().isEmpty())
-			.orElseGet(() -> this.cache.put(id, SeriesServiceImpl.getFromApi(id)));
+			.orElseGet(() -> {
+				final Series ret = SeriesServiceImpl.getFromApi(id);
+				this.cache.put(id, ret);
+				return ret;
+			});
 	}
 	
 	/**

@@ -37,7 +37,11 @@ public class CourseServiceImpl implements CourseService {
 	public Course get(final long id) {
 		return Optional.ofNullable(this.cache.get(id))
 			.filter(course -> !course.getSeries().isEmpty())
-			.orElseGet(() -> this.cache.put(id, CourseServiceImpl.getFromApi(id)));
+			.orElseGet(() -> {
+				final Course ret = CourseServiceImpl.getFromApi(id);
+				this.cache.put(id, ret);
+				return ret;
+			});
 	}
 	
 	/**

@@ -32,7 +32,11 @@ public class ExerciseServiceImpl implements ExerciseService {
 	@Override
 	public Exercise get(final long id) {
 		return Optional.ofNullable(this.cache.get(id))
-			.orElseGet(() -> this.cache.put(id, ExerciseServiceImpl.getFromApi(id)));
+			.orElseGet(() -> {
+				final Exercise ret = ExerciseServiceImpl.getFromApi(id);
+				this.cache.put(id, ret);
+				return ret;
+			});
 	}
 	
 	/**
