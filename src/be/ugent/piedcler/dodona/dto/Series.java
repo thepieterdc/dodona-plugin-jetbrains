@@ -20,13 +20,6 @@ public interface Series extends Resource {
 	String ENDPOINT_ID = Configuration.DODONA_URL + "/series/%d";
 	
 	/**
-	 * Gets the course this series belongs to.
-	 *
-	 * @return the course
-	 */
-	Course getCourse();
-	
-	/**
 	 * Gets the exercises in this series.
 	 *
 	 * @return the exercises

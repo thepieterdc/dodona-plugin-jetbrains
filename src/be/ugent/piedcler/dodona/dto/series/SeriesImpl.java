@@ -19,7 +19,6 @@ import java.util.HashSet;
  * Implementation class of Series.
  */
 public final class SeriesImpl implements Series {
-	private final Course course;
 	private final Collection<Exercise> exercises;
 	private final long id;
 	private final String name;
@@ -31,16 +30,10 @@ public final class SeriesImpl implements Series {
 	 * @param id     the id of the series
 	 * @param name   the name of the series
 	 */
-	public SeriesImpl(final Course course, final long id, final String name) {
-		this.course = course;
+	public SeriesImpl(final long id, final String name) {
 		this.exercises = new HashSet<>(20);
 		this.id = id;
 		this.name = name;
-	}
-	
-	@Override
-	public Course getCourse() {
-		return this.course;
 	}
 	
 	@Override
