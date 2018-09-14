@@ -21,6 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Implementation class for SubmissionService.
@@ -40,21 +41,9 @@ public class SubmissionServiceImpl implements SubmissionService {
 	
 	@Override
 	public Submission get(final long id) {
-		final Submission fromCache = this.cache.get(id);
-		System.out.println(fromCache);
-		
-		if(fromCache == null || fromCache.getStatus() == SubmissionStatus.PENDING) {
-			System.out.println("api");
-			final Submission fromApi = getFromApi(id);
-			System.out.println(fromApi);
-			System.out.println(fromApi.getStatus());
-			this.cache.put(id, fromApi);
-			return fromApi;
-		} else {
-			System.out.println("cache");
-			System.out.println(fromCache);
-			return fromCache;
-		}
+		return Optional.ofNullable(this.cache.get(id))
+			.filter(submission -> submission.getStatus() != SubmissionStatus.PENDING)
+			.orElseGet(() -> this.cache.put(id, SubmissionServiceImpl.getFromApi(id)));
 	}
 	
 	/**

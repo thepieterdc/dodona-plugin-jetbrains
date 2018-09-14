@@ -161,16 +161,18 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setText("Setting exercise...");
 			
 			// Modify the code.
-			//TODO issue 4:
+			//TODO issue 4: set selectedCourse and selectedExercise in the code like
+			//TODO          // Dodona course: i, exercise: j   (make sure the comments
+			//TODO          // work across all languages (Python/Ruby/..)
 			NotificationReporter.info(String.format("TODO issue #4. Course = %d, Exercise = %d",
 				this.selectedCourse.getId(), this.selectedExercise.getId()
 			));
 			
-			NotificationReporter.info("Exercise successfully set.");
+			EventQueue.invokeLater(() -> NotificationReporter.info("Exercise successfully set."));
 		} catch (final WarningMessageException warning) {
-			NotificationReporter.warning(warning.getMessage());
+			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));
 		} catch (final ErrorMessageException | InvocationTargetException error) {
-			NotificationReporter.error(error.getMessage());
+			EventQueue.invokeLater(() -> NotificationReporter.error(error.getMessage()));
 		} catch (final InterruptedException ex) {
 			// aborted by user.
 		}
