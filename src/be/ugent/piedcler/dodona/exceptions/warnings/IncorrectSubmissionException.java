@@ -21,8 +21,8 @@ public class IncorrectSubmissionException extends WarningMessageException {
 	 */
 	public IncorrectSubmissionException(final Submission submission) {
 		super(String.format(
-				"The submission to %s was incorrect. <a href=\"%s\">More details</a>.",
-				submission.getExercise(),
+				"The submission to \"%s\" was incorrect. <a href=\"%s\">More details</a>.",
+				submission.getExercise().getName(),
 				submission.getUrl()
 		));
 	}
