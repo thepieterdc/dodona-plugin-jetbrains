@@ -136,10 +136,6 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.30);
 			progressIndicator.setText("Retrieving series...");
 			
-			System.out.println(this.selectedCourse);
-			System.out.println(this.selectedCourse.getId());
-			System.out.println(this.selectedCourse.getSeries());
-			
 			final Collection<Series> courseSeries = this.courses.get(this.selectedCourse.getId()).getSeries();
 			
 			progressIndicator.setFraction(0.45);
@@ -165,14 +161,18 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setText("Setting exercise...");
 			
 			// Modify the code.
+			//TODO issue 4:
+			NotificationReporter.info(String.format("TODO issue #4. Course = %d, Exercise = %d",
+				this.selectedCourse.getId(), this.selectedExercise.getId()
+			));
 			
 			NotificationReporter.info("Exercise successfully set.");
 		} catch (final WarningMessageException warning) {
 			NotificationReporter.warning(warning.getMessage());
-		} catch (final ErrorMessageException error) {
+		} catch (final ErrorMessageException | InvocationTargetException error) {
 			NotificationReporter.error(error.getMessage());
-		} catch (final InterruptedException | InvocationTargetException e) {
-			// ignore, user closed the dialog.
+		} catch (final InterruptedException ex) {
+			// aborted by user.
 		}
 	}
 	

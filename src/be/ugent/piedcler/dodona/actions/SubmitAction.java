@@ -33,7 +33,7 @@ public class SubmitAction extends AnAction {
 		try {
 			if (code != null) {
 				final Solution solution = ExerciseIdentifier.identify(code).map(sol -> sol.setCode(code))
-						.orElseThrow(ExerciseNotSetException::new);
+					.orElseThrow(ExerciseNotSetException::new);
 				ProgressManager.getInstance().run(new SubmitSolutionTask(event.getProject(), solution));
 			} else {
 				throw new CodeReadException();
