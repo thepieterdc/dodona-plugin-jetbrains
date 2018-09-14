@@ -30,6 +30,7 @@ cmake-build-*/
 
 # IntelliJ
 out/
+*.ipr
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/
