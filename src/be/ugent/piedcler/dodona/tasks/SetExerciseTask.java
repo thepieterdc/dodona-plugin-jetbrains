@@ -164,11 +164,15 @@ public class SetExerciseTask extends Task.Backgroundable {
 			//TODO issue 4: set selectedCourse and selectedExercise in the code like
 			//TODO          // Dodona course: i, exercise: j   (make sure the comments
 			//TODO          // work across all languages (Python/Ruby/..)
-			NotificationReporter.info(String.format("TODO issue #4. Course = %d, Exercise = %d",
-				this.selectedCourse.getId(), this.selectedExercise.getId()
-			));
+			EventQueue.invokeLater(() -> NotificationReporter.info(String.format(
+				"TODO issue #4. Course = %d, Exercise = %d",
+				this.selectedCourse.getId(),
+				this.selectedExercise.getId()
+			)));
 			
-			EventQueue.invokeLater(() -> NotificationReporter.info("Exercise successfully set."));
+			// TODO when the above todo is implemented, uncomment this (it's a bit confusing
+			// TODO to show this when it's not yet implemented)
+//			EventQueue.invokeLater(() -> NotificationReporter.info("Exercise successfully set."));
 		} catch (final WarningMessageException warning) {
 			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));
 		} catch (final ErrorMessageException | InvocationTargetException error) {

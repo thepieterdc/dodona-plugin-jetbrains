@@ -78,7 +78,8 @@ public class SubmissionServiceImpl implements SubmissionService {
 		
 		if (response.getStatus().equals(SubmissionPostResponse.STATUS_OK)) {
 			final Submission submission = new PendingSubmission(response.getId(), solution.getExercise());
-			return this.cache.put(response.getId(), submission);
+			this.cache.put(response.getId(), submission);
+			return submission;
 		} else {
 			throw new SubmissionException();
 		}

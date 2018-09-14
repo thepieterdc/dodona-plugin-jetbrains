@@ -20,6 +20,8 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
+
 /**
  * Submits a solution to Dodona.
  */
@@ -64,23 +66,28 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 				submission = this.submissions.get(submission.getId());
 				
 				delay = Math.min(
-						(long) (delay * SubmitSolutionTask.DELAY_BACKOFF_FACTOR),
-						SubmitSolutionTask.DELAY_MAX
+					(long) (delay * SubmitSolutionTask.DELAY_BACKOFF_FACTOR),
+					SubmitSolutionTask.DELAY_MAX
 				);
 			}
 			
 			progressIndicator.setFraction(1.0);
 			progressIndicator.setText("Evaluation completed");
 			
+			// Required to use EventQueue.invokeLater(), must be final.
+			final Submission completed = submission;
+			
 			if (submission.getStatus() == SubmissionStatus.CORRECT) {
-				NotificationReporter.info(String.format("Solution to %s was correct!", submission.getExercise().getName()));
+				EventQueue.invokeLater(() -> NotificationReporter.info(
+					String.format("Solution to %s was correct!", completed.getExercise().getName())
+				));
 			} else {
-				throw new IncorrectSubmissionException(submission);
+				throw new IncorrectSubmissionException(completed);
 			}
 		} catch (final WarningMessageException warning) {
-			NotificationReporter.warning(warning.getMessage());
+			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));
 		} catch (final ErrorMessageException error) {
-			NotificationReporter.error(error.getMessage());
+			EventQueue.invokeLater(() -> NotificationReporter.error(error.getMessage()));
 		} catch (final InterruptedException ex) {
 			throw new RuntimeException(ex);
 		}
