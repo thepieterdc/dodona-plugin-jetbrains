@@ -64,6 +64,7 @@ fabric.properties
 # Package Files #
 *.jar
 !lib/*.jar
+!gradle/wrapper/gradle-wrapper.jar
 *.war
 *.nar
 *.ear

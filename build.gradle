@@ -19,7 +19,7 @@ dependencies {
 }
 
 intellij {
-    version 'IC-2016.1'
+    version 'IC-2018.1'
 }
 
 patchPluginXml {
