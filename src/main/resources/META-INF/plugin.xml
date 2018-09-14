@@ -36,7 +36,7 @@
             <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop" />
             <action id="be.ugent.piedcler.dodona.submit" class="be.ugent.piedcler.dodona.actions.SubmitAction"
                     text="Submit to Dodona" description="Submits the current file to Dodona."
-                    icon="ActionIcons.SUBMIT_ACTION">
+                    icon="/icons/submitAction.png">
             </action>
         </group>
     </actions>
