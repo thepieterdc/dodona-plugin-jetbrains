@@ -35,15 +35,6 @@ public class DodonaSettings implements Configurable {
 	@Nullable
 	@Override
 	public JComponent createComponent() {
-		this.lblFormDescription.setText("These settings configure the Dodona plugin.");
-
-		this.lblApiKey.setText("API token");
-		this.lblApiKeyInstructions.setText("See the README at https://github.com/thepieterdc/ugent-dodona for guidance on how to generate an API token.");
-		this.fieldApiKey.setToolTipText("API token used to sign in to Dodona.");
-
-		this.lblDodonaURL.setText("Dodona URL");
-		this.fieldDodonaURL.setToolTipText("Link to the Dodona api.");
-
 
 		this.updateApiKeyFromSettings();
 		this.updateDodonaURLFromSettings();
