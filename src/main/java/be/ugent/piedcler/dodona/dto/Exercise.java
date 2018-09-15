@@ -30,7 +30,7 @@ public interface Exercise extends Resource {
 	}
 
 	static String getUrl(long id) {
-		return SettingsHelper.getDodonaURL(ENDPOINT_ID, ENDPOINT_ID, id);
+		return SettingsHelper.getDodonaURL(ENDPOINT_ID, id);
 	}
 
 }
