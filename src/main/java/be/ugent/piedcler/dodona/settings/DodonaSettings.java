@@ -22,50 +22,69 @@ public class DodonaSettings implements Configurable {
 	private JLabel lblApiKey;
 	private JLabel lblApiKeyInstructions;
 	private JTextField fieldApiKey;
-	
+
+	private JLabel lblDodonaURL;
+	private JTextField fieldDodonaURL;
+
 	@Override
 	public void apply() {
 		SettingsHelper.setApiKey(this.fieldApiKey.getText().trim());
+		SettingsHelper.setDodonaURL(this.fieldDodonaURL.getText().trim());
 	}
-	
+
 	@Nullable
 	@Override
 	public JComponent createComponent() {
 		this.lblFormDescription.setText("These settings configure the Dodona plugin.");
-		
+
 		this.lblApiKey.setText("API token");
 		this.lblApiKeyInstructions.setText("See the README at https://github.com/thepieterdc/ugent-dodona for guidance on how to generate an API token.");
 		this.fieldApiKey.setToolTipText("API token used to sign in to Dodona.");
+
+		this.lblDodonaURL.setText("Dodona URL");
+		this.fieldDodonaURL.setToolTipText("Link to the Dodona api.");
+
+
 		this.updateApiKeyFromSettings();
-		
+		this.updateDodonaURLFromSettings();
+
 		return this.panelRoot;
 	}
-	
+
 	@Override
 	public void disposeUIResources() {
-	
+
 	}
-	
+
 	@Nls
 	@Override
 	public String getDisplayName() {
 		return "Dodona Settings";
 	}
-	
+
 	@Override
 	public boolean isModified() {
-		return !SettingsHelper.getApiKey().equals(this.fieldApiKey.getText().trim());
+		return !SettingsHelper.getApiKey().equals(this.fieldApiKey.getText().trim())
+			|| ! SettingsHelper.getDodonaURL().equals(this.fieldDodonaURL.getText().trim());
 	}
-	
+
 	@Override
 	public void reset() {
-	
+
 	}
-	
+
 	/**
 	 * Sets the value of the API key field.
 	 */
 	private void updateApiKeyFromSettings() {
 		this.fieldApiKey.setText(SettingsHelper.getApiKey());
 	}
+
+	/**
+	 * Sets the value of the Dodona URL field.
+	 */
+	private void updateDodonaURLFromSettings(){
+		this.fieldDodonaURL.setText(SettingsHelper.getDodonaURL());
+	}
+
 }
