@@ -46,7 +46,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 	 * @return the exercise
 	 */
 	private static Exercise getFromApi(final long id) {
-		final String url = String.format(Exercise.ENDPOINT_ID, id);
+		final String url = Exercise.getUrl(id);
 		return Http.get(url, ExerciseResponse.class).toExercise();
 	}
 }

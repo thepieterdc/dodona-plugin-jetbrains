@@ -47,7 +47,7 @@ public class SeriesServiceImpl implements SeriesService {
 	 * @return the series
 	 */
 	private static Series getFromApi(final long id) {
-		final String url = String.format(Series.ENDPOINT_ID, id);
+		final String url = Series.getUrl(id);
 		return Http.get(url, SeriesResponse.class).toSeries();
 	}
 }

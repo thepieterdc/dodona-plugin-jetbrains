@@ -8,6 +8,7 @@
 package be.ugent.piedcler.dodona.settings;
 
 import com.intellij.ide.util.PropertiesComponent;
+import org.fest.util.Strings;
 import org.jetbrains.annotations.NonNls;
 
 /**
@@ -43,6 +44,11 @@ public enum SettingsHelper {
 	public static String getDodonaURL() {
 		final PropertiesComponent properties = PropertiesComponent.getInstance();
 		return properties.getValue(SettingsHelper.SETTING_DODONA_URL, DEFAULT_DODONA_URL);
+	}
+
+
+	public static String getDodonaURL(String format, Object... args) {
+		return getDodonaURL() + String.format(format, args);
 	}
 
 	/**
