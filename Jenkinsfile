@@ -13,7 +13,7 @@ pipeline {
 
     post {
         always {
-            githubPRStatusPublisher statusMsg: 'Test'
+            githubNotify status: 'FAILURE', description: 'Notify test'
         }
     }
 }
