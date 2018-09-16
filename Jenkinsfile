@@ -6,14 +6,12 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh script: './gradlew assemle 2&1>build_log', returnStdout: true
+                sh './gradlew assemle | tee build_log'
             }
 
             post {
                 failure {
-                    script {
-                        log = sh script: 'cat build_log', returnStdout: true
-                    }
+                    def log = readFile 'build_log'
                     github_failure_build(log);
                 }
             }
