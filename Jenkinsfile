@@ -20,6 +20,6 @@ pipeline {
 
 def github_failure() {
     withCredentials([string(credentialsId: 'gh-thepieterdc', variable: 'GH_TOKEN')]) {
-        sh "curl --silent -H 'Authorization: token $GH_TOKEN' -X POST '{\"body\": \"Build failed :(\"}' https://api.github.com/repos/thepieterdc/ugent-dodona/commits/${env.GIT_COMMIT}/comments"
+        sh "curl --silent -H 'Authorization: token $GH_TOKEN' -X POST -d '{\"body\": \"Build failed :(\"}' https://api.github.com/repos/thepieterdc/ugent-dodona/commits/${env.GIT_COMMIT}/comments"
     }
 }
