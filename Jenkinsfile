@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh './gradlew assemle $@ | tee build_log && echo ${PIPESTATUS[0]}'
+                sh './gradlew assemle | tee build_log && (exit ${PIPESTATUS[0]})'
             }
 
             post {
