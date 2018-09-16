@@ -7,7 +7,10 @@
  */
 package be.ugent.piedcler.dodona.actions;
 
+import be.ugent.piedcler.dodona.code.ExerciseIdenifierImpl.CombinedExerciseIdentifier;
+import be.ugent.piedcler.dodona.code.ExerciseIdenifierImpl.URLExerciseIdentifier;
 import be.ugent.piedcler.dodona.code.ExerciseIdentifier;
+import be.ugent.piedcler.dodona.code.ExerciseIdenifierImpl.StructuredExerciseIdentifier;
 import be.ugent.piedcler.dodona.dto.Solution;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.exceptions.WarningMessageException;
@@ -26,13 +29,19 @@ import org.jetbrains.annotations.NotNull;
  * Action that submits the current file to Dodona.
  */
 public class SubmitAction extends AnAction {
+
+	private final ExerciseIdentifier identifier = new CombinedExerciseIdentifier(
+		new StructuredExerciseIdentifier(),
+		new URLExerciseIdentifier()
+	);
+
 	@Override
 	public void actionPerformed(@NotNull final AnActionEvent event) {
 		final String code = event.getData(PlatformDataKeys.FILE_TEXT);
-		
+
 		try {
 			if (code != null) {
-				final Solution solution = ExerciseIdentifier.identify(code).map(sol -> sol.setCode(code))
+				final Solution solution = identifier.identify(code).map(sol -> sol.setCode(code))
 					.orElseThrow(ExerciseNotSetException::new);
 				ProgressManager.getInstance().run(new SubmitSolutionTask(event.getProject(), solution));
 			} else {
