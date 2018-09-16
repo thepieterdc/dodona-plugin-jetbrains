@@ -7,12 +7,12 @@
  */
 package be.ugent.piedcler.dodona.services.impl;
 
-import be.ugent.piedcler.dodona.Configuration;
 import be.ugent.piedcler.dodona.api.Http;
 import be.ugent.piedcler.dodona.api.responses.CourseResponse;
 import be.ugent.piedcler.dodona.api.responses.RootResponse;
 import be.ugent.piedcler.dodona.dto.Course;
 import be.ugent.piedcler.dodona.services.CourseService;
+import be.ugent.piedcler.dodona.settings.SettingsHelper;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -51,13 +51,13 @@ public class CourseServiceImpl implements CourseService {
 	 * @return the course
 	 */
 	private static Course getFromApi(final long id) {
-		final String url = String.format(Course.ENDPOINT_ID, id);
+		final String url = Course.getUrl(id);
 		return Http.get(url, CourseResponse.class).toCourse();
 	}
 	
 	@Override
 	public Collection<Course> getSubscribed() {
-		return Http.get(Configuration.DODONA_URL, RootResponse.class)
+		return Http.get(SettingsHelper.getDodonaURL(), RootResponse.class)
 			.getUser()
 			.getSubscribedCourses()
 			.stream()

@@ -7,7 +7,7 @@
  */
 package be.ugent.piedcler.dodona.dto;
 
-import be.ugent.piedcler.dodona.Configuration;
+import be.ugent.piedcler.dodona.settings.SettingsHelper;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.Collection;
@@ -17,24 +17,28 @@ import java.util.Collection;
  */
 public interface Series extends Resource {
 	@NonNls
-	String ENDPOINT_ID = Configuration.DODONA_URL + "/series/%d";
-	
+	String ENDPOINT_ID = "/series/%d";
+
 	/**
 	 * Gets the exercises in this series.
 	 *
 	 * @return the exercises
 	 */
 	Collection<Exercise> getExercises();
-	
+
 	/**
 	 * Gets the name of the series.
 	 *
 	 * @return the name
 	 */
 	String getName();
-	
+
 	@Override
 	default String getUrl() {
-		return String.format(Series.ENDPOINT_ID, this.getId());
+		return getUrl(this.getId());
+	}
+
+	static String getUrl(long id) {
+		return SettingsHelper.getDodonaURL(ENDPOINT_ID, id);
 	}
 }

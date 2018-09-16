@@ -7,8 +7,8 @@
  */
 package be.ugent.piedcler.dodona.dto;
 
-import be.ugent.piedcler.dodona.Configuration;
 import be.ugent.piedcler.dodona.dto.submission.SubmissionStatus;
+import be.ugent.piedcler.dodona.settings.SettingsHelper;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,18 +17,18 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Submission extends Resource {
 	@NonNls
-	String ENDPOINT = Configuration.DODONA_URL + "/submissions";
-	
+	String ENDPOINT = "/submissions";
+
 	@NonNls
 	String ENDPOINT_ID = Submission.ENDPOINT + "/%d";
-	
+
 	/**
 	 * Gets the exercise this submission belongs to.
 	 *
 	 * @return the exercise
 	 */
 	Exercise getExercise();
-	
+
 	/**
 	 * Gets the status of the submission.
 	 *
@@ -36,13 +36,23 @@ public interface Submission extends Resource {
 	 */
 	@NotNull
 	SubmissionStatus getStatus();
-	
+
 	/**
 	 * Gets the url to this submission.
 	 *
 	 * @return the url
 	 */
 	default String getUrl() {
-		return String.format(Submission.ENDPOINT_ID, this.getId());
+		return getUrl(this.getId());
+	}
+
+	/**
+	 * Gets the url to the submission
+	 *
+	 * @param id The submission id
+	 * @return the url
+	 */
+	static String getUrl(long id) {
+		return SettingsHelper.getDodonaURL(Submission.ENDPOINT_ID, id);
 	}
 }
