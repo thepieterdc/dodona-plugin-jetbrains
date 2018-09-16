@@ -10,4 +10,10 @@ pipeline {
             }
         }
     }
+
+    post {
+        always {
+            githubPRStatusPublisher statusMsg: 'Test'
+        }
+    }
 }
