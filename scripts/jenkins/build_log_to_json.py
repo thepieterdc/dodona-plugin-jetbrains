@@ -10,7 +10,7 @@ outfile = sys.argv[3]
 with open(infile) as log:
 	buildlog = log.read()
 
-out = {"body": "{} screwed things up once more.\n**Build log:**\n`{}`".format(name, buildlog)}
+out = {"body": "{} screwed things up once more.\n**Build log:**\n```{}```".format(name, buildlog)}
 
 with open(outfile, 'w') as outh:
 	json.dump(out, outh)
