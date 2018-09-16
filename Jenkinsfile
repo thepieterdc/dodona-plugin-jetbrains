@@ -20,7 +20,7 @@ pipeline {
     }
 }
 
-static String author_name(String email) {
+String author_name(String email) {
     echo env.GIT_AUTHOR_NAME
     return "Pieter"
 }
