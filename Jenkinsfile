@@ -6,14 +6,18 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh './gradlew assemble'
+                sh './gradlew assemle' // fails the build
             }
         }
     }
 
     post {
-        always {
-            githubNotify status: 'FAILURE', description: 'Notify test'
+        failure {
+            github_failure();
         }
     }
+}
+
+def github_failure() {
+    sh "curl --silent -X POST '{\"body\": \"Build failed :(\"}' https://api.github.com/repos/thepieterdc/ugent-dodona/commits/${env.GIT_COMMIT}/comments"
 }
