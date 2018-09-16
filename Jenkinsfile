@@ -31,9 +31,9 @@ String author_name(String email) {
 
 def github_failure_build() {
     String author = author_name(sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim())
-    String build_log = sh(script: 'cat build_log', returnStdout: true)
-    String message = "${author} screwed things up once more.\\n\\n**Build log:**${build_log}"
+    String build_script = "python3 scripts/jenkins/build_log_to_json.py ${author} build_log build_log.json"
+    String build_log = sh(script: build_script, returnStdout: true)
     withCredentials([string(credentialsId: 'gh-thepieterdc', variable: 'GH_TOKEN')]) {
-        sh "curl --silent -H 'Authorization: token $GH_TOKEN' -X POST -d '{\"body\": \"${message}\"}' https://api.github.com/repos/thepieterdc/ugent-dodona/commits/${env.GIT_COMMIT}/comments"
+        sh "curl --silent -H 'Authorization: token $GH_TOKEN' -X POST --data \"@build_log.json\" https://api.github.com/repos/thepieterdc/ugent-dodona/commits/${env.GIT_COMMIT}/comments"
     }
 }
