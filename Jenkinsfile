@@ -11,8 +11,7 @@ pipeline {
 
             post {
                 failure {
-                    def log = readFile 'build_log'
-                    github_failure_build(log);
+                    github_failure_build();
                 }
             }
         }
@@ -30,8 +29,9 @@ String author_name(String email) {
     return "Someone"
 }
 
-def github_failure_build(build_log) {
+def github_failure_build() {
     String author = author_name(sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim())
+    String build_log = readFile 'build_log'
     String message = "${author} screwed things up once more.\n\n*Build log:*\n${build_log}"
     withCredentials([string(credentialsId: 'gh-thepieterdc', variable: 'GH_TOKEN')]) {
         sh "curl --silent -H 'Authorization: token $GH_TOKEN' -X POST -d '{\"body\": \"${message}\"}' https://api.github.com/repos/thepieterdc/ugent-dodona/commits/${env.GIT_COMMIT}/comments"
