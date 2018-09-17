@@ -1,6 +1,6 @@
-package be.ugent.piedcler.dodona.code.preprocess;
+package be.ugent.piedcler.dodona.code.preprocess.impl;
 
-import be.ugent.piedcler.dodona.code.FileSubmissionPreprocessor;
+import be.ugent.piedcler.dodona.code.preprocess.FileSubmissionPreprocessor;
 import com.intellij.lang.Language;
 import com.intellij.psi.PsiFile;
 
@@ -11,6 +11,10 @@ public class CombinedSubmissionPreprocessor implements FileSubmissionPreprocesso
 
 	private final HashMap<Language, FileSubmissionPreprocessor> preprocessorMap;
 
+	public CombinedSubmissionPreprocessor() {
+		preprocessorMap = new HashMap<>();
+	}
+
 	public CombinedSubmissionPreprocessor(Map<Language, FileSubmissionPreprocessor> preprocessorMap) {
 		this.preprocessorMap = new HashMap<>(preprocessorMap);
 	}
@@ -20,20 +24,15 @@ public class CombinedSubmissionPreprocessor implements FileSubmissionPreprocesso
 		return this;
 	}
 
-	public CombinedSubmissionPreprocessor unregisterEntry(Language lang, FileSubmissionPreprocessor preprocessor) {
+	public CombinedSubmissionPreprocessor unregisterEntry(Language lang) {
 		preprocessorMap.remove(lang);
 		return this;
 	}
 
 	@Override
 	public PsiFile preprocess(PsiFile file) {
-		for (Map.Entry<Language, FileSubmissionPreprocessor> entry : preprocessorMap.entrySet()) {
-			Language key = entry.getKey();
-			FileSubmissionPreprocessor value = entry.getValue();
-			if (file.getLanguage().is(key)) {
-				return value.preprocess(file);
-			}
-		}
+		if (preprocessorMap.containsKey(file.getLanguage()))
+			return preprocessorMap.get(file.getLanguage()).preprocess(file);
 		return file;
 	}
 }

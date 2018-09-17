@@ -1,6 +1,6 @@
-package be.ugent.piedcler.dodona.code.preprocess;
+package be.ugent.piedcler.dodona.code.preprocess.impl;
 
-import be.ugent.piedcler.dodona.code.FileSubmissionPreprocessor;
+import be.ugent.piedcler.dodona.code.preprocess.FileSubmissionPreprocessor;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiElement;
@@ -10,7 +10,6 @@ import com.intellij.psi.PsiPackageStatement;
 import java.util.ArrayList;
 
 
-// hello
 public class JavaFileSubmissionPreprocessor implements FileSubmissionPreprocessor {
 
 	@Override

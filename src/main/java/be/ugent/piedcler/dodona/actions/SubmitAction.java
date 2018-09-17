@@ -7,13 +7,15 @@
  */
 package be.ugent.piedcler.dodona.actions;
 
-import be.ugent.piedcler.dodona.code.ExerciseIdenifierImpl.CombinedExerciseIdentifier;
-import be.ugent.piedcler.dodona.code.ExerciseIdenifierImpl.StructuredExerciseIdentifier;
-import be.ugent.piedcler.dodona.code.ExerciseIdenifierImpl.URLExerciseIdentifier;
-import be.ugent.piedcler.dodona.code.ExerciseIdentifier;
-import be.ugent.piedcler.dodona.code.FileSubmissionPreprocessor;
-import be.ugent.piedcler.dodona.code.preprocess.CombinedSubmissionPreprocessor;
-import be.ugent.piedcler.dodona.code.preprocess.JavaFileSubmissionPreprocessor;
+import be.ugent.piedcler.dodona.code.identifiers.getter.impl.CombinedExerciseIdentifierGetter;
+import be.ugent.piedcler.dodona.code.identifiers.getter.impl.StructuredExerciseIdentifierGetter;
+import be.ugent.piedcler.dodona.code.identifiers.getter.impl.URLExerciseIdentifierGetter;
+import be.ugent.piedcler.dodona.code.identifiers.getter.ExerciseIdentifierGetter;
+import be.ugent.piedcler.dodona.code.identifiers.setter.impl.CombinedExerciseIdentifierSetter;
+import be.ugent.piedcler.dodona.code.identifiers.setter.impl.JavaExerciseIdentifierSetter;
+import be.ugent.piedcler.dodona.code.preprocess.FileSubmissionPreprocessor;
+import be.ugent.piedcler.dodona.code.preprocess.impl.CombinedSubmissionPreprocessor;
+import be.ugent.piedcler.dodona.code.preprocess.impl.JavaFileSubmissionPreprocessor;
 import be.ugent.piedcler.dodona.dto.Solution;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.exceptions.WarningMessageException;
@@ -30,31 +32,35 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-
 /**
  * Action that submits the current file to Dodona.
  */
 public class SubmitAction extends AnAction {
 
-	private final ExerciseIdentifier identifier = new CombinedExerciseIdentifier(
-		new StructuredExerciseIdentifier(),
-		new URLExerciseIdentifier()
-	);
+	private final ExerciseIdentifierGetter identifierGetter =
+		new CombinedExerciseIdentifierGetter()
+			.registerIdentifier(new StructuredExerciseIdentifierGetter())
+			.registerIdentifier(new URLExerciseIdentifierGetter());
 
 	private final FileSubmissionPreprocessor preprocessor =
-		new CombinedSubmissionPreprocessor(new HashMap<>())
+		new CombinedSubmissionPreprocessor()
 			.registerEntry(JavaLanguage.INSTANCE, new JavaFileSubmissionPreprocessor());
+
+	private final CombinedExerciseIdentifierSetter identifierSetter =
+		new CombinedExerciseIdentifierSetter()
+			.registerEntry(JavaLanguage.INSTANCE, new JavaExerciseIdentifierSetter());
 
 	@Override
 	public void actionPerformed(@NotNull final AnActionEvent event) {
 		final PsiFile file = event.getData(LangDataKeys.PSI_FILE);
+
 		final String code = (file != null) ?
 			preprocessor.preprocess((PsiFile) file.copy()).getText() : null;
 
+		identifierSetter.setIdentifier(file, "hello there");
 		try {
 			if (code != null) {
-				final Solution solution = identifier.identify(code).map(sol -> sol.setCode(code))
+				final Solution solution = identifierGetter.identify(code).map(sol -> sol.setCode(code))
 					.orElseThrow(ExerciseNotSetException::new);
 				ProgressManager.getInstance().run(new SubmitSolutionTask(event.getProject(), solution));
 			} else {
