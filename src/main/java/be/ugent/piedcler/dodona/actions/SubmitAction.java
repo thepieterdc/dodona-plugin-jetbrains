@@ -11,6 +11,7 @@ import be.ugent.piedcler.dodona.code.identifiers.getter.impl.CombinedExerciseIde
 import be.ugent.piedcler.dodona.code.identifiers.getter.impl.StructuredExerciseIdentifierGetter;
 import be.ugent.piedcler.dodona.code.identifiers.getter.impl.URLExerciseIdentifierGetter;
 import be.ugent.piedcler.dodona.code.identifiers.getter.ExerciseIdentifierGetter;
+import be.ugent.piedcler.dodona.code.identifiers.setter.ExerciseIdentifierSetter;
 import be.ugent.piedcler.dodona.code.identifiers.setter.impl.CombinedExerciseIdentifierSetter;
 import be.ugent.piedcler.dodona.code.identifiers.setter.impl.JavaExerciseIdentifierSetter;
 import be.ugent.piedcler.dodona.code.preprocess.FileSubmissionPreprocessor;
@@ -46,7 +47,7 @@ public class SubmitAction extends AnAction {
 		new CombinedSubmissionPreprocessor()
 			.registerEntry(JavaLanguage.INSTANCE, new JavaFileSubmissionPreprocessor());
 
-	private final CombinedExerciseIdentifierSetter identifierSetter =
+	private final ExerciseIdentifierSetter identifierSetter =
 		new CombinedExerciseIdentifierSetter()
 			.registerEntry(JavaLanguage.INSTANCE, new JavaExerciseIdentifierSetter());
 
