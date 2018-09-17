@@ -11,6 +11,7 @@ import be.ugent.piedcler.dodona.api.Http;
 import be.ugent.piedcler.dodona.api.responses.ExerciseResponse;
 import be.ugent.piedcler.dodona.dto.Exercise;
 import be.ugent.piedcler.dodona.services.ExerciseService;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +40,16 @@ public class ExerciseServiceImpl implements ExerciseService {
 			});
 	}
 	
+	@Override
+	@NotNull
+	public Exercise getByUrl(final String url) {
+		return Exercise.getId(url).map(this::get).orElseGet(() -> {
+			final Exercise ret = ExerciseServiceImpl.getFromApi(url);
+			this.cache.put(ret.getId(), ret);
+			return ret;
+		});
+	}
+	
 	/**
 	 * Gets an exercise from the api.
 	 *
@@ -47,6 +58,16 @@ public class ExerciseServiceImpl implements ExerciseService {
 	 */
 	private static Exercise getFromApi(final long id) {
 		final String url = Exercise.getUrl(id);
+		return Http.get(url, ExerciseResponse.class).toExercise();
+	}
+	
+	/**
+	 * Gets an exercise from the api.
+	 *
+	 * @param url the url of the exercise to fetch
+	 * @return the exercise
+	 */
+	private static Exercise getFromApi(final String url) {
 		return Http.get(url, ExerciseResponse.class).toExercise();
 	}
 }
