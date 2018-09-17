@@ -26,21 +26,17 @@ import java.util.stream.Collectors;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SeriesResponse {
-	private final Collection<ExerciseResponse> exercises;
 	private final long id;
 	private final String name;
 	
 	/**
 	 * SeriesResponse constructor.
 	 *
-	 * @param exercises the exercises in this series
 	 * @param id        the id of the series
 	 * @param name      the name of the series
 	 */
-	public SeriesResponse(@Nullable @JsonProperty("exercises") final Collection<ExerciseResponse> exercises,
-	                      @JsonProperty("id") final long id,
+	public SeriesResponse(@JsonProperty("id") final long id,
 	                      @JsonProperty("name") final String name) {
-		this.exercises = Optional.ofNullable(exercises).orElseGet(() -> new HashSet<>(30));
 		this.id = id;
 		this.name = name;
 	}
@@ -51,9 +47,6 @@ public class SeriesResponse {
 	 * @return the series
 	 */
 	public Series toSeries() {
-		final Collection<Exercise> convertedExercises = this.exercises.stream()
-				.map(ExerciseResponse::toExercise)
-				.collect(Collectors.toSet());
-		return new SeriesImpl(this.id, this.name).setExercises(convertedExercises);
+		return new SeriesImpl(this.id, this.name);
 	}
 }

@@ -27,7 +27,6 @@ public class CourseResponse {
 	private final long id;
 	private final String name;
 	private final String teacher;
-	private final Collection<SeriesResponse> series;
 	private final String year;
 	
 	/**
@@ -36,18 +35,15 @@ public class CourseResponse {
 	 * @param id      the id of the course
 	 * @param name    the name of the course
 	 * @param teacher the teacher of the course
-	 * @param series  the exercise series
 	 * @param year    the academic year
 	 */
 	public CourseResponse(@JsonProperty("id") final long id,
 	                      @JsonProperty("name") final String name,
 	                      @JsonProperty("teacher") final String teacher,
-	                      @Nullable @JsonProperty("series") final Collection<SeriesResponse> series,
 	                      @JsonProperty("year") final String year) {
 		this.id = id;
 		this.name = name;
 		this.teacher = teacher;
-		this.series = Optional.ofNullable(series).orElseGet(() -> new HashSet<>(10));
 		this.year = year;
 	}
 	
@@ -57,9 +53,6 @@ public class CourseResponse {
 	 * @return the course
 	 */
 	public Course toCourse() {
-		final Collection<Series> convertedSeries = this.series.stream()
-			.map(SeriesResponse::toSeries)
-			.collect(Collectors.toSet());
-		return new CourseImpl(this.id, this.name, this.teacher, this.year).setSeries(convertedSeries);
+		return new CourseImpl(this.id, this.name, this.teacher, this.year);
 	}
 }
