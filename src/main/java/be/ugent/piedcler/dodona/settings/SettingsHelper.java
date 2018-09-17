@@ -7,6 +7,7 @@
  */
 package be.ugent.piedcler.dodona.settings;
 
+import be.ugent.piedcler.dodona.services.CourseService;
 import com.intellij.ide.util.PropertiesComponent;
 import org.fest.util.Strings;
 import org.jetbrains.annotations.NonNls;

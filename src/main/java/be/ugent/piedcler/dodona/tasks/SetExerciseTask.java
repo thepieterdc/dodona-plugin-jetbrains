@@ -164,6 +164,8 @@ public class SetExerciseTask extends Task.Backgroundable {
 			//TODO issue 4: set selectedCourse and selectedExercise in the code like
 			//TODO          // Dodona course: i, exercise: j   (make sure the comments
 			//TODO          // work across all languages (Python/Ruby/..)
+
+
 			EventQueue.invokeLater(() -> NotificationReporter.info(String.format(
 				"TODO issue #4. Course = %d, Exercise = %d",
 				this.selectedCourse.getId(),
