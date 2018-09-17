@@ -26,7 +26,7 @@ public class SubmissionResponse {
 	public static final String STATUS_PENDING = "running";
 	
 	private final boolean accepted;
-	private final ExerciseResponse exercise;
+	private final String exercise;
 	private final long id;
 	private final String status;
 	
@@ -34,11 +34,12 @@ public class SubmissionResponse {
 	 * SubmissionResponse constructor.
 	 *
 	 * @param accepted the acceptance status
+	 * @param exercise url to the exercise
 	 * @param id       the id of the submission
 	 * @param status   the status
 	 */
 	public SubmissionResponse(@JsonProperty("accepted") final boolean accepted,
-	                          @JsonProperty("exercise") final ExerciseResponse exercise,
+	                          @JsonProperty("exercise") final String exercise,
 	                          @JsonProperty("id") final long id,
 	                          @JsonProperty("status") final String status) {
 		this.accepted = accepted;
@@ -53,11 +54,11 @@ public class SubmissionResponse {
 	 * @return the submission
 	 */
 	public Submission toSubmission() {
-		final Exercise convertedExercise = ExerciseService.getInstance().get(this.exercise.getId());
+		final Exercise convertedExercise = ExerciseService.getInstance().getByUrl(this.exercise);
 		
 		if (this.accepted) {
 			return new CorrectSubmission(this.id, convertedExercise);
-		} else if(SubmissionResponse.STATUS_PENDING.equals(this.status)) {
+		} else if (SubmissionResponse.STATUS_PENDING.equals(this.status)) {
 			return new PendingSubmission(this.id, convertedExercise);
 		}
 		return new WrongSubmission(this.id, convertedExercise);

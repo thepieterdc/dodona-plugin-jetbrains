@@ -8,13 +8,20 @@
 package be.ugent.piedcler.dodona.services.impl;
 
 import be.ugent.piedcler.dodona.api.Http;
+import be.ugent.piedcler.dodona.api.responses.ExerciseResponse;
 import be.ugent.piedcler.dodona.api.responses.SeriesResponse;
+import be.ugent.piedcler.dodona.dto.Course;
+import be.ugent.piedcler.dodona.dto.Exercise;
 import be.ugent.piedcler.dodona.dto.Series;
 import be.ugent.piedcler.dodona.services.SeriesService;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Implementation class for SeriesService.
@@ -48,6 +55,20 @@ public class SeriesServiceImpl implements SeriesService {
 	 */
 	private static Series getFromApi(final long id) {
 		final String url = Series.getUrl(id);
-		return Http.get(url, SeriesResponse.class).toSeries();
+		final Series series = Http.get(url, SeriesResponse.class).toSeries();
+		return series.setExercises(getExercisesFromApi(id));
+	}
+	
+	/**
+	 * Gets the exercises from a given series.
+	 *
+	 * @param series the series id
+	 * @return the exercises in the series
+	 */
+	@NotNull
+	private static Collection<Exercise> getExercisesFromApi(final long series) {
+		return Stream.of(Http.get(Series.getExercisesUrl(series), ExerciseResponse[].class))
+			.map(ExerciseResponse::toExercise)
+			.collect(Collectors.toSet());
 	}
 }

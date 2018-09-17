@@ -13,6 +13,7 @@ import be.ugent.piedcler.dodona.dto.submission.SubmissionStatus;
 import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.exceptions.warnings.IncorrectSubmissionException;
+import be.ugent.piedcler.dodona.exceptions.warnings.SubmissionTimeoutException;
 import be.ugent.piedcler.dodona.reporting.NotificationReporter;
 import be.ugent.piedcler.dodona.services.SubmissionService;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -26,9 +27,10 @@ import java.awt.*;
  * Submits a solution to Dodona.
  */
 public class SubmitSolutionTask extends Task.Backgroundable {
-	private static final double DELAY_BACKOFF_FACTOR = 1.2;
-	private static final long DELAY_MAX = 35_000L;
-	private static final long DELAY_INITIAL = 2_000L;
+	private static final double DELAY_BACKOFF_FACTOR = 1.15;
+	private static final long DELAY_MAX = 20_000L;
+	private static final long DELAY_INITIAL = 3_000L;
+	private static final long DELAY_TIMEOUT = 120_000L;
 	
 	private final Solution solution;
 	private final SubmissionService submissions;
@@ -60,15 +62,26 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			Thread.sleep(SubmitSolutionTask.DELAY_INITIAL);
 			
 			long delay = SubmitSolutionTask.DELAY_INITIAL;
+			long total = 0L;
 			while (submission.getStatus() == SubmissionStatus.PENDING) {
+				if (total > DELAY_TIMEOUT) {
+					break;
+				}
+				
 				Thread.sleep(delay);
 				
 				submission = this.submissions.get(submission.getId());
 				
 				delay = Math.min(
-					(long) (delay * SubmitSolutionTask.DELAY_BACKOFF_FACTOR),
+					(long) ((double) delay * SubmitSolutionTask.DELAY_BACKOFF_FACTOR),
 					SubmitSolutionTask.DELAY_MAX
 				);
+				
+				total += delay;
+			}
+			
+			if (submission.getStatus() == SubmissionStatus.PENDING) {
+				throw new SubmissionTimeoutException(submission);
 			}
 			
 			progressIndicator.setFraction(1.0);
