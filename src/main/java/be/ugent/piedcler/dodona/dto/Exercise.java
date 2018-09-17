@@ -16,21 +16,33 @@ import org.jetbrains.annotations.NonNls;
 public interface Exercise extends Resource {
 	@NonNls
 	String ENDPOINT_ID = "/exercises/%d";
-
+	
+	/**
+	 * Gets the boilerplate code.
+	 *
+	 * @return the boilerplate code
+	 */
+	String getBoilerplate();
+	
 	/**
 	 * Gets the name of the exercise.
 	 *
 	 * @return the name
 	 */
 	String getName();
-
+	
 	@Override
 	default String getUrl() {
 		return getUrl(this.getId());
 	}
-
-	static String getUrl(long id) {
+	
+	/**
+	 * Gets the url to an exercise.
+	 *
+	 * @param id the id of the exercise
+	 * @return the url
+	 */
+	static String getUrl(final long id) {
 		return SettingsHelper.getDodonaURL(ENDPOINT_ID, id);
 	}
-
 }

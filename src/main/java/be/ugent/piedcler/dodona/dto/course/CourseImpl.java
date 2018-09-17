@@ -66,16 +66,11 @@ public final class CourseImpl implements Course {
 		return this.year;
 	}
 	
-	/**
-	 * Sets the exercise series of this course.
-	 *
-	 * @param series the exercise series
-	 * @return fluent setter
-	 */
+	@Override
 	@NotNull
-	public Course setSeries(final Collection<Series> series) {
+	public Course setSeries(final Collection<Series> nw) {
 		this.series.clear();
-		this.series.addAll(series);
+		this.series.addAll(nw);
 		return this;
 	}
 	

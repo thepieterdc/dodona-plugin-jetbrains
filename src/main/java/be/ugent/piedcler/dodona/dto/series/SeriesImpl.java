@@ -10,6 +10,7 @@ package be.ugent.piedcler.dodona.dto.series;
 import be.ugent.piedcler.dodona.dto.Course;
 import be.ugent.piedcler.dodona.dto.Exercise;
 import be.ugent.piedcler.dodona.dto.Series;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -26,7 +27,6 @@ public final class SeriesImpl implements Series {
 	/**
 	 * SeriesImpl constructor.
 	 *
-	 * @param course the course of the series
 	 * @param id     the id of the series
 	 * @param name   the name of the series
 	 */
@@ -51,15 +51,11 @@ public final class SeriesImpl implements Series {
 		return this.name;
 	}
 	
-	/**
-	 * Sets the exercises in this series.
-	 *
-	 * @param exercises the exercises to set
-	 * @return fluent setter
-	 */
-	public Series setExercises(final Collection<Exercise> exercises) {
+	@Override
+	@NotNull
+	public Series setExercises(final Collection<Exercise> nw) {
 		this.exercises.clear();
-		this.exercises.addAll(exercises);
+		this.exercises.addAll(nw);
 		return this;
 	}
 	

@@ -17,19 +17,32 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ExerciseResponse {
+	private final String boilerplate;
 	private final long id;
 	private final String name;
 	
 	/**
 	 * ExerciseResponse constructor.
 	 *
-	 * @param id   the id of the exercise
-	 * @param name the name of the exercise
+	 * @param boilerplate the boilerplate code of the exercise
+	 * @param id          the id of the exercise
+	 * @param name        the name of the exercise
 	 */
-	public ExerciseResponse(@JsonProperty("id") final long id,
+	public ExerciseResponse(@JsonProperty("boilerplate") final String boilerplate,
+	                        @JsonProperty("id") final long id,
 	                        @JsonProperty("name") final String name) {
+		this.boilerplate = boilerplate;
 		this.id = id;
 		this.name = name;
+	}
+	
+	/**
+	 * Gets the boilerplate code.
+	 *
+	 * @return the boilerplate code
+	 */
+	public String getBoilerplate() {
+		return this.boilerplate;
 	}
 	
 	/**
@@ -47,6 +60,6 @@ public class ExerciseResponse {
 	 * @return the exercise
 	 */
 	public Exercise toExercise() {
-		return new ExerciseImpl(this.id, this.name);
+		return new ExerciseImpl(this.id, this.name, this.boilerplate);
 	}
 }
