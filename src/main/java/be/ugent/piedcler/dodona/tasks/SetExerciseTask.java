@@ -169,7 +169,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			//TODO issue 4: make sure the comments work across all languages (Python/Ruby/..)
 			
 			this.identifierSetter.accept(String.format(
-				"// Dodona: course %d, exercise %d", this.selectedCourse.getId(), this.selectedExercise.getId()
+				"Dodona: course %d, exercise %d", this.selectedCourse.getId(), this.selectedExercise.getId()
 			));
 			
 			EventQueue.invokeLater(() -> NotificationReporter.info("Exercise successfully set."));

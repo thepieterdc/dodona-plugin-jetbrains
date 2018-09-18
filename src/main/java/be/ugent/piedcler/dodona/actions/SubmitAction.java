@@ -70,8 +70,6 @@ public class SubmitAction extends AnAction {
 			ProgressManager.getInstance().run(
 				new SetExerciseTask(event.getProject(), id -> this.identifierSetter.setIdentifier(file, id))
 			);
-			// Retry to submit the exercise.
-			this.actionPerformed(event);
 		} catch (final WarningMessageException warning) {
 			NotificationReporter.warning(warning.getMessage());
 		} catch (final ErrorMessageException error) {
