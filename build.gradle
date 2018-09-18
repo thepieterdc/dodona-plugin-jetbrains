@@ -20,8 +20,9 @@ dependencies {
 }
 
 intellij {
-    version 'IC-2018.2'
     pluginName 'ugent-dodona'
+    updateSinceUntilBuild false
+    version 'IC-2018.2'
 }
 
 patchPluginXml {
