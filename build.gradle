@@ -9,20 +9,37 @@ version '0.1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
+def hasPyCharm = project.hasProperty('pycharmPath')
+def hasPythonPlugin = project.hasProperty('pythonPlugin')
+
+intellij {
+    version ideaVersion
+    pluginName 'ugent-dodona'
+    if (hasPyCharm){
+        alternativeIdePath pycharmPath
+    }else if(hasPythonPlugin){
+        plugins += [pythonPlugin]
+    }
+}
+
 repositories {
     mavenCentral()
+    if (hasPyCharm){
+        flatDir {
+            dirs "$pycharmPath/lib"
+        }
+    }
 }
 
 dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.9.6'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.9.6'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.6'
+    if (hasPyCharm){
+        compileOnly name: 'pycharm'
+    }
 }
 
-intellij {
-    version 'IC-2018.2'
-    pluginName 'ugent-dodona'
-}
 
 patchPluginXml {
     version project.version

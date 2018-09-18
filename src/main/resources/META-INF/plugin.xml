@@ -16,11 +16,15 @@
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
+    <depends optional="true" config-file="java.xml">com.intellij.modules.java</depends>
+    <depends optional="true" config-file="python.xml">com.intellij.modules.python</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable
             displayName="Dodona Settings"
             instance="be.ugent.piedcler.dodona.settings.DodonaSettings" />
+
+
         <applicationService serviceInterface="be.ugent.piedcler.dodona.services.CourseService"
                             serviceImplementation="be.ugent.piedcler.dodona.services.impl.CourseServiceImpl"/>
         <applicationService serviceInterface="be.ugent.piedcler.dodona.services.ExerciseService"

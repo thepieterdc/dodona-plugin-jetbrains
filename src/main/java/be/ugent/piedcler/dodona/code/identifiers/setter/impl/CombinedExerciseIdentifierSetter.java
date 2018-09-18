@@ -20,8 +20,9 @@ public class CombinedExerciseIdentifierSetter implements ExerciseIdentifierSette
 		this.setterMap = new HashMap<>(preprocessorMap);
 	}
 
-	public CombinedExerciseIdentifierSetter registerEntry(Language lang, ExerciseIdentifierSetter setter) {
-		this.setterMap.put(lang, setter);
+	public CombinedExerciseIdentifierSetter registerEntry(ExerciseIdentifierSetter setter) {
+		if (setter != null)
+			this.setterMap.put(setter.getLanguage(), setter);
 		return this;
 	}
 
@@ -30,9 +31,20 @@ public class CombinedExerciseIdentifierSetter implements ExerciseIdentifierSette
 		return this;
 	}
 
+	public CombinedExerciseIdentifierSetter unregisterEntry(ExerciseIdentifierSetter setter) {
+		if (setter != null)
+			setterMap.remove(setter.getLanguage());
+		return this;
+	}
+
 	@Override
 	public void setIdentifier(PsiFile file, String id) {
 		if (setterMap.containsKey(file.getLanguage()))
 			setterMap.get(file.getLanguage()).setIdentifier(file, id);
+	}
+
+	@Override
+	public Language getLanguage() {
+		return null;
 	}
 }
