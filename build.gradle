@@ -15,6 +15,7 @@ def hasPythonPlugin = project.hasProperty('pythonPlugin')
 intellij {
     version ideaVersion
     pluginName 'ugent-dodona'
+    updateSinceUntilBuild false
     if (hasPyCharm){
         alternativeIdePath pycharmPath
     }else if(hasPythonPlugin){
@@ -39,7 +40,6 @@ dependencies {
         compileOnly name: 'pycharm'
     }
 }
-
 
 patchPluginXml {
     version project.version
