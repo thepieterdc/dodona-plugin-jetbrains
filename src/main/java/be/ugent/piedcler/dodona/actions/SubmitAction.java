@@ -7,10 +7,10 @@
  */
 package be.ugent.piedcler.dodona.actions;
 
+import be.ugent.piedcler.dodona.code.identifiers.getter.ExerciseIdentifierGetter;
 import be.ugent.piedcler.dodona.code.identifiers.getter.impl.CombinedExerciseIdentifierGetter;
 import be.ugent.piedcler.dodona.code.identifiers.getter.impl.StructuredExerciseIdentifierGetter;
 import be.ugent.piedcler.dodona.code.identifiers.getter.impl.URLExerciseIdentifierGetter;
-import be.ugent.piedcler.dodona.code.identifiers.getter.ExerciseIdentifierGetter;
 import be.ugent.piedcler.dodona.code.identifiers.setter.ExerciseIdentifierSetter;
 import be.ugent.piedcler.dodona.code.identifiers.setter.impl.CombinedExerciseIdentifierSetter;
 import be.ugent.piedcler.dodona.code.identifiers.setter.impl.JavaExerciseIdentifierSetter;
@@ -28,7 +28,7 @@ import be.ugent.piedcler.dodona.tasks.SubmitSolutionTask;
 import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
@@ -37,28 +37,27 @@ import org.jetbrains.annotations.NotNull;
  * Action that submits the current file to Dodona.
  */
 public class SubmitAction extends AnAction {
-
+	
 	private final ExerciseIdentifierGetter identifierGetter =
 		new CombinedExerciseIdentifierGetter()
 			.registerIdentifier(new StructuredExerciseIdentifierGetter())
 			.registerIdentifier(new URLExerciseIdentifierGetter());
-
+	
 	private final FileSubmissionPreprocessor preprocessor =
 		new CombinedSubmissionPreprocessor()
 			.registerEntry(JavaLanguage.INSTANCE, new JavaFileSubmissionPreprocessor());
-
+	
 	private final ExerciseIdentifierSetter identifierSetter =
 		new CombinedExerciseIdentifierSetter()
 			.registerEntry(JavaLanguage.INSTANCE, new JavaExerciseIdentifierSetter());
-
+	
 	@Override
 	public void actionPerformed(@NotNull final AnActionEvent event) {
-		final PsiFile file = event.getData(LangDataKeys.PSI_FILE);
-
+		final PsiFile file = event.getData(CommonDataKeys.PSI_FILE);
+		
 		final String code = (file != null) ?
 			preprocessor.preprocess((PsiFile) file.copy()).getText() : null;
-
-		identifierSetter.setIdentifier(file, "hello there");
+		
 		try {
 			if (code != null) {
 				final Solution solution = identifierGetter.identify(code).map(sol -> sol.setCode(code))
@@ -68,7 +67,11 @@ public class SubmitAction extends AnAction {
 				throw new CodeReadException();
 			}
 		} catch (final ExerciseNotSetException exception) {
-			ProgressManager.getInstance().run(new SetExerciseTask(event.getProject()));
+			ProgressManager.getInstance().run(
+				new SetExerciseTask(event.getProject(), id -> this.identifierSetter.setIdentifier(file, id))
+			);
+			// Retry to submit the exercise.
+			this.actionPerformed(event);
 		} catch (final WarningMessageException warning) {
 			NotificationReporter.warning(warning.getMessage());
 		} catch (final ErrorMessageException error) {
