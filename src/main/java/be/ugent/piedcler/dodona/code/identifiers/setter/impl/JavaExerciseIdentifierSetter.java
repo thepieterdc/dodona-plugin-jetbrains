@@ -15,7 +15,7 @@ public class JavaExerciseIdentifierSetter implements ExerciseIdentifierSetter {
 	@Override
 	public void setIdentifier(PsiFile file, String id) {
 		final PsiElementFactory factory = JavaPsiFacade.getInstance(file.getProject()).getElementFactory();
-		final PsiComment comment = factory.createCommentFromText(format(id), null);
+		final PsiComment comment = factory.createCommentFromText(format("// %s", id), null);
 		final PsiElement firstChild = file.getFirstChild();
 
 		WriteCommandAction.runWriteCommandAction(file.getProject(),
