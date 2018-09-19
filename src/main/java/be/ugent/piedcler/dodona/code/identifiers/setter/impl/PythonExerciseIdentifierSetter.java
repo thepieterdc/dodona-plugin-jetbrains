@@ -31,8 +31,4 @@ public class PythonExerciseIdentifierSetter implements ExerciseIdentifierSetter 
 	public Language getLanguage() {
 		return PythonLanguage.INSTANCE;
 	}
-
-	public static PythonExerciseIdentifierSetter getInstance() {
-		return ServiceManager.getService(PythonExerciseIdentifierSetter.class);
-	}
 }

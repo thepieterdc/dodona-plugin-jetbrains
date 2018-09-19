@@ -47,12 +47,12 @@ public class SubmitAction extends AnAction {
 //		new CombinedSubmissionPreprocessor()
 //			.registerEntry(JavaLanguage.INSTANCE, new JavaFileSubmissionPreprocessor());
 //
-	//private final ExerciseIdentifierSetter identifierSetter =
-	//	new CombinedExerciseIdentifierSetter()
-	//		//.registerEntry(JavaExerciseIdentifierSetter.getInstance())
-	//		.registerEntry(PythonExerciseIdentifierSetter.getInstance());
+	private final ExerciseIdentifierSetter identifierSetter =
+		new CombinedExerciseIdentifierSetter()
+			.registerEntry(ServiceManager.getService(JavaExerciseIdentifierSetter.class))
+			.registerEntry(ServiceManager.getService(PythonExerciseIdentifierSetter.class));
 
-	private final ExerciseIdentifierSetter identifierSetter = ServiceManager.getService(ExerciseIdentifierSetter.class);
+	//private final ExerciseIdentifierSetter identifierSetter = ServiceManager.getService(ExerciseIdentifierSetter.class);
 
 	@Override
 	public void actionPerformed(@NotNull final AnActionEvent event) {

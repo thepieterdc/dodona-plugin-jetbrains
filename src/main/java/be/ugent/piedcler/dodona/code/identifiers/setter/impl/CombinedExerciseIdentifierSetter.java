@@ -39,6 +39,7 @@ public class CombinedExerciseIdentifierSetter implements ExerciseIdentifierSette
 
 	@Override
 	public void setIdentifier(PsiFile file, String id) {
+		System.out.println(file.getLanguage());
 		if (setterMap.containsKey(file.getLanguage()))
 			setterMap.get(file.getLanguage()).setIdentifier(file, id);
 	}

@@ -1,6 +1,6 @@
 <idea-plugin>
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceInterface="be.ugent.piedcler.dodona.code.identifiers.setter.ExerciseIdentifierSetter"
-                            serviceImplementation="be.ugent.piedcler.dodona.code.identifiers.setter.impl.JavaExerciseIdentifierSetter"/>
+        <applicationService
+            serviceImplementation="be.ugent.piedcler.dodona.code.identifiers.setter.impl.JavaExerciseIdentifierSetter"/>
     </extensions>
 </idea-plugin>
