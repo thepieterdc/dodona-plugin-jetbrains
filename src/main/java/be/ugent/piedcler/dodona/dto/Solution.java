@@ -7,6 +7,9 @@
  */
 package be.ugent.piedcler.dodona.dto;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * A solution to submit to Dodona.
  */
@@ -15,31 +18,33 @@ public class Solution {
 	private final Course course;
 	private final Series series;
 	private final Exercise exercise;
-
+	
 	/**
 	 * Solution constructor.
 	 *
 	 * @param course   the course
+	 * @param series   the series
 	 * @param exercise the exercise
 	 * @param code     the code to submit
 	 */
-	public Solution(final Course course, final Series series, final Exercise exercise, final String code) {
+	public Solution(@Nullable final Course course, @Nullable final Series series, @NotNull final Exercise exercise, final String code) {
 		this.code = code;
 		this.course = course;
 		this.series = series;
 		this.exercise = exercise;
 	}
-
+	
 	/**
 	 * Solution constructor.
 	 *
 	 * @param course   the course
+	 * @param series   the series
 	 * @param exercise the exercise
 	 */
-	public Solution(final Course course, final Series series, final Exercise exercise) {
+	public Solution(@Nullable final Course course, @Nullable final Series series, @NotNull final Exercise exercise) {
 		this(course, series, exercise, "");
 	}
-
+	
 	/**
 	 * Gets the code.
 	 *
@@ -48,7 +53,7 @@ public class Solution {
 	public String getCode() {
 		return this.code;
 	}
-
+	
 	/**
 	 * Gets the course.
 	 *
@@ -57,24 +62,26 @@ public class Solution {
 	public Course getCourse() {
 		return this.course;
 	}
-
-	/**
-	 * Gets the series
-	 * @return the series
-	 */
-	public Series getSeries() {
-		return series;
-	}
-
+	
 	/**
 	 * Gets the exercise.
 	 *
 	 * @return the exercise
 	 */
+	@NotNull
 	public Exercise getExercise() {
 		return this.exercise;
 	}
-
+	
+	/**
+	 * Gets the series.
+	 *
+	 * @return the series
+	 */
+	public Series getSeries() {
+		return this.series;
+	}
+	
 	/**
 	 * Sets the code of the solution.
 	 *
@@ -85,5 +92,5 @@ public class Solution {
 		this.code = code;
 		return this;
 	}
-
+	
 }
