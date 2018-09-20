@@ -53,7 +53,7 @@ public class RegexExerciseIdentifierGetter implements ExerciseIdentifierGetter {
 	                                                         @NotNull final ResourceService<T> service) {
 		return Optional.of(pattern.matcher(code))
 			.filter(Matcher::find)
-			.map(matcher -> matcher.group(0))
+			.map(matcher -> matcher.group(1))
 			.map(Long::parseLong)
 			.map(service::get);
 	}
