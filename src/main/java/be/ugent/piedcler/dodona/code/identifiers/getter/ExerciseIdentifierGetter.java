@@ -1,11 +1,11 @@
-package be.ugent.piedcler.dodona.code;
+package be.ugent.piedcler.dodona.code.identifiers.getter;
 
 import be.ugent.piedcler.dodona.dto.Solution;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
-public interface ExerciseIdentifier {
+public interface ExerciseIdentifierGetter {
 
 	/**
 	 * Identifies the current exercise given some code.

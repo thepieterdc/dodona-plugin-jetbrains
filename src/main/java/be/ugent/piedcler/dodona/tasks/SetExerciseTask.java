@@ -29,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
  * Sets the course and exercise id in the header of the code.
@@ -37,6 +38,8 @@ public class SetExerciseTask extends Task.Backgroundable {
 	private final CourseService courses;
 	private final SeriesService series;
 	
+	private final Consumer<String> identifierSetter;
+	
 	private Course selectedCourse;
 	private Exercise selectedExercise;
 	private Series selectedSeries;
@@ -44,11 +47,13 @@ public class SetExerciseTask extends Task.Backgroundable {
 	/**
 	 * SetExerciseTask constructor.
 	 *
-	 * @param project the project to display notifications in
+	 * @param project          the project to display notifications in
+	 * @param identifierSetter sets te course and exercise ids
 	 */
-	public SetExerciseTask(final Project project) {
+	public SetExerciseTask(final Project project, final Consumer<String> identifierSetter) {
 		super(project, "Configure Exercise.");
 		this.courses = CourseService.getInstance();
+		this.identifierSetter = identifierSetter;
 		this.series = SeriesService.getInstance();
 	}
 	
@@ -129,7 +134,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.15);
 			progressIndicator.setText("Waiting for course selection...");
 			
-			EventQueue.invokeAndWait(() -> this.setCourse(SetExerciseTask.askCourse(myCourses)));
+			EventQueue.invokeAndWait(() -> this.selectedCourse = SetExerciseTask.askCourse(myCourses));
 			
 			if (this.selectedCourse == null) return;
 			
@@ -141,7 +146,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.45);
 			progressIndicator.setText("Waiting for series selection...");
 			
-			EventQueue.invokeAndWait(() -> this.setSeries(SetExerciseTask.askSeries(courseSeries)));
+			EventQueue.invokeAndWait(() -> this.selectedSeries = SetExerciseTask.askSeries(courseSeries));
 			
 			if (this.selectedSeries == null) return;
 			
@@ -153,7 +158,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.75);
 			progressIndicator.setText("Waiting for exercise selection...");
 			
-			EventQueue.invokeAndWait(() -> this.setExercise(SetExerciseTask.askExercise(exercises)));
+			EventQueue.invokeAndWait(() -> this.selectedExercise = SetExerciseTask.askExercise(exercises));
 			
 			if (this.selectedExercise == null) return;
 			
@@ -161,18 +166,13 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setText("Setting exercise...");
 			
 			// Modify the code.
-			//TODO issue 4: set selectedCourse and selectedExercise in the code like
-			//TODO          // Dodona course: i, exercise: j   (make sure the comments
-			//TODO          // work across all languages (Python/Ruby/..)
-			EventQueue.invokeLater(() -> NotificationReporter.info(String.format(
-				"TODO issue #4. Course = %d, Exercise = %d",
-				this.selectedCourse.getId(),
-				this.selectedExercise.getId()
-			)));
+			//TODO issue 4: make sure the comments work across all languages (Python/Ruby/..)
 			
-			// TODO when the above todo is implemented, uncomment this (it's a bit confusing
-			// TODO to show this when it's not yet implemented)
-//			EventQueue.invokeLater(() -> NotificationReporter.info("Exercise successfully set."));
+			this.identifierSetter.accept(String.format(
+				"Dodona: course %d, exercise %d", this.selectedCourse.getId(), this.selectedExercise.getId()
+			));
+			
+			EventQueue.invokeLater(() -> NotificationReporter.info("Exercise successfully set."));
 		} catch (final WarningMessageException warning) {
 			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));
 		} catch (final ErrorMessageException | InvocationTargetException error) {
@@ -180,32 +180,5 @@ public class SetExerciseTask extends Task.Backgroundable {
 		} catch (final InterruptedException ex) {
 			// aborted by user.
 		}
-	}
-	
-	/**
-	 * Sets the selected course.
-	 *
-	 * @param course the course to set
-	 */
-	private void setCourse(@Nullable final Course course) {
-		this.selectedCourse = course;
-	}
-	
-	/**
-	 * Sets the selected exercise.
-	 *
-	 * @param exercise the exercise to set
-	 */
-	private void setExercise(@Nullable final Exercise exercise) {
-		this.selectedExercise = exercise;
-	}
-	
-	/**
-	 * Sets the selected series.
-	 *
-	 * @param series the series to set
-	 */
-	private void setSeries(@Nullable final Series series) {
-		this.selectedSeries = series;
 	}
 }

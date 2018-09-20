@@ -1,6 +1,6 @@
-package be.ugent.piedcler.dodona.code.ExerciseIdenifierImpl;
+package be.ugent.piedcler.dodona.code.identifiers.getter.impl;
 
-import be.ugent.piedcler.dodona.code.ExerciseIdentifier;
+import be.ugent.piedcler.dodona.code.identifiers.getter.ExerciseIdentifierGetter;
 import be.ugent.piedcler.dodona.dto.Course;
 import be.ugent.piedcler.dodona.dto.Exercise;
 import be.ugent.piedcler.dodona.dto.Solution;
@@ -12,13 +12,13 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class RegexExerciseIdentifier implements ExerciseIdentifier {
+public class RegexExerciseIdentifierGetter implements ExerciseIdentifierGetter {
 
 	private final int groupCourse;
 	private final int groupExercise;
 	private final Pattern regex;
 
-	public RegexExerciseIdentifier(Pattern regex, int groupCourse, int groupExercise) {
+	public RegexExerciseIdentifierGetter(Pattern regex, int groupCourse, int groupExercise) {
 		this.regex = regex;
 		this.groupCourse = groupCourse;
 		this.groupExercise = groupExercise;
