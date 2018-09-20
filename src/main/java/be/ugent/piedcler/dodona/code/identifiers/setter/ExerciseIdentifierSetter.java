@@ -1,13 +1,12 @@
 package be.ugent.piedcler.dodona.code.identifiers.setter;
 
-import be.ugent.piedcler.dodona.code.identifiers.setter.impl.JavaExerciseIdentifierSetter;
 import com.intellij.lang.Language;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.psi.PsiFile;
+import com.intellij.openapi.editor.Document;
+
 
 public interface ExerciseIdentifierSetter {
 
-	void setIdentifier(PsiFile file, String id);
+	void setIdentifier(Language language, Document file, String id);
 
 	Language getLanguage();
 }

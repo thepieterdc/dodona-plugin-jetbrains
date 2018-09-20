@@ -21,17 +21,21 @@ import java.util.Optional;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserResponse {
+	private final String url;
 	private final Collection<CourseResponse> subscribedCourses;
-	
+
 	/**
 	 * UserResponse constructor.
 	 *
 	 * @param subscribedCourses the subscribed courses of the user
 	 */
-	public UserResponse(@Nullable @JsonProperty("subscribed_courses") final Collection<CourseResponse> subscribedCourses) {
+	public UserResponse(
+		@Nullable @JsonProperty("url") final String url,
+		@Nullable @JsonProperty("subscribed_courses") final Collection<CourseResponse> subscribedCourses) {
+		this.url = url;
 		this.subscribedCourses = Optional.ofNullable(subscribedCourses).orElseGet(() -> new HashSet<>(5));
 	}
-	
+
 	/**
 	 * Gets the subscribed courses of the user.
 	 *
@@ -39,5 +43,9 @@ public class UserResponse {
 	 */
 	public Collection<CourseResponse> getSubscribedCourses() {
 		return Collections.unmodifiableCollection(this.subscribedCourses);
+	}
+
+	public String getUrl() {
+		return url;
 	}
 }

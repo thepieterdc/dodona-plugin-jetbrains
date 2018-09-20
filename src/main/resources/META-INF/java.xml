@@ -2,5 +2,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationService
             serviceImplementation="be.ugent.piedcler.dodona.code.identifiers.setter.impl.JavaExerciseIdentifierSetter"/>
+        <applicationService
+            serviceImplementation="be.ugent.piedcler.dodona.code.preprocess.impl.JavaFileSubmissionPreprocessor"/>
     </extensions>
 </idea-plugin>

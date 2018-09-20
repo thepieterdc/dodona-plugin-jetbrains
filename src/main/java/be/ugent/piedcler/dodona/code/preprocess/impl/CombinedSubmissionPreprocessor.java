@@ -19,8 +19,9 @@ public class CombinedSubmissionPreprocessor implements FileSubmissionPreprocesso
 		this.preprocessorMap = new HashMap<>(preprocessorMap);
 	}
 
-	public CombinedSubmissionPreprocessor registerEntry(Language lang, FileSubmissionPreprocessor preprocessor) {
-		preprocessorMap.put(lang, preprocessor);
+	public CombinedSubmissionPreprocessor registerEntry(FileSubmissionPreprocessor preprocessor) {
+		if (preprocessor != null)
+			preprocessorMap.put(preprocessor.getLanguage(), preprocessor);
 		return this;
 	}
 
@@ -34,5 +35,10 @@ public class CombinedSubmissionPreprocessor implements FileSubmissionPreprocesso
 		if (preprocessorMap.containsKey(file.getLanguage()))
 			return preprocessorMap.get(file.getLanguage()).preprocess(file);
 		return file;
+	}
+
+	@Override
+	public Language getLanguage() {
+		return null;
 	}
 }

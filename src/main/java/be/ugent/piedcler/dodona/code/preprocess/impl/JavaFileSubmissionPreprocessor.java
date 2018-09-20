@@ -1,6 +1,8 @@
 package be.ugent.piedcler.dodona.code.preprocess.impl;
 
 import be.ugent.piedcler.dodona.code.preprocess.FileSubmissionPreprocessor;
+import com.intellij.lang.Language;
+import com.intellij.lang.java.JavaLanguage;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.psi.JavaRecursiveElementVisitor;
 import com.intellij.psi.PsiElement;
@@ -27,6 +29,11 @@ public class JavaFileSubmissionPreprocessor implements FileSubmissionPreprocesso
 			() -> toDelete.forEach(PsiElement::delete)
 		);
 		return file;
+	}
+
+	@Override
+	public Language getLanguage() {
+		return JavaLanguage.INSTANCE;
 	}
 
 

@@ -14,13 +14,17 @@ import java.util.regex.Pattern;
  */
 public class StructuredExerciseIdentifierGetter extends RegexExerciseIdentifierGetter {
 
-	private static final int GROUP_COURSE = 1;
-	private static final int GROUP_EXERCISE = 2;
 
-	private static final Pattern regex =
-		Pattern.compile("dodona:?\\s*course\\D*(\\d+)\\D*exercise\\D*(\\d+)", Pattern.CASE_INSENSITIVE);
+	private static final Pattern courseRegex =
+		Pattern.compile("dodona:?.*course\\s*(\\d+).*", Pattern.CASE_INSENSITIVE);
+
+	private static final Pattern seriesRegex =
+		Pattern.compile("dodona:?.*series\\s*(\\d+).*", Pattern.CASE_INSENSITIVE);
+
+	private static final Pattern exerciseRegex =
+		Pattern.compile("dodona:?.*exercise\\s*(\\d+).*", Pattern.CASE_INSENSITIVE);
 
 	public StructuredExerciseIdentifierGetter() {
-		super(regex, GROUP_COURSE, GROUP_EXERCISE);
+		super(courseRegex, seriesRegex, exerciseRegex);
 	}
 }

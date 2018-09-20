@@ -1,5 +1,6 @@
 package be.ugent.piedcler.dodona.code.preprocess;
 
+import com.intellij.lang.Language;
 import com.intellij.psi.PsiFile;
 
 public interface FileSubmissionPreprocessor {
@@ -11,4 +12,5 @@ public interface FileSubmissionPreprocessor {
 	 */
 	PsiFile preprocess(PsiFile file);
 
+	Language getLanguage();
 }

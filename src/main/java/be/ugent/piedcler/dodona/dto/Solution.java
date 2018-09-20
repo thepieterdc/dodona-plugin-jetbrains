@@ -13,8 +13,9 @@ package be.ugent.piedcler.dodona.dto;
 public class Solution {
 	private String code;
 	private final Course course;
+	private final Series series;
 	private final Exercise exercise;
-	
+
 	/**
 	 * Solution constructor.
 	 *
@@ -22,22 +23,23 @@ public class Solution {
 	 * @param exercise the exercise
 	 * @param code     the code to submit
 	 */
-	public Solution(final Course course, final Exercise exercise, final String code) {
+	public Solution(final Course course, final Series series, final Exercise exercise, final String code) {
 		this.code = code;
 		this.course = course;
+		this.series = series;
 		this.exercise = exercise;
 	}
-	
+
 	/**
 	 * Solution constructor.
 	 *
 	 * @param course   the course
 	 * @param exercise the exercise
 	 */
-	public Solution(final Course course, final Exercise exercise) {
-		this(course, exercise, "");
+	public Solution(final Course course, final Series series, final Exercise exercise) {
+		this(course, series, exercise, "");
 	}
-	
+
 	/**
 	 * Gets the code.
 	 *
@@ -46,7 +48,7 @@ public class Solution {
 	public String getCode() {
 		return this.code;
 	}
-	
+
 	/**
 	 * Gets the course.
 	 *
@@ -55,7 +57,15 @@ public class Solution {
 	public Course getCourse() {
 		return this.course;
 	}
-	
+
+	/**
+	 * Gets the series
+	 * @return the series
+	 */
+	public Series getSeries() {
+		return series;
+	}
+
 	/**
 	 * Gets the exercise.
 	 *
@@ -64,7 +74,7 @@ public class Solution {
 	public Exercise getExercise() {
 		return this.exercise;
 	}
-	
+
 	/**
 	 * Sets the code of the solution.
 	 *
@@ -75,4 +85,5 @@ public class Solution {
 		this.code = code;
 		return this;
 	}
+
 }

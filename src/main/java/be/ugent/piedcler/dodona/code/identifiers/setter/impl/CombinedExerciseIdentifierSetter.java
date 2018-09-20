@@ -2,7 +2,7 @@ package be.ugent.piedcler.dodona.code.identifiers.setter.impl;
 
 import be.ugent.piedcler.dodona.code.identifiers.setter.ExerciseIdentifierSetter;
 import com.intellij.lang.Language;
-import com.intellij.psi.PsiFile;
+import com.intellij.openapi.editor.Document;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,10 +38,9 @@ public class CombinedExerciseIdentifierSetter implements ExerciseIdentifierSette
 	}
 
 	@Override
-	public void setIdentifier(PsiFile file, String id) {
-		System.out.println(file.getLanguage());
-		if (setterMap.containsKey(file.getLanguage()))
-			setterMap.get(file.getLanguage()).setIdentifier(file, id);
+	public void setIdentifier(Language language, Document file, String id) {
+		if (setterMap.containsKey(language))
+			setterMap.get(language).setIdentifier(language, file, id);
 	}
 
 	@Override
