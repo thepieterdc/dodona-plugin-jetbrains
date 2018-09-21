@@ -11,9 +11,7 @@ import be.ugent.piedcler.dodona.dto.Course;
 import be.ugent.piedcler.dodona.dto.Series;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * Implementation class of Course.
@@ -21,7 +19,7 @@ import java.util.HashSet;
 public final class CourseImpl implements Course {
 	private final long id;
 	private final String name;
-	private final Collection<Series> series;
+	private final List<Series> series;
 	private final String teacher;
 	private final String year;
 	private final String url;
@@ -38,7 +36,7 @@ public final class CourseImpl implements Course {
 	public CourseImpl(final long id, final String name, final String teacher, final String year, final String url) {
 		this.id = id;
 		this.name = name;
-		this.series = new HashSet<>(10);
+		this.series = new ArrayList<>(10);
 		this.teacher = teacher;
 		this.year = year;
 		this.url = url;
@@ -55,8 +53,8 @@ public final class CourseImpl implements Course {
 	}
 
 	@Override
-	public Collection<Series> getSeries() {
-		return Collections.unmodifiableCollection(this.series);
+	public List<Series> getSeries() {
+		return Collections.unmodifiableList(this.series);
 	}
 
 	@Override

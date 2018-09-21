@@ -11,15 +11,13 @@ import be.ugent.piedcler.dodona.dto.Exercise;
 import be.ugent.piedcler.dodona.dto.Series;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
 
 /**
  * Implementation class of Series.
  */
 public final class SeriesImpl implements Series {
-	private final Collection<Exercise> exercises;
+	private final List<Exercise> exercises;
 	private final long id;
 	private final String name;
 	private final String url;
@@ -31,15 +29,15 @@ public final class SeriesImpl implements Series {
 	 * @param name the name of the series
 	 */
 	public SeriesImpl(final long id, final String name, final String url) {
-		this.exercises = new HashSet<>(20);
+		this.exercises = new ArrayList<>(20);
 		this.id = id;
 		this.name = name;
 		this.url = url;
 	}
 
 	@Override
-	public Collection<Exercise> getExercises() {
-		return Collections.unmodifiableCollection(this.exercises);
+	public List<Exercise> getExercises() {
+		return Collections.unmodifiableList(this.exercises);
 	}
 
 	@Override

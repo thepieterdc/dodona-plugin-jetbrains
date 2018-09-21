@@ -16,10 +16,7 @@ import be.ugent.piedcler.dodona.dto.Series;
 import be.ugent.piedcler.dodona.services.SeriesService;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -66,9 +63,9 @@ public class SeriesServiceImpl implements SeriesService {
 	 * @return the exercises in the series
 	 */
 	@NotNull
-	private static Collection<Exercise> getExercisesFromApi(final long series) {
+	private static List<Exercise> getExercisesFromApi(final long series) {
 		return Stream.of(Http.get(Series.getExercisesUrl(series), ExerciseResponse[].class))
 			.map(ExerciseResponse::toExercise)
-			.collect(Collectors.toSet());
+			.collect(Collectors.toList());
 	}
 }

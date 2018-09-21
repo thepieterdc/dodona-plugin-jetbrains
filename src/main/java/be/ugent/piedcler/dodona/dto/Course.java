@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * A course on Dodona.
@@ -45,7 +46,7 @@ public interface Course extends Resource {
 	 *
 	 * @return the series
 	 */
-	Collection<Series> getSeries();
+	List<Series> getSeries();
 	
 	/**
 	 * Gets the teacher of the course.

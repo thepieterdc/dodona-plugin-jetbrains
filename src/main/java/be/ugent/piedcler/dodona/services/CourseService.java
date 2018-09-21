@@ -11,6 +11,7 @@ import be.ugent.piedcler.dodona.dto.Course;
 import com.intellij.openapi.components.ServiceManager;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Service for Course entities.
@@ -30,5 +31,5 @@ public interface CourseService extends ResourceService<Course> {
 	 *
 	 * @return all courses
 	 */
-	Collection<Course> getSubscribed();
+	List<Course> getSubscribed();
 }

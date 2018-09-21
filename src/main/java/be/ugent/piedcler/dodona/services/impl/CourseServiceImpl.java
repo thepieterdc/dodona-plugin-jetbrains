@@ -17,10 +17,7 @@ import be.ugent.piedcler.dodona.services.CourseService;
 import be.ugent.piedcler.dodona.settings.SettingsHelper;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -70,19 +67,19 @@ public class CourseServiceImpl implements CourseService {
 	 * @return the series in the course
 	 */
 	@NotNull
-	private static Collection<Series> getSeriesFromApi(final long course) {
+	private static List<Series> getSeriesFromApi(final long course) {
 		return Stream.of(Http.get(Course.getSeriesUrl(course), SeriesResponse[].class))
 			.map(SeriesResponse::toSeries)
-			.collect(Collectors.toSet());
+			.collect(Collectors.toList());
 	}
 	
 	@Override
-	public Collection<Course> getSubscribed() {
+	public List<Course> getSubscribed() {
 		return Http.get(SettingsHelper.getDodonaURL(), RootResponse.class)
 			.getUser()
 			.getSubscribedCourses()
 			.stream()
 			.map(CourseResponse::toCourse)
-			.collect(Collectors.toSet());
+			.collect(Collectors.toList());
 	}
 }

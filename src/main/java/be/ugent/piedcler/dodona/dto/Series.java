@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * An exercise series on Dodona.
@@ -38,7 +39,7 @@ public interface Series extends Resource {
 	 *
 	 * @return the exercises
 	 */
-	Collection<Exercise> getExercises();
+	List<Exercise> getExercises();
 	
 	/**
 	 * Gets the name of the series.

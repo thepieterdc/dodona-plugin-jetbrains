@@ -18,6 +18,7 @@ import be.ugent.piedcler.dodona.services.SeriesService;
 import be.ugent.piedcler.dodona.ui.SelectCourseDialog;
 import be.ugent.piedcler.dodona.ui.SelectExerciseDialog;
 import be.ugent.piedcler.dodona.ui.SelectSeriesDialog;
+import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
@@ -29,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -125,11 +127,12 @@ public class SetExerciseTask extends Task.Backgroundable {
 
 	@Override
 	public void run(@NotNull final ProgressIndicator progressIndicator) {
+
 		try {
 			progressIndicator.setFraction(0.10);
 			progressIndicator.setText("Retrieving courses...");
 
-			final Collection<Course> myCourses = this.courses.getSubscribed();
+			final List<Course> myCourses = this.courses.getSubscribed();
 
 			progressIndicator.setFraction(0.15);
 			progressIndicator.setText("Waiting for course selection...");
@@ -141,7 +144,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.30);
 			progressIndicator.setText("Retrieving series...");
 
-			final Collection<Series> courseSeries = this.courses.get(this.selectedCourse.getId()).getSeries();
+			final List<Series> courseSeries = this.courses.get(this.selectedCourse.getId()).getSeries();
 
 			progressIndicator.setFraction(0.45);
 			progressIndicator.setText("Waiting for series selection...");
@@ -153,7 +156,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.60);
 			progressIndicator.setText("Retrieving exercises...");
 
-			final Collection<Exercise> exercises = this.series.get(this.selectedSeries.getId()).getExercises();
+			final List<Exercise> exercises = this.series.get(this.selectedSeries.getId()).getExercises();
 
 			progressIndicator.setFraction(0.75);
 			progressIndicator.setText("Waiting for exercise selection...");
@@ -169,9 +172,6 @@ public class SetExerciseTask extends Task.Backgroundable {
 			//TODO issue 4: make sure the comments work across all languages (Python/Ruby/..)
 
 			this.identifierSetter.accept(this.selectedExercise.getUrl());
-			//this.identifierSetter.accept(String.format(
-			//	"Dodona: course %d, exercise %d", this.selectedCourse.getId(), this.selectedExercise.getId()
-			//));
 
 			EventQueue.invokeLater(() -> NotificationReporter.info("Exercise successfully set."));
 		} catch (final WarningMessageException warning) {

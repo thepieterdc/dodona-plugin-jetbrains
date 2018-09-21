@@ -67,7 +67,6 @@ public class SubmitAction extends AnAction {
 
 	@Override
 	public void actionPerformed(@NotNull final AnActionEvent event) {
-
 		final Optional<Editor> optEditor = ofNullable(event.getData(CommonDataKeys.EDITOR_EVEN_IF_INACTIVE));
 		final Optional<PsiFile> optFile = ofNullable(event.getData(PlatformDataKeys.PSI_FILE));
 		final Optional<Document> optDocument = optEditor.map(Editor::getDocument);
@@ -87,7 +86,7 @@ public class SubmitAction extends AnAction {
 				.map(sol -> sol.setCode(text))
 				.orElseThrow(ExerciseNotSetException::new);
 
-			ProgressManager.getInstance().run(new SubmitSolutionTask(project, solution));
+			ProgressManager.getInstance().run(new SubmitSolutionTask(project, event.getPresentation(), solution));
 
 		} catch (final ExerciseNotSetException exception) {
 			final Language language = optLanguage.orElseThrow(CodeReadException::new);
