@@ -20,25 +20,29 @@ import org.jetbrains.annotations.Nullable;
 public class ExerciseResponse {
 	@Nullable
 	private final String boilerplate;
-	
+
 	private final long id;
 	private final String name;
-	
+	private final String url;
+
 	/**
 	 * ExerciseResponse constructor.
 	 *
 	 * @param boilerplate the boilerplate code of the exercise
 	 * @param id          the id of the exercise
 	 * @param name        the name of the exercise
+	 * @param url         the url to the exercise
 	 */
 	public ExerciseResponse(@Nullable @JsonProperty("boilerplate") final String boilerplate,
-	                        @JsonProperty("id") final long id,
-	                        @JsonProperty("name") final String name) {
+							@JsonProperty("id") final long id,
+							@JsonProperty("name") final String name,
+							@JsonProperty("url") final String url) {
 		this.boilerplate = boilerplate;
 		this.id = id;
 		this.name = name;
+		this.url = url;
 	}
-	
+
 	/**
 	 * Gets the boilerplate code.
 	 *
@@ -48,7 +52,7 @@ public class ExerciseResponse {
 	public String getBoilerplate() {
 		return this.boilerplate;
 	}
-	
+
 	/**
 	 * Gets the id.
 	 *
@@ -57,13 +61,13 @@ public class ExerciseResponse {
 	public long getId() {
 		return this.id;
 	}
-	
+
 	/**
 	 * Converts the exercise response to an exercise.
 	 *
 	 * @return the exercise
 	 */
 	public Exercise toExercise() {
-		return new ExerciseImpl(this.id, this.name, this.boilerplate);
+		return new ExerciseImpl(this.id, this.name, this.boilerplate, this.url.replace(".json", ""));
 	}
 }

@@ -7,18 +7,19 @@
  */
 package be.ugent.piedcler.dodona.dto;
 
+import be.ugent.piedcler.dodona.api.bodies.SolutionBody;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * A solution to submit to Dodona.
  */
-public class Solution {
+public final class Solution {
 	private String code;
 	private final Course course;
 	private final Series series;
 	private final Exercise exercise;
-	
+
 	/**
 	 * Solution constructor.
 	 *
@@ -33,7 +34,7 @@ public class Solution {
 		this.series = series;
 		this.exercise = exercise;
 	}
-	
+
 	/**
 	 * Solution constructor.
 	 *
@@ -44,7 +45,7 @@ public class Solution {
 	public Solution(@Nullable final Course course, @Nullable final Series series, @NotNull final Exercise exercise) {
 		this(course, series, exercise, "");
 	}
-	
+
 	/**
 	 * Gets the code.
 	 *
@@ -53,7 +54,7 @@ public class Solution {
 	public String getCode() {
 		return this.code;
 	}
-	
+
 	/**
 	 * Gets the course.
 	 *
@@ -62,7 +63,7 @@ public class Solution {
 	public Course getCourse() {
 		return this.course;
 	}
-	
+
 	/**
 	 * Gets the exercise.
 	 *
@@ -72,7 +73,7 @@ public class Solution {
 	public Exercise getExercise() {
 		return this.exercise;
 	}
-	
+
 	/**
 	 * Gets the series.
 	 *
@@ -81,7 +82,8 @@ public class Solution {
 	public Series getSeries() {
 		return this.series;
 	}
-	
+
+
 	/**
 	 * Sets the code of the solution.
 	 *
@@ -92,5 +94,24 @@ public class Solution {
 		this.code = code;
 		return this;
 	}
-	
+
+
+	public SolutionBody toSolutionBody() {
+		return new SolutionBody(
+			this.code,
+			this.course != null ? this.course.getId() : null,
+			this.series != null ? this.series.getId() : null,
+			this.exercise.getId()
+		);
+	}
+
+	@Override
+	public String toString() {
+		return "Solution{" +
+			"code='" + code + '\'' +
+			", course=" + course +
+			", series=" + series +
+			", exercise=" + exercise +
+			'}';
+	}
 }

@@ -37,13 +37,13 @@ import java.util.function.Consumer;
 public class SetExerciseTask extends Task.Backgroundable {
 	private final CourseService courses;
 	private final SeriesService series;
-	
+
 	private final Consumer<String> identifierSetter;
-	
+
 	private Course selectedCourse;
 	private Exercise selectedExercise;
 	private Series selectedSeries;
-	
+
 	/**
 	 * SetExerciseTask constructor.
 	 *
@@ -56,7 +56,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 		this.identifierSetter = identifierSetter;
 		this.series = SeriesService.getInstance();
 	}
-	
+
 	/**
 	 * Asks the user about the course.
 	 *
@@ -72,13 +72,13 @@ public class SetExerciseTask extends Task.Backgroundable {
 		coursesBuilder.removeAllActions();
 		coursesBuilder.addOkAction();
 		coursesBuilder.addCancelAction();
-		
+
 		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
 			return selectCourseDialog.getSelectedCourse();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Asks the user about the exercise.
 	 *
@@ -94,13 +94,13 @@ public class SetExerciseTask extends Task.Backgroundable {
 		coursesBuilder.removeAllActions();
 		coursesBuilder.addOkAction();
 		coursesBuilder.addCancelAction();
-		
+
 		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
 			return selectExerciseDialog.getSelectedExercise();
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Asks the user about the series.
 	 *
@@ -116,62 +116,63 @@ public class SetExerciseTask extends Task.Backgroundable {
 		coursesBuilder.removeAllActions();
 		coursesBuilder.addOkAction();
 		coursesBuilder.addCancelAction();
-		
+
 		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
 			return selectSeriesDialog.getSelectedSeries();
 		}
 		return null;
 	}
-	
+
 	@Override
 	public void run(@NotNull final ProgressIndicator progressIndicator) {
 		try {
 			progressIndicator.setFraction(0.10);
 			progressIndicator.setText("Retrieving courses...");
-			
+
 			final Collection<Course> myCourses = this.courses.getSubscribed();
-			
+
 			progressIndicator.setFraction(0.15);
 			progressIndicator.setText("Waiting for course selection...");
-			
+
 			EventQueue.invokeAndWait(() -> this.selectedCourse = SetExerciseTask.askCourse(myCourses));
-			
+
 			if (this.selectedCourse == null) return;
-			
+
 			progressIndicator.setFraction(0.30);
 			progressIndicator.setText("Retrieving series...");
-			
+
 			final Collection<Series> courseSeries = this.courses.get(this.selectedCourse.getId()).getSeries();
-			
+
 			progressIndicator.setFraction(0.45);
 			progressIndicator.setText("Waiting for series selection...");
-			
+
 			EventQueue.invokeAndWait(() -> this.selectedSeries = SetExerciseTask.askSeries(courseSeries));
-			
+
 			if (this.selectedSeries == null) return;
-			
+
 			progressIndicator.setFraction(0.60);
 			progressIndicator.setText("Retrieving exercises...");
-			
+
 			final Collection<Exercise> exercises = this.series.get(this.selectedSeries.getId()).getExercises();
-			
+
 			progressIndicator.setFraction(0.75);
 			progressIndicator.setText("Waiting for exercise selection...");
-			
+
 			EventQueue.invokeAndWait(() -> this.selectedExercise = SetExerciseTask.askExercise(exercises));
-			
+
 			if (this.selectedExercise == null) return;
-			
+
 			progressIndicator.setFraction(0.90);
 			progressIndicator.setText("Setting exercise...");
-			
+
 			// Modify the code.
 			//TODO issue 4: make sure the comments work across all languages (Python/Ruby/..)
-			
-			this.identifierSetter.accept(String.format(
-				"Dodona: course %d, exercise %d", this.selectedCourse.getId(), this.selectedExercise.getId()
-			));
-			
+
+			this.identifierSetter.accept(this.selectedExercise.getUrl());
+			//this.identifierSetter.accept(String.format(
+			//	"Dodona: course %d, exercise %d", this.selectedCourse.getId(), this.selectedExercise.getId()
+			//));
+
 			EventQueue.invokeLater(() -> NotificationReporter.info("Exercise successfully set."));
 		} catch (final WarningMessageException warning) {
 			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));

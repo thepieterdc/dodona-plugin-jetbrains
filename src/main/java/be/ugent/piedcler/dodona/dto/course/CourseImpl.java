@@ -24,7 +24,8 @@ public final class CourseImpl implements Course {
 	private final Collection<Series> series;
 	private final String teacher;
 	private final String year;
-	
+	private final String url;
+
 	/**
 	 * CourseImpl constructor.
 	 *
@@ -32,40 +33,42 @@ public final class CourseImpl implements Course {
 	 * @param name    the name of the course
 	 * @param teacher the teacher of the course
 	 * @param year    the academic year
+	 * @param url     the url to the course
 	 */
-	public CourseImpl(final long id, final String name, final String teacher, final String year) {
+	public CourseImpl(final long id, final String name, final String teacher, final String year, final String url) {
 		this.id = id;
 		this.name = name;
 		this.series = new HashSet<>(10);
 		this.teacher = teacher;
 		this.year = year;
+		this.url = url;
 	}
-	
+
 	@Override
 	public long getId() {
 		return this.id;
 	}
-	
+
 	@Override
 	public String getName() {
 		return this.name;
 	}
-	
+
 	@Override
 	public Collection<Series> getSeries() {
 		return Collections.unmodifiableCollection(this.series);
 	}
-	
+
 	@Override
 	public String getTeacher() {
 		return this.teacher;
 	}
-	
+
 	@Override
 	public String getYear() {
 		return this.year;
 	}
-	
+
 	@Override
 	@NotNull
 	public Course setSeries(final Collection<Series> nw) {
@@ -73,7 +76,12 @@ public final class CourseImpl implements Course {
 		this.series.addAll(nw);
 		return this;
 	}
-	
+
+	@Override
+	public String getUrl() {
+		return url;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("Course{id=%d}", this.id);

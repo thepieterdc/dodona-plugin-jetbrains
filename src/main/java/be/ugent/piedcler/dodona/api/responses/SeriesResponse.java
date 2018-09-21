@@ -7,19 +7,10 @@
  */
 package be.ugent.piedcler.dodona.api.responses;
 
-import be.ugent.piedcler.dodona.dto.Course;
-import be.ugent.piedcler.dodona.dto.Exercise;
 import be.ugent.piedcler.dodona.dto.Series;
 import be.ugent.piedcler.dodona.dto.series.SeriesImpl;
-import be.ugent.piedcler.dodona.services.CourseService;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * The response from fetching a series.
@@ -28,25 +19,29 @@ import java.util.stream.Collectors;
 public class SeriesResponse {
 	private final long id;
 	private final String name;
-	
+	private final String url;
+
 	/**
 	 * SeriesResponse constructor.
 	 *
-	 * @param id        the id of the series
-	 * @param name      the name of the series
+	 * @param id   the id of the series
+	 * @param name the name of the series
+	 * @param url  the url of the series
 	 */
 	public SeriesResponse(@JsonProperty("id") final long id,
-	                      @JsonProperty("name") final String name) {
+						  @JsonProperty("name") final String name,
+						  @JsonProperty("url") final String url) {
 		this.id = id;
 		this.name = name;
+		this.url = url;
 	}
-	
+
 	/**
 	 * Converts the series response to a series.
 	 *
 	 * @return the series
 	 */
 	public Series toSeries() {
-		return new SeriesImpl(this.id, this.name);
+		return new SeriesImpl(this.id, this.name, this.url.replace(".json", ""));
 	}
 }
