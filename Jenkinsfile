@@ -19,7 +19,7 @@ pipeline {
 
         stage('Copyright headers') {
             steps {
-                sh 'python3 scripts/jenkins/credits_checker.py | tee copyright_log && (exit ${PIPESTATUS[0]})'
+                sh 'python3 scripts/jenkins/credits_checker.py src | tee copyright_log && (exit ${PIPESTATUS[0]})'
             }
 
             post {
