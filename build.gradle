@@ -10,7 +10,6 @@ version '0.1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 def hasPyCharm = project.hasProperty('pycharmPath')
-def hasPythonPlugin = project.hasProperty('pythonPlugin')
 
 intellij {
     version ideaVersion
@@ -18,7 +17,7 @@ intellij {
     updateSinceUntilBuild false
     if (hasPyCharm){
         alternativeIdePath pycharmPath
-    }else if(hasPythonPlugin){
+    }else{
         plugins += [pythonPlugin]
     }
 }

@@ -24,6 +24,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static be.ugent.piedcler.dodona.dto.Course.getUrl;
+
 /**
  * Implementation class for CourseService.
  */
@@ -56,7 +58,7 @@ public class CourseServiceImpl implements CourseService {
 	 */
 	@NotNull
 	private static Course getFromApi(final long id) {
-		final String url = Course.getUrl(id);
+		final String url = getUrl(id);
 		final Course course = Http.get(url, CourseResponse.class).toCourse();
 		return course.setSeries(getSeriesFromApi(id));
 	}
