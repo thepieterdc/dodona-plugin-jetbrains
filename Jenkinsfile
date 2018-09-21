@@ -6,6 +6,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                sh 'mv gradle-properties.jenkins gradle.properties'
                 sh './gradlew assemble 2>&1 | tee build_log && (exit ${PIPESTATUS[0]})'
             }
 
