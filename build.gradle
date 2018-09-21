@@ -12,6 +12,9 @@ sourceCompatibility = 1.8
 def hasPyCharm = project.hasProperty('pycharmPath')
 def hasPythonPlugin = project.hasProperty('pythonPlugin')
 
+println "Has PyCharm: " + hasPyCharm
+println "Has IntelliJ Python Plugin: " + hasPythonPlugin
+
 intellij {
     version ideaVersion
     pluginName 'ugent-dodona'
