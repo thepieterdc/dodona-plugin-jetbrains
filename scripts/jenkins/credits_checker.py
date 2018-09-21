@@ -14,5 +14,5 @@ for filename in glob.iglob("{}/**/*.java".format(entrypoint), recursive=True):
 
 if missing:
     for file in missing:
-        print(file.trim)
+        print(file)
     exit(len(missing))
