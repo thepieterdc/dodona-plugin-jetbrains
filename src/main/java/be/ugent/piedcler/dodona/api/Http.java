@@ -102,12 +102,12 @@ public enum Http {
 			connection.setRequestProperty(HEADER_AUTHORIZATION, apiKey);
 			connection.setRequestProperty(HEADER_CONTENT_TYPE, HEADER_ACCEPT_VALUE);
 			
-			if (connection.getResponseCode() == HttpStatus.SC_UNAUTHORIZED) {
-				throw new ApiTokenInvalidException();
-			}
-			
 			try (final OutputStream out = connection.getOutputStream()) {
 				mapper.writeValue(out, solution.toSolutionBody());
+			}
+			
+			if (connection.getResponseCode() == HttpStatus.SC_UNAUTHORIZED) {
+				throw new ApiTokenInvalidException();
 			}
 			
 			return mapper.readValue(connection.getInputStream(), resultCls);
