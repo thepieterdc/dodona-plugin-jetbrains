@@ -11,7 +11,7 @@ package be.ugent.piedcler.dodona.exceptions.notfound;
 /**
  * An exercise that can not be found.
  */
-public class ExerciseNotFoundException extends ResourceAccessDeniedException {
+public class ExerciseNotFoundException extends ResourceNotFoundException {
 	private static final long serialVersionUID = -200804810539508993L;
 	
 	/**

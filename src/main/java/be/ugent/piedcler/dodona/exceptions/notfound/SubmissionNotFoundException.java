@@ -11,7 +11,7 @@ package be.ugent.piedcler.dodona.exceptions.notfound;
 /**
  * A submission that can not be found.
  */
-public class SubmissionNotFoundException extends ResourceAccessDeniedException {
+public class SubmissionNotFoundException extends ResourceNotFoundException {
 	private static final long serialVersionUID = 2049032511080978489L;
 	
 	/**

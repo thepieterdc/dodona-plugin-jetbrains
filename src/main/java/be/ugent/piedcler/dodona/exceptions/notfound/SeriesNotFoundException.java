@@ -11,7 +11,7 @@ package be.ugent.piedcler.dodona.exceptions.notfound;
 /**
  * A series that can not be found.
  */
-public class SeriesNotFoundException extends ResourceAccessDeniedException {
+public class SeriesNotFoundException extends ResourceNotFoundException {
 	private static final long serialVersionUID = 5336065731460519195L;
 	
 	/**
