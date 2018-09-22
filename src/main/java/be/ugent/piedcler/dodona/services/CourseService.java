@@ -11,7 +11,6 @@ package be.ugent.piedcler.dodona.services;
 import be.ugent.piedcler.dodona.dto.Course;
 import com.intellij.openapi.components.ServiceManager;
 
-import java.util.Collection;
 import java.util.List;
 
 /**

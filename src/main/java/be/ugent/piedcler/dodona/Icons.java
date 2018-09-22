@@ -10,7 +10,7 @@ package be.ugent.piedcler.dodona;
 
 import com.intellij.openapi.util.IconLoader;
 
-import javax.swing.Icon;
+import javax.swing.*;
 
 /**
  * Contains icons used throughout the plugin.

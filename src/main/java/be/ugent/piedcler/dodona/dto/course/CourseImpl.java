@@ -12,7 +12,10 @@ import be.ugent.piedcler.dodona.dto.Course;
 import be.ugent.piedcler.dodona.dto.Series;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Implementation class of Course.

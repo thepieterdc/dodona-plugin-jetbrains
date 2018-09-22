@@ -9,19 +9,11 @@
 package be.ugent.piedcler.dodona.ui;
 
 import be.ugent.piedcler.dodona.dto.Course;
-import com.intellij.ide.IconProvider;
 import com.intellij.openapi.util.IconLoader;
-import com.intellij.ui.DrawUtil;
-import com.intellij.ui.JBColor;
 import com.intellij.util.IconUtil;
-import com.intellij.util.ImageLoader;
-import org.jetbrains.plugins.ipnb.editor.panels.code.IpnbErrorPanel;
 
 import javax.swing.*;
 import java.awt.*;
-
-import static javafx.scene.paint.Color.gray;
-import static javafx.scene.paint.Color.web;
 
 /**
  * Renders the course name correctly in a list of Courses.

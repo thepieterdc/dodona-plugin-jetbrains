@@ -11,7 +11,7 @@ package be.ugent.piedcler.dodona.api;
 import be.ugent.piedcler.dodona.dto.Solution;
 import be.ugent.piedcler.dodona.exceptions.apitoken.ApiTokenInvalidException;
 import be.ugent.piedcler.dodona.exceptions.apitoken.ApiTokenNotSetException;
-import be.ugent.piedcler.dodona.exceptions.notfound.ResourceAccessDeniedException;
+import be.ugent.piedcler.dodona.exceptions.notfound.ResourceNotFoundException;
 import be.ugent.piedcler.dodona.settings.SettingsHelper;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,7 +52,7 @@ public enum Http {
 	 */
 	public static <T> T get(final String endpoint,
 	                        final Class<T> resultCls,
-	                        final Supplier<ResourceAccessDeniedException> notFoundHandler) {
+	                        final Supplier<ResourceNotFoundException> notFoundHandler) {
 		final String apiKey = SettingsHelper.getApiKey();
 		if (apiKey.isEmpty()) {
 			throw new ApiTokenNotSetException();

@@ -19,7 +19,6 @@ import be.ugent.piedcler.dodona.services.SeriesService;
 import be.ugent.piedcler.dodona.ui.SelectCourseDialog;
 import be.ugent.piedcler.dodona.ui.SelectExerciseDialog;
 import be.ugent.piedcler.dodona.ui.SelectSeriesDialog;
-import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
