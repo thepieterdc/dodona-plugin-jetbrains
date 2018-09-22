@@ -100,8 +100,8 @@ public final class Solution {
 	public SolutionBody toSolutionBody() {
 		return new SolutionBody(
 			this.code,
-			this.course != null ? this.course.getId() : null,
-			this.series != null ? this.series.getId() : null,
+			(this.course != null) ? this.course.getId() : null,
+			(this.series != null) ? this.series.getId() : null,
 			this.exercise.getId()
 		);
 	}
@@ -109,10 +109,10 @@ public final class Solution {
 	@Override
 	public String toString() {
 		return "Solution{" +
-			"code='" + code + '\'' +
-			", course=" + course +
-			", series=" + series +
-			", exercise=" + exercise +
+			"code='" + this.code + '\'' +
+			", course=" + this.course +
+			", series=" + this.series +
+			", exercise=" + this.exercise +
 			'}';
 	}
 }

@@ -11,7 +11,7 @@ package be.ugent.piedcler.dodona.exceptions.notfound;
 /**
  * A course that can not be found.
  */
-public class CourseNotFoundException extends ResourceNotFoundException {
+public class CourseNotFoundException extends be.ugent.piedcler.dodona.exceptions.notfound.ResourceAccessDeniedException {
 	private static final long serialVersionUID = 8432355491097983811L;
 	
 	/**

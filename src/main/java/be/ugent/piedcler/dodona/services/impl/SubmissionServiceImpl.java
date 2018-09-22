@@ -23,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-import static be.ugent.piedcler.dodona.api.Http.post;
 import static be.ugent.piedcler.dodona.dto.Submission.getUrl;
 import static be.ugent.piedcler.dodona.settings.SettingsHelper.getDodonaURL;
 import static java.util.Optional.ofNullable;
@@ -71,7 +70,7 @@ public class SubmissionServiceImpl implements SubmissionService {
 	public Submission submit(@NotNull final Solution solution) {
 		final String url = getDodonaURL(Submission.ENDPOINT);
 		
-		final SubmissionPostResponse response = post(url, solution, SubmissionPostResponse.class);
+		final SubmissionPostResponse response = Http.post(url, solution, SubmissionPostResponse.class);
 		
 		if (response.getStatus().equals(SubmissionPostResponse.STATUS_OK)) {
 			final Submission submission = new PendingSubmission(response.getId(), solution.getExercise());

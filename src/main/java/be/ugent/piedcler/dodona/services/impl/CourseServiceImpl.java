@@ -14,7 +14,7 @@ import be.ugent.piedcler.dodona.api.responses.RootResponse;
 import be.ugent.piedcler.dodona.api.responses.SeriesResponse;
 import be.ugent.piedcler.dodona.dto.Course;
 import be.ugent.piedcler.dodona.dto.Series;
-import be.ugent.piedcler.dodona.exceptions.notfound.CourseNotFoundException;
+import be.ugent.piedcler.dodona.exceptions.notfound.CourseAccessDeniedException;
 import be.ugent.piedcler.dodona.services.CourseService;
 import be.ugent.piedcler.dodona.settings.SettingsHelper;
 import org.jetbrains.annotations.NotNull;
@@ -61,7 +61,7 @@ public class CourseServiceImpl implements CourseService {
 	@NotNull
 	private static Course getFromApi(final long id) {
 		final String url = getUrl(id);
-		final Course course = Http.get(url, CourseResponse.class, CourseNotFoundException::new).toCourse();
+		final Course course = Http.get(url, CourseResponse.class, CourseAccessDeniedException::new).toCourse();
 		return course.setSeries(getSeriesFromApi(id));
 	}
 	
@@ -74,14 +74,14 @@ public class CourseServiceImpl implements CourseService {
 	@NotNull
 	private static List<Series> getSeriesFromApi(final long course) {
 		return Stream
-			.of(Http.get(Course.getSeriesUrl(course), SeriesResponse[].class, CourseNotFoundException::new))
+			.of(Http.get(Course.getSeriesUrl(course), SeriesResponse[].class, CourseAccessDeniedException::new))
 			.map(SeriesResponse::toSeries)
 			.collect(Collectors.toList());
 	}
 	
 	@Override
 	public List<Course> getSubscribed() {
-		return Http.get(SettingsHelper.getDodonaURL(), RootResponse.class, CourseNotFoundException::new)
+		return Http.get(SettingsHelper.getDodonaURL(), RootResponse.class, CourseAccessDeniedException::new)
 			.getUser()
 			.getSubscribedCourses()
 			.stream()

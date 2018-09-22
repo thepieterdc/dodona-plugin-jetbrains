@@ -55,7 +55,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 	public void run(@NotNull final ProgressIndicator progressIndicator) {
 
 		try {
-			presentation.setEnabled(false);
+			this.presentation.setEnabled(false);
 			progressIndicator.setFraction(0.10);
 			progressIndicator.setText("Submitting to Dodona...");
 
@@ -110,7 +110,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 		} catch (final InterruptedException ex) {
 			throw new RuntimeException(ex);
 		} finally {
-			presentation.setEnabled(true);
+			this.presentation.setEnabled(true);
 		}
 	}
 }
