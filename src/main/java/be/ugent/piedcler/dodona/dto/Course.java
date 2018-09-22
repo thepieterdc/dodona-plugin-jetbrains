@@ -54,7 +54,13 @@ public interface Course extends Resource {
 	 * @return the teacher
 	 */
 	String getTeacher();
-	
+
+	/**
+	 * Gets the color of the course
+	 * @return the color
+	 */
+	String getColor();
+
 	/**
 	 * Gets the academic year this course is taught.
 	 *

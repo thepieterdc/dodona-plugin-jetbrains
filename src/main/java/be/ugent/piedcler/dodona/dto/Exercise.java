@@ -19,16 +19,16 @@ import java.util.regex.Pattern;
 public interface Exercise extends Resource {
 	@NonNls
 	String ENDPOINT_ID = "/exercises/%d";
-	
+
 	Pattern URL_ID_PATTERN = Pattern.compile("exercises/(\\d+)");
-	
+
 	/**
 	 * Gets the boilerplate code.
 	 *
 	 * @return the boilerplate code
 	 */
 	Optional<String> getBoilerplate();
-	
+
 	/**
 	 * Gets the id of the exercise from the url.
 	 *
@@ -41,19 +41,23 @@ public interface Exercise extends Resource {
 			.map(matcher -> matcher.group(1))
 			.map(Long::parseLong);
 	}
-	
+
 	/**
 	 * Gets the name of the exercise.
 	 *
 	 * @return the name
 	 */
 	String getName();
-	
+
+	boolean getLastSolutionCorrect();
+
+	boolean getHasCorrectSolution();
+
 	@Override
 	default String getUrl() {
 		return getUrl(this.getId());
 	}
-	
+
 	/**
 	 * Gets the url to an exercise.
 	 *

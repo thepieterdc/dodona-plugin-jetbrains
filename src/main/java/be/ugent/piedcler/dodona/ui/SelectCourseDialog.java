@@ -8,6 +8,7 @@
 package be.ugent.piedcler.dodona.ui;
 
 import be.ugent.piedcler.dodona.dto.Course;
+import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
 import org.jetbrains.annotations.Nullable;
@@ -32,6 +33,7 @@ public class SelectCourseDialog extends JDialog {
 	 */
 	public SelectCourseDialog(final Collection<Course> courses) {
 		this.createComponents();
+		//this.coursesList.setBorder(BorderFactory.);
 		this.coursesList.addListSelectionListener(e -> this.selectedCourse = this.coursesList.getSelectedValue());
 		this.coursesList.setCellRenderer(new CourseListRenderer());
 		this.coursesList.setEmptyText("No courses were found for your account.");

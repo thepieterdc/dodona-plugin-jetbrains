@@ -23,23 +23,31 @@ public class ExerciseResponse {
 
 	private final long id;
 	private final String name;
+	private final boolean lastSolutionCorrect;
+	private final boolean hasCorrectSolution;
 	private final String url;
 
 	/**
 	 * ExerciseResponse constructor.
 	 *
-	 * @param boilerplate the boilerplate code of the exercise
-	 * @param id          the id of the exercise
-	 * @param name        the name of the exercise
-	 * @param url         the url to the exercise
+	 * @param boilerplate         the boilerplate code of the exercise
+	 * @param id                  the id of the exercise
+	 * @param name                the name of the exercise
+	 * @param lastSolutionCorrect indication if the last submission was correct
+	 * @param hasCorrectSolution  indication if there ever was a correct solution submitted
+	 * @param url                 the url to the exercise
 	 */
 	public ExerciseResponse(@Nullable @JsonProperty("boilerplate") final String boilerplate,
 							@JsonProperty("id") final long id,
 							@JsonProperty("name") final String name,
+							@JsonProperty("last_solution_correct") final boolean lastSolutionCorrect,
+							@JsonProperty("has_correct_solution") final boolean hasCorrectSolution,
 							@JsonProperty("url") final String url) {
 		this.boilerplate = boilerplate;
 		this.id = id;
 		this.name = name;
+		this.lastSolutionCorrect = lastSolutionCorrect;
+		this.hasCorrectSolution = hasCorrectSolution;
 		this.url = url;
 	}
 
@@ -68,6 +76,6 @@ public class ExerciseResponse {
 	 * @return the exercise
 	 */
 	public Exercise toExercise() {
-		return new ExerciseImpl(this.id, this.name, this.boilerplate, this.url.replace(".json", ""));
+		return new ExerciseImpl(this.id, this.name, this.boilerplate, this.lastSolutionCorrect, this.hasCorrectSolution, this.url.replace(".json", ""));
 	}
 }

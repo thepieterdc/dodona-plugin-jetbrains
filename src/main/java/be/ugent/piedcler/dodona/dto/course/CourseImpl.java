@@ -21,6 +21,7 @@ public final class CourseImpl implements Course {
 	private final String name;
 	private final List<Series> series;
 	private final String teacher;
+	private final String color;
 	private final String year;
 	private final String url;
 
@@ -30,12 +31,19 @@ public final class CourseImpl implements Course {
 	 * @param id      the id of the course
 	 * @param name    the name of the course
 	 * @param teacher the teacher of the course
+	 * @param color   the courses color
 	 * @param year    the academic year
 	 * @param url     the url to the course
 	 */
-	public CourseImpl(final long id, final String name, final String teacher, final String year, final String url) {
+	public CourseImpl(final long id,
+					  final String name,
+					  final String teacher,
+					  final String color,
+					  final String year,
+					  final String url) {
 		this.id = id;
 		this.name = name;
+		this.color = color;
 		this.series = new ArrayList<>(10);
 		this.teacher = teacher;
 		this.year = year;
@@ -60,6 +68,10 @@ public final class CourseImpl implements Course {
 	@Override
 	public String getTeacher() {
 		return this.teacher;
+	}
+
+	public String getColor() {
+		return color;
 	}
 
 	@Override

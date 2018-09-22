@@ -20,6 +20,7 @@ public class CourseResponse {
 	private final long id;
 	private final String name;
 	private final String teacher;
+	private final String color;
 	private final String year;
 	private final String url;
 
@@ -29,17 +30,20 @@ public class CourseResponse {
 	 * @param id      the id of the course
 	 * @param name    the name of the course
 	 * @param teacher the teacher of the course
+	 * @param color   the color of the course
 	 * @param year    the academic year
 	 * @param url     the url to the course
 	 */
 	public CourseResponse(@JsonProperty("id") final long id,
 						  @JsonProperty("name") final String name,
 						  @JsonProperty("teacher") final String teacher,
+						  @JsonProperty("color") final String color,
 						  @JsonProperty("year") final String year,
 						  @JsonProperty("url") final String url) {
 		this.id = id;
 		this.name = name;
 		this.teacher = teacher;
+		this.color = color;
 		this.year = year;
 		this.url = url;
 	}
@@ -50,6 +54,6 @@ public class CourseResponse {
 	 * @return the course
 	 */
 	public Course toCourse() {
-		return new CourseImpl(this.id, this.name, this.teacher, this.year, this.url.replace(".json", ""));
+		return new CourseImpl(this.id, this.name, this.teacher, this.color, this.year, this.url.replace(".json", ""));
 	}
 }
