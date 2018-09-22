@@ -2,6 +2,7 @@
  * Copyright (c) 2018. All rights reserved.
  *
  * @author Pieter De Clercq
+ * @author Tobiah Lissens
  *
  * https://github.com/thepieterdc/ugent-dodona/
  */
@@ -22,7 +23,7 @@ public class CourseResponse {
 	private final String teacher;
 	private final String year;
 	private final String url;
-
+	
 	/**
 	 * CourseResponse constructor.
 	 *
@@ -33,17 +34,17 @@ public class CourseResponse {
 	 * @param url     the url to the course
 	 */
 	public CourseResponse(@JsonProperty("id") final long id,
-						  @JsonProperty("name") final String name,
-						  @JsonProperty("teacher") final String teacher,
-						  @JsonProperty("year") final String year,
-						  @JsonProperty("url") final String url) {
+	                      @JsonProperty("name") final String name,
+	                      @JsonProperty("teacher") final String teacher,
+	                      @JsonProperty("year") final String year,
+	                      @JsonProperty("url") final String url) {
 		this.id = id;
 		this.name = name;
 		this.teacher = teacher;
 		this.year = year;
 		this.url = url;
 	}
-
+	
 	/**
 	 * Converts the course response to a course.
 	 *

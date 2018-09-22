@@ -6,8 +6,10 @@
  *
  * https://github.com/thepieterdc/ugent-dodona/
  */
+package be.ugent.piedcler.dodona.actions;
 
 /**
- * Main package.
+ *
  */
-package be.ugent.piedcler.dodona;
+public class NewGroupAction {
+}

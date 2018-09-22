@@ -2,14 +2,13 @@
  * Copyright (c) 2018. All rights reserved.
  *
  * @author Pieter De Clercq
+ * @author Tobiah Lissens
  *
  * https://github.com/thepieterdc/ugent-dodona/
  */
 package be.ugent.piedcler.dodona.settings;
 
-import be.ugent.piedcler.dodona.services.CourseService;
 import com.intellij.ide.util.PropertiesComponent;
-import org.fest.util.Strings;
 import org.jetbrains.annotations.NonNls;
 
 /**
