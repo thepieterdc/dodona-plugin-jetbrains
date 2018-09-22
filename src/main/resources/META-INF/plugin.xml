@@ -35,11 +35,6 @@
     </extensions>
 
     <actions>
-        <action id="be.ugent.piedcler.dodona.actions.New"
-                class="be.ugent.piedcler.dodona.actions.NewGroupAction">
-            <add-to-group group-id="NewGroup" anchor="last"/>
-        </action>
-
         <group id="be.ugent.piedcler.dodona.actions.DodonaActions" text="UGent Dodona" popup="false">
             <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
             <action id="be.ugent.piedcler.dodona.submit" class="be.ugent.piedcler.dodona.actions.SubmitAction"
