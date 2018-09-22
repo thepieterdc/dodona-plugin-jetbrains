@@ -72,7 +72,7 @@ public final class CourseImpl implements Course {
 	}
 
 	public String getColor() {
-		return color;
+		return this.color;
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public final class CourseImpl implements Course {
 
 	@Override
 	public String getUrl() {
-		return url;
+		return this.url;
 	}
 
 	@Override

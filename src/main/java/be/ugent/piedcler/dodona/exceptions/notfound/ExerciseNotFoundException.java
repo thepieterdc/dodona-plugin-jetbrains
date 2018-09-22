@@ -8,12 +8,10 @@
  */
 package be.ugent.piedcler.dodona.exceptions.notfound;
 
-import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
-
 /**
  * An exercise that can not be found.
  */
-public class ExerciseNotFoundException extends ErrorMessageException {
+public class ExerciseNotFoundException extends ResourceNotFoundException {
 	private static final long serialVersionUID = -200804810539508993L;
 	
 	/**

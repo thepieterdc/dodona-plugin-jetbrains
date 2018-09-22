@@ -8,12 +8,10 @@
  */
 package be.ugent.piedcler.dodona.exceptions.notfound;
 
-import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
-
 /**
  * A submission that can not be found.
  */
-public class SubmissionNotFoundException extends ErrorMessageException {
+public class SubmissionNotFoundException extends ResourceNotFoundException {
 	private static final long serialVersionUID = 2049032511080978489L;
 	
 	/**

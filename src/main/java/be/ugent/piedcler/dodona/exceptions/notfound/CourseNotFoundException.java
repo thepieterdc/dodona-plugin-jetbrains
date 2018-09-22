@@ -8,12 +8,10 @@
  */
 package be.ugent.piedcler.dodona.exceptions.notfound;
 
-import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
-
 /**
  * A course that can not be found.
  */
-public class CourseNotFoundException extends ErrorMessageException {
+public class CourseNotFoundException extends ResourceNotFoundException {
 	private static final long serialVersionUID = 8432355491097983811L;
 	
 	/**

@@ -16,7 +16,9 @@ import be.ugent.piedcler.dodona.dto.Submission;
 import be.ugent.piedcler.dodona.dto.submission.PendingSubmission;
 import be.ugent.piedcler.dodona.dto.submission.SubmissionStatus;
 import be.ugent.piedcler.dodona.exceptions.errors.SubmissionException;
+import be.ugent.piedcler.dodona.exceptions.notfound.SubmissionNotFoundException;
 import be.ugent.piedcler.dodona.services.SubmissionService;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,14 +36,14 @@ import static java.util.Optional.ofNullable;
  */
 public class SubmissionServiceImpl implements SubmissionService {
 	private final Map<Long, Submission> cache;
-
+	
 	/**
 	 * SubmissionServiceImpl constructor.
 	 */
 	public SubmissionServiceImpl() {
 		this.cache = new HashMap<>(5);
 	}
-
+	
 	@Override
 	public Submission get(final long id) {
 		return ofNullable(this.cache.get(id))
@@ -52,25 +54,25 @@ public class SubmissionServiceImpl implements SubmissionService {
 				return ret;
 			});
 	}
-
+	
 	/**
 	 * Gets a series from the api.
 	 *
 	 * @param id the id of the series to fetch
 	 * @return the series
 	 */
+	@NotNull
 	private static Submission getFromApi(final long id) {
 		final String url = getUrl(id);
-		return Http.get(url, SubmissionResponse.class).toSubmission();
+		return Http.get(url, SubmissionResponse.class, SubmissionNotFoundException::new).toSubmission();
 	}
-
+	
 	@Override
-	public Submission submit(final Solution solution) {
-
+	public Submission submit(@NotNull final Solution solution) {
 		final String url = getDodonaURL(Submission.ENDPOINT);
-
+		
 		final SubmissionPostResponse response = post(url, solution, SubmissionPostResponse.class);
-
+		
 		if (response.getStatus().equals(SubmissionPostResponse.STATUS_OK)) {
 			final Submission submission = new PendingSubmission(response.getId(), solution.getExercise());
 			this.cache.put(response.getId(), submission);

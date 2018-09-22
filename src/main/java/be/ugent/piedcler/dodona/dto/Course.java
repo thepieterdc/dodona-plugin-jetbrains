@@ -26,6 +26,13 @@ public interface Course extends Resource {
 	String ENDPOINT_SERIES_ID = "/courses/%d/series";
 	
 	/**
+	 * Gets the color of the course.
+	 *
+	 * @return the color
+	 */
+	String getColor();
+	
+	/**
 	 * Gets the name of the course.
 	 *
 	 * @return the name
@@ -55,13 +62,7 @@ public interface Course extends Resource {
 	 * @return the teacher
 	 */
 	String getTeacher();
-
-	/**
-	 * Gets the color of the course
-	 * @return the color
-	 */
-	String getColor();
-
+	
 	/**
 	 * Gets the academic year this course is taught.
 	 *

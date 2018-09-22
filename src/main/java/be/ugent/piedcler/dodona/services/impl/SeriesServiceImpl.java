@@ -11,13 +11,16 @@ package be.ugent.piedcler.dodona.services.impl;
 import be.ugent.piedcler.dodona.api.Http;
 import be.ugent.piedcler.dodona.api.responses.ExerciseResponse;
 import be.ugent.piedcler.dodona.api.responses.SeriesResponse;
-import be.ugent.piedcler.dodona.dto.Course;
 import be.ugent.piedcler.dodona.dto.Exercise;
 import be.ugent.piedcler.dodona.dto.Series;
+import be.ugent.piedcler.dodona.exceptions.notfound.SeriesNotFoundException;
 import be.ugent.piedcler.dodona.services.SeriesService;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,7 +56,7 @@ public class SeriesServiceImpl implements SeriesService {
 	 */
 	private static Series getFromApi(final long id) {
 		final String url = Series.getUrl(id);
-		final Series series = Http.get(url, SeriesResponse.class).toSeries();
+		final Series series = Http.get(url, SeriesResponse.class, SeriesNotFoundException::new).toSeries();
 		return series.setExercises(getExercisesFromApi(id));
 	}
 	
@@ -65,7 +68,8 @@ public class SeriesServiceImpl implements SeriesService {
 	 */
 	@NotNull
 	private static List<Exercise> getExercisesFromApi(final long series) {
-		return Stream.of(Http.get(Series.getExercisesUrl(series), ExerciseResponse[].class))
+		return Stream
+			.of(Http.get(Series.getExercisesUrl(series), ExerciseResponse[].class, SeriesNotFoundException::new))
 			.map(ExerciseResponse::toExercise)
 			.collect(Collectors.toList());
 	}

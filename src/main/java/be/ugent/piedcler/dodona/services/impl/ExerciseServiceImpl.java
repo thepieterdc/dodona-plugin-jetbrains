@@ -11,6 +11,7 @@ package be.ugent.piedcler.dodona.services.impl;
 import be.ugent.piedcler.dodona.api.Http;
 import be.ugent.piedcler.dodona.api.responses.ExerciseResponse;
 import be.ugent.piedcler.dodona.dto.Exercise;
+import be.ugent.piedcler.dodona.exceptions.notfound.ExerciseNotFoundException;
 import be.ugent.piedcler.dodona.services.ExerciseService;
 import org.jetbrains.annotations.NotNull;
 
@@ -58,8 +59,7 @@ public class ExerciseServiceImpl implements ExerciseService {
 	 * @return the exercise
 	 */
 	private static Exercise getFromApi(final long id) {
-		final String url = Exercise.getUrl(id);
-		return Http.get(url, ExerciseResponse.class).toExercise();
+		return getFromApi(Exercise.getUrl(id));
 	}
 	
 	/**
@@ -69,6 +69,6 @@ public class ExerciseServiceImpl implements ExerciseService {
 	 * @return the exercise
 	 */
 	private static Exercise getFromApi(final String url) {
-		return Http.get(url, ExerciseResponse.class).toExercise();
+		return Http.get(url, ExerciseResponse.class, ExerciseNotFoundException::new).toExercise();
 	}
 }

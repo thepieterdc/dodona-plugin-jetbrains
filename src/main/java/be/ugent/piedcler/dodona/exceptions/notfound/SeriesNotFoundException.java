@@ -8,12 +8,10 @@
  */
 package be.ugent.piedcler.dodona.exceptions.notfound;
 
-import be.ugent.piedcler.dodona.exceptions.ErrorMessageException;
-
 /**
  * A series that can not be found.
  */
-public class SeriesNotFoundException extends ErrorMessageException {
+public class SeriesNotFoundException extends ResourceNotFoundException {
 	private static final long serialVersionUID = 5336065731460519195L;
 	
 	/**

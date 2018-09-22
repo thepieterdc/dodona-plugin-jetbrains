@@ -13,12 +13,13 @@ import be.ugent.piedcler.dodona.dto.Resource;
 /**
  * Service for resources.
  */
+@FunctionalInterface
 public interface ResourceService<T extends Resource> {
 	/**
 	 * Gets the resource with id.
 	 *
 	 * @param id the id of the resource to fetch
-	 * @return the resource, if it does not exist, an UnknownResource will be returned
+	 * @return the resource
 	 */
 	T get(long id);
 }

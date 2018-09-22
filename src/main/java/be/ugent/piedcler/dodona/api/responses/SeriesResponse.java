@@ -13,11 +13,16 @@ import be.ugent.piedcler.dodona.dto.series.SeriesImpl;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * The response from fetching a series.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SeriesResponse {
+	private static final Pattern JSON_EXTENSION = Pattern.compile(".json", Pattern.LITERAL);
+	
 	private final long id;
 	private final String name;
 	private final String url;
@@ -43,6 +48,8 @@ public class SeriesResponse {
 	 * @return the series
 	 */
 	public Series toSeries() {
-		return new SeriesImpl(this.id, this.name, this.url.replace(".json", ""));
+		return new SeriesImpl(
+			this.id, this.name, JSON_EXTENSION.matcher(this.url).replaceAll(Matcher.quoteReplacement(""))
+		);
 	}
 }
