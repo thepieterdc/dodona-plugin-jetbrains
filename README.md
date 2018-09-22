@@ -19,7 +19,7 @@ You can access the settings by selecting `Settings` in the `File` menu, or by pr
 
 
 ## Credits
-- Plugin developed by Pieter De Clercq <piedcler.declercq@ugent.be>.
+- Plugin initially developed by [Pieter De Clercq](https://thepieterdc.github.io/).
+- Co-developed by [Tobiah_Lissens](https://github.com/darktilrisen).
 - Thanks to [Rien Maertens](https://github.com/rien) for explaining the authentication procedure and other undocumented API questions.
-- JSON library by [Sean Leary](https://github.com/stleary/JSON-java).
 - Icons are property of [FontAwesome](http://fontawesome.io).

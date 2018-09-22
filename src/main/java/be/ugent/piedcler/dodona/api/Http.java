@@ -2,12 +2,12 @@
  * Copyright (c) 2018. All rights reserved.
  *
  * @author Pieter De Clercq
+ * @author Tobiah Lissens
  *
  * https://github.com/thepieterdc/ugent-dodona/
  */
 package be.ugent.piedcler.dodona.api;
 
-import be.ugent.piedcler.dodona.api.bodies.SolutionBody;
 import be.ugent.piedcler.dodona.dto.Solution;
 import be.ugent.piedcler.dodona.exceptions.warnings.MissingApiKeyException;
 import be.ugent.piedcler.dodona.settings.SettingsHelper;

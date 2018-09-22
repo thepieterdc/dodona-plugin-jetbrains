@@ -2,6 +2,7 @@
  * Copyright (c) 2018. All rights reserved.
  *
  * @author Pieter De Clercq
+ * @author Tobiah Lissens
  *
  * https://github.com/thepieterdc/ugent-dodona/
  */
@@ -23,7 +24,7 @@ public class CourseResponse {
 	private final String color;
 	private final String year;
 	private final String url;
-
+	
 	/**
 	 * CourseResponse constructor.
 	 *
@@ -47,7 +48,7 @@ public class CourseResponse {
 		this.year = year;
 		this.url = url;
 	}
-
+	
 	/**
 	 * Converts the course response to a course.
 	 *

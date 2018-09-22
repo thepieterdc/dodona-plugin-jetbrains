@@ -22,8 +22,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable
             displayName="Dodona Settings"
-            instance="be.ugent.piedcler.dodona.settings.DodonaSettings" />
-
+            instance="be.ugent.piedcler.dodona.settings.DodonaSettings"/>
 
         <applicationService serviceInterface="be.ugent.piedcler.dodona.services.CourseService"
                             serviceImplementation="be.ugent.piedcler.dodona.services.impl.CourseServiceImpl"/>
@@ -37,7 +36,7 @@
 
     <actions>
         <group id="be.ugent.piedcler.dodona.actions.DodonaActions" text="UGent Dodona" popup="false">
-            <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop" />
+            <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
             <action id="be.ugent.piedcler.dodona.submit" class="be.ugent.piedcler.dodona.actions.SubmitAction"
                     text="Submit to Dodona" description="Submits the current file to Dodona."
                     icon="/icons/submitAction.png">
