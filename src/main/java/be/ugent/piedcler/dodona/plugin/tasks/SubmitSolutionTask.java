@@ -79,8 +79,8 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 
 			long delay = SubmitSolutionTask.DELAY_INITIAL;
 			long total = 0L;
-			while (submission.getStatus().equals(SubmissionStatus.RUNNING)
-				|| submission.getStatus().equals(SubmissionStatus.QUEUED)) {
+			while (submission.getStatus() == SubmissionStatus.RUNNING
+				|| submission.getStatus() == SubmissionStatus.QUEUED) {
 				if (total > DELAY_TIMEOUT) {
 					break;
 				}
@@ -99,7 +99,8 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 
 			Exercise exercise = api.getExercise(submission.getExercise());
 
-			if (submission.getStatus().equals(SubmissionStatus.RUNNING)) {
+			if (submission.getStatus() == SubmissionStatus.RUNNING
+				|| submission.getStatus() == SubmissionStatus.QUEUED) {
 				throw new SubmissionTimeoutException(submission, exercise);
 			}
 
@@ -108,7 +109,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 
 			// Required to use EventQueue.invokeLater(), must be final.
 			final Submission completed = submission;
-			if (submission.getStatus().equals(SubmissionStatus.CORRECT)) {
+			if (submission.getStatus() == SubmissionStatus.CORRECT) {
 				EventQueue.invokeLater(() -> NotificationReporter.info(
 					format("Solution to %s was correct!", exercise.getName())
 				));

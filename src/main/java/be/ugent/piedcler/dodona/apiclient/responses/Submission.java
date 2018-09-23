@@ -22,7 +22,7 @@ public final class Submission {
 	private final String url;
 	private final String exercise;
 	private final long id;
-	private final String status;
+	private final SubmissionStatus status;
 
 	/**
 	 * Submission constructor.
@@ -36,7 +36,7 @@ public final class Submission {
 					  @JsonProperty("url") String url,
 					  @JsonProperty("exercise") final String exercise,
 					  @JsonProperty("id") final long id,
-					  @JsonProperty("status") final String status) {
+					  @JsonProperty("status") final SubmissionStatus status) {
 		this.accepted = accepted;
 		this.url = url;
 		this.exercise = exercise;
@@ -56,7 +56,7 @@ public final class Submission {
 		return id;
 	}
 
-	public String getStatus() {
+	public SubmissionStatus getStatus() {
 		return status;
 	}
 
