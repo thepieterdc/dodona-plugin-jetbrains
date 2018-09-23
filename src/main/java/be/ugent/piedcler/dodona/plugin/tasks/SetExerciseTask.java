@@ -38,14 +38,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 /**
  * Sets the course and exercise id in the header of the code.
  */
 public class SetExerciseTask extends Task.Backgroundable {
-	//private final CourseService courses;
-	//private final SeriesService series;
 
 	private final Consumer<String> identifierSetter;
 
@@ -61,9 +58,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 	 */
 	public SetExerciseTask(final Project project, final Consumer<String> identifierSetter) {
 		super(project, "Configure Exercise.");
-		//this.courses = CourseService.getInstance();
 		this.identifierSetter = identifierSetter;
-		//this.series = SeriesService.getInstance();
 	}
 
 	/**

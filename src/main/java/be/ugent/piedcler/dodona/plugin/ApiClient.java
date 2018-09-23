@@ -57,9 +57,4 @@ public final class ApiClient {
 		return http.post(SettingsHelper.getDodonaURL("/submissions"), SettingsHelper.getApiKey(), solution, Submission.class);
 	}
 
-
-	public JavaType getListTypeOf(Class<?> clz) {
-		return http.getListTypeOf(clz);
-	}
-
 }

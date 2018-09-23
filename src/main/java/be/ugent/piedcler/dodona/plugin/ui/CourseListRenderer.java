@@ -9,8 +9,7 @@
 package be.ugent.piedcler.dodona.plugin.ui;
 
 import be.ugent.piedcler.dodona.apiclient.responses.Course;
-import com.intellij.openapi.util.IconLoader;
-import com.intellij.util.IconUtil;
+import be.ugent.piedcler.dodona.plugin.Icons;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,8 +20,6 @@ import java.awt.*;
 public class CourseListRenderer extends DefaultListCellRenderer {
 	private static final long serialVersionUID = 1474165572278173025L;
 
-	private static final Icon CIRCLE_ICON = IconLoader.findIcon("/icons/circle.png");
-
 	@Override
 	public Component getListCellRendererComponent(final JList<?> list,
 												  final Object value,
@@ -32,15 +29,8 @@ public class CourseListRenderer extends DefaultListCellRenderer {
 		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		if (value instanceof Course) {
 			final Course course = (Course) value;
-			Color color;
-			try {
-				color = (Color) Color.class.getField(course.getColor()).get(null);
-			} catch (Exception e) {
-				color = Color.BLUE;
-			}
-			final Icon coloredIcon = IconUtil.colorize(CIRCLE_ICON, color);
 			this.setText(course.getName());
-			this.setIcon(coloredIcon);
+			this.setIcon(Icons.getColorIcon(course.getColor()));
 		}
 		return this;
 	}
