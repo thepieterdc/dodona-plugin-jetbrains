@@ -28,8 +28,6 @@ public final class Solution {
 	private final Long seriesId;
 	@JsonProperty("exercise_id")
 	private final Long exerciseId;
-	@JsonIgnore
-	private final String exerciseUrl;
 
 	/**
 	 * Solution constructor.
@@ -42,13 +40,11 @@ public final class Solution {
 	public Solution(@Nullable @JsonProperty("course_id") final Long courseId,
 					@Nullable @JsonProperty("series_id") final Long seriesId,
 					@NotNull @JsonProperty("exercise_id") final Long exerciseId,
-					@JsonProperty("code") final String code,
-					final String exerciseUrl) {
+					@JsonProperty("code") final String code) {
 		this.code = code;
 		this.courseId = courseId;
 		this.seriesId = seriesId;
 		this.exerciseId = exerciseId;
-		this.exerciseUrl = exerciseUrl;
 	}
 
 	/**
@@ -61,7 +57,7 @@ public final class Solution {
 	public Solution(@Nullable @JsonProperty("course_id") final Long courseId,
 					@Nullable @JsonProperty("series_id") final Long seriesId,
 					@NotNull @JsonProperty("exercise_id") final Long exerciseId) {
-		this(courseId, seriesId, exerciseId, "", "");
+		this(courseId, seriesId, exerciseId, "");
 	}
 
 
@@ -114,7 +110,4 @@ public final class Solution {
 		return this;
 	}
 
-	public String getExerciseUrl() {
-		return exerciseUrl;
-	}
 }

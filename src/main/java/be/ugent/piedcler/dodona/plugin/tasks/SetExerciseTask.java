@@ -8,8 +8,11 @@
  */
 package be.ugent.piedcler.dodona.plugin.tasks;
 
+import be.ugent.piedcler.dodona.apiclient.exceptions.accessdenied.ResourceAccessDeniedException;
+import be.ugent.piedcler.dodona.apiclient.exceptions.apitoken.ApiTokenException;
 import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.CourseNotFoundException;
 import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.ExerciseNotFoundException;
+import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.ResourceNotFoundException;
 import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.SeriesNotFoundException;
 import be.ugent.piedcler.dodona.apiclient.responses.Course;
 import be.ugent.piedcler.dodona.apiclient.responses.Exercise;
@@ -135,9 +138,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setText("Retrieving courses...");
 
 			final ApiClient apiClient = ApiClient.getInstance();
-			final Root root = apiClient
-				.get("", Root.class)
-				.orElseThrow(CourseNotFoundException::new);
+			final Root root = apiClient.getRoot();
 
 			List<Course> myCourses = root.getUser().getSubscribedCourses();
 
@@ -151,10 +152,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.30);
 			progressIndicator.setText("Retrieving series...");
 
-			final List<Series> courseSeries = apiClient
-				.get(this.selectedCourse.getSeries(), Series[].class)
-				.map(Arrays::asList)
-				.orElseThrow(SeriesNotFoundException::new);
+			final List<Series> courseSeries = apiClient.getSeriesList(this.selectedCourse.getSeries());
 
 			progressIndicator.setFraction(0.45);
 			progressIndicator.setText("Waiting for series selection...");
@@ -166,10 +164,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.60);
 			progressIndicator.setText("Retrieving exercises...");
 
-			final List<Exercise> exercises = apiClient
-				.get(this.selectedSeries.getExercises(), Exercise[].class)
-				.map(Arrays::asList)
-				.orElseThrow(ExerciseNotFoundException::new);
+			final List<Exercise> exercises = apiClient.getExercisesList(this.selectedSeries.getExercises());
 
 			progressIndicator.setFraction(0.75);
 			progressIndicator.setText("Waiting for exercise selection...");
@@ -187,7 +182,11 @@ public class SetExerciseTask extends Task.Backgroundable {
 			EventQueue.invokeLater(() -> NotificationReporter.info("Exercise successfully set."));
 		} catch (final WarningMessageException warning) {
 			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));
-		} catch (final ErrorMessageException | InvocationTargetException error) {
+		} catch (final ErrorMessageException
+			| InvocationTargetException
+			| ResourceNotFoundException
+			| ResourceAccessDeniedException
+			| ApiTokenException error) {
 			EventQueue.invokeLater(() -> NotificationReporter.error(error.getMessage()));
 		} catch (final InterruptedException ex) {
 			// aborted by user.

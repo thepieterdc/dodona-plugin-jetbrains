@@ -8,12 +8,12 @@
  */
 package be.ugent.piedcler.dodona.apiclient;
 
+import be.ugent.piedcler.dodona.apiclient.exceptions.accessdenied.*;
 import be.ugent.piedcler.dodona.apiclient.exceptions.apitoken.ApiTokenInvalidException;
 import be.ugent.piedcler.dodona.apiclient.exceptions.apitoken.ApiTokenNotSetException;
-import be.ugent.piedcler.dodona.apiclient.responses.Solution;
+import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.*;
+import be.ugent.piedcler.dodona.apiclient.responses.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.http.HttpStatus;
@@ -22,8 +22,8 @@ import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Provides HTTP methods.
@@ -40,8 +40,7 @@ public class Http {
 
 	private static final ObjectMapper mapper = new ObjectMapper()
 		.setSerializationInclusion(JsonInclude.Include.NON_NULL)
-		.enable(SerializationFeature.WRAP_ROOT_VALUE)
-		;//.enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE);
+		.enable(SerializationFeature.WRAP_ROOT_VALUE);
 
 	/**
 	 * Sends an authenticated HTTP GET request.
@@ -51,9 +50,11 @@ public class Http {
 	 * @param resultCls the result class
 	 * @return the response wrapped in the given result class
 	 */
-	public <T> Optional<T> get(final String endpoint,
-							   final String apiKey,
-							   final Class<T> resultCls) {
+	private <T> T get(final String endpoint,
+					  final String apiKey,
+					  final Class<T> resultCls,
+					  final ResourceNotFoundException notFound,
+					  final ResourceAccessDeniedException noAccess) {
 		if (apiKey.isEmpty()) {
 			throw new ApiTokenNotSetException();
 		}
@@ -70,24 +71,20 @@ public class Http {
 			}
 
 			if (connection.getResponseCode() == HttpStatus.SC_NOT_FOUND) {
-				return Optional.empty();
+				throw notFound;
 			}
 
-			return Optional.of(Http.mapper.readValue(connection.getInputStream(), resultCls));
+			return Http.mapper.readValue(connection.getInputStream(), resultCls);
 		} catch (final IOException ex) {
-			return Optional.empty();
+			throw noAccess;
 		}
 	}
 
-	/**
-	 * Sends an authenticated HTTP POST request.
-	 *
-	 * @param endpoint  the endpoint to call
-	 * @param apiKey    the api key to use
-	 * @param solution  the solution to send
-	 * @param resultCls the result class
-	 */
-	public <T> Optional<T> post(final String endpoint, final String apiKey, final Solution solution, final Class<T> resultCls) {
+	private <T, R> T post(final String endpoint,
+						  final String apiKey,
+						  final R body,
+						  final Class<T> resultCls,
+						  final ResourceNotFoundException notFound) {
 		if (apiKey.isEmpty()) {
 			throw new ApiTokenNotSetException();
 		}
@@ -103,23 +100,53 @@ public class Http {
 			connection.setRequestProperty(HEADER_CONTENT_TYPE, HEADER_ACCEPT_VALUE);
 
 			try (final OutputStream out = connection.getOutputStream()) {
-				mapper.writeValue(out, solution);
+				mapper.writeValue(out, body);
 			}
 
 			if (connection.getResponseCode() == HttpStatus.SC_UNAUTHORIZED) {
 				throw new ApiTokenInvalidException();
 			}
 
-			return Optional.of(mapper.readValue(connection.getInputStream(), resultCls));
+			return mapper.readValue(connection.getInputStream(), resultCls);
 		} catch (final IOException ex) {
-			return Optional.empty();
+			throw notFound;
 		}
 	}
 
 
-	public JavaType getListTypeOf(Class<?> clz) {
-		return mapper.getTypeFactory().constructCollectionType(List.class, clz);
+	public Root getRoot(final String url, final String apiKey) {
+		return this.get(url, apiKey, Root.class, new RootNotFoundException(), new RootAccessDeniedException());
 	}
 
+	public Course getCourse(final String url, final String apiKey) {
+		return this.get(url, apiKey, Course.class, new CourseNotFoundException(), new CourseAccessDeniedException());
+	}
 
+	public Series getSeries(final String url, final String apiKey) {
+		return this.get(url, apiKey, Series.class, new SeriesNotFoundException(), new SeriesAccessDeniedException());
+	}
+
+	public Exercise getExercise(final String url, final String apiKey) {
+		return this.get(url, apiKey, Exercise.class, new ExerciseNotFoundException(), new ExerciseAccessDeniedException());
+	}
+
+	public Submission getSubmission(final String url, final String apiKey) {
+		return this.get(url, apiKey, Submission.class, new SubmissionNotFoundException(), new SubmissionAccessDeniedException());
+	}
+
+	public List<Series> getSeriesList(final String url, final String apiKey) {
+		return Arrays.asList(
+			this.get(url, apiKey, Series[].class, new SeriesNotFoundException(), new SeriesAccessDeniedException())
+		);
+	}
+
+	public List<Exercise> getExercisesList(final String url, final String apiKey) {
+		return Arrays.asList(
+			this.get(url, apiKey, Exercise[].class, new ExerciseNotFoundException(), new ExerciseAccessDeniedException())
+		);
+	}
+
+	public SubmissionPost postSolution(final String endpoint, final String apiKey, final Solution solution) {
+		return this.post(endpoint, apiKey, solution, SubmissionPost.class, new SubmissionNotFoundException());
+	}
 }

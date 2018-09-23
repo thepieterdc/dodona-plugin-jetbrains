@@ -8,7 +8,11 @@
  */
 package be.ugent.piedcler.dodona.plugin.tasks;
 
+import be.ugent.piedcler.dodona.apiclient.exceptions.accessdenied.ResourceAccessDeniedException;
+import be.ugent.piedcler.dodona.apiclient.exceptions.accessdenied.RootAccessDeniedException;
+import be.ugent.piedcler.dodona.apiclient.exceptions.apitoken.ApiTokenException;
 import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.ExerciseNotFoundException;
+import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.ResourceNotFoundException;
 import be.ugent.piedcler.dodona.apiclient.responses.*;
 import be.ugent.piedcler.dodona.plugin.ApiClient;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
@@ -63,9 +67,9 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			final ApiClient api = ApiClient.getInstance();
 
 
-			SubmissionPost submissionPost = api.post(solution).orElseThrow(SubmissionException::new);
+			SubmissionPost submissionPost = api.postSolution(solution);
 
-			Submission submission = api.get(submissionPost.getUrl(), Submission.class).orElseThrow(SubmissionException::new);
+			Submission submission = api.getSubmission(submissionPost.getUrl());
 			NotificationReporter.info("Solution successfully submitted, awaiting evaluation.");
 
 			progressIndicator.setFraction(0.50);
@@ -83,9 +87,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 
 				Thread.sleep(delay);
 
-				submission = api.get(
-					submissionPost.getUrl(),
-					Submission.class).orElseThrow(SubmissionException::new);
+				submission = api.getSubmission(submissionPost.getUrl());
 
 				delay = Math.min(
 					(long) ((double) delay * SubmitSolutionTask.DELAY_BACKOFF_FACTOR),
@@ -95,8 +97,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 				total += delay;
 			}
 
-			Exercise exercise = api.get(submission.getExercise(), Exercise.class)
-				.orElseThrow(ExerciseNotFoundException::new);
+			Exercise exercise = api.getExercise(submission.getExercise());
 
 			if (submission.getStatus().equals(SubmissionStatus.RUNNING)) {
 				throw new SubmissionTimeoutException(submission, exercise);
@@ -116,7 +117,10 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			}
 		} catch (final WarningMessageException warning) {
 			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));
-		} catch (final ErrorMessageException error) {
+		} catch (final ErrorMessageException
+			| ApiTokenException
+			| ResourceNotFoundException
+			| ResourceAccessDeniedException error) {
 			EventQueue.invokeLater(() -> NotificationReporter.error(error.getMessage()));
 		} catch (final InterruptedException ex) {
 			throw new RuntimeException(ex);

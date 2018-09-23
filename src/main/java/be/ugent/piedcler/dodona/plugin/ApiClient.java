@@ -1,13 +1,11 @@
 package be.ugent.piedcler.dodona.plugin;
 
 import be.ugent.piedcler.dodona.apiclient.Http;
-import be.ugent.piedcler.dodona.apiclient.responses.Solution;
-import be.ugent.piedcler.dodona.apiclient.responses.Submission;
-import be.ugent.piedcler.dodona.apiclient.responses.SubmissionPost;
+import be.ugent.piedcler.dodona.apiclient.responses.*;
 import be.ugent.piedcler.dodona.plugin.settings.SettingsHelper;
-import com.fasterxml.jackson.databind.JavaType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,8 +15,6 @@ public final class ApiClient {
 	private static final ApiClient INSTANCE = new ApiClient(new Http(), new HashMap<>(20));
 
 	public static final String SUBMISSION_ENDPOINT = "/submissions";
-
-	public static final String SUBMISSION_PROTOTYPE_URL = SUBMISSION_ENDPOINT + "/%d";
 
 	private final Http http;
 
@@ -34,19 +30,37 @@ public final class ApiClient {
 		this.cache = cache;
 	}
 
-	/**
-	 * Sends an authenticated HTTP GET request.
-	 *
-	 * @param endpoint  the endpoint to call
-	 * @param resultCls the result class
-	 * @return the response wrapped in the given result class
-	 */
-	public <T> Optional<T> get(final String endpoint, final Class<T> resultCls) {
-		// should cache here
+	private String getUrl(final String url) {
+		return SettingsHelper.getDodonaURL() + url.replace(SettingsHelper.getDodonaURL(), "");
+	}
 
-		// TODO extract the base url correctly.
-		final String url = SettingsHelper.getDodonaURL() + endpoint.replace(SettingsHelper.getDodonaURL(), "");
-		return http.get(url, SettingsHelper.getApiKey(), resultCls);
+
+	public Root getRoot() {
+		return this.http.getRoot(this.getUrl(""), SettingsHelper.getApiKey());
+	}
+
+	public Course getCourse(final String url) {
+		return this.http.getCourse(this.getUrl(url), SettingsHelper.getApiKey());
+	}
+
+	public Series getSeries(final String url) {
+		return this.http.getSeries(this.getUrl(url), SettingsHelper.getApiKey());
+	}
+
+	public Exercise getExercise(final String url) {
+		return this.http.getExercise(this.getUrl(url), SettingsHelper.getApiKey());
+	}
+
+	public Submission getSubmission(final String url) {
+		return this.http.getSubmission(this.getUrl(url), SettingsHelper.getApiKey());
+	}
+
+	public List<Series> getSeriesList(final String url) {
+		return this.http.getSeriesList(this.getUrl(url), SettingsHelper.getApiKey());
+	}
+
+	public List<Exercise> getExercisesList(final String url) {
+		return this.http.getExercisesList(this.getUrl(url), SettingsHelper.getApiKey());
 	}
 
 	/**
@@ -54,8 +68,8 @@ public final class ApiClient {
 	 *
 	 * @param solution the solution to send
 	 */
-	public Optional<SubmissionPost> post(final Solution solution) {
-		return http.post(SettingsHelper.getDodonaURL("/submissions"), SettingsHelper.getApiKey(), solution, SubmissionPost.class);
+	public SubmissionPost postSolution(final Solution solution) {
+		return http.postSolution(SettingsHelper.getDodonaURL("/submissions"), SettingsHelper.getApiKey(), solution);
 	}
 
 }
