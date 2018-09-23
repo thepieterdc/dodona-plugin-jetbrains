@@ -1,0 +1,30 @@
+.col6 {
+	display: inline-block;
+	width: 49%;
+    vertical-align: top;
+}
+.feature-status::after {
+    font-family: monospace;
+	font-size: 60%;
+    margin-left: 1em;
+    vertical-align: middle;
+    display: inline-block;
+}
+.feature-status.done::after {
+	content: '\2714';
+    font-size: 75%;
+	color: #527658;
+}
+.feature-status.almostdone::after {
+	content: '[ALMOST DONE]';
+	color: #527658;
+}
+.feature-status.inprogress::after {
+	content: '[IN PROGRESS]';
+	color: #515d76;
+}
+
+.quote-attrib {
+    text-align: right;
+    margin-right: 1em;
+}
