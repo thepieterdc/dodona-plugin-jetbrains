@@ -8,7 +8,7 @@
       This plugin allows you to submit your exerciseId to Dodona right from within your favourite JetBrains IDE.
     ]]></description>
 
-    <change-notes>Initial development version.</change-notes>
+    <change-notes>Initial release version. More versions will be released soon, containing bug fixes and more features.</change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="162.0"/>
