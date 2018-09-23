@@ -3,6 +3,7 @@ package be.ugent.piedcler.dodona.plugin;
 import be.ugent.piedcler.dodona.apiclient.Http;
 import be.ugent.piedcler.dodona.apiclient.responses.Solution;
 import be.ugent.piedcler.dodona.apiclient.responses.Submission;
+import be.ugent.piedcler.dodona.apiclient.responses.SubmissionPost;
 import be.ugent.piedcler.dodona.plugin.settings.SettingsHelper;
 import com.fasterxml.jackson.databind.JavaType;
 
@@ -53,8 +54,8 @@ public final class ApiClient {
 	 *
 	 * @param solution the solution to send
 	 */
-	public Optional<Submission> post(final Solution solution) {
-		return http.post(SettingsHelper.getDodonaURL("/submissions"), SettingsHelper.getApiKey(), solution, Submission.class);
+	public Optional<SubmissionPost> post(final Solution solution) {
+		return http.post(SettingsHelper.getDodonaURL("/submissions"), SettingsHelper.getApiKey(), solution, SubmissionPost.class);
 	}
 
 }

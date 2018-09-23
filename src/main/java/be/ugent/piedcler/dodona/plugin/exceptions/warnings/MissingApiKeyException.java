@@ -8,10 +8,13 @@
  */
 package be.ugent.piedcler.dodona.plugin.exceptions.warnings;
 
+import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
+import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
+
 /**
  * The apiclient key was not yet configured in the settings.
  */
-public class MissingApiKeyException extends RuntimeException {
+public class MissingApiKeyException extends WarningMessageException {
 	private static final long serialVersionUID = 4739214540153438897L;
 	
 	/**

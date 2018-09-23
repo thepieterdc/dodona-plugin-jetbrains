@@ -17,30 +17,34 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class Submission {
 
+
 	private final boolean accepted;
+	private final String url;
 	private final String exercise;
 	private final long id;
-	private final SubmissionStatus status;
-	
+	private final String status;
+
 	/**
 	 * Submission constructor.
-	 *
-	 * @param accepted the acceptance status
+	 *  @param accepted the acceptance status
+	 * @param url      the url to the submission
 	 * @param exercise url to the exercise
 	 * @param id       the id of the submission
 	 * @param status   the status
 	 */
 	public Submission(@JsonProperty("accepted") final boolean accepted,
+					  @JsonProperty("url") String url,
 					  @JsonProperty("exercise") final String exercise,
 					  @JsonProperty("id") final long id,
-					  @JsonProperty("status") final SubmissionStatus status) {
+					  @JsonProperty("status") final String status) {
 		this.accepted = accepted;
+		this.url = url;
 		this.exercise = exercise;
 		this.id = id;
 		this.status = status;
 	}
 
-	public boolean isAccepted() {
+	public boolean getAccepted() {
 		return accepted;
 	}
 
@@ -52,7 +56,11 @@ public final class Submission {
 		return id;
 	}
 
-	public SubmissionStatus getStatus() {
+	public String getStatus() {
 		return status;
+	}
+
+	public String getUrl() {
+		return url;
 	}
 }

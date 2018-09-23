@@ -11,11 +11,12 @@ package be.ugent.piedcler.dodona.plugin.exceptions.warnings;
 
 import be.ugent.piedcler.dodona.apiclient.responses.Exercise;
 import be.ugent.piedcler.dodona.apiclient.responses.Submission;
+import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 
 /**
  * The user submitted a solution but it took too long to evaluate.
  */
-public class SubmissionTimeoutException extends RuntimeException {
+public class SubmissionTimeoutException extends WarningMessageException {
 	private static final long serialVersionUID = 1861364799339652909L;
 	
 	/**

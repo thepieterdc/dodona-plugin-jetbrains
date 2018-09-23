@@ -9,10 +9,7 @@
 package be.ugent.piedcler.dodona.plugin.tasks;
 
 import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.ExerciseNotFoundException;
-import be.ugent.piedcler.dodona.apiclient.responses.Exercise;
-import be.ugent.piedcler.dodona.apiclient.responses.Solution;
-import be.ugent.piedcler.dodona.apiclient.responses.Submission;
-import be.ugent.piedcler.dodona.apiclient.responses.SubmissionStatus;
+import be.ugent.piedcler.dodona.apiclient.responses.*;
 import be.ugent.piedcler.dodona.plugin.ApiClient;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
@@ -65,11 +62,10 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 
 			final ApiClient api = ApiClient.getInstance();
 
-			Exercise exercise = api.get(solution.getExerciseUrl(), Exercise.class)
-				.orElseThrow(ExerciseNotFoundException::new);
 
-			Submission submission = api.post(solution).orElseThrow(SubmissionException::new);
+			SubmissionPost submissionPost = api.post(solution).orElseThrow(SubmissionException::new);
 
+			Submission submission = api.get(submissionPost.getUrl(), Submission.class).orElseThrow(SubmissionException::new);
 			NotificationReporter.info("Solution successfully submitted, awaiting evaluation.");
 
 			progressIndicator.setFraction(0.50);
@@ -79,7 +75,8 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 
 			long delay = SubmitSolutionTask.DELAY_INITIAL;
 			long total = 0L;
-			while (submission.getStatus() == SubmissionStatus.PENDING) {
+			while (submission.getStatus().equals(SubmissionStatus.RUNNING)
+				|| submission.getStatus().equals(SubmissionStatus.QUEUED)) {
 				if (total > DELAY_TIMEOUT) {
 					break;
 				}
@@ -87,7 +84,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 				Thread.sleep(delay);
 
 				submission = api.get(
-					format(ApiClient.SUBMISSION_PROTOTYPE_URL, submission.getId()),
+					submissionPost.getUrl(),
 					Submission.class).orElseThrow(SubmissionException::new);
 
 				delay = Math.min(
@@ -98,7 +95,10 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 				total += delay;
 			}
 
-			if (submission.getStatus() == SubmissionStatus.PENDING) {
+			Exercise exercise = api.get(submission.getExercise(), Exercise.class)
+				.orElseThrow(ExerciseNotFoundException::new);
+
+			if (submission.getStatus().equals(SubmissionStatus.RUNNING)) {
 				throw new SubmissionTimeoutException(submission, exercise);
 			}
 
@@ -107,8 +107,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 
 			// Required to use EventQueue.invokeLater(), must be final.
 			final Submission completed = submission;
-
-			if (submission.getStatus() == SubmissionStatus.CORRECT) {
+			if (submission.getStatus().equals(SubmissionStatus.CORRECT)) {
 				EventQueue.invokeLater(() -> NotificationReporter.info(
 					format("Solution to %s was correct!", exercise.getName())
 				));

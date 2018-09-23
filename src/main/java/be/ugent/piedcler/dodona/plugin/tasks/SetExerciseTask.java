@@ -181,8 +181,6 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.90);
 			progressIndicator.setText("Setting exercise...");
 
-			// Modify the code.
-			//TODO issue 4: make sure the comments work across all languages (Python/Ruby/..)
 
 			this.identifierSetter.accept(this.selectedExercise.getUrl());
 

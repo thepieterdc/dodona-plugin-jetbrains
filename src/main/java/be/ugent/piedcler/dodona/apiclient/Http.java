@@ -12,6 +12,7 @@ import be.ugent.piedcler.dodona.apiclient.exceptions.apitoken.ApiTokenInvalidExc
 import be.ugent.piedcler.dodona.apiclient.exceptions.apitoken.ApiTokenNotSetException;
 import be.ugent.piedcler.dodona.apiclient.responses.Solution;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -39,7 +40,8 @@ public class Http {
 
 	private static final ObjectMapper mapper = new ObjectMapper()
 		.setSerializationInclusion(JsonInclude.Include.NON_NULL)
-		.enable(SerializationFeature.WRAP_ROOT_VALUE);
+		.enable(SerializationFeature.WRAP_ROOT_VALUE)
+		;//.enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE);
 
 	/**
 	 * Sends an authenticated HTTP GET request.

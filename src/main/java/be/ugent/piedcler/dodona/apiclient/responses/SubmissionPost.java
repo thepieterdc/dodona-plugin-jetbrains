@@ -10,31 +10,32 @@ package be.ugent.piedcler.dodona.apiclient.responses;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.jetbrains.annotations.NonNls;
 
 /**
  * The response from a submitting a solution to Dodona.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public final class SubmissionPost {
-	@NonNls
-	public static final String STATUS_OK = "ok";
-	
+
 	private final long id;
-	private final SubmissionStatus status;
-	
+	private final String status;
+	private final String url;
+
 	/**
 	 * SubmitResponse constructor.
 	 *
 	 * @param id     the id of the submission
 	 * @param status the status
+	 * @param url    the url
 	 */
 	public SubmissionPost(@JsonProperty("id") final long id,
-						  @JsonProperty("status") final SubmissionStatus status) {
+						  @JsonProperty("status") final String status,
+						  @JsonProperty("url") final String url) {
 		this.id = id;
 		this.status = status;
+		this.url = url;
 	}
-	
+
 	/**
 	 * Gets the id of the submission.
 	 *
@@ -43,13 +44,17 @@ public final class SubmissionPost {
 	public long getId() {
 		return this.id;
 	}
-	
+
 	/**
 	 * Gets the status.
 	 *
 	 * @return the status
 	 */
-	public SubmissionStatus getStatus() {
+	public String getStatus() {
 		return this.status;
+	}
+
+	public String getUrl() {
+		return url;
 	}
 }

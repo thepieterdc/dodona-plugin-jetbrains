@@ -8,10 +8,12 @@
  */
 package be.ugent.piedcler.dodona.plugin.exceptions.errors;
 
+import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
+
 /**
  * Something went wrong while submitting the solution.
  */
-public class SubmissionException extends RuntimeException {
+public class SubmissionException extends ErrorMessageException {
 	private static final long serialVersionUID = 7925403987834655938L;
 	
 	/**
