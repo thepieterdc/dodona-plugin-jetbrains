@@ -15,7 +15,6 @@ import be.ugent.piedcler.dodona.plugin.settings.SettingsHelper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 public final class ApiClient {
 
