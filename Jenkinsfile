@@ -47,7 +47,7 @@ def github_failure_build() {
     String build_script = "python3 scripts/jenkins/build_log_to_json.py ${author} build_log build_log.json"
     String build_log = sh(script: build_script, returnStdout: true)
     withCredentials([string(credentialsId: 'gh-thepieterdc', variable: 'GH_TOKEN')]) {
-        sh "curl --silent -H 'Authorization: token $GH_TOKEN' -X POST --data \"@build_log.json\" https://api.github.com/repos/thepieterdc/ugent-dodona/commits/${env.GIT_COMMIT}/comments >/dev/null"
+        sh "curl --silent -H 'Authorization: token $GH_TOKEN' -X POST --data \"@build_log.json\" https://apiclient.github.com/repos/thepieterdc/ugent-dodona/commits/${env.GIT_COMMIT}/comments >/dev/null"
     }
 }
 
@@ -56,6 +56,6 @@ def github_failure_copyright() {
     String copyright_script = "python3 scripts/jenkins/credits_log_to_json.py ${author} copyright_log copyright_log.json"
     String copyright_log = sh(script: copyright_script, returnStdout: true)
     withCredentials([string(credentialsId: 'gh-thepieterdc', variable: 'GH_TOKEN')]) {
-        sh "curl --silent -H 'Authorization: token $GH_TOKEN' -X POST --data \"@copyright_log.json\" https://api.github.com/repos/thepieterdc/ugent-dodona/commits/${env.GIT_COMMIT}/comments >/dev/null"
+        sh "curl --silent -H 'Authorization: token $GH_TOKEN' -X POST --data \"@copyright_log.json\" https://apiclient.github.com/repos/thepieterdc/ugent-dodona/commits/${env.GIT_COMMIT}/comments >/dev/null"
     }
 }

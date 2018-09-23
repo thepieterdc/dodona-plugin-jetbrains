@@ -5,7 +5,7 @@
     <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io">Pieter De Clercq</vendor>
 
     <description><![CDATA[
-      This plugin allows you to submit your exercise to Dodona right from within your favourite JetBrains IDE.
+      This plugin allows you to submit your exerciseId to Dodona right from within your favourite JetBrains IDE.
     ]]></description>
 
     <change-notes>Initial development version.</change-notes>
@@ -22,22 +22,22 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable
             displayName="Dodona Settings"
-            instance="be.ugent.piedcler.dodona.settings.DodonaSettings"/>
+            instance="be.ugent.piedcler.dodona.plugin.settings.DodonaSettings"/>
 
-        <applicationService serviceInterface="be.ugent.piedcler.dodona.services.CourseService"
-                            serviceImplementation="be.ugent.piedcler.dodona.services.impl.CourseServiceImpl"/>
-        <applicationService serviceInterface="be.ugent.piedcler.dodona.services.ExerciseService"
-                            serviceImplementation="be.ugent.piedcler.dodona.services.impl.ExerciseServiceImpl"/>
-        <applicationService serviceInterface="be.ugent.piedcler.dodona.services.SeriesService"
-                            serviceImplementation="be.ugent.piedcler.dodona.services.impl.SeriesServiceImpl"/>
-        <applicationService serviceInterface="be.ugent.piedcler.dodona.services.SubmissionService"
-                            serviceImplementation="be.ugent.piedcler.dodona.services.impl.SubmissionServiceImpl"/>
+        <applicationService serviceInterface="be.ugent.piedcler.dodona.apiclient.services.CourseService"
+                            serviceImplementation="be.ugent.piedcler.dodona.apiclient.services.impl.CourseServiceImpl"/>
+        <applicationService serviceInterface="be.ugent.piedcler.dodona.apiclient.services.ExerciseService"
+                            serviceImplementation="be.ugent.piedcler.dodona.apiclient.services.impl.ExerciseServiceImpl"/>
+        <applicationService serviceInterface="be.ugent.piedcler.dodona.apiclient.services.SeriesService"
+                            serviceImplementation="be.ugent.piedcler.dodona.apiclient.services.impl.SeriesServiceImpl"/>
+        <applicationService serviceInterface="be.ugent.piedcler.dodona.apiclient.services.SubmissionService"
+                            serviceImplementation="be.ugent.piedcler.dodona.apiclient.services.impl.SubmissionServiceImpl"/>
     </extensions>
 
     <actions>
-        <group id="be.ugent.piedcler.dodona.actions.DodonaActions" text="UGent Dodona" popup="false">
+        <group id="be.ugent.piedcler.dodona.plugin.actions.DodonaActions" text="UGent Dodona" popup="false">
             <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
-            <action id="be.ugent.piedcler.dodona.submit" class="be.ugent.piedcler.dodona.actions.SubmitAction"
+            <action id="be.ugent.piedcler.dodona.submit" class="be.ugent.piedcler.dodona.plugin.actions.SubmitAction"
                     text="Submit to Dodona" description="Submits the current file to Dodona."
                     icon="/icons/submitAction.png">
             </action>
