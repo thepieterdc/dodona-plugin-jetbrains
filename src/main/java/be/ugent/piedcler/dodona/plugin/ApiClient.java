@@ -14,8 +14,6 @@ public final class ApiClient {
 
 	private static final ApiClient INSTANCE = new ApiClient(new Http(), new HashMap<>(20));
 
-	public static final String SUBMISSION_ENDPOINT = "/submissions";
-
 	private final Http http;
 
 	private final Map<String, Object> cache;
