@@ -12,6 +12,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.Nullable;
 
+import static be.ugent.piedcler.dodona.plugin.StringUtils.removeJsonExtention;
+
 /**
  * The response from fetching an exercise.
  */
@@ -48,7 +50,7 @@ public final class Exercise {
 		this.id = id;
 		this.lastSolutionCorrect = lastSolutionCorrect;
 		this.name = name;
-		this.url = url;
+		this.url = removeJsonExtention(url);
 	}
 
 

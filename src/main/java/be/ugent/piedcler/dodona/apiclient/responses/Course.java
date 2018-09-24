@@ -11,6 +11,8 @@ package be.ugent.piedcler.dodona.apiclient.responses;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import static be.ugent.piedcler.dodona.plugin.StringUtils.removeJsonExtention;
+
 /**
  * The response from fetching a course.
  */
@@ -47,7 +49,7 @@ public final class Course {
 		this.id = id;
 		this.name = name;
 		this.teacher = teacher;
-		this.url = url;
+		this.url = removeJsonExtention(url);
 		this.series = series;
 		this.year = year;
 	}
