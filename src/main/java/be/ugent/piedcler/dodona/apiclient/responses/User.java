@@ -14,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
+import static be.ugent.piedcler.dodona.plugin.StringUtils.removeJsonExtention;
+
 /**
  * The response from fetching the user profile.
  */
@@ -30,7 +32,7 @@ public final class User {
 	public User(
 		@Nullable @JsonProperty("url") final String url,
 		@Nullable @JsonProperty("subscribed_courses") final List<Course> subscribedCourses) {
-		this.url = url;
+		this.url = removeJsonExtention(url);
 		this.subscribedCourses = Optional.ofNullable(subscribedCourses).orElseGet(() -> new ArrayList<>(5));
 	}
 

@@ -11,6 +11,8 @@ package be.ugent.piedcler.dodona.apiclient.responses;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import static be.ugent.piedcler.dodona.plugin.StringUtils.removeJsonExtention;
+
 /**
  * The response from a submitting a solution to Dodona.
  */
@@ -33,7 +35,7 @@ public final class SubmissionPost {
 						  @JsonProperty("url") final String url) {
 		this.id = id;
 		this.status = status;
-		this.url = url;
+		this.url = removeJsonExtention(url);
 	}
 
 	/**

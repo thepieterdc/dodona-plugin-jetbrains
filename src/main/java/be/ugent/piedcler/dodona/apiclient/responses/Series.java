@@ -14,6 +14,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static be.ugent.piedcler.dodona.plugin.StringUtils.removeJsonExtention;
+
 /**
  * The response from fetching a series.
  */
@@ -39,8 +41,8 @@ public final class Series {
 				  @JsonProperty("exercises") final String exercises) {
 		this.id = id;
 		this.name = name;
-		this.url = url;
-		this.exercises = exercises;
+		this.url = removeJsonExtention(url);
+		this.exercises = removeJsonExtention(exercises);
 	}
 
 
