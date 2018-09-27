@@ -57,7 +57,7 @@ public class DodonaSettings implements Configurable {
 	@Override
 	public boolean isModified() {
 		return !SettingsHelper.getApiKey().equals(this.fieldApiKey.getText().trim())
-			|| ! SettingsHelper.getDodonaURL().equals(this.fieldDodonaURL.getText().trim());
+			|| ! SettingsHelper.getDodonaUrl().equals(this.fieldDodonaURL.getText().trim());
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class DodonaSettings implements Configurable {
 	 * Sets the value of the Dodona URL field.
 	 */
 	private void updateDodonaURLFromSettings(){
-		this.fieldDodonaURL.setText(SettingsHelper.getDodonaURL());
+		this.fieldDodonaURL.setText(SettingsHelper.getDodonaUrl());
 	}
 
 }

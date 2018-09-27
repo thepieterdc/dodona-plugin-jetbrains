@@ -44,7 +44,7 @@ public enum SettingsHelper {
 	 * @return the URL
 	 */
 	@NonNls
-	public static String getDodonaURL() {
+	public static String getDodonaUrl() {
 		final PropertiesComponent properties = PropertiesComponent.getInstance();
 		return properties.getValue(SettingsHelper.SETTING_DODONA_URL, DEFAULT_DODONA_URL);
 	}

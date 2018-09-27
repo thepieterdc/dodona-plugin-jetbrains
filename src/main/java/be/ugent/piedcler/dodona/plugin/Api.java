@@ -41,7 +41,7 @@ public final class Api {
 		if (instance == null) {
 			instance = DodonaBuilder.builder()
 				.setApiToken(SettingsHelper.getApiKey())
-				.setBaseUrl(SettingsHelper.getDodonaURL())
+				.setBaseUrl(SettingsHelper.getDodonaUrl())
 				.setUserAgent(USER_AGENT)
 				.build();
 		}
