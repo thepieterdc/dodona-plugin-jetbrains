@@ -8,10 +8,9 @@
  */
 package be.ugent.piedcler.dodona.plugin.exceptions.warnings;
 
-import be.ugent.piedcler.dodona.apiclient.responses.Exercise;
-import be.ugent.piedcler.dodona.apiclient.responses.Submission;
-import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
+import be.ugent.piedcler.dodona.resources.Exercise;
+import be.ugent.piedcler.dodona.resources.Submission;
 
 /**
  * The user submitted a solution but it was incorrect
@@ -24,9 +23,9 @@ public class IncorrectSubmissionException extends WarningMessageException {
 	 */
 	public IncorrectSubmissionException(final Submission submission, Exercise exercise) {
 		super(String.format(
-				"The submission to \"%s\" was incorrect. <a href=\"%s\">More details</a>.",
-				exercise.getName(),
-				submission.getUrl()
+			"The submission to \"%s\" was incorrect. <a href=\"%s\">More details</a>.",
+			exercise.getName(),
+			submission.getUrl()
 		));
 	}
 }

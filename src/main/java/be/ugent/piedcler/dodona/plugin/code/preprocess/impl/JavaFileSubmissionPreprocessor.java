@@ -23,8 +23,8 @@ import java.util.ArrayList;
 public class JavaFileSubmissionPreprocessor implements FileSubmissionPreprocessor {
 
 	@Override
-	public PsiFile preprocess(PsiFile file) {
-		ArrayList<PsiElement> toDelete = new ArrayList<>();
+	public PsiFile preprocess(final PsiFile file) {
+		final ArrayList<PsiElement> toDelete = new ArrayList<>();
 		file.accept(new JavaRecursiveElementVisitor() {
 			@Override
 			public void visitPackageStatement(PsiPackageStatement statement) {

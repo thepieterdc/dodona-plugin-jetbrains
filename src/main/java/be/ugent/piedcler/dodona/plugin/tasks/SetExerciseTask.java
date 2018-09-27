@@ -8,24 +8,18 @@
  */
 package be.ugent.piedcler.dodona.plugin.tasks;
 
-import be.ugent.piedcler.dodona.apiclient.exceptions.accessdenied.ResourceAccessDeniedException;
-import be.ugent.piedcler.dodona.apiclient.exceptions.apitoken.ApiTokenException;
-import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.CourseNotFoundException;
-import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.ExerciseNotFoundException;
-import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.ResourceNotFoundException;
-import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.SeriesNotFoundException;
-import be.ugent.piedcler.dodona.apiclient.responses.Course;
-import be.ugent.piedcler.dodona.apiclient.responses.Exercise;
-import be.ugent.piedcler.dodona.apiclient.responses.Root;
-import be.ugent.piedcler.dodona.apiclient.responses.Series;
-import be.ugent.piedcler.dodona.plugin.ApiClient;
+import be.ugent.piedcler.dodona.DodonaClient;
+import be.ugent.piedcler.dodona.exceptions.DodonaException;
+import be.ugent.piedcler.dodona.plugin.Api;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.reporting.NotificationReporter;
 import be.ugent.piedcler.dodona.plugin.ui.SelectCourseDialog;
 import be.ugent.piedcler.dodona.plugin.ui.SelectExerciseDialog;
 import be.ugent.piedcler.dodona.plugin.ui.SelectSeriesDialog;
-import com.fasterxml.jackson.core.type.TypeReference;
+import be.ugent.piedcler.dodona.resources.Course;
+import be.ugent.piedcler.dodona.resources.Exercise;
+import be.ugent.piedcler.dodona.resources.Series;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
@@ -36,8 +30,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
@@ -46,13 +38,13 @@ import java.util.function.Consumer;
  * Sets the course and exercise id in the header of the code.
  */
 public class SetExerciseTask extends Task.Backgroundable {
-
+	
 	private final Consumer<String> identifierSetter;
-
+	
 	private Course selectedCourse;
 	private Exercise selectedExercise;
 	private Series selectedSeries;
-
+	
 	/**
 	 * SetExerciseTask constructor.
 	 *
@@ -63,7 +55,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 		super(project, "Configure Exercise.");
 		this.identifierSetter = identifierSetter;
 	}
-
+	
 	/**
 	 * Asks the user about the course.
 	 *
@@ -79,13 +71,13 @@ public class SetExerciseTask extends Task.Backgroundable {
 		coursesBuilder.removeAllActions();
 		coursesBuilder.addOkAction();
 		coursesBuilder.addCancelAction();
-
+		
 		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
 			return selectCourseDialog.getSelectedCourse();
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Asks the user about the exercise.
 	 *
@@ -101,13 +93,13 @@ public class SetExerciseTask extends Task.Backgroundable {
 		coursesBuilder.removeAllActions();
 		coursesBuilder.addOkAction();
 		coursesBuilder.addCancelAction();
-
+		
 		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
 			return selectExerciseDialog.getSelectedExercise();
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Asks the user about the series.
 	 *
@@ -123,70 +115,65 @@ public class SetExerciseTask extends Task.Backgroundable {
 		coursesBuilder.removeAllActions();
 		coursesBuilder.addOkAction();
 		coursesBuilder.addCancelAction();
-
+		
 		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
 			return selectSeriesDialog.getSelectedSeries();
 		}
 		return null;
 	}
-
+	
 	@Override
 	public void run(@NotNull final ProgressIndicator progressIndicator) {
-
+		
 		try {
 			progressIndicator.setFraction(0.10);
 			progressIndicator.setText("Retrieving courses...");
-
-			final ApiClient apiClient = ApiClient.getInstance();
-			final Root root = apiClient.getRoot();
-
-			List<Course> myCourses = root.getUser().getSubscribedCourses();
-
+			
+			final DodonaClient dodona = Api.getInstance();
+			
+			final List<Course> myCourses = dodona.me().getSubscribedCourses();
+			
 			progressIndicator.setFraction(0.15);
 			progressIndicator.setText("Waiting for course selection...");
-
+			
 			EventQueue.invokeAndWait(() -> this.selectedCourse = SetExerciseTask.askCourse(myCourses));
-
+			
 			if (this.selectedCourse == null) return;
-
+			
 			progressIndicator.setFraction(0.30);
 			progressIndicator.setText("Retrieving series...");
-
-			final List<Series> courseSeries = apiClient.getSeriesList(this.selectedCourse.getSeries());
-
+			
+			final List<Series> courseSeries = dodona.series().getAll(this.selectedCourse);
+			
 			progressIndicator.setFraction(0.45);
 			progressIndicator.setText("Waiting for series selection...");
-
+			
 			EventQueue.invokeAndWait(() -> this.selectedSeries = SetExerciseTask.askSeries(courseSeries));
-
+			
 			if (this.selectedSeries == null) return;
-
+			
 			progressIndicator.setFraction(0.60);
 			progressIndicator.setText("Retrieving exercises...");
-
-			final List<Exercise> exercises = apiClient.getExercisesList(this.selectedSeries.getExercises());
-
+			
+			final List<Exercise> exercises = dodona.exercises().getAll(this.selectedSeries);
+			
 			progressIndicator.setFraction(0.75);
 			progressIndicator.setText("Waiting for exercise selection...");
-
+			
 			EventQueue.invokeAndWait(() -> this.selectedExercise = SetExerciseTask.askExercise(exercises));
-
+			
 			if (this.selectedExercise == null) return;
-
+			
 			progressIndicator.setFraction(0.90);
 			progressIndicator.setText("Setting exercise...");
-
-
+			
+			
 			this.identifierSetter.accept(this.selectedExercise.getUrl());
-
+			
 			EventQueue.invokeLater(() -> NotificationReporter.info("Exercise successfully set."));
 		} catch (final WarningMessageException warning) {
 			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));
-		} catch (final ErrorMessageException
-			| InvocationTargetException
-			| ResourceNotFoundException
-			| ResourceAccessDeniedException
-			| ApiTokenException error) {
+		} catch (final ErrorMessageException | InvocationTargetException | DodonaException error) {
 			EventQueue.invokeLater(() -> NotificationReporter.error(error.getMessage()));
 		} catch (final InterruptedException ex) {
 			// aborted by user.

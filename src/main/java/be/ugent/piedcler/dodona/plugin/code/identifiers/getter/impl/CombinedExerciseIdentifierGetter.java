@@ -8,8 +8,8 @@
  */
 package be.ugent.piedcler.dodona.plugin.code.identifiers.getter.impl;
 
-import be.ugent.piedcler.dodona.apiclient.responses.Solution;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.getter.ExerciseIdentifierGetter;
+import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -36,9 +36,9 @@ public class CombinedExerciseIdentifierGetter implements ExerciseIdentifierGette
 	}
 
 	@Override
-	public Optional<Solution> identify(@NotNull CharSequence code) {
-		for (ExerciseIdentifierGetter exerciseIdentifierGetter : identifierList) {
-			Optional<Solution> identify = exerciseIdentifierGetter.identify(code);
+	public Optional<Solution> identify(@NotNull final CharSequence code) {
+		for (final ExerciseIdentifierGetter exerciseIdentifierGetter : identifierList) {
+			final Optional<Solution> identify = exerciseIdentifierGetter.identify(code);
 			if (identify.isPresent()) {
 				return identify;
 			}

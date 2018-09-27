@@ -8,13 +8,12 @@
  */
 package be.ugent.piedcler.dodona.plugin.code.identifiers.getter;
 
-import be.ugent.piedcler.dodona.apiclient.responses.Solution;
+import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 
 public interface ExerciseIdentifierGetter {
-
 	/**
 	 * Identifies the current exercise given some code.
 	 *

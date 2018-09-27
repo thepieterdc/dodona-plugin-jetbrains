@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'be.ugent.piedcler.dodona'
-version '1.0.1-SNAPSHOT'
+version '1.1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
@@ -37,7 +37,9 @@ repositories {
 }
 
 dependencies {
-    compile group: 'be.ugent.piedcler.dodona', name: 'dodona-api', version: '1.0.0'
+    compile group: 'be.ugent.piedcler.dodona', name: 'dodona-api-interface', version: '1.0.0'
+    runtime group: 'be.ugent.piedcler.dodona', name: 'dodona-api-impl', version: '1.0.0'
+
     if (hasPyCharm){
         compileOnly name: 'pycharm'
     }

@@ -8,8 +8,8 @@
  */
 package be.ugent.piedcler.dodona.plugin.code.identifiers.getter.impl;
 
-import be.ugent.piedcler.dodona.apiclient.responses.Solution;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.getter.ExerciseIdentifierGetter;
+import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -19,11 +19,11 @@ import java.util.regex.Pattern;
 import static java.util.Optional.of;
 
 public class RegexExerciseIdentifierGetter implements ExerciseIdentifierGetter {
-
+	
 	private final Pattern courseRegex;
 	private final Pattern seriesRegex;
 	private final Pattern exerciseRegex;
-
+	
 	/**
 	 * RegexExerciseIdentifierGetter constructor.
 	 *
@@ -32,13 +32,13 @@ public class RegexExerciseIdentifierGetter implements ExerciseIdentifierGetter {
 	 * @param exerciseRegex regex used to identify the exercise id
 	 */
 	public RegexExerciseIdentifierGetter(@NotNull final Pattern courseRegex,
-										 @NotNull final Pattern seriesRegex,
-										 @NotNull final Pattern exerciseRegex) {
+	                                     @NotNull final Pattern seriesRegex,
+	                                     @NotNull final Pattern exerciseRegex) {
 		this.courseRegex = courseRegex;
 		this.seriesRegex = seriesRegex;
 		this.exerciseRegex = exerciseRegex;
 	}
-
+	
 	/**
 	 * Identifies a resource using the given regex, and fetches it from the service.
 	 *
@@ -48,13 +48,13 @@ public class RegexExerciseIdentifierGetter implements ExerciseIdentifierGetter {
 	 */
 	@NotNull
 	private static Optional<Long> identify(@NotNull final CharSequence code,
-										   @NotNull final Pattern pattern) {
+	                                       @NotNull final Pattern pattern) {
 		return Optional.of(pattern.matcher(code))
 			.filter(Matcher::find)
 			.map(matcher -> matcher.group(1))
 			.map(Long::parseLong);
 	}
-
+	
 	/**
 	 * Identifies the current exercise given some code.
 	 *
@@ -66,10 +66,10 @@ public class RegexExerciseIdentifierGetter implements ExerciseIdentifierGetter {
 		final Optional<Long> courseId = identify(code, this.courseRegex);
 		final Optional<Long> exerciseId = identify(code, this.exerciseRegex);
 		final Optional<Long> seriesId = identify(code, this.seriesRegex);
-
+		
 		// Exercise is required, course and series are is optional.
 		return exerciseId.flatMap(
-			ex -> of(new Solution(courseId.orElse(null), seriesId.orElse(null), ex))
+			ex -> of(new Solution(courseId.orElse(null), seriesId.orElse(null), ex, null))
 		);
 	}
 }

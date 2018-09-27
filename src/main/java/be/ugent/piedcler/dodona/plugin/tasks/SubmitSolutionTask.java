@@ -8,19 +8,18 @@
  */
 package be.ugent.piedcler.dodona.plugin.tasks;
 
-import be.ugent.piedcler.dodona.apiclient.exceptions.accessdenied.ResourceAccessDeniedException;
-import be.ugent.piedcler.dodona.apiclient.exceptions.accessdenied.RootAccessDeniedException;
-import be.ugent.piedcler.dodona.apiclient.exceptions.apitoken.ApiTokenException;
-import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.ExerciseNotFoundException;
-import be.ugent.piedcler.dodona.apiclient.exceptions.notfound.ResourceNotFoundException;
-import be.ugent.piedcler.dodona.apiclient.responses.*;
-import be.ugent.piedcler.dodona.plugin.ApiClient;
+import be.ugent.piedcler.dodona.DodonaClient;
+import be.ugent.piedcler.dodona.data.SubmissionStatus;
+import be.ugent.piedcler.dodona.exceptions.DodonaException;
+import be.ugent.piedcler.dodona.plugin.Api;
+import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
-import be.ugent.piedcler.dodona.plugin.exceptions.errors.SubmissionException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.IncorrectSubmissionException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
 import be.ugent.piedcler.dodona.plugin.reporting.NotificationReporter;
+import be.ugent.piedcler.dodona.resources.Exercise;
+import be.ugent.piedcler.dodona.resources.Submission;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
@@ -39,10 +38,10 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 	private static final long DELAY_MAX = 20_000L;
 	private static final long DELAY_INITIAL = 3_000L;
 	private static final long DELAY_TIMEOUT = 120_000L;
-
+	
 	private final Solution solution;
 	private final Presentation presentation;
-
+	
 	/**
 	 * SubmitSolutionTask constructor.
 	 *
@@ -54,29 +53,32 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 		this.solution = solution;
 		this.presentation = presentation;
 	}
-
+	
 	@Override
 	public void run(@NotNull final ProgressIndicator progressIndicator) {
-
 		try {
 			this.presentation.setEnabled(false);
 			progressIndicator.setFraction(0.10);
 			progressIndicator.setText("Submitting to Dodona...");
-
-
-			final ApiClient api = ApiClient.getInstance();
-
-
-			SubmissionPost submissionPost = api.postSolution(solution);
-
-			Submission submission = api.getSubmission(submissionPost.getUrl());
+			
+			final DodonaClient dodona = Api.getInstance();
+			
+			final long createdSubmissionId = dodona.submissions().create(
+				this.solution.getCourseId().orElse(null),
+				this.solution.getSeriesId().orElse(null),
+				this.solution.getExerciseId(),
+				this.solution.getCode()
+			);
+			
+			Submission submission = dodona.submissions().get(createdSubmissionId);
+			
 			NotificationReporter.info("Solution successfully submitted, awaiting evaluation.");
-
+			
 			progressIndicator.setFraction(0.50);
 			progressIndicator.setText("Awaiting evaluation...");
-
+			
 			Thread.sleep(SubmitSolutionTask.DELAY_INITIAL);
-
+			
 			long delay = SubmitSolutionTask.DELAY_INITIAL;
 			long total = 0L;
 			while (submission.getStatus() == SubmissionStatus.RUNNING
@@ -84,29 +86,29 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 				if (total > DELAY_TIMEOUT) {
 					break;
 				}
-
+				
 				Thread.sleep(delay);
-
-				submission = api.getSubmission(submissionPost.getUrl());
-
+				
+				submission = dodona.submissions().get(createdSubmissionId);
+				
 				delay = Math.min(
 					(long) ((double) delay * SubmitSolutionTask.DELAY_BACKOFF_FACTOR),
 					SubmitSolutionTask.DELAY_MAX
 				);
-
+				
 				total += delay;
 			}
-
-			Exercise exercise = api.getExercise(submission.getExercise());
-
-			if (submission.getStatus() == SubmissionStatus.RUNNING
-				|| submission.getStatus() == SubmissionStatus.QUEUED) {
+			
+			final Exercise exercise = dodona.exercises().get(submission);
+			
+			if ((submission.getStatus() == SubmissionStatus.RUNNING)
+				|| (submission.getStatus() == SubmissionStatus.QUEUED)) {
 				throw new SubmissionTimeoutException(submission, exercise);
 			}
-
+			
 			progressIndicator.setFraction(1.0);
 			progressIndicator.setText("Evaluation completed");
-
+			
 			// Required to use EventQueue.invokeLater(), must be final.
 			final Submission completed = submission;
 			if (submission.getStatus() == SubmissionStatus.CORRECT) {
@@ -118,10 +120,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			}
 		} catch (final WarningMessageException warning) {
 			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));
-		} catch (final ErrorMessageException
-			| ApiTokenException
-			| ResourceNotFoundException
-			| ResourceAccessDeniedException error) {
+		} catch (final ErrorMessageException | DodonaException error) {
 			EventQueue.invokeLater(() -> NotificationReporter.error(error.getMessage()));
 		} catch (final InterruptedException ex) {
 			throw new RuntimeException(ex);

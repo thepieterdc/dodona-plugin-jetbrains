@@ -30,7 +30,7 @@ public class DodonaSettings implements Configurable {
 	@Override
 	public void apply() {
 		SettingsHelper.setApiKey(this.fieldApiKey.getText().trim());
-		SettingsHelper.setDodonaURL(this.fieldDodonaURL.getText().trim());
+		SettingsHelper.setDodonaUrl(this.fieldDodonaURL.getText().trim());
 	}
 
 	@Nullable

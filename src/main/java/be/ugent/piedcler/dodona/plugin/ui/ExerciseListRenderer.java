@@ -8,8 +8,8 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui;
 
-import be.ugent.piedcler.dodona.apiclient.responses.Exercise;
 import be.ugent.piedcler.dodona.plugin.Icons;
+import be.ugent.piedcler.dodona.resources.Exercise;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,9 +31,9 @@ public class ExerciseListRenderer extends DefaultListCellRenderer {
 		if (value instanceof Exercise) {
 			final Exercise exercise = (Exercise) value;
 			this.setText(exercise.getName());
-			if (exercise.getLastSolutionCorrect() && exercise.getHasCorrectSolution()) {
+			if (exercise.isLastSolutionCorrect() && exercise.hasCorrectSolution()) {
 				this.setIcon(Icons.CORRECT);
-			} else if (!exercise.getLastSolutionCorrect()) {
+			} else if (!exercise.isLastSolutionCorrect()) {
 				this.setIcon(Icons.INCORRECT);
 			}
 		}

@@ -8,7 +8,6 @@
  */
 package be.ugent.piedcler.dodona.plugin.actions;
 
-import be.ugent.piedcler.dodona.apiclient.responses.Solution;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.getter.ExerciseIdentifierGetter;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.getter.impl.CombinedExerciseIdentifierGetter;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.getter.impl.StructuredExerciseIdentifierGetter;
@@ -20,6 +19,7 @@ import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.PythonExerci
 import be.ugent.piedcler.dodona.plugin.code.preprocess.FileSubmissionPreprocessor;
 import be.ugent.piedcler.dodona.plugin.code.preprocess.impl.CombinedSubmissionPreprocessor;
 import be.ugent.piedcler.dodona.plugin.code.preprocess.impl.JavaFileSubmissionPreprocessor;
+import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.errors.CodeReadException;

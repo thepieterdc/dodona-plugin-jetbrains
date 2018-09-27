@@ -8,7 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui;
 
-import be.ugent.piedcler.dodona.apiclient.responses.Series;
+import be.ugent.piedcler.dodona.resources.Series;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
 import org.jetbrains.annotations.Nullable;
