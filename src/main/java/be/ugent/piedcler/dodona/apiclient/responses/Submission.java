@@ -11,6 +11,8 @@ package be.ugent.piedcler.dodona.apiclient.responses;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import static be.ugent.piedcler.dodona.plugin.StringUtils.removeJsonExtention;
+
 /**
  * The response of getting a Submission from Dodona.
  */
@@ -26,7 +28,8 @@ public final class Submission {
 
 	/**
 	 * Submission constructor.
-	 *  @param accepted the acceptance status
+	 *
+	 * @param accepted the acceptance status
 	 * @param url      the url to the submission
 	 * @param exercise url to the exercise
 	 * @param id       the id of the submission
@@ -38,8 +41,8 @@ public final class Submission {
 					  @JsonProperty("id") final long id,
 					  @JsonProperty("status") final SubmissionStatus status) {
 		this.accepted = accepted;
-		this.url = url;
-		this.exercise = exercise;
+		this.url = removeJsonExtention(url);
+		this.exercise = removeJsonExtention(exercise);
 		this.id = id;
 		this.status = status;
 	}
