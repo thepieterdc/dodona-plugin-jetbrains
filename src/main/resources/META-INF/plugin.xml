@@ -1,8 +1,8 @@
-<idea-plugin>
+<idea-plugin url="https://plugins.jetbrains.com/plugin/11166-dodona">
     <id>be.ugent.piedcler.dodona</id>
     <name>Dodona</name>
     <version>1.0.0</version>
-    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io">Pieter De Clercq</vendor>
+    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq</vendor>
 
     <description><![CDATA[
       This plugin makes it possible to submit your exercises to Dodona right from within your favourite JetBrains IDE.
@@ -10,8 +10,7 @@
 
     <change-notes><![CDATA[
     <ul>
-        <li>Fixed a bug where every "More details" link in the notifications would redirect to a JSON version of the submission instead of the HTML version.</li>
-        <li>Completely removed all API calls and refactored them into a separate library at <a href="https://github.com/thepieterdc/dodona-api-java">https://github.com/thepieterdc/dodona-api-java</a>.</li>
+	<li>Fixed documentation links</li>
     </ul>
     ]]>
     </change-notes>
