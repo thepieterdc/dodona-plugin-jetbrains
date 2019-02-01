@@ -1,6 +1,5 @@
 language: java
 sudo: false
-jdk:
-    - oraclejdk8
-    - oraclejdk9
+jdk: oraclejdk8
 install: true
+script: ./gradlew assemble
