@@ -10,8 +10,8 @@
 
     <change-notes><![CDATA[
     <ul>
-        <li>Fixed a bug where every "More details" link in the notifications would redirect to a JSON version of the submission instead of the HTML version.</li>
-        <li>Completely removed all API calls and refactored them into a separate library at <a href="https://github.com/thepieterdc/dodona-api-java">https://github.com/thepieterdc/dodona-api-java</a>.</li>
+        <li>Course year is now displayed next to the name of the course.
+        <li>[Internal] User agent now includes the plugin version number.</li>
     </ul>
     ]]>
     </change-notes>
