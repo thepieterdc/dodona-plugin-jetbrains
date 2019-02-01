@@ -1,4 +1,7 @@
 # Dodona
+
+[![Build Status](https://travis-ci.org/thepieterdc/dodona-plugin-jetbrains.svg?branch=master)](https://travis-ci.org/thepieterdc/dodona-plugin-jetbrains)
+
 Plugin for JetBrains IDE's to submit exercises to Dodona.
 
 ## Generating an API token
