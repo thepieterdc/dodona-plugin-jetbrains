@@ -10,7 +10,7 @@
 
     <change-notes><![CDATA[
     <ul>
-        <li>Course year is now displayed next to the name of the course.
+        <li>Course year is now displayed next to the name of the course.</li>
         <li>[Internal] User agent now includes the plugin version number.</li>
     </ul>
     ]]>
