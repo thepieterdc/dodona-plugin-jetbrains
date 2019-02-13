@@ -10,8 +10,7 @@
 
     <change-notes><![CDATA[
     <ul>
-        <li>[BUGFIX] Feedback of submissions is shown in the IDE again.</li>
-        <li>[BUGFIX] Exercise can be selected from the list of exercises in the course.</li>
+        <li>Added a light and dark icon variant, supported since IDEA 2019.1</li>
     </ul>
     ]]>
     </change-notes>
