@@ -10,8 +10,8 @@
 
     <change-notes><![CDATA[
     <ul>
-        <li>Course year is now displayed next to the name of the course.</li>
-        <li>[Internal] User agent now includes the plugin version number.</li>
+        <li>[BUGFIX] Feedback of submissions is shown in the IDE again.</li>
+        <li>[BUGFIX] Exercise can be selected from the list of exercises in the course.</li>
     </ul>
     ]]>
     </change-notes>
