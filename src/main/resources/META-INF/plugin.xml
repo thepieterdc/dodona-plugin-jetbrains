@@ -10,7 +10,7 @@
 
     <change-notes><![CDATA[
     <ul>
-	<li>Fixed documentation links</li>
+        <li>Added a light and dark icon variant, supported since IDEA 2019.1</li>
     </ul>
     ]]>
     </change-notes>
