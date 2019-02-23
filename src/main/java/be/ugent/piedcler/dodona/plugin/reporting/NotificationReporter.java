@@ -8,6 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.reporting;
 
+import be.ugent.piedcler.dodona.plugin.Icons;
 import com.intellij.notification.*;
 import com.intellij.openapi.application.ApplicationManager;
 
@@ -18,7 +19,8 @@ public enum NotificationReporter {
 	;
 	
 	private static final NotificationGroup NOTIFICATION_GROUP = new NotificationGroup(
-			"Dodona Notifications", NotificationDisplayType.BALLOON, true
+		"Dodona", NotificationDisplayType.BALLOON, true, null,
+		Icons.DODONA
 	);
 	
 	/**
@@ -48,10 +50,10 @@ public enum NotificationReporter {
 	private static void showBalloon(final String title, final NotificationType type, final String message) {
 		ApplicationManager.getApplication().invokeLater(() -> {
 			final Notification notification = NotificationReporter.NOTIFICATION_GROUP.createNotification(
-					title,
-					message,
-					type,
-					NotificationListener.URL_OPENING_LISTENER);
+				title,
+				message,
+				type,
+				NotificationListener.URL_OPENING_LISTENER);
 			Notifications.Bus.notify(notification);
 		});
 	}

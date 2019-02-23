@@ -20,6 +20,8 @@ import java.awt.*;
 public enum Icons {
 	;
 	
+	public static final Icon DODONA = IconLoader.getIcon("/icons/dodona.png");
+	
 	public static final Icon CORRECT = IconLoader.getIcon("/icons/correct.png");
 	public static final Icon INCORRECT = IconLoader.getIcon("/icons/incorrect.png");
 	public static final Icon CIRCLE = IconLoader.findIcon("/icons/circle.png");
