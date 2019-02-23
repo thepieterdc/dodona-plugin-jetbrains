@@ -11,6 +11,8 @@ package be.ugent.piedcler.dodona.plugin.tasks;
 import be.ugent.piedcler.dodona.DodonaClient;
 import be.ugent.piedcler.dodona.exceptions.DodonaException;
 import be.ugent.piedcler.dodona.plugin.Api;
+import be.ugent.piedcler.dodona.plugin.authentication.AuthenticationData;
+import be.ugent.piedcler.dodona.plugin.exceptions.CancellationException;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.reporting.NotificationReporter;
@@ -131,7 +133,12 @@ public class SetExerciseTask extends Task.Backgroundable {
 			
 			final DodonaClient dodona = Api.getInstance();
 			
-			final List<Course> myCourses = dodona.me().getSubscribedCourses();
+			final List<Course> myCourses = Api.call(
+				this.myProject,
+				AuthenticationData.create("https://dodona.ugent.be", "test"),
+				progressIndicator,
+				client -> client.me().getSubscribedCourses()
+			);
 			
 			progressIndicator.setFraction(0.15);
 			progressIndicator.setText("Waiting for course selection...");
@@ -175,7 +182,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));
 		} catch (final ErrorMessageException | InvocationTargetException | DodonaException error) {
 			EventQueue.invokeLater(() -> NotificationReporter.error(error.getMessage()));
-		} catch (final InterruptedException ex) {
+		} catch (final CancellationException | InterruptedException ex) {
 			// aborted by user.
 		}
 	}
