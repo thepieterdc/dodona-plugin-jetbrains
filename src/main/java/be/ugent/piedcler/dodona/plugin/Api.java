@@ -10,8 +10,11 @@ package be.ugent.piedcler.dodona.plugin;
 
 import be.ugent.piedcler.dodona.DodonaBuilder;
 import be.ugent.piedcler.dodona.DodonaClient;
+import be.ugent.piedcler.dodona.plugin.authentication.AuthenticationData;
 import be.ugent.piedcler.dodona.plugin.settings.SettingsHelper;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Function;
 
 /**
  * Interface to the API.
@@ -20,9 +23,12 @@ public final class Api {
 	@Nullable
 	private static DodonaClient instance;
 	
+	public static <T> T call(final AuthenticationData auth, final Function<DodonaClient, T> task) {
+	
+	}
+	
 	/**
-	 * Removes the instance of the Dodona client, may be called by the
-	 * SettingsHelper.
+	 * Removes the instance of the Dodona client.
 	 */
 	public static void clearInstance() {
 		instance = null;
