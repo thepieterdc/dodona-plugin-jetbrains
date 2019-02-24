@@ -45,8 +45,8 @@ repositories {
 }
 
 dependencies {
-    compile group: 'be.ugent.piedcler.dodona', name: 'dodona-api-interface', version: '1.0.3'
-    runtime group: 'be.ugent.piedcler.dodona', name: 'dodona-api-impl', version: '1.0.3'
+    compile group: 'be.ugent.piedcler.dodona', name: 'dodona-api-interface', version: '1.0.5'
+    runtime group: 'be.ugent.piedcler.dodona', name: 'dodona-api-impl', version: '1.0.5'
 
     if (hasPyCharm){
         compileOnly name: 'pycharm'

@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Interface to the API.
  */
+@Deprecated
 public final class Api {
 	@Nullable
 	private static DodonaClient instance;

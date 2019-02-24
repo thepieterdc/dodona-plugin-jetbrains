@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NonNls;
 /**
  * Provides access to the plugin settings.
  */
+@Deprecated
 public enum SettingsHelper {
 	;
 	
