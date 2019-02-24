@@ -60,64 +60,64 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			this.presentation.setEnabled(false);
 			progressIndicator.setFraction(0.10);
 			progressIndicator.setText("Submitting to Dodona...");
-			
-			final DodonaClient dodona = Api.getInstance();
-			
-			final long createdSubmissionId = dodona.submissions().create(
-				this.solution.getCourseId().orElse(null),
-				this.solution.getSeriesId().orElse(null),
-				this.solution.getExerciseId(),
-				this.solution.getCode()
-			);
-			
-			Submission submission = dodona.submissions().get(createdSubmissionId);
-			
-			NotificationReporter.info("Solution successfully submitted, awaiting evaluation.");
-			
-			progressIndicator.setFraction(0.50);
-			progressIndicator.setText("Awaiting evaluation...");
-			
-			Thread.sleep(SubmitSolutionTask.DELAY_INITIAL);
-			
-			long delay = SubmitSolutionTask.DELAY_INITIAL;
-			long total = 0L;
-			while (submission.getStatus() == SubmissionStatus.RUNNING
-				|| submission.getStatus() == SubmissionStatus.QUEUED) {
-				if (total > DELAY_TIMEOUT) {
-					break;
-				}
-				
-				Thread.sleep(delay);
-				
-				submission = dodona.submissions().get(createdSubmissionId);
-				
-				delay = Math.min(
-					(long) ((double) delay * SubmitSolutionTask.DELAY_BACKOFF_FACTOR),
-					SubmitSolutionTask.DELAY_MAX
-				);
-				
-				total += delay;
-			}
-			
-			final Exercise exercise = dodona.exercises().get(submission);
-			
-			if ((submission.getStatus() == SubmissionStatus.RUNNING)
-				|| (submission.getStatus() == SubmissionStatus.QUEUED)) {
-				throw new SubmissionTimeoutException(submission, exercise);
-			}
-			
-			progressIndicator.setFraction(1.0);
-			progressIndicator.setText("Evaluation completed");
-			
-			// Required to use EventQueue.invokeLater(), must be final.
-			final Submission completed = submission;
-			if (submission.getStatus() == SubmissionStatus.CORRECT) {
-				EventQueue.invokeLater(() -> NotificationReporter.info(
-					format("Solution to %s was correct!", exercise.getName())
-				));
-			} else {
-				throw new IncorrectSubmissionException(completed, exercise);
-			}
+//
+//			final DodonaClient dodona = Api.getInstance();
+//
+//			final long createdSubmissionId = dodona.submissions().create(
+//				this.solution.getCourseId().orElse(null),
+//				this.solution.getSeriesId().orElse(null),
+//				this.solution.getExerciseId(),
+//				this.solution.getCode()
+//			);
+//
+//			Submission submission = dodona.submissions().get(createdSubmissionId);
+//
+//			NotificationReporter.info("Solution successfully submitted, awaiting evaluation.");
+//
+//			progressIndicator.setFraction(0.50);
+//			progressIndicator.setText("Awaiting evaluation...");
+//
+//			Thread.sleep(SubmitSolutionTask.DELAY_INITIAL);
+//
+//			long delay = SubmitSolutionTask.DELAY_INITIAL;
+//			long total = 0L;
+//			while (submission.getStatus() == SubmissionStatus.RUNNING
+//				|| submission.getStatus() == SubmissionStatus.QUEUED) {
+//				if (total > DELAY_TIMEOUT) {
+//					break;
+//				}
+//
+//				Thread.sleep(delay);
+//
+//				submission = dodona.submissions().get(createdSubmissionId);
+//
+//				delay = Math.min(
+//					(long) ((double) delay * SubmitSolutionTask.DELAY_BACKOFF_FACTOR),
+//					SubmitSolutionTask.DELAY_MAX
+//				);
+//
+//				total += delay;
+//			}
+//
+//			final Exercise exercise = dodona.exercises().get(submission);
+//
+//			if ((submission.getStatus() == SubmissionStatus.RUNNING)
+//				|| (submission.getStatus() == SubmissionStatus.QUEUED)) {
+//				throw new SubmissionTimeoutException(submission, exercise);
+//			}
+//
+//			progressIndicator.setFraction(1.0);
+//			progressIndicator.setText("Evaluation completed");
+//
+//			// Required to use EventQueue.invokeLater(), must be final.
+//			final Submission completed = submission;
+//			if (submission.getStatus() == SubmissionStatus.CORRECT) {
+//				EventQueue.invokeLater(() -> NotificationReporter.info(
+//					format("Solution to %s was correct!", exercise.getName())
+//				));
+//			} else {
+//				throw new IncorrectSubmissionException(completed, exercise);
+//			}
 		} catch (final WarningMessageException warning) {
 			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));
 		} catch (final ErrorMessageException | DodonaException error) {

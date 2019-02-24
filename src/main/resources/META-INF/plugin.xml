@@ -13,6 +13,7 @@
         <li>[BUGFIX] Issue #41 is fixed; When no file had an active focus, submitting was not possible. This is now resolved and the currently active opened file is submitted.</li>
         <li>[IMPROVEMENT] The authentication flow has been rewritten from scratch and is now more interactive, providing a better user experience.</li>
         <li>[IMPROVEMENT] Instructions on how to configure the plugin have been rewritten.</li>
+        <li>[IMPROVEMENT] Settings have been rewritten to allow a more secure storage of the API token.</li>
     </ul>
     ]]>
     </change-notes>

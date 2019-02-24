@@ -54,8 +54,6 @@ public enum Authenticator {
 			throw new AuthenticationCancelledException();
 		}
 		
-		indicator.setText("Authenticating");
-		
 		return data[0];
 	}
 }
