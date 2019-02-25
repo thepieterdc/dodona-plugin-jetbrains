@@ -28,7 +28,7 @@ class LoginDialog extends DialogWrapper {
 	LoginDialog(@Nonnull final Project project) {
 		super(project, true);
 		
-		this.credentialsPanel = new CredentialsPanel();
+		this.credentialsPanel = new CredentialsPanel(project);
 		
 		this.setTitle("Login to Dodona");
 		this.setOKButtonText("Authenticate");

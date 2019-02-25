@@ -8,8 +8,8 @@
  */
 package be.ugent.piedcler.dodona.plugin.settings;
 
-import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
+import com.intellij.openapi.util.Comparing;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -22,34 +22,45 @@ import javax.swing.*;
  */
 public class SettingsConfigurable implements SearchableConfigurable {
 	@Nullable
-	private SettingsPanel settingsPane;
+	private SettingsPanel settingsPanel;
+	
+	@Nonnull
+	private final DodonaSettings settings;
 	
 	/**
 	 * SettingsConfigurable constructor.
 	 */
 	public SettingsConfigurable() {
-	
+		this.settings = DodonaSettings.getInstance();
 	}
 	
 	@Override
-	public void apply() throws ConfigurationException {
-		if(this.settingsPane != null) {
-			this.settingsPane.apply();
+	public void apply() {
+		if(this.settingsPanel == null) {
+			return;
 		}
+		
+		this.settings.setToken(this.settingsPanel.getToken());
 	}
 	
 	@Nonnull
 	@Override
 	public JComponent createComponent() {
-		if(this.settingsPane == null) {
-			this.settingsPane = new SettingsPanel();
+		if(this.settingsPanel == null) {
+			this.settingsPanel = new SettingsPanel();
 		}
-		return this.settingsPane.getPanel();
+		return this.settingsPanel.getPanel();
 	}
 	
 	@Override
 	public void disposeUIResources() {
-		this.settingsPane = null;
+		this.settingsPanel = null;
+	}
+	
+	@Nullable
+	@Override
+	public Runnable enableSearch(String option) {
+		return null;
 	}
 	
 	@Nls(capitalization = Nls.Capitalization.Title)
@@ -58,27 +69,30 @@ public class SettingsConfigurable implements SearchableConfigurable {
 		return "Dodona";
 	}
 	
-	@Nonnull
+	@Nullable
 	@Override
 	public String getHelpTopic() {
-		return "settings.dodona";
+		return null;
 	}
 	
 	@NotNull
 	@Override
 	public String getId() {
-		return this.getHelpTopic();
+		return this.getDisplayName();
 	}
 	
 	@Override
 	public boolean isModified() {
-		return this.settingsPane != null && this.settingsPane.isModified();
+		return this.settingsPanel == null
+			|| !Comparing.equal(this.settings.getToken(), this.settingsPanel.getToken());
 	}
 	
 	@Override
 	public void reset() {
-		if(this.settingsPane != null) {
-			this.settingsPane.reset();
+		if(this.settingsPanel == null) {
+			return;
 		}
+		
+		this.settingsPanel.setToken(this.settings.getToken());
 	}
 }

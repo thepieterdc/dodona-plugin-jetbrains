@@ -9,32 +9,24 @@
 package be.ugent.piedcler.dodona.plugin.settings;
 
 import be.ugent.piedcler.dodona.plugin.authentication.CredentialsPanel;
+import com.intellij.openapi.project.ProjectManager;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 
 /**
  * Settings panel to modify plugin settings.
  */
 public class SettingsPanel {
-	private JPanel mainPane;
 	private CredentialsPanel credentialsPanel;
 	
-	/**
-	 * SettingsPanel constructor.
-	 */
-	public SettingsPanel() {
-		this.reset();
-	}
+	private JPanel mainPane;
 	
 	/**
-	 * Saves the settings.
+	 * Initializes components.
 	 */
-	public void apply() {
-	
-	}
-	
 	private void createUIComponents() {
-		this.credentialsPanel = new CredentialsPanel();
+		this.credentialsPanel = new CredentialsPanel(ProjectManager.getInstance().getDefaultProject());
 	}
 	
 	/**
@@ -47,18 +39,21 @@ public class SettingsPanel {
 	}
 	
 	/**
-	 * Gets whether the settings were modified.
+	 * Gets the value of the token field.
 	 *
-	 * @return true if the settings were modified
+	 * @return the token
 	 */
-	public boolean isModified() {
-		return false;
+	@Nonnull
+	public String getToken() {
+		return this.credentialsPanel.getToken();
 	}
 	
 	/**
-	 * Resets the state of the component.
+	 * Sets the value of the token field.
+	 *
+	 * @param token the token to set
 	 */
-	public void reset() {
-	
+	public void setToken(@Nonnull final String token) {
+		this.credentialsPanel.setToken(token);
 	}
 }

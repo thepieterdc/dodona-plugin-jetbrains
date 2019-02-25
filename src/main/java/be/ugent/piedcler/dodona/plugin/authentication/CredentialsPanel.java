@@ -11,6 +11,7 @@ package be.ugent.piedcler.dodona.plugin.authentication;
 import be.ugent.piedcler.dodona.DodonaClient;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import com.intellij.ide.BrowserUtil;
+import com.intellij.openapi.project.Project;
 import com.intellij.ui.HoverHyperlinkLabel;
 
 import javax.annotation.Nonnull;
@@ -32,14 +33,16 @@ public class CredentialsPanel extends JPanel {
 	
 	/**
 	 * CredentialsPanel constructor.
+	 *
+	 * @param project active project
 	 */
-	public CredentialsPanel() {
+	public CredentialsPanel(@Nonnull final Project project) {
 		super(new BorderLayout());
 		this.add(this.mainPane, BorderLayout.CENTER);
 		
 		this.hostField.setText(DodonaClient.DEFAULT_HOST);
-
-		this.testBtn.addActionListener(e -> this.testCredentials());
+		
+		this.testBtn.addActionListener(e -> this.testCredentials(project));
 	}
 	
 	/**
@@ -53,7 +56,7 @@ public class CredentialsPanel extends JPanel {
 		
 		final HoverHyperlinkLabel readmeLink = new HoverHyperlinkLabel("View instructions");
 		readmeLink.addHyperlinkListener(e -> {
-			if(e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 				BrowserUtil.browse("https://github.com/thepieterdc/dodona-plugin-jetbrains/blob/master/README.md");
 			}
 		});
@@ -67,14 +70,25 @@ public class CredentialsPanel extends JPanel {
 	 * @return the token
 	 */
 	@Nonnull
-	String getToken() {
-		return String.valueOf(this.tokenField.getPassword());
+	public String getToken() {
+		return String.valueOf(this.tokenField.getPassword()).trim();
+	}
+	
+	/**
+	 * Sets the value of the token field.
+	 *
+	 * @param token the value to set
+	 */
+	public void setToken(@Nonnull final String token) {
+		this.tokenField.setText(token);
 	}
 	
 	/**
 	 * Tests the provided access token.
+	 *
+	 * @param project active project
 	 */
-	private void testCredentials() {
+	private void testCredentials(@Nonnull final Project project) {
 		Notifier.success(this.mainPane, String.format("Successfully authenticated as %s %s.", "Pieter", "De Clercq"));
 	}
 }
