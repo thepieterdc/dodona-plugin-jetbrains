@@ -9,14 +9,13 @@
 package be.ugent.piedcler.dodona.plugin.authentication;
 
 import be.ugent.piedcler.dodona.DodonaClient;
-import be.ugent.piedcler.dodona.plugin.reporting.NotificationReporter;
+import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import com.intellij.ide.BrowserUtil;
-import com.intellij.openapi.ui.Messages;
-import com.intellij.util.ui.JBUI;
-import com.intellij.util.ui.UIUtil;
+import com.intellij.ui.HoverHyperlinkLabel;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
+import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 
 /**
@@ -26,7 +25,7 @@ public class CredentialsPanel extends JPanel {
 	private JTextField hostField;
 	private JPasswordField tokenField;
 	
-	private JTextPane helpTxt;
+	private JPanel helpPanel;
 	private JButton testBtn;
 	
 	private JPanel mainPane;
@@ -39,13 +38,7 @@ public class CredentialsPanel extends JPanel {
 		this.add(this.mainPane, BorderLayout.CENTER);
 		
 		this.hostField.setText(DodonaClient.DEFAULT_HOST);
-		
-		this.helpTxt.addHyperlinkListener(e -> BrowserUtil.browse(e.getURL()));
-		this.helpTxt.setBackground(UIUtil.TRANSPARENT_COLOR);
-		this.helpTxt.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		this.helpTxt.setMargin(JBUI.insetsTop(5));
-		this.helpTxt.setText("<html>Need help generating a token? <a href=\"https://github.com/thepieterdc/dodona-plugin-jetbrains/blob/master/README.md\">View instructions</a></html>");
-	
+
 		this.testBtn.addActionListener(e -> this.testCredentials());
 	}
 	
@@ -63,7 +56,22 @@ public class CredentialsPanel extends JPanel {
 	 * Tests the provided access token.
 	 */
 	private void testCredentials() {
-		Messages.showInfoMessage(this.mainPane, "test", "test");
-		NotificationReporter.info("Successfully authenticated as Pieter De Clercq.");
+		Notifier.success(this.mainPane, String.format("Successfully authenticated as %s %s.", "Pieter", "De Clercq"));
+	}
+	
+	private void createUIComponents() {
+		this.helpPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
+		this.helpPanel.setBorder(BorderFactory.createEmptyBorder());
+		
+		this.helpPanel.add(new JLabel("Need help generating a token? "));
+		
+		final HoverHyperlinkLabel readmeLink = new HoverHyperlinkLabel("View instructions");
+		readmeLink.addHyperlinkListener(e -> {
+			if(e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+				BrowserUtil.browse("https://github.com/thepieterdc/dodona-plugin-jetbrains/blob/master/README.md");
+			}
+		});
+		
+		this.helpPanel.add(readmeLink);
 	}
 }
