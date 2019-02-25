@@ -2,7 +2,9 @@
     <id>be.ugent.piedcler.dodona</id>
     <name>Dodona</name>
     <version>1.0.0</version>
-    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah Lissens</vendor>
+    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah
+        Lissens
+    </vendor>
 
     <description><![CDATA[
       This plugin makes it possible to submit your exercises to Dodona right from within your favourite JetBrains IDE.
@@ -26,8 +28,8 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable
-            displayName="Dodona Settings"
-            instance="be.ugent.piedcler.dodona.plugin.settings.DodonaSettings"/>
+            displayName="Dodona"
+            instance="be.ugent.piedcler.dodona.plugin.settings.SettingsConfigurable"/>
     </extensions>
 
     <actions>
