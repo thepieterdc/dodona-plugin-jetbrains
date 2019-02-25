@@ -105,8 +105,8 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			progressIndicator.setText("Evaluation completed");
 			
 			if (submission.getStatus() == SubmissionStatus.CORRECT) {
-				Notifier.info(this.myProject, "Solution was correct!",
-					String.format("Your solution to %s has been accepted!", exercise.getName())
+				Notifier.info(this.myProject, "Correct solution",
+					String.format("Your solution to \"%s\" has been accepted!", exercise.getName())
 				);
 			} else {
 				Notifier.warning(this.myProject, "Incorrect solution",
