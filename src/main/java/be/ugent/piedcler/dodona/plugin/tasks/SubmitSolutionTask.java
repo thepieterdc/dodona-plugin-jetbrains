@@ -11,7 +11,7 @@ package be.ugent.piedcler.dodona.plugin.tasks;
 import be.ugent.piedcler.dodona.DodonaClient;
 import be.ugent.piedcler.dodona.data.SubmissionStatus;
 import be.ugent.piedcler.dodona.exceptions.DodonaException;
-import be.ugent.piedcler.dodona.plugin.Api;
+import be.ugent.piedcler.dodona.plugin.ApiOld;
 import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
@@ -61,7 +61,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.10);
 			progressIndicator.setText("Submitting to Dodona...");
 			
-			final DodonaClient dodona = Api.getInstance();
+			final DodonaClient dodona = ApiOld.getInstance();
 			
 			final long createdSubmissionId = dodona.submissions().create(
 				this.solution.getCourseId().orElse(null),

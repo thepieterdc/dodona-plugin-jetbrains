@@ -10,7 +10,7 @@ package be.ugent.piedcler.dodona.plugin.tasks;
 
 import be.ugent.piedcler.dodona.DodonaClient;
 import be.ugent.piedcler.dodona.exceptions.DodonaException;
-import be.ugent.piedcler.dodona.plugin.Api;
+import be.ugent.piedcler.dodona.plugin.ApiOld;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.reporting.NotificationReporter;
@@ -129,7 +129,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			progressIndicator.setFraction(0.10);
 			progressIndicator.setText("Retrieving courses...");
 			
-			final DodonaClient dodona = Api.getInstance();
+			final DodonaClient dodona = ApiOld.getInstance();
 			
 			final List<Course> myCourses = dodona.me().getSubscribedCourses();
 			

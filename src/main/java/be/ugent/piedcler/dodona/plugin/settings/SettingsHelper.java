@@ -8,7 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.settings;
 
-import be.ugent.piedcler.dodona.plugin.Api;
+import be.ugent.piedcler.dodona.plugin.ApiOld;
 import com.intellij.ide.util.PropertiesComponent;
 import org.jetbrains.annotations.NonNls;
 
@@ -58,7 +58,7 @@ public enum SettingsHelper {
 	public static void setApiKey(final String apiKey) {
 		final PropertiesComponent properties = PropertiesComponent.getInstance();
 		properties.setValue(SettingsHelper.SETTING_API_KEY, apiKey);
-		Api.clearInstance();
+		ApiOld.clearInstance();
 	}
 	
 	/**
@@ -69,6 +69,6 @@ public enum SettingsHelper {
 	public static void setDodonaUrl(final String dodonaUrl) {
 		final PropertiesComponent properties = PropertiesComponent.getInstance();
 		properties.setValue(SettingsHelper.SETTING_DODONA_URL, dodonaUrl);
-		Api.clearInstance();
+		ApiOld.clearInstance();
 	}
 }
