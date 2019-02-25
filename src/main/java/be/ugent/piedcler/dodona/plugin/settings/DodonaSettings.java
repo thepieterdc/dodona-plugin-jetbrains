@@ -17,6 +17,7 @@ import javax.swing.*;
 /**
  * Controls the settings of the plugin.
  */
+@Deprecated
 public class DodonaSettings implements Configurable {
 	private JPanel panelRoot;
 	private JLabel lblFormDescription;

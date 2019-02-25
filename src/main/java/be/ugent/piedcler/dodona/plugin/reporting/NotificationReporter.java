@@ -14,6 +14,7 @@ import com.intellij.openapi.application.ApplicationManager;
 /**
  * Reports statuses using the status bar.
  */
+@Deprecated
 public enum NotificationReporter {
 	;
 	

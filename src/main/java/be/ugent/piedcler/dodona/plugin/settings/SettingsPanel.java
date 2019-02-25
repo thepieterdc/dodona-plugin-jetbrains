@@ -8,6 +8,8 @@
  */
 package be.ugent.piedcler.dodona.plugin.settings;
 
+import be.ugent.piedcler.dodona.plugin.authentication.CredentialsPanel;
+
 import javax.swing.*;
 
 /**
@@ -15,6 +17,7 @@ import javax.swing.*;
  */
 public class SettingsPanel {
 	private JPanel mainPane;
+	private CredentialsPanel credentialsPanel;
 	
 	/**
 	 * SettingsPanel constructor.
@@ -28,6 +31,10 @@ public class SettingsPanel {
 	 */
 	public void apply() {
 	
+	}
+	
+	private void createUIComponents() {
+		this.credentialsPanel = new CredentialsPanel();
 	}
 	
 	/**

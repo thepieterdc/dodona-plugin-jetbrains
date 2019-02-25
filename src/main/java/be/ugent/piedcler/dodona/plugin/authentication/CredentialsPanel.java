@@ -9,7 +9,9 @@
 package be.ugent.piedcler.dodona.plugin.authentication;
 
 import be.ugent.piedcler.dodona.DodonaClient;
+import be.ugent.piedcler.dodona.plugin.reporting.NotificationReporter;
 import com.intellij.ide.BrowserUtil;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 
@@ -20,27 +22,31 @@ import java.awt.*;
 /**
  * Center component of the login dialog.
  */
-class CredentialsPanel extends JPanel {
-	private JTextField fieldHost;
-	private JPasswordField fieldToken;
+public class CredentialsPanel extends JPanel {
+	private JTextField hostField;
+	private JPasswordField tokenField;
 	
-	private JTextPane txtHelp;
-	private JPanel paneMain;
+	private JTextPane helpTxt;
+	private JButton testBtn;
+	
+	private JPanel mainPane;
 	
 	/**
 	 * CredentialsPanel constructor.
 	 */
-	CredentialsPanel() {
+	public CredentialsPanel() {
 		super(new BorderLayout());
-		this.add(this.paneMain, BorderLayout.CENTER);
+		this.add(this.mainPane, BorderLayout.CENTER);
 		
-		this.fieldHost.setText(DodonaClient.DEFAULT_HOST);
+		this.hostField.setText(DodonaClient.DEFAULT_HOST);
 		
-		this.txtHelp.addHyperlinkListener(e -> BrowserUtil.browse(e.getURL()));
-		this.txtHelp.setBackground(UIUtil.TRANSPARENT_COLOR);
-		this.txtHelp.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		this.txtHelp.setMargin(JBUI.insetsTop(5));
-		this.txtHelp.setText("<html>Need help generating a token? <a href=\"https://github.com/thepieterdc/dodona-plugin-jetbrains/blob/master/README.md\">View instructions</a></html>");
+		this.helpTxt.addHyperlinkListener(e -> BrowserUtil.browse(e.getURL()));
+		this.helpTxt.setBackground(UIUtil.TRANSPARENT_COLOR);
+		this.helpTxt.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		this.helpTxt.setMargin(JBUI.insetsTop(5));
+		this.helpTxt.setText("<html>Need help generating a token? <a href=\"https://github.com/thepieterdc/dodona-plugin-jetbrains/blob/master/README.md\">View instructions</a></html>");
+	
+		this.testBtn.addActionListener(e -> this.testCredentials());
 	}
 	
 	/**
@@ -50,6 +56,14 @@ class CredentialsPanel extends JPanel {
 	 */
 	@Nonnull
 	String getToken() {
-		return String.valueOf(this.fieldToken.getPassword());
+		return String.valueOf(this.tokenField.getPassword());
+	}
+	
+	/**
+	 * Tests the provided access token.
+	 */
+	private void testCredentials() {
+		Messages.showInfoMessage(this.mainPane, "test", "test");
+		NotificationReporter.info("Successfully authenticated as Pieter De Clercq.");
 	}
 }
