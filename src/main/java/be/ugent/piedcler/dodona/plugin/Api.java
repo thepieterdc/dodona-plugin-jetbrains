@@ -33,6 +33,21 @@ public enum Api {
 	 * Executes the given task in a modal. Uses the configured credentials.
 	 *
 	 * @param project the project to call the task on
+	 * @param task    the task to execute
+	 * @param <T>     type class of the result
+	 * @return the result
+	 * @throws IOException network connectivity issues
+	 */
+	@Nonnull
+	public static <T> T call(@Nonnull final Project project,
+	                         @Nonnull final Function<DodonaClient, T> task) throws IOException {
+		return task.apply(getClient());
+	}
+	
+	/**
+	 * Executes the given task in a modal. Uses the configured credentials.
+	 *
+	 * @param project the project to call the task on
 	 * @param title   the title for the progress indicator
 	 * @param task    the task to execute
 	 * @param <T>     type class of the result
@@ -65,10 +80,10 @@ public enum Api {
 	 */
 	@Nonnull
 	public static <T> T callModal(@Nonnull final Project project,
-	                         @Nonnull final String title,
-	                         @Nonnull final String host,
-	                         @Nonnull final String token,
-	                         @Nonnull final Function<DodonaClient, T> task) throws IOException {
+	                              @Nonnull final String title,
+	                              @Nonnull final String host,
+	                              @Nonnull final String token,
+	                              @Nonnull final Function<DodonaClient, T> task) throws IOException {
 		final DodonaClient client = DodonaBuilder.builder()
 			.setApiToken(token)
 			.setHost(host)
@@ -97,7 +112,7 @@ public enum Api {
 	 */
 	@Nonnull
 	private static DodonaClient getClient() {
-		if(client == null) {
+		if (client == null) {
 			final DodonaSettings settings = DodonaSettings.getInstance();
 			
 			client = DodonaBuilder.builder()
