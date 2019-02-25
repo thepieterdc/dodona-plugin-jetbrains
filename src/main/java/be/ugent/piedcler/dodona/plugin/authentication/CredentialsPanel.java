@@ -8,6 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.authentication;
 
+import be.ugent.piedcler.dodona.DodonaClient;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.ui.HyperlinkAdapter;
 import com.intellij.util.ui.JBUI;
@@ -34,6 +35,8 @@ class CredentialsPanel extends JPanel {
 	CredentialsPanel() {
 		super(new BorderLayout());
 		this.add(this.paneMain, BorderLayout.CENTER);
+		
+		this.fieldHost.setText(DodonaClient.DEFAULT_HOST);
 		
 		this.txtHelp.setBackground(UIUtil.TRANSPARENT_COLOR);
 		this.txtHelp.setCursor(new Cursor(Cursor.HAND_CURSOR));
