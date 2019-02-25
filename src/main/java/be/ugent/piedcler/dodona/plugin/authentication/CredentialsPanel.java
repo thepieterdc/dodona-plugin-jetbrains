@@ -10,13 +10,11 @@ package be.ugent.piedcler.dodona.plugin.authentication;
 
 import be.ugent.piedcler.dodona.DodonaClient;
 import com.intellij.ide.BrowserUtil;
-import com.intellij.ui.HyperlinkAdapter;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
 
 /**
@@ -38,17 +36,11 @@ class CredentialsPanel extends JPanel {
 		
 		this.fieldHost.setText(DodonaClient.DEFAULT_HOST);
 		
+		this.txtHelp.addHyperlinkListener(e -> BrowserUtil.browse(e.getURL()));
 		this.txtHelp.setBackground(UIUtil.TRANSPARENT_COLOR);
 		this.txtHelp.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		this.txtHelp.setMargin(JBUI.insetsTop(5));
 		this.txtHelp.setText("<html>Need help generating a token? <a href=\"https://github.com/thepieterdc/dodona-plugin-jetbrains/blob/master/README.md\">View instructions</a></html>");
-		
-		this.txtHelp.addHyperlinkListener(new HyperlinkAdapter() {
-			@Override
-			protected void hyperlinkActivated(HyperlinkEvent e) {
-				BrowserUtil.browse(e.getURL());
-			}
-		});
 	}
 	
 	/**
