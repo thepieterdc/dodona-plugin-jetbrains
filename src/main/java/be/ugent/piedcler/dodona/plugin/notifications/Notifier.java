@@ -24,10 +24,33 @@ public enum Notifier {
 	private static final Logger logger = LoggerFactory.getLogger(Notifier.class);
 	
 	/**
+	 * Shows an error message in a component.
+	 *
+	 * @param component the component
+	 * @param message   the message to display
+	 */
+	public static void error(@Nonnull final Component component, @Nonnull final String message) {
+		logger.error(message);
+		Messages.showErrorDialog(component, message, "Error");
+	}
+	
+	/**
+	 * Shows an error message in a component.
+	 *
+	 * @param component the component
+	 * @param message   the message to display
+	 * @param cause     exception that lead to this error
+	 */
+	public static void error(@Nonnull final Component component, @Nonnull final String message, @Nonnull final Throwable cause) {
+		logger.error(message, cause);
+		Messages.showErrorDialog(component, message, "Error");
+	}
+	
+	/**
 	 * Shows an informative message in a component.
 	 *
 	 * @param component the component
-	 * @param message the message to display
+	 * @param message   the message to display
 	 */
 	public static void info(@Nonnull final Component component, @Nonnull final String message) {
 		logger.info(message);
@@ -38,7 +61,7 @@ public enum Notifier {
 	 * Shows an informative message in a component.
 	 *
 	 * @param component the component
-	 * @param message the message to display
+	 * @param message   the message to display
 	 */
 	public static void success(@Nonnull final Component component, @Nonnull final String message) {
 		logger.info(message);

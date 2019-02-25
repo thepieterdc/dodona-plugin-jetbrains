@@ -36,6 +36,7 @@ public final class ApiOld {
 	 *
 	 * @return Dodona instance
 	 */
+	@Deprecated
 	public static DodonaClient getInstance() {
 		if (instance == null) {
 			instance = DodonaBuilder.builder()
@@ -52,6 +53,7 @@ public final class ApiOld {
 	 *
 	 * @return the user agent
 	 */
+	@Deprecated
 	private static String getUserAgent() {
 		final String version = BuildConfig.VERSION;
 		return String.format("DodonaPlugin/JetBrains-%s", version);

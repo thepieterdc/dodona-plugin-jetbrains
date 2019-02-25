@@ -34,6 +34,7 @@ public enum SettingsHelper {
 	 * @return the apiclient key
 	 */
 	@NonNls
+	@Deprecated
 	public static String getApiKey() {
 		final PropertiesComponent properties = PropertiesComponent.getInstance();
 		return properties.getValue(SettingsHelper.SETTING_API_KEY, "");
@@ -45,6 +46,7 @@ public enum SettingsHelper {
 	 * @return the URL
 	 */
 	@NonNls
+	@Deprecated
 	public static String getDodonaUrl() {
 		final PropertiesComponent properties = PropertiesComponent.getInstance();
 		return properties.getValue(SettingsHelper.SETTING_DODONA_URL, DEFAULT_DODONA_URL);
@@ -55,6 +57,7 @@ public enum SettingsHelper {
 	 *
 	 * @param apiKey the api key to set
 	 */
+	@Deprecated
 	public static void setApiKey(final String apiKey) {
 		final PropertiesComponent properties = PropertiesComponent.getInstance();
 		properties.setValue(SettingsHelper.SETTING_API_KEY, apiKey);
@@ -66,6 +69,7 @@ public enum SettingsHelper {
 	 *
 	 * @param dodonaUrl the dodona url to set
 	 */
+	@Deprecated
 	public static void setDodonaUrl(final String dodonaUrl) {
 		final PropertiesComponent properties = PropertiesComponent.getInstance();
 		properties.setValue(SettingsHelper.SETTING_DODONA_URL, dodonaUrl);

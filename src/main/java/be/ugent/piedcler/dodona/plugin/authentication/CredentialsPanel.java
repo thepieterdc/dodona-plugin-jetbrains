@@ -9,7 +9,10 @@
 package be.ugent.piedcler.dodona.plugin.authentication;
 
 import be.ugent.piedcler.dodona.DodonaClient;
+import be.ugent.piedcler.dodona.exceptions.AuthenticationException;
+import be.ugent.piedcler.dodona.plugin.Api;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
+import be.ugent.piedcler.dodona.resources.User;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.HoverHyperlinkLabel;
@@ -18,6 +21,7 @@ import javax.annotation.Nonnull;
 import javax.swing.*;
 import javax.swing.event.HyperlinkEvent;
 import java.awt.*;
+import java.io.IOException;
 
 /**
  * Center component of the login dialog.
@@ -65,6 +69,16 @@ public class CredentialsPanel extends JPanel {
 	}
 	
 	/**
+	 * Gets the entered host.
+	 *
+	 * @return the host
+	 */
+	@Nonnull
+	public String getHost() {
+		return String.valueOf(this.hostField.getText()).trim();
+	}
+	
+	/**
 	 * Gets the entered token.
 	 *
 	 * @return the token
@@ -89,6 +103,18 @@ public class CredentialsPanel extends JPanel {
 	 * @param project active project
 	 */
 	private void testCredentials(@Nonnull final Project project) {
-		Notifier.success(this.mainPane, String.format("Successfully authenticated as %s %s.", "Pieter", "De Clercq"));
+		try {
+			final User user = Api.callModal(
+				project, "Verifying credentials", this.getHost(), this.getToken(), DodonaClient::me
+			);
+			
+			Notifier.success(this.mainPane,
+				String.format("Successfully authenticated as %s %s.", user.getFirstName(), user.getLastName())
+			);
+		} catch (final AuthenticationException ex) {
+			Notifier.error(this.mainPane, "The provided token was not valid.");
+		} catch (final IOException ex) {
+			Notifier.error(this.mainPane, String.format("Could not authenticate: %s", ex.getMessage()));
+		}
 	}
 }
