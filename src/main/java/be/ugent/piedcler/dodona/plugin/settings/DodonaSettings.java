@@ -9,6 +9,7 @@
 package be.ugent.piedcler.dodona.plugin.settings;
 
 import be.ugent.piedcler.dodona.DodonaClient;
+import be.ugent.piedcler.dodona.plugin.Api;
 import com.intellij.credentialStore.CredentialAttributes;
 import com.intellij.credentialStore.CredentialAttributesKt;
 import com.intellij.ide.passwordSafe.PasswordSafe;
@@ -77,5 +78,7 @@ public class DodonaSettings {
 	public void setToken(@Nonnull final String token) {
 		final CredentialAttributes credentials = createCredentialAttributes();
 		PasswordSafe.getInstance().setPassword(credentials, token);
+		
+		Api.clearClient();
 	}
 }

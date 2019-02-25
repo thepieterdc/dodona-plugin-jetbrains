@@ -19,7 +19,7 @@ import java.util.Collection;
 /**
  * A dialog that allows the user to select a course.
  */
-public class SelectCourseDialog extends JDialog {
+public class CourseSelectionDialog extends SelectionDialog<Course> {
 	private JPanel contentPane;
 	private JBList<Course> coursesList;
 	
@@ -31,9 +31,8 @@ public class SelectCourseDialog extends JDialog {
 	 *
 	 * @param courses the courses to select from
 	 */
-	public SelectCourseDialog(final Collection<Course> courses) {
+	public CourseSelectionDialog(final Collection<Course> courses) {
 		this.createComponents();
-		//this.coursesList.setBorder(BorderFactory.);
 		this.coursesList.addListSelectionListener(e -> this.selectedCourse = this.coursesList.getSelectedValue());
 		this.coursesList.setCellRenderer(new CourseListRenderer());
 		this.coursesList.setEmptyText("No courses were found for your account.");
@@ -49,13 +48,9 @@ public class SelectCourseDialog extends JDialog {
 		this.setModal(true);
 	}
 	
-	/**
-	 * Gets the selected course.
-	 *
-	 * @return the selected course
-	 */
 	@Nullable
-	public Course getSelectedCourse() {
+	@Override
+	public Course getSelectedItem() {
 		return this.selectedCourse;
 	}
 }
