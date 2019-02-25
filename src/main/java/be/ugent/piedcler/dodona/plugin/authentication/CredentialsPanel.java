@@ -43,22 +43,8 @@ public class CredentialsPanel extends JPanel {
 	}
 	
 	/**
-	 * Gets the entered token.
-	 *
-	 * @return the token
+	 * Custom creator for the help text.
 	 */
-	@Nonnull
-	String getToken() {
-		return String.valueOf(this.tokenField.getPassword());
-	}
-	
-	/**
-	 * Tests the provided access token.
-	 */
-	private void testCredentials() {
-		Notifier.success(this.mainPane, String.format("Successfully authenticated as %s %s.", "Pieter", "De Clercq"));
-	}
-	
 	private void createUIComponents() {
 		this.helpPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
 		this.helpPanel.setBorder(BorderFactory.createEmptyBorder());
@@ -73,5 +59,22 @@ public class CredentialsPanel extends JPanel {
 		});
 		
 		this.helpPanel.add(readmeLink);
+	}
+	
+	/**
+	 * Gets the entered token.
+	 *
+	 * @return the token
+	 */
+	@Nonnull
+	String getToken() {
+		return String.valueOf(this.tokenField.getPassword());
+	}
+	
+	/**
+	 * Tests the provided access token.
+	 */
+	private void testCredentials() {
+		Notifier.success(this.mainPane, String.format("Successfully authenticated as %s %s.", "Pieter", "De Clercq"));
 	}
 }
