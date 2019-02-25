@@ -16,6 +16,7 @@
         <li>[IMPROVEMENT] The authentication flow has been rewritten from scratch and is now more interactive, providing a better user experience.</li>
         <li>[IMPROVEMENT] Instructions on how to configure the plugin have been rewritten.</li>
         <li>[IMPROVEMENT] Settings have been rewritten to allow a more secure storage of the API token.</li>
+        <li>[IMPROVEMENT] Clicking "More details" upon submitting an incorrect solution now shows the feedback instead of the exercise.</li>
     </ul>
     ]]>
     </change-notes>
