@@ -1,82 +1,84 @@
 /*
- * Copyright (c) 2018. All rights reserved.
+ * Copyright (c) 2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/ugent-dodona/
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
 package be.ugent.piedcler.dodona.plugin.settings;
 
-import com.intellij.openapi.options.Configurable;
-import org.jetbrains.annotations.Nls;
-import org.jetbrains.annotations.Nullable;
+import be.ugent.piedcler.dodona.DodonaClient;
+import be.ugent.piedcler.dodona.plugin.Api;
+import com.intellij.credentialStore.CredentialAttributes;
+import com.intellij.credentialStore.CredentialAttributesKt;
+import com.intellij.ide.passwordSafe.PasswordSafe;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.components.State;
 
-import javax.swing.*;
+import javax.annotation.Nonnull;
+import java.util.Optional;
 
 /**
- * Controls the settings of the plugin.
+ * Manages the configured settings.
  */
-public class DodonaSettings implements Configurable {
-	private JPanel panelRoot;
-	private JLabel lblFormDescription;
-	private JLabel lblApiKey;
-	private JLabel lblApiKeyInstructions;
-	private JTextField fieldApiKey;
-
-	private JLabel lblDodonaURL;
-	private JTextField fieldDodonaURL;
-
-	@Override
-	public void apply() {
-		SettingsHelper.setApiKey(this.fieldApiKey.getText().trim());
-		SettingsHelper.setDodonaUrl(this.fieldDodonaURL.getText().trim());
-	}
-
-	@Nullable
-	@Override
-	public JComponent createComponent() {
-
-		this.updateApiKeyFromSettings();
-		this.updateDodonaURLFromSettings();
-
-		return this.panelRoot;
-	}
-
-	@Override
-	public void disposeUIResources() {
-
-	}
-
-	@Nls
-	@Override
-	public String getDisplayName() {
-		return "Dodona Settings";
-	}
-
-	@Override
-	public boolean isModified() {
-		return !SettingsHelper.getApiKey().equals(this.fieldApiKey.getText().trim())
-			|| ! SettingsHelper.getDodonaUrl().equals(this.fieldDodonaURL.getText().trim());
-	}
-
-	@Override
-	public void reset() {
-
-	}
-
+@State(name = "DodonaSettings")
+public class DodonaSettings {
+	private static final String CREDENTIALS_SUBSYSTEM = "dodona";
+	private static final String CREDENTIALS_KEY_TOKEN = "token";
+	
 	/**
-	 * Sets the value of the API key field.
+	 * Creates the Credential attributes.
+	 *
+	 * @return credential attributes
 	 */
-	private void updateApiKeyFromSettings() {
-		this.fieldApiKey.setText(SettingsHelper.getApiKey());
+	@Nonnull
+	private static CredentialAttributes createCredentialAttributes() {
+		return new CredentialAttributes(
+			CredentialAttributesKt.generateServiceName(CREDENTIALS_SUBSYSTEM, CREDENTIALS_KEY_TOKEN)
+		);
 	}
-
+	
 	/**
-	 * Sets the value of the Dodona URL field.
+	 * Gets the configured host.
+	 *
+	 * @return the host
 	 */
-	private void updateDodonaURLFromSettings(){
-		this.fieldDodonaURL.setText(SettingsHelper.getDodonaUrl());
+	@Nonnull
+	public String getHost() {
+		return DodonaClient.DEFAULT_HOST;
 	}
-
+	
+	/**
+	 * Gets an instance of the settings.
+	 *
+	 * @return instance
+	 */
+	@Nonnull
+	public static DodonaSettings getInstance() {
+		return ServiceManager.getService(DodonaSettings.class);
+	}
+	
+	/**
+	 * Gets the authentication token.
+	 *
+	 * @return the authentication token
+	 */
+	@Nonnull
+	public String getToken() {
+		final CredentialAttributes credentials = createCredentialAttributes();
+		return Optional.ofNullable(PasswordSafe.getInstance().getPassword(credentials)).orElse("");
+	}
+	
+	/**
+	 * Sets the authentication token.
+	 *
+	 * @param token the authentication token to set
+	 */
+	public void setToken(@Nonnull final String token) {
+		final CredentialAttributes credentials = createCredentialAttributes();
+		PasswordSafe.getInstance().setPassword(credentials, token);
+		
+		Api.clearClient();
+	}
 }

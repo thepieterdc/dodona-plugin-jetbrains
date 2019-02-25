@@ -16,7 +16,7 @@ import be.ugent.piedcler.dodona.resources.Submission;
 /**
  * The user submitted a solution but it took too long to evaluate.
  */
-public class SubmissionTimeoutException extends WarningMessageException {
+public final class SubmissionTimeoutException extends WarningMessageException {
 	private static final long serialVersionUID = 1861364799339652909L;
 	
 	/**

@@ -8,15 +8,14 @@
  */
 package be.ugent.piedcler.dodona.plugin.tasks;
 
-import be.ugent.piedcler.dodona.DodonaClient;
 import be.ugent.piedcler.dodona.exceptions.DodonaException;
 import be.ugent.piedcler.dodona.plugin.Api;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
-import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
-import be.ugent.piedcler.dodona.plugin.reporting.NotificationReporter;
-import be.ugent.piedcler.dodona.plugin.ui.SelectCourseDialog;
-import be.ugent.piedcler.dodona.plugin.ui.SelectExerciseDialog;
-import be.ugent.piedcler.dodona.plugin.ui.SelectSeriesDialog;
+import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
+import be.ugent.piedcler.dodona.plugin.ui.CourseSelectionDialog;
+import be.ugent.piedcler.dodona.plugin.ui.ExerciseSelectionDialog;
+import be.ugent.piedcler.dodona.plugin.ui.SelectionDialog;
+import be.ugent.piedcler.dodona.plugin.ui.SeriesSelectionDialog;
 import be.ugent.piedcler.dodona.resources.Course;
 import be.ugent.piedcler.dodona.resources.Exercise;
 import be.ugent.piedcler.dodona.resources.Series;
@@ -26,11 +25,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.awt.*;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -57,124 +56,70 @@ public class SetExerciseTask extends Task.Backgroundable {
 	}
 	
 	/**
-	 * Asks the user about the course.
+	 * Shows a selection dialog.
 	 *
-	 * @param courses all courses
-	 * @return the selected course
+	 * @param dialog the dialog to show
+	 * @param title  title of the dialog
+	 * @param <T>    type class of the options
+	 * @return the chosen element, or null if canceled
 	 */
 	@Nullable
-	private static Course askCourse(final Collection<Course> courses) {
-		final SelectCourseDialog selectCourseDialog = new SelectCourseDialog(courses);
+	private static <T> T choose(final String title, final SelectionDialog<T> dialog) {
 		final DialogBuilder coursesBuilder = new DialogBuilder();
-		coursesBuilder.setCenterPanel(selectCourseDialog.getRootPane());
-		coursesBuilder.setTitle("Select Course");
+		coursesBuilder.setCenterPanel(dialog.getRootPane());
+		coursesBuilder.setTitle(title);
 		coursesBuilder.removeAllActions();
 		coursesBuilder.addOkAction();
 		coursesBuilder.addCancelAction();
 		
 		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
-			return selectCourseDialog.getSelectedCourse();
-		}
-		return null;
-	}
-	
-	/**
-	 * Asks the user about the exercise.
-	 *
-	 * @param exercises all exercises
-	 * @return the selected exercise
-	 */
-	@Nullable
-	private static Exercise askExercise(final Collection<Exercise> exercises) {
-		final SelectExerciseDialog selectExerciseDialog = new SelectExerciseDialog(exercises);
-		final DialogBuilder coursesBuilder = new DialogBuilder();
-		coursesBuilder.setCenterPanel(selectExerciseDialog.getRootPane());
-		coursesBuilder.setTitle("Select Exercise");
-		coursesBuilder.removeAllActions();
-		coursesBuilder.addOkAction();
-		coursesBuilder.addCancelAction();
-		
-		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
-			return selectExerciseDialog.getSelectedExercise();
-		}
-		return null;
-	}
-	
-	/**
-	 * Asks the user about the series.
-	 *
-	 * @param series all series
-	 * @return the selected series
-	 */
-	@Nullable
-	private static Series askSeries(final Collection<Series> series) {
-		final SelectSeriesDialog selectSeriesDialog = new SelectSeriesDialog(series);
-		final DialogBuilder coursesBuilder = new DialogBuilder();
-		coursesBuilder.setCenterPanel(selectSeriesDialog.getRootPane());
-		coursesBuilder.setTitle("Select Series");
-		coursesBuilder.removeAllActions();
-		coursesBuilder.addOkAction();
-		coursesBuilder.addCancelAction();
-		
-		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
-			return selectSeriesDialog.getSelectedSeries();
+			return dialog.getSelectedItem();
 		}
 		return null;
 	}
 	
 	@Override
 	public void run(@NotNull final ProgressIndicator progressIndicator) {
-		
 		try {
-			progressIndicator.setFraction(0.10);
-			progressIndicator.setText("Retrieving courses...");
+			final List<Course> myCourses = Api.callModal(this.myProject, "Retrieving courses",
+				dodona -> dodona.me().getSubscribedCourses()
+			);
 			
-			final DodonaClient dodona = Api.getInstance();
-			
-			final List<Course> myCourses = dodona.me().getSubscribedCourses();
-			
-			progressIndicator.setFraction(0.15);
+			progressIndicator.setFraction(0.30);
 			progressIndicator.setText("Waiting for course selection...");
 			
-			EventQueue.invokeAndWait(() -> this.selectedCourse = SetExerciseTask.askCourse(myCourses));
+			EventQueue.invokeAndWait(() -> this.selectedCourse = choose("Select Course", new CourseSelectionDialog(myCourses)));
 			
 			if (this.selectedCourse == null) return;
 			
-			progressIndicator.setFraction(0.30);
-			progressIndicator.setText("Retrieving series...");
+			final List<Series> courseSeries = Api.callModal(this.myProject, "Retrieving series",
+				dodona -> dodona.series().getAll(this.selectedCourse)
+			);
 			
-			final List<Series> courseSeries = dodona.series().getAll(this.selectedCourse);
-			
-			progressIndicator.setFraction(0.45);
+			progressIndicator.setFraction(0.60);
 			progressIndicator.setText("Waiting for series selection...");
 			
-			EventQueue.invokeAndWait(() -> this.selectedSeries = SetExerciseTask.askSeries(courseSeries));
+			EventQueue.invokeAndWait(() -> this.selectedSeries = choose("Select Series", new SeriesSelectionDialog(courseSeries)));
 			
 			if (this.selectedSeries == null) return;
 			
-			progressIndicator.setFraction(0.60);
-			progressIndicator.setText("Retrieving exercises...");
+			final List<Exercise> exercises = Api.callModal(this.myProject, "Retrieving exercises",
+				dodona -> dodona.exercises().getAll(this.selectedSeries)
+			);
 			
-			final List<Exercise> exercises = dodona.exercises().getAll(this.selectedSeries);
-			
-			progressIndicator.setFraction(0.75);
+			progressIndicator.setFraction(0.90);
 			progressIndicator.setText("Waiting for exercise selection...");
 			
-			EventQueue.invokeAndWait(() -> this.selectedExercise = SetExerciseTask.askExercise(exercises));
+			EventQueue.invokeAndWait(() -> this.selectedExercise = choose("Select Exercise", new ExerciseSelectionDialog(exercises)));
 			
 			if (this.selectedExercise == null) return;
 			
-			progressIndicator.setFraction(0.90);
+			progressIndicator.setFraction(0.95);
 			progressIndicator.setText("Setting exercise...");
 			
-			
 			this.identifierSetter.accept(this.selectedExercise.getUrl());
-			
-			EventQueue.invokeLater(() -> NotificationReporter.info("Exercise successfully set."));
-		} catch (final WarningMessageException warning) {
-			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));
-		} catch (final ErrorMessageException | InvocationTargetException | DodonaException error) {
-			EventQueue.invokeLater(() -> NotificationReporter.error(error.getMessage()));
+		} catch (final ErrorMessageException | InvocationTargetException | IOException | DodonaException error) {
+			Notifier.error(this.myProject, "Exercise not set.", error.getMessage());
 		} catch (final InterruptedException ex) {
 			// aborted by user.
 		}

@@ -1,49 +1,148 @@
 /*
- * Copyright (c) 2018. All rights reserved.
+ * Copyright (c) 2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/ugent-dodona/
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
 package be.ugent.piedcler.dodona.plugin;
 
 import be.ugent.piedcler.dodona.DodonaBuilder;
 import be.ugent.piedcler.dodona.DodonaClient;
-import be.ugent.piedcler.dodona.plugin.settings.SettingsHelper;
-import org.jetbrains.annotations.Nullable;
+import be.ugent.piedcler.dodona.exceptions.AuthenticationException;
+import be.ugent.piedcler.dodona.plugin.authentication.LoginDialog;
+import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
+import be.ugent.piedcler.dodona.plugin.settings.DodonaSettings;
+import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.progress.ProgressIndicator;
+import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.progress.Task;
+import com.intellij.openapi.project.Project;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nonnull;
+import java.io.IOException;
+import java.util.function.Function;
 
 /**
  * Interface to the API.
  */
-public final class Api {
-	@Nullable
-	private static DodonaClient instance;
+public enum Api {
+	;
+	
+	private static DodonaClient client;
 	
 	/**
-	 * Removes the instance of the Dodona client, may be called by the
-	 * SettingsHelper.
+	 * Executes the given task in a modal. Uses the configured credentials.
+	 *
+	 * @param project the project to call the task on
+	 * @param task    the task to execute
+	 * @param <T>     type class of the result
+	 * @return the result
+	 * @throws IOException network connectivity issues
 	 */
-	public static void clearInstance() {
-		instance = null;
+	@Nonnull
+	public static <T> T call(@Nonnull final Project project,
+	                         @Nonnull final Function<DodonaClient, T> task) throws IOException {
+		try {
+			return task.apply(getClient());
+		} catch (final AuthenticationException ex) {
+			ApplicationManager.getApplication().invokeAndWait(() -> {
+				final DodonaSettings settings = DodonaSettings.getInstance();
+				
+				final LoginDialog dialog = new LoginDialog(project, settings.getToken());
+				dialog.show();
+				
+				if (dialog.isOK()) {
+					settings.setToken(dialog.getToken());
+				} else {
+					throw new UserAbortedException();
+				}
+			});
+			
+			return call(project, task);
+		}
 	}
 	
 	/**
-	 * Gets an instance of the Dodona client. This instance may not be saved by
-	 * the caller since the instance will become invalid upon changing the
-	 * settings.
+	 * Executes the given task in a modal. Uses the configured credentials.
 	 *
-	 * @return Dodona instance
+	 * @param project the project to call the task on
+	 * @param title   the title for the progress indicator
+	 * @param task    the task to execute
+	 * @param <T>     type class of the result
+	 * @return the result
+	 * @throws IOException network connectivity issues
 	 */
-	public static DodonaClient getInstance() {
-		if (instance == null) {
-			instance = DodonaBuilder.builder()
-				.setApiToken(SettingsHelper.getApiKey())
-				.setBaseUrl(SettingsHelper.getDodonaUrl())
+	@Nonnull
+	public static <T> T callModal(@Nonnull final Project project,
+	                              @Nonnull final String title,
+	                              @Nonnull final Function<DodonaClient, T> task) throws IOException {
+		return ProgressManager.getInstance().run(new Task.WithResult<T, IOException>(project, title, true) {
+			@Override
+			protected T compute(@NotNull final ProgressIndicator indicator) throws IOException {
+				return call(project, task);
+			}
+		});
+	}
+	
+	/**
+	 * Executes the given task in a modal.
+	 *
+	 * @param project the project to call the task on
+	 * @param title   the title for the progress indicator
+	 * @param host    the host to call
+	 * @param token   the authentication token
+	 * @param task    the task to execute
+	 * @param <T>     type class of the result
+	 * @return the result
+	 * @throws IOException network connectivity issues
+	 */
+	@Nonnull
+	public static <T> T callModal(@Nonnull final Project project,
+	                              @Nonnull final String title,
+	                              @Nonnull final String host,
+	                              @Nonnull final String token,
+	                              @Nonnull final Function<DodonaClient, T> task) throws IOException {
+		final DodonaClient client = DodonaBuilder.builder()
+			.setApiToken(token)
+			.setHost(host)
+			.setUserAgent(getUserAgent())
+			.build();
+		
+		return ProgressManager.getInstance().run(new Task.WithResult<T, IOException>(project, title, true) {
+			@Override
+			protected T compute(@NotNull final ProgressIndicator indicator) throws IOException {
+				return task.apply(client);
+			}
+		});
+	}
+	
+	/**
+	 * Clears the instance of the client.
+	 */
+	public static void clearClient() {
+		client = null;
+	}
+	
+	/**
+	 * Gets a Dodona client from the configured credentials.
+	 *
+	 * @return client
+	 */
+	@Nonnull
+	private static DodonaClient getClient() {
+		if (client == null) {
+			final DodonaSettings settings = DodonaSettings.getInstance();
+			
+			client = DodonaBuilder.builder()
+				.setApiToken(settings.getToken())
+				.setHost(settings.getHost())
 				.setUserAgent(getUserAgent())
 				.build();
 		}
-		return instance;
+		return client;
 	}
 	
 	/**
@@ -51,6 +150,7 @@ public final class Api {
 	 *
 	 * @return the user agent
 	 */
+	@Nonnull
 	private static String getUserAgent() {
 		final String version = BuildConfig.VERSION;
 		return String.format("DodonaPlugin/JetBrains-%s", version);

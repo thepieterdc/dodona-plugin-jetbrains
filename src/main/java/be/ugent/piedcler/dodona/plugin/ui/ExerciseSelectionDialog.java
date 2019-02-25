@@ -19,7 +19,7 @@ import java.util.Collection;
 /**
  * A dialog that allows the user to select an exercise.
  */
-public class SelectExerciseDialog extends JDialog {
+public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 	private JPanel contentPane;
 	private JBList<Exercise> exercisesList;
 	
@@ -31,7 +31,7 @@ public class SelectExerciseDialog extends JDialog {
 	 *
 	 * @param exercises the exercises to select from
 	 */
-	public SelectExerciseDialog(final Collection<Exercise> exercises) {
+	public ExerciseSelectionDialog(final Collection<Exercise> exercises) {
 		this.createComponents();
 		this.exercisesList.addListSelectionListener(e -> this.selectedExercise = this.exercisesList.getSelectedValue());
 		this.exercisesList.setCellRenderer(new ExerciseListRenderer());
@@ -48,13 +48,9 @@ public class SelectExerciseDialog extends JDialog {
 		this.setModal(true);
 	}
 	
-	/**
-	 * Gets the selected exercise.
-	 *
-	 * @return the selected exercise
-	 */
 	@Nullable
-	public Exercise getSelectedExercise() {
+	@Override
+	public Exercise getSelectedItem() {
 		return this.selectedExercise;
 	}
 }

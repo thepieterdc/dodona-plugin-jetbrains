@@ -8,16 +8,14 @@
  */
 package be.ugent.piedcler.dodona.plugin.tasks;
 
-import be.ugent.piedcler.dodona.DodonaClient;
 import be.ugent.piedcler.dodona.data.SubmissionStatus;
 import be.ugent.piedcler.dodona.exceptions.DodonaException;
 import be.ugent.piedcler.dodona.plugin.Api;
 import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
-import be.ugent.piedcler.dodona.plugin.exceptions.warnings.IncorrectSubmissionException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
-import be.ugent.piedcler.dodona.plugin.reporting.NotificationReporter;
+import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import be.ugent.piedcler.dodona.resources.Exercise;
 import be.ugent.piedcler.dodona.resources.Submission;
 import com.intellij.openapi.actionSystem.Presentation;
@@ -26,9 +24,7 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
-
-import static java.lang.String.format;
+import java.io.IOException;
 
 /**
  * Submits a solution to Dodona.
@@ -49,7 +45,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 	 * @param solution the solution to submit
 	 */
 	public SubmitSolutionTask(final Project project, final Presentation presentation, final Solution solution) {
-		super(project, format("Evaluation for %s", solution.getExerciseId()));
+		super(project, "Submitting Solution");
 		this.solution = solution;
 		this.presentation = presentation;
 	}
@@ -58,21 +54,17 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 	public void run(@NotNull final ProgressIndicator progressIndicator) {
 		try {
 			this.presentation.setEnabled(false);
-			progressIndicator.setFraction(0.10);
-			progressIndicator.setText("Submitting to Dodona...");
 			
-			final DodonaClient dodona = Api.getInstance();
-			
-			final long createdSubmissionId = dodona.submissions().create(
-				this.solution.getCourseId().orElse(null),
-				this.solution.getSeriesId().orElse(null),
-				this.solution.getExerciseId(),
-				this.solution.getCode()
+			final long createdSubmissionId = Api.callModal(this.myProject, "Submitting solution",
+				dodona -> dodona.submissions().create(
+					this.solution.getCourseId().orElse(null),
+					this.solution.getSeriesId().orElse(null),
+					this.solution.getExerciseId(),
+					this.solution.getCode()
+				)
 			);
 			
-			Submission submission = dodona.submissions().get(createdSubmissionId);
-			
-			NotificationReporter.info("Solution successfully submitted, awaiting evaluation.");
+			Submission submission = Api.call(this.myProject, dodona -> dodona.submissions().get(createdSubmissionId));
 			
 			progressIndicator.setFraction(0.50);
 			progressIndicator.setText("Awaiting evaluation...");
@@ -89,7 +81,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 				
 				Thread.sleep(delay);
 				
-				submission = dodona.submissions().get(createdSubmissionId);
+				submission = Api.call(this.myProject, dodona -> dodona.submissions().get(createdSubmissionId));
 				
 				delay = Math.min(
 					(long) ((double) delay * SubmitSolutionTask.DELAY_BACKOFF_FACTOR),
@@ -99,7 +91,10 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 				total += delay;
 			}
 			
-			final Exercise exercise = dodona.exercises().get(submission);
+			// Ugly hack to make the submission available in the api call.
+			final Submission finalSubmission = submission;
+			
+			final Exercise exercise = Api.call(this.myProject, dodona -> dodona.exercises().get(finalSubmission));
 			
 			if ((submission.getStatus() == SubmissionStatus.RUNNING)
 				|| (submission.getStatus() == SubmissionStatus.QUEUED)) {
@@ -109,19 +104,19 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			progressIndicator.setFraction(1.0);
 			progressIndicator.setText("Evaluation completed");
 			
-			// Required to use EventQueue.invokeLater(), must be final.
-			final Submission completed = submission;
 			if (submission.getStatus() == SubmissionStatus.CORRECT) {
-				EventQueue.invokeLater(() -> NotificationReporter.info(
-					format("Solution to %s was correct!", exercise.getName())
-				));
+				Notifier.info(this.myProject, "Correct solution",
+					String.format("Your solution to \"%s\" has been accepted!", exercise.getName())
+				);
 			} else {
-				throw new IncorrectSubmissionException(completed, exercise);
+				Notifier.warning(this.myProject, "Incorrect solution",
+					String.format("Your solution to \"%s\" was incorrect. <a href=\"%s\">More details</a>.", exercise.getName(), submission.getUrl())
+				);
 			}
 		} catch (final WarningMessageException warning) {
-			EventQueue.invokeLater(() -> NotificationReporter.warning(warning.getMessage()));
-		} catch (final ErrorMessageException | DodonaException error) {
-			EventQueue.invokeLater(() -> NotificationReporter.error(error.getMessage()));
+			Notifier.warning(this.myProject, warning.getMessage());
+		} catch (final ErrorMessageException | IOException | DodonaException error) {
+			Notifier.error(this.myProject, error.getMessage());
 		} catch (final InterruptedException ex) {
 			throw new RuntimeException(ex);
 		} finally {

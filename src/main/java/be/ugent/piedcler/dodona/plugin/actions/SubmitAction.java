@@ -21,10 +21,9 @@ import be.ugent.piedcler.dodona.plugin.code.preprocess.impl.CombinedSubmissionPr
 import be.ugent.piedcler.dodona.plugin.code.preprocess.impl.JavaFileSubmissionPreprocessor;
 import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
-import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.errors.CodeReadException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.ExerciseNotSetException;
-import be.ugent.piedcler.dodona.plugin.reporting.NotificationReporter;
+import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import be.ugent.piedcler.dodona.plugin.tasks.SetExerciseTask;
 import be.ugent.piedcler.dodona.plugin.tasks.SubmitSolutionTask;
 import com.intellij.lang.Language;
@@ -37,7 +36,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -104,10 +102,8 @@ public class SubmitAction extends AnAction {
 					id -> runWriteCommandAction(project, () -> identifierSetter.setIdentifier(language, document, id)))
 			);
 			
-		} catch (final WarningMessageException warning) {
-			NotificationReporter.warning(warning.getMessage());
 		} catch (final ErrorMessageException error) {
-			NotificationReporter.error(error.getMessage());
+			Notifier.error(project, "Solution not submitted.", error.getMessage());
 		}
 	}
 	

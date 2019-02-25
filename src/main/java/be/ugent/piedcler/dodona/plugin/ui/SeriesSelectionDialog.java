@@ -19,7 +19,7 @@ import java.util.Collection;
 /**
  * A dialog that allows the user to select a series.
  */
-public class SelectSeriesDialog extends JDialog {
+public class SeriesSelectionDialog extends SelectionDialog<Series> {
 	private JPanel contentPane;
 	private JBList<Series> seriesList;
 	
@@ -31,7 +31,7 @@ public class SelectSeriesDialog extends JDialog {
 	 *
 	 * @param series the series to select from
 	 */
-	public SelectSeriesDialog(final Collection<Series> series) {
+	public SeriesSelectionDialog(final Collection<Series> series) {
 		this.createComponents();
 		this.seriesList.addListSelectionListener(e -> this.selectedSeries = this.seriesList.getSelectedValue());
 		this.seriesList.setCellRenderer(new SeriesListRenderer());
@@ -48,13 +48,9 @@ public class SelectSeriesDialog extends JDialog {
 		this.setModal(true);
 	}
 	
-	/**
-	 * Gets the selected series.
-	 *
-	 * @return the selected series
-	 */
 	@Nullable
-	public Series getSelectedSeries() {
+	@Override
+	public Series getSelectedItem() {
 		return this.selectedSeries;
 	}
 }
