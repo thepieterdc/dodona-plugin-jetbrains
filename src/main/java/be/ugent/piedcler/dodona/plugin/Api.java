@@ -10,7 +10,11 @@ package be.ugent.piedcler.dodona.plugin;
 
 import be.ugent.piedcler.dodona.DodonaBuilder;
 import be.ugent.piedcler.dodona.DodonaClient;
+import be.ugent.piedcler.dodona.exceptions.AuthenticationException;
+import be.ugent.piedcler.dodona.plugin.authentication.LoginDialog;
+import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
 import be.ugent.piedcler.dodona.plugin.settings.DodonaSettings;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
@@ -41,7 +45,24 @@ public enum Api {
 	@Nonnull
 	public static <T> T call(@Nonnull final Project project,
 	                         @Nonnull final Function<DodonaClient, T> task) throws IOException {
-		return task.apply(getClient());
+		try {
+			return task.apply(getClient());
+		} catch (final AuthenticationException ex) {
+			ApplicationManager.getApplication().invokeAndWait(() -> {
+				final DodonaSettings settings = DodonaSettings.getInstance();
+				
+				final LoginDialog dialog = new LoginDialog(project, settings.getToken());
+				dialog.show();
+				
+				if (dialog.isOK()) {
+					settings.setToken(dialog.getToken());
+				} else {
+					throw new UserAbortedException();
+				}
+			});
+			
+			return call(project, task);
+		}
 	}
 	
 	/**
@@ -61,7 +82,7 @@ public enum Api {
 		return ProgressManager.getInstance().run(new Task.WithResult<T, IOException>(project, title, true) {
 			@Override
 			protected T compute(@NotNull final ProgressIndicator indicator) throws IOException {
-				return task.apply(getClient());
+				return call(project, task);
 			}
 		});
 	}

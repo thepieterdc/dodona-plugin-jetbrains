@@ -26,7 +26,7 @@ public class SettingsPanel {
 	 * Initializes components.
 	 */
 	private void createUIComponents() {
-		this.credentialsPanel = new CredentialsPanel(ProjectManager.getInstance().getDefaultProject());
+		this.credentialsPanel = new CredentialsPanel(ProjectManager.getInstance().getDefaultProject(), true);
 	}
 	
 	/**

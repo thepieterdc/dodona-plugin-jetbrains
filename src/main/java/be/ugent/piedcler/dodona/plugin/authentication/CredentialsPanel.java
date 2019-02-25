@@ -38,15 +38,17 @@ public class CredentialsPanel extends JPanel {
 	/**
 	 * CredentialsPanel constructor.
 	 *
-	 * @param project active project
+	 * @param project        active project
+	 * @param showTestButton true to show the test connection button
 	 */
-	public CredentialsPanel(@Nonnull final Project project) {
+	public CredentialsPanel(@Nonnull final Project project, final boolean showTestButton) {
 		super(new BorderLayout());
 		this.add(this.mainPane, BorderLayout.CENTER);
 		
 		this.hostField.setText(DodonaClient.DEFAULT_HOST);
 		
 		this.testBtn.addActionListener(e -> this.testCredentials(project));
+		this.testBtn.setVisible(showTestButton);
 	}
 	
 	/**
