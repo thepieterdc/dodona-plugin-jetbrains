@@ -33,9 +33,8 @@ public class ExerciseListRenderer extends DefaultListCellRenderer {
 			this.setText(exercise.getName());
 			if (exercise.isLastSolutionCorrect() && exercise.hasCorrectSolution()) {
 				this.setIcon(Icons.CORRECT);
-			} else if (!exercise.isLastSolutionCorrect()) {
-				this.setIcon(Icons.INCORRECT);
 			}
+			// TODO: Mark an exercise as incorrect when the API is updated.
 		}
 		return this;
 	}
