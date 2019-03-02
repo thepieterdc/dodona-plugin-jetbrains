@@ -25,7 +25,7 @@ public class SeriesListRenderer extends DefaultListCellRenderer {
 	                                              final int index,
 	                                              final boolean isSelected,
 	                                              final boolean cellHasFocus) {
-		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+		super.getListCellRendererComponent(list, value, index, isSelected, false);
 		if (value instanceof Series) {
 			final Series series = (Series) value;
 			this.setText(series.getName());

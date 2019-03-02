@@ -27,7 +27,7 @@ public class ExerciseListRenderer extends DefaultListCellRenderer {
 												  final int index,
 												  final boolean isSelected,
 												  final boolean cellHasFocus) {
-		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+		super.getListCellRendererComponent(list, value, index, isSelected, false);
 		if (value instanceof Exercise) {
 			final Exercise exercise = (Exercise) value;
 			this.setText(exercise.getName());
@@ -35,6 +35,7 @@ public class ExerciseListRenderer extends DefaultListCellRenderer {
 				this.setIcon(Icons.CORRECT);
 			}
 			// TODO: Mark an exercise as incorrect when the API is updated.
+			// https://github.com/thepieterdc/dodona-plugin-jetbrains/issues/65
 		}
 		return this;
 	}

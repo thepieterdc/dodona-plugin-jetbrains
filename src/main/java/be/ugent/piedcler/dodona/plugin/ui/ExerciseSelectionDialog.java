@@ -21,7 +21,11 @@ import java.util.Collection;
  */
 public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 	private JPanel contentPane;
+	
 	private JBList<Exercise> exercisesList;
+	private final CollectionListModel<Exercise> exercisesModel;
+	
+	private JCheckBox hideCompletedCheck;
 	
 	@Nullable
 	private Exercise selectedExercise;
@@ -32,11 +36,14 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 	 * @param exercises the exercises to select from
 	 */
 	public ExerciseSelectionDialog(final Collection<Exercise> exercises) {
+		this.exercisesModel = new CollectionListModel<>(exercises);
+		
 		this.createComponents();
+		
 		this.exercisesList.addListSelectionListener(e -> this.selectedExercise = this.exercisesList.getSelectedValue());
 		this.exercisesList.setCellRenderer(new ExerciseListRenderer());
 		this.exercisesList.setEmptyText("No exercises were found in this series.");
-		this.exercisesList.setModel(new CollectionListModel<>(exercises));
+		this.exercisesList.setModel(this.exercisesModel);
 		this.exercisesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 	

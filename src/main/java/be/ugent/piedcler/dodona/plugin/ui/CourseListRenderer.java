@@ -26,7 +26,7 @@ public class CourseListRenderer extends DefaultListCellRenderer {
 	                                              final int index,
 	                                              final boolean isSelected,
 	                                              final boolean cellHasFocus) {
-		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+		super.getListCellRendererComponent(list, value, index, isSelected, false);
 		if (value instanceof Course) {
 			final Course course = (Course) value;
 			this.setText(course.getName());
