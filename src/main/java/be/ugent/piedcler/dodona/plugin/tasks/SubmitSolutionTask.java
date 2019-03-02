@@ -15,10 +15,12 @@ import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
+import be.ugent.piedcler.dodona.plugin.notifications.FeedbackService;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import be.ugent.piedcler.dodona.resources.Exercise;
 import be.ugent.piedcler.dodona.resources.Submission;
 import com.intellij.openapi.actionSystem.Presentation;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
@@ -104,15 +106,9 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			progressIndicator.setFraction(1.0);
 			progressIndicator.setText("Evaluation completed");
 			
-			if (submission.getStatus() == SubmissionStatus.CORRECT) {
-				Notifier.info(this.myProject, "Correct solution",
-					String.format("Your solution to \"%s\" has been accepted!", exercise.getName())
-				);
-			} else {
-				Notifier.warning(this.myProject, "Incorrect solution",
-					String.format("Your solution to \"%s\" was incorrect. <a href=\"%s\">More details</a>.", exercise.getName(), submission.getUrl())
-				);
-			}
+			final FeedbackService feedbackSrv = ServiceManager.getService(this.myProject, FeedbackService.class);
+			feedbackSrv.notify(exercise, submission);
+			
 		} catch (final WarningMessageException warning) {
 			Notifier.warning(this.myProject, warning.getMessage());
 		} catch (final ErrorMessageException | IOException | DodonaException error) {
