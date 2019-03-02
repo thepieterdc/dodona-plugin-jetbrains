@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018. All rights reserved.
+ * Copyright (c) 2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/ugent-dodona/
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
 package be.ugent.piedcler.dodona.plugin.ui;
 
@@ -12,6 +12,7 @@ import be.ugent.piedcler.dodona.plugin.ui.listeners.SelectedItemListener;
 import be.ugent.piedcler.dodona.resources.Exercise;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
+import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -29,20 +30,20 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 	
 	private JCheckBox hideCompletedCheck;
 	
-	@Nullable
-	private Exercise selectedExercise;
+	private final SimpleObjectProperty<Exercise> selectedExercise;
 	
 	/**
-	 * SelectExerciseDialog constructor.
+	 * ExerciseSelectionDialog constructor.
 	 *
 	 * @param exercises the exercises to select from
 	 */
 	public ExerciseSelectionDialog(final Collection<Exercise> exercises) {
 		this.exercisesModel = new CollectionListModel<>(exercises);
+		this.selectedExercise = new SimpleObjectProperty<>(null);
 		
 		this.createComponents();
 		
-		this.exercisesList.addListSelectionListener(e -> this.selectedExercise = this.exercisesList.getSelectedValue());
+		this.exercisesList.addListSelectionListener(e -> this.selectedExercise.set(this.exercisesList.getSelectedValue()));
 		this.exercisesList.setCellRenderer(new ExerciseListRenderer());
 		this.exercisesList.setEmptyText("No exercises were found in this series.");
 		this.exercisesList.setModel(this.exercisesModel);
@@ -51,7 +52,7 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 	
 	@Override
 	public void addListener(@Nonnull final SelectedItemListener<Exercise> listener) {
-		//TODO implement me
+		this.selectedExercise.addListener((o, od, nw) -> listener.onItemSelected(nw));
 	}
 	
 	/**
@@ -65,7 +66,7 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 	@Nullable
 	@Override
 	public Exercise getSelectedItem() {
-		return this.selectedExercise;
+		return this.selectedExercise.get();
 	}
 	
 	@Override

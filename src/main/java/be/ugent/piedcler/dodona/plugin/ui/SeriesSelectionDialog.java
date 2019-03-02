@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018. All rights reserved.
+ * Copyright (c) 2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/ugent-dodona/
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
 package be.ugent.piedcler.dodona.plugin.ui;
 
@@ -12,6 +12,7 @@ import be.ugent.piedcler.dodona.plugin.ui.listeners.SelectedItemListener;
 import be.ugent.piedcler.dodona.resources.Series;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
+import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -25,8 +26,7 @@ public class SeriesSelectionDialog extends SelectionDialog<Series> {
 	private JPanel contentPane;
 	private JBList<Series> seriesList;
 	
-	@Nullable
-	private Series selectedSeries;
+	private final SimpleObjectProperty<Series> selectedSeries;
 	
 	/**
 	 * SelectSeriesDialog constructor.
@@ -34,8 +34,10 @@ public class SeriesSelectionDialog extends SelectionDialog<Series> {
 	 * @param series the series to select from
 	 */
 	public SeriesSelectionDialog(final Collection<Series> series) {
+		this.selectedSeries = new SimpleObjectProperty<>(null);
+		
 		this.createComponents();
-		this.seriesList.addListSelectionListener(e -> this.selectedSeries = this.seriesList.getSelectedValue());
+		this.seriesList.addListSelectionListener(e -> this.selectedSeries.set(this.seriesList.getSelectedValue()));
 		this.seriesList.setCellRenderer(new SeriesListRenderer());
 		this.seriesList.setEmptyText("No series were found in this course.");
 		this.seriesList.setModel(new CollectionListModel<>(series));
@@ -44,7 +46,7 @@ public class SeriesSelectionDialog extends SelectionDialog<Series> {
 	
 	@Override
 	public void addListener(@Nonnull final SelectedItemListener<Series> listener) {
-		//TODO implement me
+		this.selectedSeries.addListener((o, od, nw) -> listener.onItemSelected(nw));
 	}
 	
 	/**
@@ -58,7 +60,7 @@ public class SeriesSelectionDialog extends SelectionDialog<Series> {
 	@Nullable
 	@Override
 	public Series getSelectedItem() {
-		return this.selectedSeries;
+		return this.selectedSeries.get();
 	}
 	
 	@Override
