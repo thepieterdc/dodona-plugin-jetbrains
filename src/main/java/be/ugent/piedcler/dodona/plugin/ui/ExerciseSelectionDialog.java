@@ -8,11 +8,13 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui;
 
+import be.ugent.piedcler.dodona.plugin.ui.listeners.SelectedItemListener;
 import be.ugent.piedcler.dodona.resources.Exercise;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.Collection;
 
@@ -45,6 +47,11 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 		this.exercisesList.setEmptyText("No exercises were found in this series.");
 		this.exercisesList.setModel(this.exercisesModel);
 		this.exercisesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+	
+	@Override
+	public void addListener(@Nonnull final SelectedItemListener<Exercise> listener) {
+		//TODO implement me
 	}
 	
 	/**

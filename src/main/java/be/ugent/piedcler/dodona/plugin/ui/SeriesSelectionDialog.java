@@ -8,11 +8,13 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui;
 
+import be.ugent.piedcler.dodona.plugin.ui.listeners.SelectedItemListener;
 import be.ugent.piedcler.dodona.resources.Series;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.Collection;
 
@@ -38,6 +40,11 @@ public class SeriesSelectionDialog extends SelectionDialog<Series> {
 		this.seriesList.setEmptyText("No series were found in this course.");
 		this.seriesList.setModel(new CollectionListModel<>(series));
 		this.seriesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	}
+	
+	@Override
+	public void addListener(@Nonnull final SelectedItemListener<Series> listener) {
+		//TODO implement me
 	}
 	
 	/**

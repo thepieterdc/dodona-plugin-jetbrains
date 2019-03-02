@@ -8,6 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui;
 
+import be.ugent.piedcler.dodona.plugin.ui.listeners.SelectedItemListener;
 import be.ugent.piedcler.dodona.resources.Course;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBLabel;
@@ -40,20 +41,25 @@ public class CourseSelectionDialog extends SelectionDialog<Course> {
 	 *
 	 * @param courses the courses to select from
 	 */
-	public CourseSelectionDialog(final Collection<Course> courses) {
+	public CourseSelectionDialog(@Nonnull final Collection<Course> courses) {
 		this.hasItems = !courses.isEmpty();
 		this.selectedCourse = new SimpleObjectProperty<>(null);
 		
 		this.setContentPane(this.contentPane);
 		this.setModal(true);
 		
-		if(courses.isEmpty()) {
+		if (courses.isEmpty()) {
 			this.contentPane.add(createEmptyDialog());
 			this.contentPane.setPreferredSize(new Dimension(250, -1));
 		} else {
 			this.contentPane.add(this.createSelectionDialog(courses));
 			this.contentPane.setPreferredSize(new Dimension(400, 150));
 		}
+	}
+	
+	@Override
+	public void addListener(@Nonnull final SelectedItemListener<Course> listener) {
+		this.selectedCourse.addListener((o, od, nw) -> listener.onItemSelected(nw));
 	}
 	
 	/**
@@ -99,8 +105,8 @@ public class CourseSelectionDialog extends SelectionDialog<Course> {
 		list.setCellRenderer(new CourseListRenderer());
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		this.selectedCourse.addListener((o, od, nw) -> {
-			if (!nw.getYear().equals(year)) {
+		this.addListener(course -> {
+			if (course == null || !course.getYear().equals(year)) {
 				list.clearSelection();
 			}
 		});

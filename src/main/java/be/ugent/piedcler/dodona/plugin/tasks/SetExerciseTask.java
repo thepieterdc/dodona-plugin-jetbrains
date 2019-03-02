@@ -73,6 +73,8 @@ public class SetExerciseTask extends Task.Backgroundable {
 		if (dialog.hasItems()) {
 			coursesBuilder.addOkAction();
 			coursesBuilder.addCancelAction();
+			coursesBuilder.setOkActionEnabled(false);
+			dialog.addListener(i -> coursesBuilder.setOkActionEnabled(i != null));
 		} else {
 			coursesBuilder.addCloseButton();
 		}
