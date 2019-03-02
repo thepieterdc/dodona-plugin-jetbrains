@@ -11,7 +11,6 @@ package be.ugent.piedcler.dodona.plugin.settings;
 import be.ugent.piedcler.dodona.DodonaClient;
 import be.ugent.piedcler.dodona.plugin.Api;
 import com.intellij.credentialStore.CredentialAttributes;
-import com.intellij.credentialStore.CredentialAttributesKt;
 import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
@@ -34,9 +33,7 @@ public class DodonaSettings {
 	 */
 	@Nonnull
 	private static CredentialAttributes createCredentialAttributes() {
-		return new CredentialAttributes(
-			CredentialAttributesKt.generateServiceName(CREDENTIALS_SUBSYSTEM, CREDENTIALS_KEY_TOKEN)
-		);
+		return new CredentialAttributes(String.format("%s-%s", CREDENTIALS_SUBSYSTEM, CREDENTIALS_KEY_TOKEN));
 	}
 	
 	/**

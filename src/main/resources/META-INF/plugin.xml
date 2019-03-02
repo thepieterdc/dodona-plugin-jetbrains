@@ -12,6 +12,7 @@
 
     <change-notes><![CDATA[
     <ul>
+        <li>Removed support for some older versions because on incompatibility issues.</li>
         <li>[IMPROVEMENT] Added a checkbox to the exercise selection dialog, to hide already completed exercises.</li>
         <li>[IMPROVEMENT] Redesigned the course selection dialog, now it contains tabs to only show courses from the last academic year by default.</li>
     </ul>
@@ -19,7 +20,7 @@
     </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="162.0"/>
+    <idea-version since-build="171.0"/>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
