@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018. All rights reserved.
+ * Copyright (c) 2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/ugent-dodona/
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
 package be.ugent.piedcler.dodona.plugin.ui;
 
@@ -26,7 +26,7 @@ public class CourseListRenderer extends DefaultListCellRenderer {
 	                                              final int index,
 	                                              final boolean isSelected,
 	                                              final boolean cellHasFocus) {
-		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+		super.getListCellRendererComponent(list, value, index, isSelected, false);
 		if (value instanceof Course) {
 			final Course course = (Course) value;
 			this.setText(course.getName());

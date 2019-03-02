@@ -10,4 +10,7 @@
 /**
  * Custom user interface components.
  */
-package be.ugent.piedcler.dodona.plugin.ui;
+@ParametersAreNonnullByDefault
+package be.ugent.piedcler.dodona.plugin.ui.listeners;
+
+import javax.annotation.ParametersAreNonnullByDefault;

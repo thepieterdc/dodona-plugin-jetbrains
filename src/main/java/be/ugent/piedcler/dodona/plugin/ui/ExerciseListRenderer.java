@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018. All rights reserved.
+ * Copyright (c) 2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/ugent-dodona/
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
 package be.ugent.piedcler.dodona.plugin.ui;
 
@@ -27,15 +27,15 @@ public class ExerciseListRenderer extends DefaultListCellRenderer {
 												  final int index,
 												  final boolean isSelected,
 												  final boolean cellHasFocus) {
-		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+		super.getListCellRendererComponent(list, value, index, isSelected, false);
 		if (value instanceof Exercise) {
 			final Exercise exercise = (Exercise) value;
 			this.setText(exercise.getName());
 			if (exercise.isLastSolutionCorrect() && exercise.hasCorrectSolution()) {
 				this.setIcon(Icons.CORRECT);
-			} else if (!exercise.isLastSolutionCorrect()) {
-				this.setIcon(Icons.INCORRECT);
 			}
+			// TODO: Mark an exercise as incorrect when the API is updated.
+			// https://github.com/thepieterdc/dodona-plugin-jetbrains/issues/65
 		}
 		return this;
 	}

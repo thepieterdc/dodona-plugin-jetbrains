@@ -8,46 +8,21 @@
  */
 package be.ugent.piedcler.dodona.plugin.settings;
 
-import be.ugent.piedcler.dodona.DodonaClient;
-import be.ugent.piedcler.dodona.plugin.Api;
-import com.intellij.credentialStore.CredentialAttributes;
-import com.intellij.credentialStore.CredentialAttributesKt;
-import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.components.State;
 
 import javax.annotation.Nonnull;
-import java.util.Optional;
 
 /**
  * Manages the configured settings.
  */
-@State(name = "DodonaSettings")
-public class DodonaSettings {
-	private static final String CREDENTIALS_SUBSYSTEM = "dodona";
-	private static final String CREDENTIALS_KEY_TOKEN = "token";
-	
-	/**
-	 * Creates the Credential attributes.
-	 *
-	 * @return credential attributes
-	 */
-	@Nonnull
-	private static CredentialAttributes createCredentialAttributes() {
-		return new CredentialAttributes(
-			CredentialAttributesKt.generateServiceName(CREDENTIALS_SUBSYSTEM, CREDENTIALS_KEY_TOKEN)
-		);
-	}
-	
+public interface DodonaSettings {
 	/**
 	 * Gets the configured host.
 	 *
 	 * @return the host
 	 */
 	@Nonnull
-	public String getHost() {
-		return DodonaClient.DEFAULT_HOST;
-	}
+	String getHost();
 	
 	/**
 	 * Gets an instance of the settings.
@@ -55,7 +30,7 @@ public class DodonaSettings {
 	 * @return instance
 	 */
 	@Nonnull
-	public static DodonaSettings getInstance() {
+	static DodonaSettings getInstance() {
 		return ServiceManager.getService(DodonaSettings.class);
 	}
 	
@@ -65,20 +40,26 @@ public class DodonaSettings {
 	 * @return the authentication token
 	 */
 	@Nonnull
-	public String getToken() {
-		final CredentialAttributes credentials = createCredentialAttributes();
-		return Optional.ofNullable(PasswordSafe.getInstance().getPassword(credentials)).orElse("");
-	}
+	String getToken();
+	
+	/**
+	 * Gets whether correct exercises should be hidden by default or not.
+	 *
+	 * @return true if they should be hidden
+	 */
+	boolean hideCorrectExercises();
+	
+	/**
+	 * Hides or shows correct exercises by default.
+	 *
+	 * @param hide true to hide exercises
+	 */
+	void setHideCorrectExercises(boolean hide);
 	
 	/**
 	 * Sets the authentication token.
 	 *
 	 * @param token the authentication token to set
 	 */
-	public void setToken(@Nonnull final String token) {
-		final CredentialAttributes credentials = createCredentialAttributes();
-		PasswordSafe.getInstance().setPassword(credentials, token);
-		
-		Api.clearClient();
-	}
+	void setToken(@Nonnull String token);
 }
