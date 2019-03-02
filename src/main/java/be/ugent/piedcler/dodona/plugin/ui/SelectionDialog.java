@@ -23,4 +23,11 @@ public abstract class SelectionDialog<T> extends JDialog {
 	 */
 	@Nullable
 	abstract public T getSelectedItem();
+	
+	/**
+	 * Gets whether or not items can be selected from this dialog.
+	 *
+	 * @return true if items exist
+	 */
+	abstract public boolean hasItems();
 }

@@ -64,13 +64,16 @@ public class SetExerciseTask extends Task.Backgroundable {
 	 * @return the chosen element, or null if canceled
 	 */
 	@Nullable
-	private static <T> T choose(final String title, final SelectionDialog<T> dialog) {
-		final DialogBuilder coursesBuilder = new DialogBuilder();
+	private <T> T choose(final String title, final SelectionDialog<T> dialog) {
+		final DialogBuilder coursesBuilder = new DialogBuilder(this.myProject);
 		coursesBuilder.setCenterPanel(dialog.getRootPane());
 		coursesBuilder.setTitle(title);
 		coursesBuilder.removeAllActions();
-		coursesBuilder.addOkAction();
 		coursesBuilder.addCancelAction();
+		
+		if (dialog.hasItems()) {
+			coursesBuilder.addOkAction();
+		}
 		
 		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
 			return dialog.getSelectedItem();

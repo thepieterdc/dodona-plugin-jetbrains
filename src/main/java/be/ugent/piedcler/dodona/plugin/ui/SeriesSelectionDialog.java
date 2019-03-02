@@ -53,4 +53,9 @@ public class SeriesSelectionDialog extends SelectionDialog<Series> {
 	public Series getSelectedItem() {
 		return this.selectedSeries;
 	}
+	
+	@Override
+	public boolean hasItems() {
+		return !this.seriesList.isEmpty();
+	}
 }
