@@ -69,10 +69,12 @@ public class SetExerciseTask extends Task.Backgroundable {
 		coursesBuilder.setCenterPanel(dialog.getRootPane());
 		coursesBuilder.setTitle(title);
 		coursesBuilder.removeAllActions();
-		coursesBuilder.addCancelAction();
 		
 		if (dialog.hasItems()) {
 			coursesBuilder.addOkAction();
+			coursesBuilder.addCancelAction();
+		} else {
+			coursesBuilder.addCloseButton();
 		}
 		
 		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
