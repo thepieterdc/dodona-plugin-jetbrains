@@ -33,7 +33,7 @@
             displayName="Dodona"
             instance="be.ugent.piedcler.dodona.plugin.settings.SettingsConfigurable"/>
         <applicationService serviceInterface="be.ugent.piedcler.dodona.plugin.settings.DodonaSettings"
-                            serviceImplementation="be.ugent.piedcler.dodona.plugin.settings.DodonaSettings"/>
+                            serviceImplementation="be.ugent.piedcler.dodona.plugin.settings.DodonaSettingsImpl"/>
 
         <projectService serviceInterface="be.ugent.piedcler.dodona.plugin.notifications.FeedbackService"
                         serviceImplementation="be.ugent.piedcler.dodona.plugin.notifications.FeedbackServiceImpl"/>
