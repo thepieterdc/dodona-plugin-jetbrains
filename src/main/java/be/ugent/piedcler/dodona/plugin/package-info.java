@@ -4,7 +4,7 @@
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains/issues
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
 
 /**
