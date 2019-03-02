@@ -53,4 +53,9 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 	public Exercise getSelectedItem() {
 		return this.selectedExercise;
 	}
+	
+	@Override
+	public boolean hasItems() {
+		return !this.exercisesList.isEmpty();
+	}
 }

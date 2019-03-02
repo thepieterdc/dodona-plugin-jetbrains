@@ -12,6 +12,7 @@
 
     <change-notes><![CDATA[
     <ul>
+        <li>[IMPROVEMENT] Redesigned the course selection dialog, now it contains tabs to only show courses from the last academic year by default.</li>
     </ul>
     ]]>
     </change-notes>

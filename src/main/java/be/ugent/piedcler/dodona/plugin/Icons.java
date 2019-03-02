@@ -22,7 +22,7 @@ public enum Icons {
 	
 	public static final Icon CORRECT = IconLoader.getIcon("/icons/correct.png");
 	public static final Icon INCORRECT = IconLoader.getIcon("/icons/incorrect.png");
-	public static final Icon CIRCLE = IconLoader.findIcon("/icons/circle.png");
+	private static final Icon CIRCLE = IconLoader.findIcon("/icons/circle.png");
 	
 	/**
 	 * Gets a colored circle.
