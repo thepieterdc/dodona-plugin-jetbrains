@@ -9,8 +9,11 @@
 package be.ugent.piedcler.dodona.plugin.ui;
 
 import be.ugent.piedcler.dodona.resources.Course;
+import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBTabbedPane;
+import javafx.beans.property.SimpleObjectProperty;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -30,21 +33,27 @@ public class CourseSelectionDialog extends SelectionDialog<Course> {
 	
 	private final boolean hasItems;
 	
-	@Nullable
-	private Course selectedCourse;
+	private final SimpleObjectProperty<Course> selectedCourse;
 	
 	/**
-	 * SelectCourseDialog constructor.
+	 * CourseSelectionDialog constructor.
 	 *
 	 * @param courses the courses to select from
 	 */
 	public CourseSelectionDialog(final Collection<Course> courses) {
 		this.hasItems = !courses.isEmpty();
+		this.selectedCourse = new SimpleObjectProperty<>(null);
 		
 		this.setContentPane(this.contentPane);
 		this.setModal(true);
 		
-		this.contentPane.add(courses.isEmpty() ? createEmptyDialog() : this.createSelectionDialog(courses));
+		if(courses.isEmpty()) {
+			this.contentPane.add(createEmptyDialog());
+			this.contentPane.setPreferredSize(new Dimension(250, -1));
+		} else {
+			this.contentPane.add(this.createSelectionDialog(courses));
+			this.contentPane.setPreferredSize(new Dimension(400, 150));
+		}
 	}
 	
 	/**
@@ -54,7 +63,7 @@ public class CourseSelectionDialog extends SelectionDialog<Course> {
 	 */
 	@Nonnull
 	private static Component createEmptyDialog() {
-		return new JBLabel("No courses were found for your account.");
+		return new JBLabel("No courses were found for your account.", SwingConstants.CENTER);
 	}
 	
 	/**
@@ -69,7 +78,7 @@ public class CourseSelectionDialog extends SelectionDialog<Course> {
 		
 		final JBTabbedPane yearTabs = new JBTabbedPane();
 		coursesPerYear.keySet().stream().sorted(Comparator.reverseOrder()).forEach(year ->
-			yearTabs.add(this.createSelectionTab(coursesPerYear.get(year)))
+			yearTabs.add(year, this.createSelectionTab(year, coursesPerYear.get(year)))
 		);
 		
 		return yearTabs;
@@ -78,25 +87,31 @@ public class CourseSelectionDialog extends SelectionDialog<Course> {
 	/**
 	 * Creates a dialog that contains the courses in 1 year.
 	 *
+	 * @param year    the year
 	 * @param courses the courses
 	 * @return the dialog pane
 	 */
 	@Nonnull
-	private JPanel createSelectionTab(@Nonnull final Collection<Course> courses) {
-		//		this.yearsTabs.addTab("2018-2019", new JPanel());
-//		this.yearsTabs.addTab("2017-2018", new JPanel());
-//
-//		this.coursesList.addListSelectionListener(e -> this.selectedCourse = this.coursesList.getSelectedValue());
-//		this.coursesList.setCellRenderer(new CourseListRenderer());
-//		this.coursesList.setEmptyText("No courses were found for your account.");
-//		this.coursesList.setModel(new CollectionListModel<>(courses));
-//		this.coursesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	private Component createSelectionTab(@Nonnull final String year,
+	                                     @Nonnull final Collection<Course> courses) {
+		final JBList<Course> list = new JBList<>(new CollectionListModel<>(courses));
+		list.addListSelectionListener(e -> this.selectedCourse.set(list.getSelectedValue()));
+		list.setCellRenderer(new CourseListRenderer());
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		this.selectedCourse.addListener((o, od, nw) -> {
+			if (!nw.getYear().equals(year)) {
+				list.clearSelection();
+			}
+		});
+		
+		return list;
 	}
 	
 	@Nullable
 	@Override
 	public Course getSelectedItem() {
-		return this.selectedCourse;
+		return this.selectedCourse.get();
 	}
 	
 	@Override

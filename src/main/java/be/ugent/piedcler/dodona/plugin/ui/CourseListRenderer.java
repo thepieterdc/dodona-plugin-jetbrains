@@ -14,8 +14,6 @@ import be.ugent.piedcler.dodona.resources.Course;
 import javax.swing.*;
 import java.awt.*;
 
-import static java.lang.String.format;
-
 /**
  * Renders the course name correctly in a list of Courses.
  */
@@ -31,7 +29,7 @@ public class CourseListRenderer extends DefaultListCellRenderer {
 		super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 		if (value instanceof Course) {
 			final Course course = (Course) value;
-			this.setText(format("%s (%s)", course.getName(), course.getYear()));
+			this.setText(course.getName());
 			this.setIcon(Icons.getColoredCircle(course.getColor().getColor()));
 		}
 		return this;
