@@ -74,7 +74,7 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 		if (exercises.isEmpty()) {
 			this.contentPane.setPreferredSize(new Dimension(250, -1));
 		} else {
-			this.contentPane.setPreferredSize(new Dimension(400, 300));
+			this.contentPane.setPreferredSize(new Dimension(450, 300));
 		}
 	}
 	

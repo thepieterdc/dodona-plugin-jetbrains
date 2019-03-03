@@ -14,6 +14,7 @@ import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.CombinedExer
 import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.JavaExerciseIdentifierSetter;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.PythonExerciseIdentifierSetter;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
+import be.ugent.piedcler.dodona.plugin.exceptions.errors.CodeReadException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.FileAlreadyExistsException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.ProgrammingLanguageNotSetException;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
@@ -21,11 +22,15 @@ import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
 import be.ugent.piedcler.dodona.resources.Exercise;
 import be.ugent.piedcler.dodona.resources.ProgrammingLanguage;
 import com.intellij.ide.IdeView;
+import com.intellij.lang.Language;
+import com.intellij.lang.LanguageUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
@@ -44,6 +49,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.intellij.openapi.application.ActionsKt.runWriteAction;
+import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction;
 
 /**
  * Creates a new file from a Dodona exercise.
@@ -95,6 +101,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 		
 		final String filename = generateFileName(exercise);
 		final FileType filetype = FileTypeRegistry.getInstance().getFileTypeByFileName(filename);
+		final Language language = LanguageUtil.getFileTypeLanguage(filetype);
 		final String boilerplate = exercise.getBoilerplate().orElse("");
 		
 		Optional.ofNullable(directory.findFile(filename)).ifPresent(file -> {
@@ -107,6 +114,13 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 		final VirtualFile virtualFile = runWriteAction(() -> (PsiFile) directory.add(file)).getVirtualFile();
 
 		FileEditorManager.getInstance(project).openFile(virtualFile, true);
+		
+		final Document document = Optional.ofNullable(FileEditorManager.getInstance(project))
+			.map(FileEditorManager::getSelectedTextEditor)
+			.map(Editor::getDocument)
+			.orElseThrow(CodeReadException::new);
+		
+		runWriteCommandAction(project, () -> identifierSetter.setIdentifier(language, document, exercise.getUrl()));
 	}
 	
 	/**

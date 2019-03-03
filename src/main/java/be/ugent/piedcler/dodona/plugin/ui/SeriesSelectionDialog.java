@@ -49,7 +49,7 @@ public class SeriesSelectionDialog extends SelectionDialog<Series> {
 		if (series.isEmpty()) {
 			this.contentPane.setPreferredSize(new Dimension(250, -1));
 		} else {
-			this.contentPane.setPreferredSize(new Dimension(400, 300));
+			this.contentPane.setPreferredSize(new Dimension(450, 300));
 		}
 	}
 	
