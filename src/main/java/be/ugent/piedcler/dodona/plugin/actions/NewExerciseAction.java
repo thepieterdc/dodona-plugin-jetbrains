@@ -21,8 +21,6 @@ import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
 import be.ugent.piedcler.dodona.resources.Exercise;
 import be.ugent.piedcler.dodona.resources.ProgrammingLanguage;
 import com.intellij.ide.IdeView;
-import com.intellij.lang.Language;
-import com.intellij.lang.LanguageUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -97,7 +95,6 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 		
 		final String filename = generateFileName(exercise);
 		final FileType filetype = FileTypeRegistry.getInstance().getFileTypeByFileName(filename);
-		final Language language = LanguageUtil.getFileTypeLanguage(filetype);
 		final String boilerplate = exercise.getBoilerplate().orElse("");
 		
 		Optional.ofNullable(directory.findFile(filename)).ifPresent(file -> {
