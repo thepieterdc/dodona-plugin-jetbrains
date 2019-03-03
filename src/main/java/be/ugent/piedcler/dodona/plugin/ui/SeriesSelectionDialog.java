@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
+import java.awt.*;
 import java.util.Collection;
 
 /**
@@ -36,25 +37,25 @@ public class SeriesSelectionDialog extends SelectionDialog<Series> {
 	public SeriesSelectionDialog(final Collection<Series> series) {
 		this.selectedSeries = new SimpleObjectProperty<>(null);
 		
-		this.createComponents();
+		this.setContentPane(this.contentPane);
+		this.setModal(true);
+		
 		this.seriesList.addListSelectionListener(e -> this.selectedSeries.set(this.seriesList.getSelectedValue()));
 		this.seriesList.setCellRenderer(new SeriesListRenderer());
 		this.seriesList.setEmptyText("No series were found in this course.");
 		this.seriesList.setModel(new CollectionListModel<>(series));
 		this.seriesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		if (series.isEmpty()) {
+			this.contentPane.setPreferredSize(new Dimension(250, -1));
+		} else {
+			this.contentPane.setPreferredSize(new Dimension(450, 300));
+		}
 	}
 	
 	@Override
 	public void addListener(@Nonnull final SelectedItemListener<Series> listener) {
 		this.selectedSeries.addListener((o, od, nw) -> listener.onItemSelected(nw));
-	}
-	
-	/**
-	 * Creates the form components.
-	 */
-	private void createComponents() {
-		this.setContentPane(this.contentPane);
-		this.setModal(true);
 	}
 	
 	@Nullable

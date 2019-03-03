@@ -1,17 +1,15 @@
 /*
- * Copyright (c) 2018. All rights reserved.
+ * Copyright (c) 2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/ugent-dodona/
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
 package be.ugent.piedcler.dodona.plugin.tasks;
 
 import be.ugent.piedcler.dodona.exceptions.DodonaException;
 import be.ugent.piedcler.dodona.plugin.Api;
-import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
-import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import be.ugent.piedcler.dodona.plugin.ui.CourseSelectionDialog;
 import be.ugent.piedcler.dodona.plugin.ui.ExerciseSelectionDialog;
 import be.ugent.piedcler.dodona.plugin.ui.SelectionDialog;
@@ -26,33 +24,29 @@ import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.DialogWrapper;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.Optional;
 
 /**
- * Sets the course and exercise id in the header of the code.
+ * Requests the user to select a course, series and exercise.
  */
-public class SetExerciseTask extends Task.Backgroundable {
-	
-	private final Consumer<String> identifierSetter;
-	
+public class SelectExerciseTask extends Task.WithResult<Optional<Exercise>, RuntimeException> {
 	private Course selectedCourse;
 	private Exercise selectedExercise;
 	private Series selectedSeries;
 	
 	/**
-	 * SetExerciseTask constructor.
+	 * SelectExerciseTask constructor.
 	 *
-	 * @param project          the project to display notifications in
-	 * @param identifierSetter sets te course and exercise ids
+	 * @param project  the project to display notifications in
 	 */
-	public SetExerciseTask(final Project project, final Consumer<String> identifierSetter) {
-		super(project, "Configure Exercise.");
-		this.identifierSetter = identifierSetter;
+	public SelectExerciseTask(@Nonnull final Project project) {
+		super(project, "Configure Exercise", false);
 	}
 	
 	/**
@@ -65,28 +59,28 @@ public class SetExerciseTask extends Task.Backgroundable {
 	 */
 	@Nullable
 	private <T> T choose(final String title, final SelectionDialog<T> dialog) {
-		final DialogBuilder coursesBuilder = new DialogBuilder(this.myProject);
-		coursesBuilder.setCenterPanel(dialog.getRootPane());
-		coursesBuilder.setTitle(title);
-		coursesBuilder.removeAllActions();
+		final DialogBuilder builder = new DialogBuilder(this.myProject);
+		builder.setCenterPanel(dialog.getRootPane());
+		builder.setTitle(title);
+		builder.removeAllActions();
 		
 		if (dialog.hasItems()) {
-			coursesBuilder.addOkAction();
-			coursesBuilder.addCancelAction();
-			coursesBuilder.setOkActionEnabled(false);
-			dialog.addListener(i -> coursesBuilder.setOkActionEnabled(i != null));
+			builder.addOkAction();
+			builder.addCancelAction();
+			builder.setOkActionEnabled(false);
+			dialog.addListener(i -> builder.setOkActionEnabled(i != null));
 		} else {
-			coursesBuilder.addCloseButton();
+			builder.addCloseButton();
 		}
 		
-		if (coursesBuilder.show() == DialogWrapper.OK_EXIT_CODE) {
+		if (builder.show() == DialogWrapper.OK_EXIT_CODE) {
 			return dialog.getSelectedItem();
 		}
 		return null;
 	}
 	
 	@Override
-	public void run(@NotNull final ProgressIndicator progressIndicator) {
+	protected Optional<Exercise> compute(@NotNull ProgressIndicator progressIndicator) throws RuntimeException {
 		try {
 			final List<Course> myCourses = Api.callModal(this.myProject, "Retrieving courses",
 				dodona -> dodona.me().getSubscribedCourses()
@@ -97,7 +91,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			
 			EventQueue.invokeAndWait(() -> this.selectedCourse = choose("Select Course", new CourseSelectionDialog(myCourses)));
 			
-			if (this.selectedCourse == null) return;
+			if (this.selectedCourse == null) return Optional.empty();
 			
 			final List<Series> courseSeries = Api.callModal(this.myProject, "Retrieving series",
 				dodona -> dodona.series().getAll(this.selectedCourse)
@@ -108,7 +102,7 @@ public class SetExerciseTask extends Task.Backgroundable {
 			
 			EventQueue.invokeAndWait(() -> this.selectedSeries = choose("Select Series", new SeriesSelectionDialog(courseSeries)));
 			
-			if (this.selectedSeries == null) return;
+			if (this.selectedSeries == null) return Optional.empty();
 			
 			final List<Exercise> exercises = Api.callModal(this.myProject, "Retrieving exercises",
 				dodona -> dodona.exercises().getAll(this.selectedSeries)
@@ -119,16 +113,13 @@ public class SetExerciseTask extends Task.Backgroundable {
 			
 			EventQueue.invokeAndWait(() -> this.selectedExercise = choose("Select Exercise", new ExerciseSelectionDialog(exercises)));
 			
-			if (this.selectedExercise == null) return;
+			if (this.selectedExercise == null) return Optional.empty();
 			
-			progressIndicator.setFraction(0.95);
-			progressIndicator.setText("Setting exercise...");
-			
-			this.identifierSetter.accept(this.selectedExercise.getUrl());
-		} catch (final ErrorMessageException | InvocationTargetException | IOException | DodonaException error) {
-			Notifier.error(this.myProject, "Exercise not set.", error.getMessage());
+			return Optional.of(this.selectedExercise);
+		} catch (final InvocationTargetException | IOException | DodonaException error) {
+			throw new RuntimeException(error);
 		} catch (final InterruptedException ex) {
-			// aborted by user.
+			return Optional.empty();
 		}
 	}
 }

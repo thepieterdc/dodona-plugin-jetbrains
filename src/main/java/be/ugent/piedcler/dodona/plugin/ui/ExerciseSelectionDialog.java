@@ -18,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +33,8 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 	private JBList<Exercise> exercisesList;
 	private final CollectionListModel<Exercise> exercisesModel;
 	
+	private final boolean hasItems;
+	
 	private JCheckBox hideCorrectCheck;
 	
 	private final SimpleObjectProperty<Exercise> selectedExercise;
@@ -43,6 +46,7 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 	 */
 	public ExerciseSelectionDialog(@Nonnull final Collection<Exercise> exercises) {
 		this.exercisesModel = new CollectionListModel<>(exercises);
+		this.hasItems = !exercises.isEmpty();
 		this.selectedExercise = new SimpleObjectProperty<>(null);
 		
 		this.setContentPane(this.contentPane);
@@ -66,6 +70,12 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 		});
 		
 		this.hideCorrectCheck.setSelected(settings.hideCorrectExercises());
+		
+		if (exercises.isEmpty()) {
+			this.contentPane.setPreferredSize(new Dimension(250, -1));
+		} else {
+			this.contentPane.setPreferredSize(new Dimension(450, 300));
+		}
 	}
 	
 	@Override
@@ -94,6 +104,6 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 	
 	@Override
 	public boolean hasItems() {
-		return !this.exercisesList.isEmpty();
+		return this.hasItems;
 	}
 }

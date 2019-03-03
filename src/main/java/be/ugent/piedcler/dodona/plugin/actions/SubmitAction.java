@@ -24,7 +24,7 @@ import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.errors.CodeReadException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.ExerciseNotSetException;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
-import be.ugent.piedcler.dodona.plugin.tasks.SetExerciseTask;
+import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
 import be.ugent.piedcler.dodona.plugin.tasks.SubmitSolutionTask;
 import com.intellij.lang.Language;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -92,16 +92,17 @@ public class SubmitAction extends AnAction {
 				.orElseThrow(ExerciseNotSetException::new);
 			
 			ProgressManager.getInstance().run(new SubmitSolutionTask(project, event.getPresentation(), solution));
-			
 		} catch (final ExerciseNotSetException exception) {
 			final Document document = optDocument.orElseThrow(CodeReadException::new);
 			final Language language = optLanguage.orElseThrow(CodeReadException::new);
 			
-			ProgressManager.getInstance().run(
-				new SetExerciseTask(event.getProject(),
-					id -> runWriteCommandAction(project, () -> identifierSetter.setIdentifier(language, document, id)))
-			);
-			
+			try {
+				ProgressManager.getInstance().run(new SelectExerciseTask(project)).ifPresent(ex ->
+					runWriteCommandAction(project, () -> identifierSetter.setIdentifier(language, document, ex.getUrl()))
+				);
+			} catch (final RuntimeException ex) {
+				Notifier.error(project, "Failed configuring exercise.", ex.getMessage());
+			}
 		} catch (final ErrorMessageException error) {
 			Notifier.error(project, "Solution not submitted.", error.getMessage());
 		}
