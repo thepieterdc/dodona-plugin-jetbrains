@@ -8,10 +8,12 @@
  */
 package be.ugent.piedcler.dodona.plugin.exceptions;
 
+import be.ugent.piedcler.dodona.exceptions.DodonaException;
+
 /**
  * Triggers a warning message.
  */
-public abstract class WarningMessageException extends RuntimeException {
+public abstract class WarningMessageException extends DodonaException {
 	private static final long serialVersionUID = -8659819533420936251L;
 	
 	/**

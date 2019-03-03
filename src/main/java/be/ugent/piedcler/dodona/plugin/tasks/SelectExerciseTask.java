@@ -10,7 +10,6 @@ package be.ugent.piedcler.dodona.plugin.tasks;
 
 import be.ugent.piedcler.dodona.exceptions.DodonaException;
 import be.ugent.piedcler.dodona.plugin.Api;
-import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.ui.CourseSelectionDialog;
 import be.ugent.piedcler.dodona.plugin.ui.ExerciseSelectionDialog;
 import be.ugent.piedcler.dodona.plugin.ui.SelectionDialog;
@@ -31,11 +30,12 @@ import java.awt.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Requests the user to select a course, series and exercise.
  */
-public class SelectExerciseTask extends Task.WithResult<Exercise, RuntimeException> {
+public class SelectExerciseTask extends Task.WithResult<Optional<Exercise>, RuntimeException> {
 	private Course selectedCourse;
 	private Exercise selectedExercise;
 	private Series selectedSeries;
@@ -80,7 +80,7 @@ public class SelectExerciseTask extends Task.WithResult<Exercise, RuntimeExcepti
 	}
 	
 	@Override
-	protected Exercise compute(@NotNull ProgressIndicator progressIndicator) throws RuntimeException {
+	protected Optional<Exercise> compute(@NotNull ProgressIndicator progressIndicator) throws RuntimeException {
 		try {
 			final List<Course> myCourses = Api.callModal(this.myProject, "Retrieving courses",
 				dodona -> dodona.me().getSubscribedCourses()
@@ -91,7 +91,7 @@ public class SelectExerciseTask extends Task.WithResult<Exercise, RuntimeExcepti
 			
 			EventQueue.invokeAndWait(() -> this.selectedCourse = choose("Select Course", new CourseSelectionDialog(myCourses)));
 			
-			if (this.selectedCourse == null) return null;
+			if (this.selectedCourse == null) return Optional.empty();
 			
 			final List<Series> courseSeries = Api.callModal(this.myProject, "Retrieving series",
 				dodona -> dodona.series().getAll(this.selectedCourse)
@@ -102,7 +102,7 @@ public class SelectExerciseTask extends Task.WithResult<Exercise, RuntimeExcepti
 			
 			EventQueue.invokeAndWait(() -> this.selectedSeries = choose("Select Series", new SeriesSelectionDialog(courseSeries)));
 			
-			if (this.selectedSeries == null) return null;
+			if (this.selectedSeries == null) return Optional.empty();
 			
 			final List<Exercise> exercises = Api.callModal(this.myProject, "Retrieving exercises",
 				dodona -> dodona.exercises().getAll(this.selectedSeries)
@@ -113,13 +113,13 @@ public class SelectExerciseTask extends Task.WithResult<Exercise, RuntimeExcepti
 			
 			EventQueue.invokeAndWait(() -> this.selectedExercise = choose("Select Exercise", new ExerciseSelectionDialog(exercises)));
 			
-			if (this.selectedExercise == null) return null;
+			if (this.selectedExercise == null) return Optional.empty();
 			
-			return this.selectedExercise;
-		} catch (final ErrorMessageException | InvocationTargetException | IOException | DodonaException error) {
+			return Optional.of(this.selectedExercise);
+		} catch (final InvocationTargetException | IOException | DodonaException error) {
 			throw new RuntimeException(error);
 		} catch (final InterruptedException ex) {
-			return null;
+			return Optional.empty();
 		}
 	}
 }

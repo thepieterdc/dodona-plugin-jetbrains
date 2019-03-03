@@ -7,10 +7,12 @@ package be.ugent.piedcler.dodona.plugin.exceptions;/*
  * https://github.com/thepieterdc/ugent-dodona/
  */
 
+import be.ugent.piedcler.dodona.exceptions.DodonaException;
+
 /**
  * Triggers an error message.
  */
-public abstract class ErrorMessageException extends RuntimeException {
+public abstract class ErrorMessageException extends DodonaException {
 	private static final long serialVersionUID = 2158622456618403362L;
 	
 	/**

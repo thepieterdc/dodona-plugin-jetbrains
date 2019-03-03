@@ -97,7 +97,7 @@ public class SubmitAction extends AnAction {
 			final Language language = optLanguage.orElseThrow(CodeReadException::new);
 			
 			try {
-				Optional.ofNullable(ProgressManager.getInstance().run(new SelectExerciseTask(project))).ifPresent(ex ->
+				ProgressManager.getInstance().run(new SelectExerciseTask(project)).ifPresent(ex ->
 					runWriteCommandAction(project, () -> identifierSetter.setIdentifier(language, document, ex.getUrl()))
 				);
 			} catch (final RuntimeException ex) {

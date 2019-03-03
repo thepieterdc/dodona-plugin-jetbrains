@@ -9,21 +9,55 @@
 package be.ugent.piedcler.dodona.plugin.actions;
 
 import be.ugent.piedcler.dodona.plugin.Icons;
+import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.ExerciseIdentifierSetter;
+import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.CombinedExerciseIdentifierSetter;
+import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.JavaExerciseIdentifierSetter;
+import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.PythonExerciseIdentifierSetter;
+import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
+import be.ugent.piedcler.dodona.plugin.exceptions.warnings.FileAlreadyExistsException;
+import be.ugent.piedcler.dodona.plugin.exceptions.warnings.ProgrammingLanguageNotSetException;
+import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
+import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
+import be.ugent.piedcler.dodona.resources.Exercise;
+import be.ugent.piedcler.dodona.resources.ProgrammingLanguage;
 import com.intellij.ide.IdeView;
+import com.intellij.lang.Language;
+import com.intellij.lang.LanguageUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.LangDataKeys;
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.fileEditor.FileEditorManager;
+import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.fileTypes.FileTypeRegistry;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiFileFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
+import java.util.Optional;
+
+import static com.intellij.openapi.application.ActionsKt.runWriteAction;
 
 /**
  * Creates a new file from a Dodona exercise.
  */
 public class NewExerciseAction extends AnAction implements DumbAware {
+	private static final Logger logger = LoggerFactory.getLogger(NewExerciseAction.class);
+	
+	private static final ExerciseIdentifierSetter identifierSetter =
+		new CombinedExerciseIdentifierSetter()
+			.registerEntry(ServiceManager.getService(JavaExerciseIdentifierSetter.class))
+			.registerEntry(ServiceManager.getService(PythonExerciseIdentifierSetter.class));
+	
 	/**
 	 * NewExerciseAction constructor.
 	 */
@@ -33,12 +67,65 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 	
 	@Override
 	public void actionPerformed(@Nonnull final AnActionEvent e) {
-		final Project project = e.getData(CommonDataKeys.PROJECT);
-		final IdeView view = e.getData(LangDataKeys.IDE_VIEW);
+		final Project project = Objects.requireNonNull(e.getData(CommonDataKeys.PROJECT));
+		final IdeView view = Objects.requireNonNull(e.getData(LangDataKeys.IDE_VIEW));
 		
-//		ProgressManager.getInstance().run(
-////			new NewExerciseTask(project)
-//		);
+		try {
+			ProgressManager.getInstance().run(new SelectExerciseTask(project)).ifPresent(ex -> create(project, view, ex));
+		} catch (final WarningMessageException ex) {
+			Notifier.warning(project, "Failed creating exercise", ex.getMessage());
+		} catch (final RuntimeException ex) {
+			logger.error(ex.getMessage(), ex);
+			Notifier.error(project, "Failed creating exercise", ex.getMessage());
+		}
+	}
+	
+	/**
+	 * Creates a new file from a given exercise.
+	 *
+	 * @param project  the project
+	 * @param view     current IDE view
+	 * @param exercise the exercise
+	 */
+	private static void create(@Nonnull final Project project,
+	                           @Nonnull final IdeView view,
+	                           @Nonnull final Exercise exercise) {
+		final PsiDirectory directory = view.getOrChooseDirectory();
+		if (directory == null) {
+			return;
+		}
+		
+		final String filename = generateFileName(exercise);
+		final FileType filetype = FileTypeRegistry.getInstance().getFileTypeByFileName(filename);
+		final Language language = LanguageUtil.getFileTypeLanguage(filetype);
+		final String boilerplate = exercise.getBoilerplate().orElse("");
+		
+		Optional.ofNullable(directory.findFile(filename)).ifPresent(file -> {
+			throw new FileAlreadyExistsException(filename);
+		});
+		
+		final PsiFileFactory fileFactory = PsiFileFactory.getInstance(project);
+		final PsiFile file = fileFactory.createFileFromText(filename, filetype, boilerplate);
+		
+		final VirtualFile virtualFile = runWriteAction(() -> (PsiFile) directory.add(file)).getVirtualFile();
+
+		FileEditorManager.getInstance(project).openFile(virtualFile, true);
+	}
+	
+	/**
+	 * Generates a filename for the given exercise.
+	 *
+	 * @param exercise the exercise
+	 * @return the filename and extension
+	 */
+	@Nonnull
+	private static String generateFileName(@Nonnull final Exercise exercise) {
+		//TODO improve this, for example if it's a Java file, try to find the class name from the placeholder.
+		//TODO if there is no placeholder, try the exercise name (cleaned!!), same goes for Python exercises
+		final String extension = exercise.getProgrammingLanguage()
+			.map(ProgrammingLanguage::getExtension)
+			.orElseThrow(ProgrammingLanguageNotSetException::new);
+		return String.valueOf(exercise.getId()) + '.' + extension;
 	}
 	
 	@Override

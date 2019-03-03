@@ -12,7 +12,6 @@ import be.ugent.piedcler.dodona.data.SubmissionStatus;
 import be.ugent.piedcler.dodona.exceptions.DodonaException;
 import be.ugent.piedcler.dodona.plugin.Api;
 import be.ugent.piedcler.dodona.plugin.dto.Solution;
-import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
 import be.ugent.piedcler.dodona.plugin.notifications.FeedbackService;
@@ -111,7 +110,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			
 		} catch (final WarningMessageException warning) {
 			Notifier.warning(this.myProject, warning.getMessage());
-		} catch (final ErrorMessageException | IOException | DodonaException error) {
+		} catch (final IOException | DodonaException error) {
 			Notifier.error(this.myProject, error.getMessage());
 		} catch (final InterruptedException ex) {
 			throw new RuntimeException(ex);
