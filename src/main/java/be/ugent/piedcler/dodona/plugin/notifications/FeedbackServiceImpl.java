@@ -52,7 +52,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 */
 	private void compilationError(@Nonnull final Exercise exercise, @Nonnull final Submission submission) {
 		Notifier.warning(this.project, "Compilation error",
-			String.format("Your solution to \"%s\" could not be compiled and contains syntax errors. <a href=\\\"%s\\\">More details</a>.",
+			String.format("Your solution to \"%s\" could not be compiled and contains syntax errors. <a href=\"%s\">More details</a>.",
 				exercise.getName(), submission.getUrl()
 			)
 		);
@@ -90,7 +90,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 */
 	private void memoryLimitExceeded(@Nonnull final Exercise exercise, @Nonnull final Submission submission) {
 		Notifier.warning(this.project, "Memory limit exceeded",
-			String.format("Your solution to \"%s\" exceeded the allowed memory usage. Try to optimise your allocations and data structures. <a href=\\\"%s\\\">More details</a>.",
+			String.format("Your solution to \"%s\" exceeded the allowed memory usage. Try to optimise your allocations and data structures. <a href=\"%s\">More details</a>.",
 				exercise.getName(), submission.getUrl()
 			)
 		);
@@ -111,7 +111,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 */
 	private void runtimeError(@Nonnull final Exercise exercise, @Nonnull final Submission submission) {
 		Notifier.warning(this.project, "Runtime error",
-			String.format("A runtime error has occurred while evaluating your solution to \"%s\". <a href=\\\"%s\\\">More details</a>.",
+			String.format("A runtime error has occurred while evaluating your solution to \"%s\". <a href=\"%s\">More details</a>.",
 				exercise.getName(), submission.getUrl()
 			)
 		);
@@ -125,7 +125,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 */
 	private void timeLimitExceeded(@Nonnull final Exercise exercise, @Nonnull final Submission submission) {
 		Notifier.warning(this.project, "Time limit exceeded",
-			String.format("Your solution to \"%s\" was too slow and has exceeded the allowed time limit. Try to optimise your code and reduce its computational complexity. <a href=\\\"%s\\\">More details</a>.",
+			String.format("Your solution to \"%s\" was too slow and has exceeded the allowed time limit. Try to optimise your code and reduce its computational complexity. <a href=\"%s\">More details</a>.",
 				exercise.getName(), submission.getUrl()
 			)
 		);
@@ -139,7 +139,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 */
 	private void wrong(@Nonnull final Exercise exercise, @Nonnull final Submission submission) {
 		Notifier.warning(this.project, "Incorrect solution",
-			String.format("Your solution to \"%s\" was not correct: %s. <a href=\\\"%s\\\">More details</a>.",
+			String.format("Your solution to \"%s\" was not correct: %s. <a href=\"%s\">More details</a>.",
 				exercise.getName(), submission.getSummary(), submission.getUrl())
 		);
 	}
