@@ -2,9 +2,7 @@
     <id>be.ugent.piedcler.dodona</id>
     <name>Dodona</name>
     <version>1.0.0</version>
-    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah
-        Lissens
-    </vendor>
+    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah Lissens</vendor>
 
     <description><![CDATA[
       This plugin makes it easy to solve your Dodona exercises, right from within your favourite JetBrains IDE.
@@ -12,6 +10,8 @@
 
     <change-notes><![CDATA[
     <ul>
+        <li>Catching additional exceptions at the authentication dialog.</li>
+        <li>[BUGFIX] Fixed CRLF bugs on Windows.</li>
     </ul>
     ]]>
     </change-notes>

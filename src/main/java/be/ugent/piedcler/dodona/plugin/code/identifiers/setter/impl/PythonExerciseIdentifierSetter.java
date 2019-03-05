@@ -22,7 +22,7 @@ public class PythonExerciseIdentifierSetter implements ExerciseIdentifierSetter 
 	
 	@Override
 	public void setIdentifier(Language language, Document file, String id) {
-		file.insertString(0, format("# %s%n", id));
+		file.insertString(0, format("# %s\n", id));
 		
 	}
 	

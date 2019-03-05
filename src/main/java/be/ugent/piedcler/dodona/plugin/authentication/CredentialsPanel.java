@@ -115,7 +115,7 @@ public class CredentialsPanel extends JPanel {
 			);
 		} catch (final AuthenticationException ex) {
 			Notifier.error(this.mainPane, "The provided token was not valid.");
-		} catch (final IOException ex) {
+		} catch (final IOException | RuntimeException ex) {
 			Notifier.error(this.mainPane, String.format("Could not authenticate: %s", ex.getMessage()));
 		}
 	}
