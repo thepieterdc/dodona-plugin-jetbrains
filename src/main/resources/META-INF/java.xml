@@ -1,8 +1,6 @@
 <idea-plugin>
     <extensions defaultExtensionNs="com.intellij">
         <applicationService
-            serviceImplementation="be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.JavaExerciseIdentifierSetter"/>
-        <applicationService
             serviceImplementation="be.ugent.piedcler.dodona.plugin.code.preprocess.impl.JavaFileSubmissionPreprocessor"/>
     </extensions>
 </idea-plugin>

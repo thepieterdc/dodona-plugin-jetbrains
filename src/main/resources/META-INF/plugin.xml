@@ -20,14 +20,10 @@
     ]]>
     </change-notes>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="171.0"/>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java.xml">com.intellij.modules.java</depends>
-    <depends optional="true" config-file="python.xml">com.intellij.modules.python</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable
@@ -59,5 +55,4 @@
             </action>
         </group>
     </actions>
-
 </idea-plugin>
