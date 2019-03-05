@@ -10,6 +10,8 @@
 
     <change-notes><![CDATA[
     <ul>
+        <li>Catching additional exceptions at the authentication dialog.</li>
+        <li>[BUGFIX] Fixed CRLF bugs on Windows.</li>
     </ul>
     ]]>
     </change-notes>
