@@ -16,17 +16,17 @@ import javax.annotation.Nonnull;
 /**
  * The programming language was not supported by the plugin.
  */
-public final class ProgrammingLanguageNotSupportedException extends WarningMessageException {
-	private static final long serialVersionUID = 7625672228052177914L;
+public final class UnsupportedProgrammingLanguageException extends WarningMessageException {
+	private static final long serialVersionUID = -4667463198568098290L;
 	
 	private final ProgrammingLanguage language;
 	
 	/**
-	 * ProgrammingLanguageNotSupportedException constructor.
+	 * UnsupportedProgrammingLanguageException constructor.
 	 *
 	 * @param language the programming language
 	 */
-	public ProgrammingLanguageNotSupportedException(@Nonnull final ProgrammingLanguage language) {
+	public UnsupportedProgrammingLanguageException(@Nonnull final ProgrammingLanguage language) {
 		super("The programming language \"%s\" is not currently supported by the plugin. Please report this at the repository so it can be added.");
 		this.language = language;
 	}
