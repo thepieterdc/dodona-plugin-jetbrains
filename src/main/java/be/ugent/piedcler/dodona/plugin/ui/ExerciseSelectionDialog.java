@@ -8,6 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui;
 
+import be.ugent.piedcler.dodona.data.ExerciseStatus;
 import be.ugent.piedcler.dodona.plugin.settings.DodonaSettings;
 import be.ugent.piedcler.dodona.plugin.ui.listeners.SelectedItemListener;
 import be.ugent.piedcler.dodona.resources.Exercise;
@@ -92,7 +93,7 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 	@Nonnull
 	private static List<Exercise> getIncorrectExercises(@Nonnull final Collection<Exercise> all) {
 		return all.stream()
-			.filter(e -> !(e.isLastSolutionCorrect() && e.hasCorrectSolution()))
+			.filter(e -> e.getStatus() != ExerciseStatus.CORRECT)
 			.collect(Collectors.toList());
 	}
 	
