@@ -8,9 +8,8 @@
  */
 package be.ugent.piedcler.dodona.plugin.dto;
 
-import org.jetbrains.annotations.Nullable;
-
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
@@ -30,7 +29,7 @@ public final class Identification {
 	 */
 	public Identification(@Nullable final Long courseId,
 	                      @Nullable final Long seriesId,
-	                      final Long exerciseId) {
+	                      @Nonnull final Long exerciseId) {
 		this.courseId = courseId;
 		this.exerciseId = exerciseId;
 		this.seriesId = seriesId;

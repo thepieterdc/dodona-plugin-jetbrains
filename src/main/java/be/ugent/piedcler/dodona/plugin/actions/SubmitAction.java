@@ -9,7 +9,6 @@
 package be.ugent.piedcler.dodona.plugin.actions;
 
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationParser;
-import be.ugent.piedcler.dodona.plugin.code.identification.parsers.URLIdentificationParser;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.ExerciseIdentifierSetter;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.CombinedExerciseIdentifierSetter;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.JavaExerciseIdentifierSetter;
@@ -50,7 +49,7 @@ import static java.util.Optional.ofNullable;
  * Action that submits the current file to Dodona.
  */
 public class SubmitAction extends AnAction {
-	private static final IdentificationParser identificationParser = new URLIdentificationParser();
+	private final IdentificationParser identificationParser = ServiceManager.getService(IdentificationParser.class);
 	
 	private final FileSubmissionPreprocessor preprocessor =
 		new CombinedSubmissionPreprocessor()

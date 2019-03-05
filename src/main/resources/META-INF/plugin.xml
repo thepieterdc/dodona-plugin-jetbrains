@@ -35,6 +35,11 @@
             instance="be.ugent.piedcler.dodona.plugin.settings.SettingsConfigurable"/>
         <applicationService serviceInterface="be.ugent.piedcler.dodona.plugin.settings.DodonaSettings"
                             serviceImplementation="be.ugent.piedcler.dodona.plugin.settings.DodonaSettingsImpl"/>
+        <applicationService
+            serviceInterface="be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider"
+            serviceImplementation="be.ugent.piedcler.dodona.plugin.code.identification.configurers.providers.IdentificationConfigurerProviderImpl"/>
+        <applicationService serviceInterface="be.ugent.piedcler.dodona.plugin.code.identification.IdentificationParser"
+                            serviceImplementation="be.ugent.piedcler.dodona.plugin.code.identification.parsers.URLIdentificationParser"/>
 
         <projectService serviceInterface="be.ugent.piedcler.dodona.plugin.notifications.FeedbackService"
                         serviceImplementation="be.ugent.piedcler.dodona.plugin.notifications.FeedbackServiceImpl"/>
