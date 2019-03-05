@@ -1,14 +1,14 @@
 /*
- * Copyright (c) 2018. All rights reserved.
+ * Copyright (c) 2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/ugent-dodona/
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
 package be.ugent.piedcler.dodona.plugin.actions;
 
-import be.ugent.piedcler.dodona.plugin.code.identifiers.getter.ExerciseIdentifierGetter;
+import be.ugent.piedcler.dodona.plugin.code.IdentificationParser;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.getter.impl.CombinedExerciseIdentifierGetter;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.getter.impl.StructuredExerciseIdentifierGetter;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.getter.impl.URLExerciseIdentifierGetter;
@@ -52,7 +52,7 @@ import static java.util.Optional.ofNullable;
  */
 public class SubmitAction extends AnAction {
 	
-	private final ExerciseIdentifierGetter identifierGetter =
+	private final IdentificationParser identifierGetter =
 		new CombinedExerciseIdentifierGetter()
 			.registerIdentifier(new StructuredExerciseIdentifierGetter())
 			.registerIdentifier(new URLExerciseIdentifierGetter());
