@@ -21,7 +21,7 @@ intellij {
     version ideaVersion
     pluginName 'ugent-dodona'
     updateSinceUntilBuild false
-    if (customIde) {
+    if (customIde == 'true') {
         alternativeIdePath customIdePath
     }
 }
