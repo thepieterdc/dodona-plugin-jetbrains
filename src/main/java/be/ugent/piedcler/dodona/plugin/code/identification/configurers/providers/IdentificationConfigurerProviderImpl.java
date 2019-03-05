@@ -16,6 +16,8 @@ import be.ugent.piedcler.dodona.plugin.code.identification.configurers.PythonIde
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.UndetectableProgrammingLanguageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.UnsupportedProgrammingLanguageException;
 import be.ugent.piedcler.dodona.resources.ProgrammingLanguage;
+import com.intellij.lang.Language;
+import com.intellij.openapi.fileTypes.FileType;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -48,11 +50,12 @@ public class IdentificationConfigurerProviderImpl implements IdentificationConfi
 	
 	@Nonnull
 	@Override
-	public IdentificationConfigurer getConfigurer(@Nonnull String fileName) {
-		return configurers.stream()
-			.filter(config -> fileName.toLowerCase(Locale.getDefault()).endsWith(config.getFileExtension()))
-			.findAny()
-			.orElseThrow(() -> new UndetectableProgrammingLanguageException(fileName));
+	public IdentificationConfigurer getConfigurer(@Nonnull final Language language) {
+		return Optional.of(language)
+			.map(Language::getAssociatedFileType)
+			.map(FileType::getDefaultExtension)
+			.flatMap(IdentificationConfigurerProviderImpl::getConfigurerByExtension)
+			.orElseThrow(() -> new UndetectableProgrammingLanguageException(language.getDisplayName()));
 	}
 	
 	@Nonnull
@@ -60,5 +63,14 @@ public class IdentificationConfigurerProviderImpl implements IdentificationConfi
 	public IdentificationConfigurer getConfigurer(@Nonnull final ProgrammingLanguage language) {
 		return getConfigurerByExtension(language.getExtension())
 			.orElseThrow(() -> new UnsupportedProgrammingLanguageException(language));
+	}
+	
+	@Nonnull
+	@Override
+	public IdentificationConfigurer getConfigurer(@Nonnull String fileName) {
+		return configurers.stream()
+			.filter(config -> fileName.toLowerCase(Locale.getDefault()).endsWith(config.getFileExtension()))
+			.findAny()
+			.orElseThrow(() -> new UndetectableProgrammingLanguageException(fileName));
 	}
 }

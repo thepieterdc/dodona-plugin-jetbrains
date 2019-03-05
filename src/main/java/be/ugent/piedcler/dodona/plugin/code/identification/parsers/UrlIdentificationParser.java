@@ -13,20 +13,20 @@ import java.util.regex.Pattern;
 /**
  * Parses identifications from urls.
  */
-public class URLIdentificationParser extends RegexIdentificationParser {
+public class UrlIdentificationParser extends RegexIdentificationParser {
 	private static final Pattern courseRegex =
 		Pattern.compile("https?://.*/courses/(\\d+)", Pattern.CASE_INSENSITIVE);
-	
-	private static final Pattern seriesRegex =
-		Pattern.compile("https?://.*/series/(\\d+)", Pattern.CASE_INSENSITIVE);
 	
 	private static final Pattern exerciseRegex =
 		Pattern.compile("https?://.*/exercises/(\\d+)", Pattern.CASE_INSENSITIVE);
 	
+	private static final Pattern seriesRegex =
+		Pattern.compile("https?://.*/series/(\\d+)", Pattern.CASE_INSENSITIVE);
+	
 	/**
-	 * URLIdentificationParser constructor.
+	 * UrlIdentificationParser constructor.
 	 */
-	public URLIdentificationParser() {
+	public UrlIdentificationParser() {
 		super(courseRegex, seriesRegex, exerciseRegex);
 	}
 }
