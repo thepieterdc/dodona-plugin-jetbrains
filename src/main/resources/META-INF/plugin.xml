@@ -12,6 +12,7 @@
     <ul>
         <li>Catching additional exceptions at the authentication dialog.</li>
         <li>[BUGFIX] Fixed CRLF bugs on Windows.</li>
+        <li>[FEATURE] Support for JavaScript exercises.</li>
         <li>[IMPROVEMENT] Incorrect exercises now have a red icon in the list of exercises.</li>
         <li><i>[INTERNAL]</i> Update the API client to cope with API changes.</li>
     </ul>
