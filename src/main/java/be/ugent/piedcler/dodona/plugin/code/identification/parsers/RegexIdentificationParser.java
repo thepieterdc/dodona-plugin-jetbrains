@@ -9,7 +9,7 @@
 package be.ugent.piedcler.dodona.plugin.code.identification.parsers;
 
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationParser;
-import be.ugent.piedcler.dodona.plugin.dto.Solution;
+import be.ugent.piedcler.dodona.plugin.dto.Identification;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -57,17 +57,16 @@ public class RegexIdentificationParser implements IdentificationParser {
 	
 	@Nonnull
 	@Override
-	public Optional<Solution> identify(@Nonnull final CharSequence code) {
+	public Optional<Identification> identify(@Nonnull final CharSequence code) {
 		final Optional<Long> courseId = identify(code, this.courseRegex);
 		final Optional<Long> exerciseId = identify(code, this.exerciseRegex);
 		final Optional<Long> seriesId = identify(code, this.seriesRegex);
 		
-		// Exercise is required, course and series are is optional.
-		return exerciseId.flatMap(ex -> Optional.of(new Solution(
+		// Exercise is required, course and series are optional.
+		return exerciseId.flatMap(ex -> Optional.of(new Identification(
 				courseId.orElse(null),
 				seriesId.orElse(null),
-				ex,
-				null
+				ex
 			))
 		);
 	}

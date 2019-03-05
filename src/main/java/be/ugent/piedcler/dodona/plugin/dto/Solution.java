@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018. All rights reserved.
+ * Copyright (c) 2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/ugent-dodona/
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
 package be.ugent.piedcler.dodona.plugin.dto;
 
@@ -30,10 +30,10 @@ public final class Solution {
 	 * @param exerciseId the exercise id
 	 * @param code       the code to submit
 	 */
-	public Solution(@Nullable final Long courseId,
-	                @Nullable final Long seriesId,
-	                final Long exerciseId,
-	                @Nullable final String code) {
+	private Solution(@Nullable final Long courseId,
+	                 @Nullable final Long seriesId,
+	                 @Nonnull final Long exerciseId,
+	                 @Nullable final String code) {
 		this.code = code;
 		this.courseId = courseId;
 		this.exerciseId = exerciseId;
@@ -41,16 +41,19 @@ public final class Solution {
 	}
 	
 	/**
-	 * Solution constructor.
+	 * Creates a new solution.
 	 *
-	 * @param courseId   the course id
-	 * @param seriesId   the series id
-	 * @param exerciseId the exercise id
+	 * @param identification the identification
+	 * @param code           the solution
 	 */
-	public Solution(@Nullable final Long courseId,
-	                @Nullable final Long seriesId,
-	                final Long exerciseId) {
-		this(courseId, seriesId, exerciseId, null);
+	@Nonnull
+	public static Solution create(@Nonnull final Identification identification, @Nonnull final String code) {
+		return new Solution(
+			identification.getCourseId().orElse(null),
+			identification.getSeriesId().orElse(null),
+			identification.getExerciseId(),
+			code
+		);
 	}
 	
 	/**
@@ -90,17 +93,5 @@ public final class Solution {
 	@Nonnull
 	public Optional<Long> getSeriesId() {
 		return Optional.ofNullable(this.seriesId);
-	}
-	
-	/**
-	 * Sets the code of the solution.
-	 *
-	 * @param code the code
-	 * @return fluent setter
-	 */
-	@Nonnull
-	public Solution setCode(final String code) {
-		this.code = code;
-		return this;
 	}
 }

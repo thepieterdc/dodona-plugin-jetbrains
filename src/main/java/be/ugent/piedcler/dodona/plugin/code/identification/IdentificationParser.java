@@ -8,7 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.code.identification;
 
-import be.ugent.piedcler.dodona.plugin.dto.Solution;
+import be.ugent.piedcler.dodona.plugin.dto.Identification;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -25,5 +25,5 @@ public interface IdentificationParser {
 	 * @return the found exercise, if any
 	 */
 	@Nonnull
-	Optional<Solution> identify(@Nonnull final CharSequence code);
+	Optional<Identification> identify(@Nonnull final CharSequence code);
 }

@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2018. All rights reserved.
+ * Copyright (c) 2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/ugent-dodona/
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
 package be.ugent.piedcler.dodona.plugin.dto;
 
@@ -17,31 +17,12 @@ import java.util.Optional;
  * An identification of an exercise.
  */
 public final class Identification {
-	private String code;
 	private final Long courseId;
 	private final Long exerciseId;
 	private final Long seriesId;
 	
 	/**
-	 * Solution constructor.
-	 *
-	 * @param courseId   the course id
-	 * @param seriesId   the series id
-	 * @param exerciseId the exercise id
-	 * @param code       the code to submit
-	 */
-	public Identification(@Nullable final Long courseId,
-	                      @Nullable final Long seriesId,
-	                      final Long exerciseId,
-	                      @Nullable final String code) {
-		this.code = code;
-		this.courseId = courseId;
-		this.exerciseId = exerciseId;
-		this.seriesId = seriesId;
-	}
-	
-	/**
-	 * Solution constructor.
+	 * Identification constructor.
 	 *
 	 * @param courseId   the course id
 	 * @param seriesId   the series id
@@ -50,16 +31,9 @@ public final class Identification {
 	public Identification(@Nullable final Long courseId,
 	                      @Nullable final Long seriesId,
 	                      final Long exerciseId) {
-		this(courseId, seriesId, exerciseId, null);
-	}
-	
-	/**
-	 * Gets the code.
-	 *
-	 * @return the code
-	 */
-	public String getCode() {
-		return this.code;
+		this.courseId = courseId;
+		this.exerciseId = exerciseId;
+		this.seriesId = seriesId;
 	}
 	
 	/**
@@ -90,17 +64,5 @@ public final class Identification {
 	@Nonnull
 	public Optional<Long> getSeriesId() {
 		return Optional.ofNullable(this.seriesId);
-	}
-	
-	/**
-	 * Sets the code of the solution.
-	 *
-	 * @param code the code
-	 * @return fluent setter
-	 */
-	@Nonnull
-	public Identification setCode(final String code) {
-		this.code = code;
-		return this;
 	}
 }

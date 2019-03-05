@@ -8,10 +8,8 @@
  */
 package be.ugent.piedcler.dodona.plugin.actions;
 
-import be.ugent.piedcler.dodona.plugin.code.IdentificationParser;
-import be.ugent.piedcler.dodona.plugin.code.identifiers.getter.impl.CombinedExerciseIdentifierGetter;
-import be.ugent.piedcler.dodona.plugin.code.identifiers.getter.impl.StructuredExerciseIdentifierGetter;
-import be.ugent.piedcler.dodona.plugin.code.identifiers.getter.impl.URLExerciseIdentifierGetter;
+import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationParser;
+import be.ugent.piedcler.dodona.plugin.code.identification.parsers.URLIdentificationParser;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.ExerciseIdentifierSetter;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.CombinedExerciseIdentifierSetter;
 import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.JavaExerciseIdentifierSetter;
@@ -19,6 +17,7 @@ import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.PythonExerci
 import be.ugent.piedcler.dodona.plugin.code.preprocess.FileSubmissionPreprocessor;
 import be.ugent.piedcler.dodona.plugin.code.preprocess.impl.CombinedSubmissionPreprocessor;
 import be.ugent.piedcler.dodona.plugin.code.preprocess.impl.JavaFileSubmissionPreprocessor;
+import be.ugent.piedcler.dodona.plugin.dto.Identification;
 import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.errors.CodeReadException;
@@ -51,11 +50,7 @@ import static java.util.Optional.ofNullable;
  * Action that submits the current file to Dodona.
  */
 public class SubmitAction extends AnAction {
-	
-	private final IdentificationParser identifierGetter =
-		new CombinedExerciseIdentifierGetter()
-			.registerIdentifier(new StructuredExerciseIdentifierGetter())
-			.registerIdentifier(new URLExerciseIdentifierGetter());
+	private static final IdentificationParser identificationParser = new URLIdentificationParser();
 	
 	private final FileSubmissionPreprocessor preprocessor =
 		new CombinedSubmissionPreprocessor()
@@ -85,11 +80,9 @@ public class SubmitAction extends AnAction {
 			.map(PsiElement::getText);
 		
 		try {
-			
-			final String text = optText.orElseThrow(CodeReadException::new);
-			final Solution solution = identifierGetter.identify(text)
-				.map(sol -> sol.setCode(text))
-				.orElseThrow(ExerciseNotSetException::new);
+			final String code = optText.orElseThrow(CodeReadException::new);
+			final Identification identification = identificationParser.identify(code).orElseThrow(ExerciseNotSetException::new);
+			final Solution solution = Solution.create(identification, code);
 			
 			ProgressManager.getInstance().run(new SubmitSolutionTask(project, event.getPresentation(), solution));
 		} catch (final ExerciseNotSetException exception) {
