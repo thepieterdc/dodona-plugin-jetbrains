@@ -8,6 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui;
 
+import be.ugent.piedcler.dodona.data.ExerciseStatus;
 import be.ugent.piedcler.dodona.plugin.Icons;
 import be.ugent.piedcler.dodona.resources.Exercise;
 
@@ -31,11 +32,11 @@ public class ExerciseListRenderer extends DefaultListCellRenderer {
 		if (value instanceof Exercise) {
 			final Exercise exercise = (Exercise) value;
 			this.setText(exercise.getName());
-			if (exercise.isLastSolutionCorrect() && exercise.hasCorrectSolution()) {
+			if (exercise.getStatus() == ExerciseStatus.CORRECT) {
 				this.setIcon(Icons.CORRECT);
+			} else if(exercise.getStatus() != ExerciseStatus.NOT_ATTEMPTED) {
+				this.setIcon(Icons.INCORRECT);
 			}
-			// TODO: Mark an exercise as incorrect when the API is updated.
-			// https://github.com/thepieterdc/dodona-plugin-jetbrains/issues/65
 		}
 		return this;
 	}
