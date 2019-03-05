@@ -10,6 +10,7 @@ package be.ugent.piedcler.dodona.plugin.tasks;
 
 import be.ugent.piedcler.dodona.exceptions.DodonaException;
 import be.ugent.piedcler.dodona.plugin.Api;
+import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
 import be.ugent.piedcler.dodona.plugin.ui.CourseSelectionDialog;
 import be.ugent.piedcler.dodona.plugin.ui.ExerciseSelectionDialog;
 import be.ugent.piedcler.dodona.plugin.ui.SelectionDialog;
@@ -43,7 +44,7 @@ public class SelectExerciseTask extends Task.WithResult<Optional<Exercise>, Runt
 	/**
 	 * SelectExerciseTask constructor.
 	 *
-	 * @param project  the project to display notifications in
+	 * @param project the project to display notifications in
 	 */
 	public SelectExerciseTask(@Nonnull final Project project) {
 		super(project, "Configure Exercise", false);
@@ -116,10 +117,10 @@ public class SelectExerciseTask extends Task.WithResult<Optional<Exercise>, Runt
 			if (this.selectedExercise == null) return Optional.empty();
 			
 			return Optional.of(this.selectedExercise);
+		} catch (final UserAbortedException | InterruptedException ex) {
+			return Optional.empty();
 		} catch (final InvocationTargetException | IOException | DodonaException error) {
 			throw new RuntimeException(error);
-		} catch (final InterruptedException ex) {
-			return Optional.empty();
 		}
 	}
 }

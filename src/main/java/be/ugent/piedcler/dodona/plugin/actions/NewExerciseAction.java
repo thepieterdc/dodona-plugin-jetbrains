@@ -9,10 +9,7 @@
 package be.ugent.piedcler.dodona.plugin.actions;
 
 import be.ugent.piedcler.dodona.plugin.Icons;
-import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.ExerciseIdentifierSetter;
-import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.CombinedExerciseIdentifierSetter;
-import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.JavaExerciseIdentifierSetter;
-import be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.PythonExerciseIdentifierSetter;
+import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.errors.CodeReadException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.FileAlreadyExistsException;
@@ -22,8 +19,6 @@ import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
 import be.ugent.piedcler.dodona.resources.Exercise;
 import be.ugent.piedcler.dodona.resources.ProgrammingLanguage;
 import com.intellij.ide.IdeView;
-import com.intellij.lang.Language;
-import com.intellij.lang.LanguageUtil;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
@@ -57,16 +52,14 @@ import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAct
 public class NewExerciseAction extends AnAction implements DumbAware {
 	private static final Logger logger = LoggerFactory.getLogger(NewExerciseAction.class);
 	
-	private static final ExerciseIdentifierSetter identifierSetter =
-		new CombinedExerciseIdentifierSetter()
-			.registerEntry(ServiceManager.getService(JavaExerciseIdentifierSetter.class))
-			.registerEntry(ServiceManager.getService(PythonExerciseIdentifierSetter.class));
+	private final IdentificationConfigurerProvider idConfigurer;
 	
 	/**
 	 * NewExerciseAction constructor.
 	 */
 	public NewExerciseAction() {
 		super("Dodona Exercise", "Creates a new file from a Dodona exercise", Icons.DODONA);
+		this.idConfigurer = ServiceManager.getService(IdentificationConfigurerProvider.class);
 	}
 	
 	@Override
@@ -91,9 +84,9 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 	 * @param view     current IDE view
 	 * @param exercise the exercise
 	 */
-	private static void create(@Nonnull final Project project,
-	                           @Nonnull final IdeView view,
-	                           @Nonnull final Exercise exercise) {
+	private void create(@Nonnull final Project project,
+	                    @Nonnull final IdeView view,
+	                    @Nonnull final Exercise exercise) {
 		final PsiDirectory directory = view.getOrChooseDirectory();
 		if (directory == null) {
 			return;
@@ -101,7 +94,6 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 		
 		final String filename = generateFileName(exercise);
 		final FileType filetype = FileTypeRegistry.getInstance().getFileTypeByFileName(filename);
-		final Language language = LanguageUtil.getFileTypeLanguage(filetype);
 		final String boilerplate = exercise.getBoilerplate().orElse("");
 		
 		Optional.ofNullable(directory.findFile(filename)).ifPresent(file -> {
@@ -112,7 +104,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 		final PsiFile file = fileFactory.createFileFromText(filename, filetype, boilerplate);
 		
 		final VirtualFile virtualFile = runWriteAction(() -> (PsiFile) directory.add(file)).getVirtualFile();
-
+		
 		FileEditorManager.getInstance(project).openFile(virtualFile, true);
 		
 		final Document document = Optional.ofNullable(FileEditorManager.getInstance(project))
@@ -120,7 +112,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 			.map(Editor::getDocument)
 			.orElseThrow(CodeReadException::new);
 		
-		runWriteCommandAction(project, () -> identifierSetter.setIdentifier(language, document, exercise.getUrl()));
+		runWriteCommandAction(project, () -> idConfigurer.getConfigurer(exercise, file).configure(document, exercise.getUrl()));
 	}
 	
 	/**

@@ -12,20 +12,18 @@
     <ul>
         <li>Catching additional exceptions at the authentication dialog.</li>
         <li>[BUGFIX] Fixed CRLF bugs on Windows.</li>
+        <li>[FEATURE] Support for JavaScript exercises.</li>
         <li>[IMPROVEMENT] Incorrect exercises now have a red icon in the list of exercises.</li>
+        <li>[IMPROVEMENT] Reworked the way exercises are identified to support more languages without plugins, as we weren't using language features anyways.</li>
         <li><i>[INTERNAL]</i> Update the API client to cope with API changes.</li>
     </ul>
     ]]>
     </change-notes>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="171.0"/>
 
-    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-         on how to target different products -->
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java.xml">com.intellij.modules.java</depends>
-    <depends optional="true" config-file="python.xml">com.intellij.modules.python</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable
@@ -33,6 +31,11 @@
             instance="be.ugent.piedcler.dodona.plugin.settings.SettingsConfigurable"/>
         <applicationService serviceInterface="be.ugent.piedcler.dodona.plugin.settings.DodonaSettings"
                             serviceImplementation="be.ugent.piedcler.dodona.plugin.settings.DodonaSettingsImpl"/>
+        <applicationService
+            serviceInterface="be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider"
+            serviceImplementation="be.ugent.piedcler.dodona.plugin.code.identification.configurers.providers.IdentificationConfigurerProviderImpl"/>
+        <applicationService serviceInterface="be.ugent.piedcler.dodona.plugin.code.identification.IdentificationParser"
+                            serviceImplementation="be.ugent.piedcler.dodona.plugin.code.identification.parsers.UrlIdentificationParser"/>
 
         <projectService serviceInterface="be.ugent.piedcler.dodona.plugin.notifications.FeedbackService"
                         serviceImplementation="be.ugent.piedcler.dodona.plugin.notifications.FeedbackServiceImpl"/>
@@ -52,5 +55,4 @@
             </action>
         </group>
     </actions>
-
 </idea-plugin>

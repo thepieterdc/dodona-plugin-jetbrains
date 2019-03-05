@@ -8,9 +8,9 @@
  */
 
 /**
- * Utilities to read or edit code.
+ * Utilities to identify (parse/configure) the exercise, given the code.
  */
 @ParametersAreNonnullByDefault
-package be.ugent.piedcler.dodona.plugin.code;
+package be.ugent.piedcler.dodona.plugin.code.identification;
 
 import javax.annotation.ParametersAreNonnullByDefault;

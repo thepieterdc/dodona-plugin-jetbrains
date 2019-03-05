@@ -1,5 +1,0 @@
-<idea-plugin>
-    <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="be.ugent.piedcler.dodona.plugin.code.identifiers.setter.impl.PythonExerciseIdentifierSetter"/>
-    </extensions>
-</idea-plugin>

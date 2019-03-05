@@ -8,9 +8,9 @@
  */
 
 /**
- * Utilities to read or edit code.
+ * Providers for identification configurers.
  */
 @ParametersAreNonnullByDefault
-package be.ugent.piedcler.dodona.plugin.code;
+package be.ugent.piedcler.dodona.plugin.code.identification.configurers.providers;
 
 import javax.annotation.ParametersAreNonnullByDefault;
