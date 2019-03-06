@@ -16,6 +16,7 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -32,15 +33,15 @@ public interface IdentificationConfigurerProvider {
 	 */
 	@Nonnull
 	default IdentificationConfigurer getConfigurer(@Nonnull final Exercise exercise,
-	                                               @Nonnull final PsiFile file) {
+	                                               @Nullable final PsiFile file) {
 		final Optional<IdentificationConfigurer> fromExercise = exercise.getProgrammingLanguage()
 			.flatMap(this::getConfigurer);
-		final Optional<IdentificationConfigurer> fromLanguage = Optional.of(file).map(PsiFile::getLanguage)
+		final Optional<IdentificationConfigurer> fromLanguage = Optional.ofNullable(file).map(PsiFile::getLanguage)
 			.flatMap(this::getConfigurer);
-		final Supplier<IdentificationConfigurer> fromFile = () -> Optional.of(file)
+		final Supplier<IdentificationConfigurer> fromFile = () -> Optional.ofNullable(file)
 			.map(PsiFile::getVirtualFile)
 			.flatMap(this::getConfigurer)
-			.orElseThrow(() -> new UndetectableProgrammingLanguageException(file.getName()));
+			.orElseThrow(() -> new UndetectableProgrammingLanguageException(file != null ? file.getName() : "null"));
 		
 		return fromExercise.orElseGet(() -> fromLanguage.orElseGet(fromFile));
 	}
