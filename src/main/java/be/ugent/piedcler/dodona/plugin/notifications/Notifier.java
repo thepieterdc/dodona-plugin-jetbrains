@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.awt.*;
 
 /**
@@ -34,17 +35,6 @@ public enum Notifier {
 	 *
 	 * @param component the component
 	 * @param message   the message to display
-	 */
-	public static void error(@Nonnull final Component component, @Nonnull final String message) {
-		logger.error(message);
-		Messages.showErrorDialog(component, message, "Error");
-	}
-	
-	/**
-	 * Shows an error message in a component.
-	 *
-	 * @param component the component
-	 * @param message   the message to display
 	 * @param cause     exception that lead to this error
 	 */
 	public static void error(@Nonnull final Component component, @Nonnull final String message, @Nonnull final Throwable cause) {
@@ -58,9 +48,11 @@ public enum Notifier {
 	 * @param project the project to display the message in
 	 * @param title   title of the message
 	 * @param message the message to display
+	 * @param cause   cause of the error
 	 */
-	public static void error(@Nonnull final Project project, @Nonnull final String title, @Nonnull final String message) {
-		logger.error(String.format("%s; %s", title, message));
+	public static void error(@Nonnull final Project project, @Nonnull final String title,
+	                         @Nonnull final String message, @Nonnull final Throwable cause) {
+		logger.error(String.format("%s; %s", title, message), cause);
 		notify(project, NotificationType.ERROR, title, message);
 	}
 	
@@ -69,9 +61,11 @@ public enum Notifier {
 	 *
 	 * @param project the project to display the message in
 	 * @param message the message to display
+	 * @param cause   the cause
 	 */
-	public static void error(@Nonnull final Project project, @Nonnull final String message) {
-		logger.error(message);
+	public static void error(@Nonnull final Project project, @Nonnull final String message,
+	                         @Nonnull final Throwable cause) {
+		logger.error(message, cause);
 		notify(project, NotificationType.ERROR, "Error", message);
 	}
 	
@@ -137,6 +131,21 @@ public enum Notifier {
 	 * @param project the project to display the message in
 	 * @param title   title of the message
 	 * @param message the message to display
+	 * @param cause   error cause
+	 */
+	public static void warning(@Nonnull final Project project, @Nonnull final String title,
+	                           @Nonnull final String message,
+	                           @Nonnull final Throwable cause) {
+		logger.warn(String.format("%s; %s", title, message), cause);
+		notify(project, NotificationType.WARNING, title, message);
+	}
+	
+	/**
+	 * Shows a warning message.
+	 *
+	 * @param project the project to display the message in
+	 * @param title   title of the message
+	 * @param message the message to display
 	 */
 	public static void warning(@Nonnull final Project project, @Nonnull final String title, @Nonnull final String message) {
 		logger.warn(String.format("%s; %s", title, message));
@@ -148,9 +157,11 @@ public enum Notifier {
 	 *
 	 * @param project the project to display the message in
 	 * @param message the message to display
+	 * @param cause   error cause
 	 */
-	public static void warning(@Nonnull final Project project, @Nonnull final String message) {
-		logger.warn(message);
+	public static void warning(@Nonnull final Project project, @Nonnull final String message,
+	                           @Nonnull final Throwable cause) {
+		logger.warn(message, cause);
 		notify(project, NotificationType.WARNING, "Warning", message);
 	}
 }

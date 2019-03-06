@@ -109,9 +109,9 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			feedbackSrv.notify(exercise, submission);
 			
 		} catch (final WarningMessageException warning) {
-			Notifier.warning(this.myProject, warning.getMessage());
+			Notifier.warning(this.myProject, warning.getMessage(), warning);
 		} catch (final IOException | DodonaException error) {
-			Notifier.error(this.myProject, error.getMessage());
+			Notifier.error(this.myProject, error.getMessage(), error);
 		} catch (final InterruptedException ex) {
 			throw new RuntimeException(ex);
 		} finally {
