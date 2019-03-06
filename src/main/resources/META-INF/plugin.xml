@@ -10,9 +10,6 @@
 
     <change-notes><![CDATA[
     <ul>
-        <li>Added exception traces to error logs to simplify fixing bugs.</li>
-        <li>[BUGFIX] Now works correctly with JDK 11+.</li>
-        <li>[BUGFIX] Fixed rare race condition upon creating a new exercise.</li>
     </ul>
     ]]>
     </change-notes>
