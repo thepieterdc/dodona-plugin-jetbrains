@@ -10,6 +10,7 @@
 
     <change-notes><![CDATA[
     <ul>
+        <li>Added exception traces to error logs to simplify fixing bugs.</li>
     </ul>
     ]]>
     </change-notes>

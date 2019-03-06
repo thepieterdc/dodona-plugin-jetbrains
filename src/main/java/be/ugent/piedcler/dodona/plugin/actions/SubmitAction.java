@@ -90,7 +90,7 @@ public class SubmitAction extends AnAction {
 				);
 			}
 		} catch (final RuntimeException ex) {
-			Notifier.error(project, "Failed configuring exercise.", ex.getMessage());
+			Notifier.error(project, "Failed configuring exercise.", ex.getMessage(), ex);
 		}
 	}
 	

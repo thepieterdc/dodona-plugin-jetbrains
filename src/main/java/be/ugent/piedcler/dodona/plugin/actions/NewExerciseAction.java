@@ -70,10 +70,9 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 		try {
 			ProgressManager.getInstance().run(new SelectExerciseTask(project)).ifPresent(ex -> create(project, view, ex));
 		} catch (final WarningMessageException ex) {
-			Notifier.warning(project, "Failed creating exercise", ex.getMessage());
+			Notifier.warning(project, "Failed creating exercise", ex.getMessage(), ex);
 		} catch (final RuntimeException ex) {
-			logger.error(ex.getMessage(), ex);
-			Notifier.error(project, "Failed creating exercise", ex.getMessage());
+			Notifier.error(project, "Failed creating exercise", ex.getMessage(), ex);
 		}
 	}
 	
