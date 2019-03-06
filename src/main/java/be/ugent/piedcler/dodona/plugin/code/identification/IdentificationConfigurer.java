@@ -26,6 +26,17 @@ public interface IdentificationConfigurer {
 	void configure(@Nonnull Document document, @Nonnull String url);
 	
 	/**
+	 * Sets the identification in the code.
+	 *
+	 * @param code the code to modify
+	 * @param url  the url to the exercise
+	 * @return the modified code
+	 */
+	// TODO use the Identification class for this, instead of passing urls.
+	@Nonnull
+	String configure(@Nonnull String code, @Nonnull String url);
+	
+	/**
 	 * Gets the file extension that can be used with this configurer.
 	 *
 	 * @return the file extension

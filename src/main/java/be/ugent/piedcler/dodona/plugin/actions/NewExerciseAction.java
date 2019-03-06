@@ -11,7 +11,6 @@ package be.ugent.piedcler.dodona.plugin.actions;
 import be.ugent.piedcler.dodona.plugin.Icons;
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
-import be.ugent.piedcler.dodona.plugin.exceptions.errors.CodeReadException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.FileAlreadyExistsException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.ProgrammingLanguageNotSetException;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
@@ -24,8 +23,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.editor.Document;
-import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
@@ -44,7 +41,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.intellij.openapi.application.ActionsKt.runWriteAction;
-import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction;
 
 /**
  * Creates a new file from a Dodona exercise.
@@ -99,19 +95,14 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 			throw new FileAlreadyExistsException(filename);
 		});
 		
+		final String code = this.idConfigurer.getConfigurer(exercise, null).configure(boilerplate, exercise.getUrl());
+		
 		final PsiFileFactory fileFactory = PsiFileFactory.getInstance(project);
-		final PsiFile file = fileFactory.createFileFromText(filename, filetype, boilerplate);
+		final PsiFile file = fileFactory.createFileFromText(filename, filetype, code);
 		
 		final VirtualFile virtualFile = runWriteAction(() -> (PsiFile) directory.add(file)).getVirtualFile();
 		
 		FileEditorManager.getInstance(project).openFile(virtualFile, true);
-		
-		final Document document = Optional.ofNullable(FileEditorManager.getInstance(project))
-			.map(FileEditorManager::getSelectedTextEditor)
-			.map(Editor::getDocument)
-			.orElseThrow(CodeReadException::new);
-		
-		runWriteCommandAction(project, () -> idConfigurer.getConfigurer(exercise, file).configure(document, exercise.getUrl()));
 	}
 	
 	/**

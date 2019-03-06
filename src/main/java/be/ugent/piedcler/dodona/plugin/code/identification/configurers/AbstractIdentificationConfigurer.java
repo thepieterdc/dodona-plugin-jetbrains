@@ -23,6 +23,12 @@ abstract class AbstractIdentificationConfigurer implements IdentificationConfigu
 		document.insertString(0, this.getIdentificationLine(url));
 	}
 	
+	@Nonnull
+	@Override
+	public String configure(@Nonnull final String code, @Nonnull final String url) {
+		return this.getIdentificationLine(url) + code;
+	}
+	
 	/**
 	 * Gets the identification comment line
 	 *
