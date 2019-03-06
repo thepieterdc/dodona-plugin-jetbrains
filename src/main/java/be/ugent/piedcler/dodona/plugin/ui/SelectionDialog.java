@@ -9,9 +9,9 @@
 package be.ugent.piedcler.dodona.plugin.ui;
 
 import be.ugent.piedcler.dodona.plugin.ui.listeners.SelectedItemListener;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 /**

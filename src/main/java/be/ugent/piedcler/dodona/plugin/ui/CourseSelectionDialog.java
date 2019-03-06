@@ -9,15 +9,15 @@
 package be.ugent.piedcler.dodona.plugin.ui;
 
 import be.ugent.piedcler.dodona.plugin.ui.listeners.SelectedItemListener;
+import be.ugent.piedcler.dodona.plugin.util.observable.ObservableValue;
 import be.ugent.piedcler.dodona.resources.Course;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBTabbedPane;
-import javafx.beans.property.SimpleObjectProperty;
-import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Collection;
@@ -34,7 +34,7 @@ public class CourseSelectionDialog extends SelectionDialog<Course> {
 	
 	private final boolean hasItems;
 	
-	private final SimpleObjectProperty<Course> selectedCourse;
+	private final ObservableValue<Course> selectedCourse;
 	
 	/**
 	 * CourseSelectionDialog constructor.
@@ -43,7 +43,7 @@ public class CourseSelectionDialog extends SelectionDialog<Course> {
 	 */
 	public CourseSelectionDialog(@Nonnull final Collection<Course> courses) {
 		this.hasItems = !courses.isEmpty();
-		this.selectedCourse = new SimpleObjectProperty<>(null);
+		this.selectedCourse = new ObservableValue<>(null);
 		
 		this.setContentPane(this.contentPane);
 		this.setModal(true);
@@ -59,7 +59,7 @@ public class CourseSelectionDialog extends SelectionDialog<Course> {
 	
 	@Override
 	public void addListener(@Nonnull final SelectedItemListener<Course> listener) {
-		this.selectedCourse.addListener((o, od, nw) -> listener.onItemSelected(nw));
+		this.selectedCourse.addListener(listener::onItemSelected);
 	}
 	
 	/**
@@ -101,7 +101,7 @@ public class CourseSelectionDialog extends SelectionDialog<Course> {
 	private Component createSelectionTab(@Nonnull final String year,
 	                                     @Nonnull final Collection<Course> courses) {
 		final JBList<Course> list = new JBList<>(new CollectionListModel<>(courses));
-		list.addListSelectionListener(e -> this.selectedCourse.set(list.getSelectedValue()));
+		list.addListSelectionListener(e -> this.selectedCourse.setValue(list.getSelectedValue()));
 		list.setCellRenderer(new CourseListRenderer());
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
@@ -117,7 +117,7 @@ public class CourseSelectionDialog extends SelectionDialog<Course> {
 	@Nullable
 	@Override
 	public Course getSelectedItem() {
-		return this.selectedCourse.get();
+		return this.selectedCourse.getValue();
 	}
 	
 	@Override
