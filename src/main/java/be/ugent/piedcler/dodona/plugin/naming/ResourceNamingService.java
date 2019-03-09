@@ -19,11 +19,11 @@ import javax.annotation.Nonnull;
  */
 public interface ResourceNamingService<T extends Resource> {
 	/**
-	 * Gets a name for the given resource.
+	 * Generates a name for the given resource.
 	 *
 	 * @param resource the resource to name
-	 * @return name
+	 * @return the generated name
 	 */
 	@Nonnull
-	String getName(@Nonnull T resource);
+	String generateName(@Nonnull T resource);
 }
