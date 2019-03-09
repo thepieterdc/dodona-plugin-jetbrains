@@ -10,6 +10,7 @@
 
     <change-notes><![CDATA[
     <ul>
+        <li>[IMPROVEMENT] Intelligent file naming when creating new exercises.</li>
     </ul>
     ]]>
     </change-notes>
