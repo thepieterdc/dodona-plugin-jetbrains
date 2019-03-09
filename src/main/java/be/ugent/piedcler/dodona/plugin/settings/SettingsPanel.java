@@ -8,7 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.settings;
 
-import be.ugent.piedcler.dodona.plugin.authentication.CredentialsPanel;
+import be.ugent.piedcler.dodona.plugin.ui.auth.CredentialsPanel;
 import com.intellij.openapi.project.ProjectManager;
 
 import javax.annotation.Nonnull;
