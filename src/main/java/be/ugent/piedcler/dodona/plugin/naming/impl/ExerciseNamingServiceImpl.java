@@ -36,9 +36,9 @@ public class ExerciseNamingServiceImpl implements ExerciseNamingService {
 			.orElse("");
 		
 		if (extension.equalsIgnoreCase(EXT_JAVA)) {
-			return generateJavaFileName(exercise);
+			return generateJavaFileName(exercise).map(s -> s + "." + extension);
 		}
-		return generateDefaultFileName(exercise);
+		return generateDefaultFileName(exercise).map(s -> s + "." + extension);
 	}
 	
 	/**
@@ -50,7 +50,7 @@ public class ExerciseNamingServiceImpl implements ExerciseNamingService {
 	@Nonnull
 	private static Optional<String> generateDefaultFileName(@Nonnull final Exercise exercise) {
 		String name = exercise.getName().toLowerCase(Locale.getDefault());
-		name = name.replaceAll("[^a-zA-Z0-9-_.]", "");
+		name = name.replaceAll("[^a-zA-Z0-9-_. ]", "");
 		return Optional.of(name.replaceAll("\\s", "_")).filter(s -> !s.isEmpty());
 	}
 	
@@ -78,7 +78,7 @@ public class ExerciseNamingServiceImpl implements ExerciseNamingService {
 	 */
 	@Nonnull
 	private static String generateJavaClassName(@Nonnull final String name) {
-		return Arrays.stream(name.replaceAll("[^a-zA-Z0-9_]", "").split("\\s"))
+		return Arrays.stream(name.replaceAll("[^a-zA-Z0-9_ ]", "").split("\\s"))
 			.map(s -> s.substring(0, 1) + s.substring(1))
 			.collect(Collectors.joining());
 	}
