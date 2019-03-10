@@ -2,7 +2,9 @@
     <id>be.ugent.piedcler.dodona</id>
     <name>Dodona</name>
     <version>1.0.0</version>
-    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah Lissens</vendor>
+    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah
+        Lissens
+    </vendor>
 
     <description><![CDATA[
       This plugin makes it easy to solve your Dodona exercises, right from within your favourite JetBrains IDE.
@@ -10,7 +12,8 @@
 
     <change-notes><![CDATA[
     <ul>
-        <li>[IMPROVEMENT] It's now possible to choose a name when a new exercise is being created, rather than defaulting to the id.</li>
+        <li>[IMPROVEMENT] Intelligent file naming when creating new exercises. Issue #67.</li>
+        <li>[IMPROVEMENT] It's now possible to choose a name when a new exercise is being created, rather than defaulting to the id. Issue #84.</li>
     </ul>
     ]]>
     </change-notes>
@@ -26,6 +29,9 @@
             instance="be.ugent.piedcler.dodona.plugin.settings.SettingsConfigurable"/>
         <applicationService serviceInterface="be.ugent.piedcler.dodona.plugin.settings.DodonaSettings"
                             serviceImplementation="be.ugent.piedcler.dodona.plugin.settings.DodonaSettingsImpl"/>
+        <applicationService
+            serviceInterface="be.ugent.piedcler.dodona.plugin.naming.ExerciseNamingService"
+            serviceImplementation="be.ugent.piedcler.dodona.plugin.naming.impl.ExerciseNamingServiceImpl"/>
         <applicationService
             serviceInterface="be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider"
             serviceImplementation="be.ugent.piedcler.dodona.plugin.code.identification.configurers.providers.IdentificationConfigurerProviderImpl"/>
