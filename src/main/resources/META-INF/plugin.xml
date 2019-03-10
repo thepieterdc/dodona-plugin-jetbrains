@@ -12,8 +12,6 @@
 
     <change-notes><![CDATA[
     <ul>
-        <li>[IMPROVEMENT] Intelligent file naming when creating new exercises. Issue #67.</li>
-        <li>[IMPROVEMENT] It's now possible to choose a name when a new exercise is being created, rather than defaulting to the id. Issue #84.</li>
     </ul>
     ]]>
     </change-notes>
