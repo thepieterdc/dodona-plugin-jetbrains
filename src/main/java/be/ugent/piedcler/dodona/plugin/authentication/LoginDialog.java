@@ -8,6 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.authentication;
 
+import be.ugent.piedcler.dodona.plugin.ui.auth.CredentialsPanel;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 

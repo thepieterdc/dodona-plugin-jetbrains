@@ -10,9 +10,9 @@ package be.ugent.piedcler.dodona.plugin.actions;
 
 import be.ugent.piedcler.dodona.plugin.Icons;
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider;
+import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.FileAlreadyExistsException;
-import be.ugent.piedcler.dodona.plugin.exceptions.warnings.ProgrammingLanguageNotSetException;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
 import be.ugent.piedcler.dodona.resources.Exercise;
@@ -29,10 +29,12 @@ import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
+import com.intellij.ui.UIBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,6 +67,8 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 		
 		try {
 			ProgressManager.getInstance().run(new SelectExerciseTask(project)).ifPresent(ex -> create(project, view, ex));
+		} catch (final UserAbortedException ex) {
+			//
 		} catch (final WarningMessageException ex) {
 			Notifier.warning(project, "Failed creating exercise", ex.getMessage(), ex);
 		} catch (final RuntimeException ex) {
@@ -87,7 +91,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 			return;
 		}
 		
-		final String filename = generateFileName(exercise);
+		final String filename = getFileName(exercise, directory);
 		final FileType filetype = FileTypeRegistry.getInstance().getFileTypeByFileName(filename);
 		final String boilerplate = exercise.getBoilerplate().orElse("");
 		
@@ -106,19 +110,52 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 	}
 	
 	/**
-	 * Generates a filename for the given exercise.
+	 * Gets a filename for the given exercise.
 	 *
-	 * @param exercise the exercise
+	 * @param exercise  the exercise
+	 * @param directory the directory to save the file in, file may not yet exist
 	 * @return the filename and extension
 	 */
 	@Nonnull
-	private static String generateFileName(@Nonnull final Exercise exercise) {
+	private static String getFileName(@Nonnull final Exercise exercise, final PsiDirectory directory) {
 		//TODO improve this, for example if it's a Java file, try to find the class name from the placeholder.
 		//TODO if there is no placeholder, try the exercise name (cleaned!!), same goes for Python exercises
-		final String extension = exercise.getProgrammingLanguage()
+		String name = exercise.getProgrammingLanguage()
 			.map(ProgrammingLanguage::getExtension)
-			.orElseThrow(ProgrammingLanguageNotSetException::new);
-		return String.valueOf(exercise.getId()) + '.' + extension;
+			.map(extension -> exercise.getId() + "." + extension)
+			.orElse(null);
+		
+		while (true) {
+			name = Messages.showInputDialog(
+				UIBundle.message("create.new.file.enter.new.file.name.prompt.text"),
+				UIBundle.message("new.file.dialog.title"),
+				Messages.getQuestionIcon(), name, null
+			);
+			
+			if (name == null) {
+				throw new UserAbortedException();
+			}
+			
+			if ("".equals(name.trim())) {
+				Messages.showMessageDialog(
+					UIBundle.message("create.new.file.file.name.cannot.be.empty.error.message"),
+					UIBundle.message("error.dialog.title"),
+					Messages.getErrorIcon()
+				);
+				continue;
+			}
+			
+			if (directory.findFile(name) != null) {
+				Messages.showMessageDialog(
+					"A file with this name already exists in the selected directory.",
+					UIBundle.message("error.dialog.title"),
+					Messages.getErrorIcon()
+				);
+				continue;
+			}
+			
+			return name;
+		}
 	}
 	
 	@Override
