@@ -122,7 +122,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 		//TODO if there is no placeholder, try the exercise name (cleaned!!), same goes for Python exercises
 		String name = exercise.getProgrammingLanguage()
 			.map(ProgrammingLanguage::getExtension)
-			.map(extension -> exercise.getId() + extension)
+			.map(extension -> exercise.getId() + "." + extension)
 			.orElse(null);
 		
 		while (true) {
