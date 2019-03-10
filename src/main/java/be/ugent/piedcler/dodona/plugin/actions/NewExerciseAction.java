@@ -13,10 +13,10 @@ import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigu
 import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.FileAlreadyExistsException;
+import be.ugent.piedcler.dodona.plugin.naming.ExerciseNamingService;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
 import be.ugent.piedcler.dodona.resources.Exercise;
-import be.ugent.piedcler.dodona.resources.ProgrammingLanguage;
 import com.intellij.ide.IdeView;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -51,6 +51,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 	private static final Logger logger = LoggerFactory.getLogger(NewExerciseAction.class);
 	
 	private final IdentificationConfigurerProvider idConfigurer;
+	private final ExerciseNamingService namingService;
 	
 	/**
 	 * NewExerciseAction constructor.
@@ -58,6 +59,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 	public NewExerciseAction() {
 		super("Dodona Exercise", "Creates a new file from a Dodona exercise", Icons.DODONA);
 		this.idConfigurer = ServiceManager.getService(IdentificationConfigurerProvider.class);
+		this.namingService = ServiceManager.getService(ExerciseNamingService.class);
 	}
 	
 	@Override
@@ -91,7 +93,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 			return;
 		}
 		
-		final String filename = getFileName(exercise, directory);
+		final String filename = this.getFileName(exercise, directory);
 		final FileType filetype = FileTypeRegistry.getInstance().getFileTypeByFileName(filename);
 		final String boilerplate = exercise.getBoilerplate().orElse("");
 		
@@ -117,13 +119,8 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 	 * @return the filename and extension
 	 */
 	@Nonnull
-	private static String getFileName(@Nonnull final Exercise exercise, final PsiDirectory directory) {
-		//TODO improve this, for example if it's a Java file, try to find the class name from the placeholder.
-		//TODO if there is no placeholder, try the exercise name (cleaned!!), same goes for Python exercises
-		String name = exercise.getProgrammingLanguage()
-			.map(ProgrammingLanguage::getExtension)
-			.map(extension -> exercise.getId() + "." + extension)
-			.orElse(null);
+	private String getFileName(@Nonnull final Exercise exercise, final PsiDirectory directory) {
+		String name = this.namingService.generateFileName(exercise);
 		
 		while (true) {
 			name = Messages.showInputDialog(
