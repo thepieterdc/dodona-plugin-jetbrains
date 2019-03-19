@@ -12,6 +12,7 @@
 
     <change-notes><![CDATA[
     <ul>
+        <li>[BUGFIX] Fix the retrieval of submissions to private exercises.</li>
     </ul>
     ]]>
     </change-notes>
