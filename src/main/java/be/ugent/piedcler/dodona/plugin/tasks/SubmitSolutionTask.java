@@ -17,7 +17,7 @@ import be.ugent.piedcler.dodona.plugin.exceptions.warnings.SubmissionTimeoutExce
 import be.ugent.piedcler.dodona.plugin.notifications.FeedbackService;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import be.ugent.piedcler.dodona.resources.Exercise;
-import be.ugent.piedcler.dodona.resources.Submission;
+import be.ugent.piedcler.dodona.resources.submissions.Submission;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.progress.ProgressIndicator;

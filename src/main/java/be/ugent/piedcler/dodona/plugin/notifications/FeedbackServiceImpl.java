@@ -10,7 +10,7 @@ package be.ugent.piedcler.dodona.plugin.notifications;
 
 import be.ugent.piedcler.dodona.data.SubmissionStatus;
 import be.ugent.piedcler.dodona.resources.Exercise;
-import be.ugent.piedcler.dodona.resources.Submission;
+import be.ugent.piedcler.dodona.resources.submissions.Submission;
 import com.intellij.openapi.project.Project;
 
 import javax.annotation.Nonnull;

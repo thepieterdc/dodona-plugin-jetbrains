@@ -13,7 +13,8 @@
     <change-notes><![CDATA[
     <ul>
         <li>[FEATURE] Create new exercise files using templates. For now only a Python doctest template is available.</li>
-        <li>[IMPROVEMENT] General performance improvements.
+        <li>[FEATURE] List previous submissions using a tab at the bottom of the IDE.</li>
+        <li>[IMPROVEMENT] General performance improvements.</li>
         <li><em>[INTERNAL]</em> Updated API client.</li>
     </ul>
     ]]>
@@ -44,6 +45,12 @@
 
         <projectService serviceInterface="be.ugent.piedcler.dodona.plugin.notifications.FeedbackService"
                         serviceImplementation="be.ugent.piedcler.dodona.plugin.notifications.FeedbackServiceImpl"/>
+
+        <toolWindow id="Dodona" anchor="bottom" icon="/icons/dodona.png"
+                    factoryClass="be.ugent.piedcler.dodona.plugin.toolwindows.SubmissionsToolWindowFactory"
+                    secondary="false"
+                    canCloseContents="true"/>
+
     </extensions>
 
     <actions>

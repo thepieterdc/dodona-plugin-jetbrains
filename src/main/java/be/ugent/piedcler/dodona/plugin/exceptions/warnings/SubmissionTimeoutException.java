@@ -11,7 +11,7 @@ package be.ugent.piedcler.dodona.plugin.exceptions.warnings;
 
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.resources.Exercise;
-import be.ugent.piedcler.dodona.resources.Submission;
+import be.ugent.piedcler.dodona.resources.submissions.Submission;
 
 /**
  * The user submitted a solution but it took too long to evaluate.
