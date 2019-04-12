@@ -8,8 +8,6 @@
  */
 package be.ugent.piedcler.dodona.plugin.util.observable;
 
-import be.ugent.piedcler.dodona.resources.Resource;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -19,7 +17,7 @@ import java.util.Objects;
 /**
  * A resource that can be observed for changes.
  */
-public class ObservableValue<T extends Resource> {
+public class ObservableValue<T> {
 	private final Collection<ModificationListener<T>> listeners = new HashSet<>();
 	
 	@Nullable

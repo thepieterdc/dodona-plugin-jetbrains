@@ -1,3 +1,5 @@
+name: Doctest
+
 def function_to_test(arg: str):
     """
     >>> function_to_test('correct!')

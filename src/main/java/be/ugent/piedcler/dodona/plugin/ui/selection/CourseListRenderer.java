@@ -10,28 +10,23 @@ package be.ugent.piedcler.dodona.plugin.ui.selection;
 
 import be.ugent.piedcler.dodona.plugin.Icons;
 import be.ugent.piedcler.dodona.resources.Course;
+import com.intellij.ui.ColoredListCellRenderer;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Renders the course name correctly in a list of Courses.
  */
-public class CourseListRenderer extends DefaultListCellRenderer {
-	private static final long serialVersionUID = 1474165572278173025L;
-	
+public class CourseListRenderer extends ColoredListCellRenderer<Course> {
 	@Override
-	public Component getListCellRendererComponent(final JList<?> list,
-	                                              final Object value,
-	                                              final int index,
-	                                              final boolean isSelected,
-	                                              final boolean cellHasFocus) {
-		super.getListCellRendererComponent(list, value, index, isSelected, false);
-		if (value instanceof Course) {
-			final Course course = (Course) value;
-			this.setText(course.getName());
-			this.setIcon(Icons.getColoredCircle(course.getColor().getColor()));
-		}
-		return this;
+	protected void customizeCellRenderer(@NotNull JList<? extends Course> list,
+	                                     @Nonnull final Course course,
+	                                     int index,
+	                                     boolean selected,
+	                                     boolean hasFocus) {
+		this.append(course.getName());
+		this.setIcon(Icons.getColoredCircle(course.getColor().getColor()));
 	}
 }

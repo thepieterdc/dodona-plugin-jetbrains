@@ -36,6 +36,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 	private static final long DELAY_INITIAL = 3_000L;
 	private static final long DELAY_TIMEOUT = 120_000L;
 	
+	private final FeedbackService feedbackSrv;
 	private final Solution solution;
 	private final Presentation presentation;
 	
@@ -47,6 +48,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 	 */
 	public SubmitSolutionTask(final Project project, final Presentation presentation, final Solution solution) {
 		super(project, "Submitting Solution");
+		this.feedbackSrv = ServiceManager.getService(project, FeedbackService.class);
 		this.solution = solution;
 		this.presentation = presentation;
 	}
@@ -56,8 +58,8 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 		try {
 			this.presentation.setEnabled(false);
 			
-			final long createdSubmissionId = Api.callModal(this.myProject, "Submitting solution",
-				dodona -> dodona.submissions().create(
+			final long createdSubmissionId = Api.callModal(this.myProject, "Submitting solution", dodona ->
+				dodona.submissions().create(
 					this.solution.getCourseId().orElse(null),
 					this.solution.getSeriesId().orElse(null),
 					this.solution.getExerciseId(),
@@ -105,8 +107,7 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			progressIndicator.setFraction(1.0);
 			progressIndicator.setText("Evaluation completed");
 			
-			final FeedbackService feedbackSrv = ServiceManager.getService(this.myProject, FeedbackService.class);
-			feedbackSrv.notify(exercise, submission);
+			this.feedbackSrv.notify(exercise, submission);
 			
 		} catch (final WarningMessageException warning) {
 			Notifier.warning(this.myProject, warning.getMessage(), warning);

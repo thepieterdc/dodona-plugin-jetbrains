@@ -12,7 +12,7 @@ import be.ugent.piedcler.dodona.plugin.dto.Template;
 import be.ugent.piedcler.dodona.resources.Exercise;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * A service that provides templates for Exercises.
@@ -20,11 +20,12 @@ import java.util.Collection;
 @FunctionalInterface
 public interface ExerciseTemplateService {
 	/**
-	 * Lists all templates that can be applied to a given exercise.
+	 * Lists all templates that can be applied to a given exercise. This
+	 * includes the Exercise boilerplate if it's available and nonempty.
 	 *
 	 * @param exercise the exercise
 	 * @return the matching templates
 	 */
 	@Nonnull
-	Collection<Template> listTemplates(final Exercise exercise);
+	List<Template> listTemplates(final Exercise exercise);
 }
