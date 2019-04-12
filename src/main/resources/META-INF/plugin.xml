@@ -12,7 +12,8 @@
 
     <change-notes><![CDATA[
     <ul>
-    <li><em>[INTERNAL]</em> Updated API client.</li>
+        <li>[FEATURE] Create new exercise files using templates. For now only a Python doctest template is available.
+        <li><em>[INTERNAL]</em> Updated API client.</li>
     </ul>
     ]]>
     </change-notes>
