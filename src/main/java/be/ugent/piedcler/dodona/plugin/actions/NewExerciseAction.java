@@ -10,12 +10,15 @@ package be.ugent.piedcler.dodona.plugin.actions;
 
 import be.ugent.piedcler.dodona.plugin.Icons;
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider;
+import be.ugent.piedcler.dodona.plugin.dto.Template;
 import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.FileAlreadyExistsException;
 import be.ugent.piedcler.dodona.plugin.naming.ExerciseNamingService;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
+import be.ugent.piedcler.dodona.plugin.templates.ExerciseTemplateService;
+import be.ugent.piedcler.dodona.plugin.ui.templates.TemplateSelectionDialog;
 import be.ugent.piedcler.dodona.resources.Exercise;
 import com.intellij.ide.IdeView;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -39,6 +42,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -52,6 +56,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 	
 	private final IdentificationConfigurerProvider idConfigurer;
 	private final ExerciseNamingService namingService;
+	private final ExerciseTemplateService templateService;
 	
 	/**
 	 * NewExerciseAction constructor.
@@ -60,6 +65,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 		super("Dodona Exercise", "Creates a new file from a Dodona exercise", Icons.DODONA);
 		this.idConfigurer = ServiceManager.getService(IdentificationConfigurerProvider.class);
 		this.namingService = ServiceManager.getService(ExerciseNamingService.class);
+		this.templateService = ServiceManager.getService(ExerciseTemplateService.class);
 	}
 	
 	@Override
@@ -95,13 +101,13 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 		
 		final String filename = this.getFileName(exercise, directory);
 		final FileType filetype = FileTypeRegistry.getInstance().getFileTypeByFileName(filename);
-		final String boilerplate = exercise.getBoilerplate().orElse("");
+		final String template = this.getTemplate(project, exercise).map(Template::getContents).orElse("");
 		
 		Optional.ofNullable(directory.findFile(filename)).ifPresent(file -> {
 			throw new FileAlreadyExistsException(filename);
 		});
 		
-		final String code = this.idConfigurer.getConfigurer(exercise, null).configure(boilerplate, exercise.getUrl());
+		final String code = this.idConfigurer.getConfigurer(exercise, null).configure(template, exercise.getUrl());
 		
 		final PsiFileFactory fileFactory = PsiFileFactory.getInstance(project);
 		final PsiFile file = fileFactory.createFileFromText(filename, filetype, code);
@@ -153,6 +159,29 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 			
 			return name;
 		}
+	}
+	
+	/**
+	 * Gets a template to create a new exercise file.
+	 *
+	 * @param exercise the exercise
+	 * @return the chosen template, or null
+	 */
+	@Nonnull
+	private Optional<Template> getTemplate(@Nonnull final Project project, @Nonnull final Exercise exercise) {
+		final List<Template> templates = this.templateService.listTemplates(exercise);
+		
+		if (!templates.isEmpty()) {
+			if (templates.size() == 1 && templates.get(0).isBoilerplate()) {
+				return Optional.of(templates.get(0));
+			}
+			
+			final TemplateSelectionDialog dialog = new TemplateSelectionDialog(project, templates);
+			boolean useTemplate = dialog.showAndGet();
+			
+			return useTemplate ? dialog.getTemplate() : Optional.empty();
+		}
+		return Optional.empty();
 	}
 	
 	@Override

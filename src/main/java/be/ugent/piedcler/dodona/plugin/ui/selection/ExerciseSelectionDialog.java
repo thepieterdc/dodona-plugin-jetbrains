@@ -10,14 +10,11 @@ package be.ugent.piedcler.dodona.plugin.ui.selection;
 
 import be.ugent.piedcler.dodona.data.ExerciseStatus;
 import be.ugent.piedcler.dodona.plugin.settings.DodonaSettings;
-import be.ugent.piedcler.dodona.plugin.ui.listeners.SelectedItemListener;
-import be.ugent.piedcler.dodona.plugin.util.observable.ObservableValue;
 import be.ugent.piedcler.dodona.resources.Exercise;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -38,24 +35,23 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 	
 	private JCheckBox hideCorrectCheck;
 	
-	private final ObservableValue<Exercise> selectedExercise;
-	
 	/**
 	 * ExerciseSelectionDialog constructor.
 	 *
 	 * @param exercises the exercises to select from
 	 */
 	public ExerciseSelectionDialog(@Nonnull final Collection<Exercise> exercises) {
+		super(null);
+		
 		this.exercisesModel = new CollectionListModel<>(exercises);
 		this.hasItems = !exercises.isEmpty();
-		this.selectedExercise = new ObservableValue<>(null);
 		
 		this.setContentPane(this.contentPane);
 		this.setModal(true);
 		
 		final DodonaSettings settings = DodonaSettings.getInstance();
 		
-		this.exercisesList.addListSelectionListener(e -> this.selectedExercise.setValue(this.exercisesList.getSelectedValue()));
+		this.exercisesList.addListSelectionListener(e -> this.setValue(this.exercisesList.getSelectedValue()));
 		this.exercisesList.setCellRenderer(new ExerciseListRenderer());
 		this.exercisesList.setEmptyText("No exercises were found in this series.");
 		this.exercisesList.setModel(this.exercisesModel);
@@ -65,7 +61,7 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 		this.hideCorrectCheck.addItemListener(e -> {
 			final boolean hide = this.hideCorrectCheck.isSelected();
 			settings.setHideCorrectExercises(hide);
-			final Exercise selected = this.selectedExercise.getValue();
+			final Exercise selected = this.getSelectedItem();
 			this.exercisesModel.replaceAll(new ArrayList<>(hide ? getIncorrectExercises(exercises) : exercises));
 			this.exercisesList.setSelectedValue(selected, true);
 		});
@@ -79,11 +75,6 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 		}
 	}
 	
-	@Override
-	public void addListener(@Nonnull final SelectedItemListener<Exercise> listener) {
-		this.selectedExercise.addListener(listener::onItemSelected);
-	}
-	
 	/**
 	 * Gets all incorrect exercises.
 	 *
@@ -95,12 +86,6 @@ public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
 		return all.stream()
 			.filter(e -> e.getStatus() != ExerciseStatus.CORRECT)
 			.collect(Collectors.toList());
-	}
-	
-	@Nullable
-	@Override
-	public Exercise getSelectedItem() {
-		return this.selectedExercise.getValue();
 	}
 	
 	@Override

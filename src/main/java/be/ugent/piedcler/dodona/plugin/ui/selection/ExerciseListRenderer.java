@@ -11,33 +11,27 @@ package be.ugent.piedcler.dodona.plugin.ui.selection;
 import be.ugent.piedcler.dodona.data.ExerciseStatus;
 import be.ugent.piedcler.dodona.plugin.Icons;
 import be.ugent.piedcler.dodona.resources.Exercise;
+import com.intellij.ui.ColoredListCellRenderer;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
-import java.awt.*;
 
 /**
- * Renders the course name correctly in a list of Exercises.
+ * Renders the exercise name correctly in a list of Exercises.
  */
-public class ExerciseListRenderer extends DefaultListCellRenderer {
-	private static final long serialVersionUID = 4470256123408914611L;
-
-
+public class ExerciseListRenderer extends ColoredListCellRenderer<Exercise> {
 	@Override
-	public Component getListCellRendererComponent(final JList<?> list,
-												  final Object value,
-												  final int index,
-												  final boolean isSelected,
-												  final boolean cellHasFocus) {
-		super.getListCellRendererComponent(list, value, index, isSelected, false);
-		if (value instanceof Exercise) {
-			final Exercise exercise = (Exercise) value;
-			this.setText(exercise.getName());
-			if (exercise.getStatus() == ExerciseStatus.CORRECT) {
-				this.setIcon(Icons.CORRECT);
-			} else if(exercise.getStatus() != ExerciseStatus.NOT_ATTEMPTED) {
-				this.setIcon(Icons.INCORRECT);
-			}
+	protected void customizeCellRenderer(@NotNull JList<? extends Exercise> list,
+	                                     @Nonnull final Exercise exercise,
+	                                     int index,
+	                                     boolean selected,
+	                                     boolean hasFocus) {
+		this.append(exercise.getName());
+		if (exercise.getStatus() == ExerciseStatus.CORRECT) {
+			this.setIcon(Icons.CORRECT);
+		} else if (exercise.getStatus() != ExerciseStatus.NOT_ATTEMPTED) {
+			this.setIcon(Icons.INCORRECT);
 		}
-		return this;
 	}
 }

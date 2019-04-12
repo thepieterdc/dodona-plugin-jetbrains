@@ -6,9 +6,9 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.ui.selection;
+package be.ugent.piedcler.dodona.plugin.ui.templates;
 
-import be.ugent.piedcler.dodona.resources.Series;
+import be.ugent.piedcler.dodona.plugin.dto.Template;
 import com.intellij.ui.ColoredListCellRenderer;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,15 +16,15 @@ import javax.annotation.Nonnull;
 import javax.swing.*;
 
 /**
- * Renders the series name correctly in a list of Series.
+ * Renders the template name correctly in a list of templates.
  */
-public class SeriesListRenderer extends ColoredListCellRenderer<Series> {
+public class TemplateListRenderer extends ColoredListCellRenderer<Template> {
 	@Override
-	protected void customizeCellRenderer(@NotNull JList<? extends Series> list,
-	                                     @Nonnull final Series series,
+	protected void customizeCellRenderer(@NotNull JList<? extends Template> list,
+	                                     @Nonnull final Template template,
 	                                     int index,
 	                                     boolean selected,
 	                                     boolean hasFocus) {
-		this.append(series.getName());
+		this.append(template.getName());
 	}
 }

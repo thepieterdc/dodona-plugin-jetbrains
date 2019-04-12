@@ -12,7 +12,9 @@
 
     <change-notes><![CDATA[
     <ul>
-    <li><em>[INTERNAL]</em> Updated API client.</li>
+        <li>[FEATURE] Create new exercise files using templates. For now only a Python doctest template is available.</li>
+        <li>[IMPROVEMENT] General performance improvements.
+        <li><em>[INTERNAL]</em> Updated API client.</li>
     </ul>
     ]]>
     </change-notes>
@@ -31,6 +33,9 @@
         <applicationService
             serviceInterface="be.ugent.piedcler.dodona.plugin.naming.ExerciseNamingService"
             serviceImplementation="be.ugent.piedcler.dodona.plugin.naming.impl.ExerciseNamingServiceImpl"/>
+        <applicationService
+            serviceInterface="be.ugent.piedcler.dodona.plugin.templates.ExerciseTemplateService"
+            serviceImplementation="be.ugent.piedcler.dodona.plugin.templates.impl.ExerciseTemplateServiceImpl"/>
         <applicationService
             serviceInterface="be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider"
             serviceImplementation="be.ugent.piedcler.dodona.plugin.code.identification.configurers.providers.IdentificationConfigurerProviderImpl"/>
