@@ -33,6 +33,9 @@
             serviceInterface="be.ugent.piedcler.dodona.plugin.naming.ExerciseNamingService"
             serviceImplementation="be.ugent.piedcler.dodona.plugin.naming.impl.ExerciseNamingServiceImpl"/>
         <applicationService
+            serviceInterface="be.ugent.piedcler.dodona.plugin.templates.ExerciseTemplateService"
+            serviceImplementation="be.ugent.piedcler.dodona.plugin.templates.impl.ExerciseTemplateServiceImpl"/>
+        <applicationService
             serviceInterface="be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider"
             serviceImplementation="be.ugent.piedcler.dodona.plugin.code.identification.configurers.providers.IdentificationConfigurerProviderImpl"/>
         <applicationService serviceInterface="be.ugent.piedcler.dodona.plugin.code.identification.IdentificationParser"
