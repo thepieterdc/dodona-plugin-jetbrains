@@ -41,8 +41,8 @@ public class GetSubmissionsTask extends Task.WithResult<List<PartialSubmission>,
 	protected List<PartialSubmission> compute(@NotNull final ProgressIndicator indicator) throws RuntimeException {
 		try {
 			return Api.call(this.myProject, dodona -> this.identification.getCourseId()
-				.map(course -> dodona.submissions().getAllByMe(course, identification.getExerciseId()))
-				.orElseGet(() -> dodona.submissions().getAllByMe(identification.getExerciseId()))
+				.map(course -> dodona.submissions().getAllByMe(course, this.identification.getExerciseId()))
+				.orElseGet(() -> dodona.submissions().getAllByMe(this.identification.getExerciseId()))
 			);
 		} catch (final IOException ex) {
 			throw new RuntimeException(ex);

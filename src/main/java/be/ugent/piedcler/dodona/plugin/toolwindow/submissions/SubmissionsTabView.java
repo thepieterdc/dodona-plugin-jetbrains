@@ -10,7 +10,9 @@ package be.ugent.piedcler.dodona.plugin.toolwindow.submissions;
 
 import be.ugent.piedcler.dodona.plugin.identification.Identification;
 import be.ugent.piedcler.dodona.plugin.identification.IdentificationService;
+import be.ugent.piedcler.dodona.plugin.tasks.GetExerciseInfoTask;
 import be.ugent.piedcler.dodona.plugin.tasks.GetSubmissionsTask;
+import be.ugent.piedcler.dodona.resources.Exercise;
 import be.ugent.piedcler.dodona.resources.submissions.PartialSubmission;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
@@ -98,11 +100,22 @@ public class SubmissionsTabView {
 			.flatMap(f -> this.identificationService.identify(this.project, f))
 			.orElse(null);
 		
-		if(identification != null) {
+		if (identification != null) {
+			
+			final Exercise exercise = ProgressManager.getInstance()
+				.run(new GetExerciseInfoTask(this.project, identification));
+			
+			this.content.setDisplayName("Submissions to " + exercise.getName());
+			
 			final List<PartialSubmission> submissions = ProgressManager.getInstance()
 				.run(new GetSubmissionsTask(this.project, identification));
-			this.panel.setSubmissions(submissions);
+			if (submissions.isEmpty()) {
+				this.panel.setNoSubmissions();
+			} else {
+				this.panel.setSubmissions(submissions);
+			}
 		} else {
+			this.content.setDisplayName("Submissions");
 			this.panel.setNoExercise();
 		}
 	}

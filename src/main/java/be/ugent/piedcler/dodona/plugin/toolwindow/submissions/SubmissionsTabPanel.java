@@ -14,7 +14,6 @@ import com.intellij.ui.table.JBTable;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
-import javax.swing.table.TableModel;
 import java.util.List;
 
 /**
@@ -35,8 +34,7 @@ class SubmissionsTabPanel extends SimpleToolWindowPanel {
 	 * @param submissions the submissions
 	 */
 	void setSubmissions(@Nonnull final List<PartialSubmission> submissions) {
-		final TableModel submissionsTableModel = new SubmissionsTableModel(submissions);
-		final JBTable submissionsTable = new JBTable(submissionsTableModel);
+		final JBTable submissionsTable = new SubmissionsTable(submissions);
 		
 		final JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
@@ -50,6 +48,19 @@ class SubmissionsTabPanel extends SimpleToolWindowPanel {
 	 */
 	void setNoExercise() {
 		final JLabel noExerciseLabel = new JLabel("No active exercise is loaded.");
+		
+		final JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+		mainPanel.add(noExerciseLabel);
+		
+		this.setContent(mainPanel);
+	}
+	
+	/**
+	 * No submissions.
+	 */
+	void setNoSubmissions() {
+		final JLabel noExerciseLabel = new JLabel("No submissions to this exercise were made yet.");
 		
 		final JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));

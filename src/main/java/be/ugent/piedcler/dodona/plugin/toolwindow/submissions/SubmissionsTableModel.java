@@ -11,22 +11,26 @@ package be.ugent.piedcler.dodona.plugin.toolwindow.submissions;
 import be.ugent.piedcler.dodona.resources.submissions.PartialSubmission;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.TableViewModel;
-import com.intellij.util.xml.ui.BooleanColumnInfo;
 import com.intellij.util.xml.ui.StringColumnInfo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Renders a list of submissions.
  */
-public class SubmissionsTableModel extends TableViewModel<PartialSubmission> {
+class SubmissionsTableModel extends TableViewModel<PartialSubmission> {
 	private final ColumnInfo[] columns;
 	private final List<PartialSubmission> submissions;
+	
+	private static final DateTimeFormatter timestampFormatter =
+		DateTimeFormatter.ofPattern("eeee d MMMM y, HH:mm", Locale.getDefault());
 	
 	/**
 	 * SubmissionsTableModel constructor.
@@ -35,7 +39,7 @@ public class SubmissionsTableModel extends TableViewModel<PartialSubmission> {
 	 */
 	SubmissionsTableModel(@Nonnull final List<PartialSubmission> submissions) {
 		this.columns = new ColumnInfo[]{
-			new BooleanColumnInfo("Accepted"),
+			new StringColumnInfo("Accepted"),
 			new StringColumnInfo("Summary"),
 			new StringColumnInfo("Timestamp")
 		};
@@ -75,19 +79,19 @@ public class SubmissionsTableModel extends TableViewModel<PartialSubmission> {
 	}
 	
 	@Override
-	public Object getRowValue(int row) {
+	public PartialSubmission getRowValue(int row) {
 		return this.submissions.get(row);
 	}
 	
 	@Override
-	public Object getValueAt(final int rowIndex, final int columnIndex) {
+	public String getValueAt(final int rowIndex, final int columnIndex) {
 		switch (columnIndex) {
 			case 0:
-				return this.submissions.get(rowIndex).isAccepted();
+				return this.submissions.get(rowIndex).isAccepted() ? "Yes" : "No";
 			case 1:
 				return this.submissions.get(rowIndex).getSummary();
 			case 2:
-				return this.submissions.get(rowIndex).getCreatedAt();
+				return this.submissions.get(rowIndex).getCreatedAt().format(timestampFormatter);
 		}
 		
 		return null;
