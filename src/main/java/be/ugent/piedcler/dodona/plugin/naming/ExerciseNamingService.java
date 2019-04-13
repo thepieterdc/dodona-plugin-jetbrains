@@ -25,5 +25,5 @@ public interface ExerciseNamingService {
 	 * @return the generated filename, null if failed
 	 */
 	@Nonnull
-	Optional<String> generateFileName(@Nonnull Exercise exercise);
+	Optional<String> generateFilename(@Nonnull Exercise exercise);
 }

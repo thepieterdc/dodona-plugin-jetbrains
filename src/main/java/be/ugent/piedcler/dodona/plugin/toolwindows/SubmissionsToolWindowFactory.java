@@ -8,9 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.toolwindows;
 
-import be.ugent.piedcler.dodona.plugin.tasks.GetSubmissionsTask;
 import be.ugent.piedcler.dodona.resources.submissions.PartialSubmission;
-import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
@@ -37,7 +35,5 @@ public class SubmissionsToolWindowFactory implements ToolWindowFactory, DumbAwar
 		
 		toolWindow.setTitle("Submissions");
 		toolWindow.getContentManager().addContent(ContentFactory.SERVICE.getInstance().createContent(root, "Submissions", true));
-		
-		ProgressManager.getInstance().run(new GetSubmissionsTask(project)).forEach(submissionListModel::addElement);
 	}
 }

@@ -126,7 +126,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 	 */
 	@Nonnull
 	private String getFileName(@Nonnull final Exercise exercise, final PsiDirectory directory) {
-		String name = this.namingService.generateFileName(exercise).orElse(null);
+		String name = this.namingService.generateFilename(exercise).orElse(null);
 		
 		while (true) {
 			name = Messages.showInputDialog(
