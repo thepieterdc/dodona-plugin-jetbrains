@@ -9,6 +9,7 @@
 package be.ugent.piedcler.dodona.plugin.identification;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
 
 import javax.annotation.Nonnull;
@@ -35,6 +36,16 @@ public interface IdentificationService {
 	 */
 	@Nonnull
 	Optional<Identification> identify(@Nonnull final PsiFile file);
+	
+	/**
+	 * Identifies the current exercise given a virtual file.
+	 *
+	 * @param project the opened project
+	 * @param file    the file to process
+	 * @return the found identification, if any
+	 */
+	@Nonnull
+	Optional<Identification> identify(@Nonnull final Project project, @Nonnull final VirtualFile file);
 	
 	/**
 	 * Identifies the currently opened exercise.

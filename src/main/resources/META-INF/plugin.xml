@@ -50,13 +50,18 @@
         <projectService serviceInterface="be.ugent.piedcler.dodona.plugin.notifications.FeedbackService"
                         serviceImplementation="be.ugent.piedcler.dodona.plugin.notifications.FeedbackServiceImpl"/>
 
-        <toolWindow id="Dodona" anchor="bottom" icon="/icons/dodona.png"
-                    factoryClass="be.ugent.piedcler.dodona.plugin.toolwindows.SubmissionsToolWindowFactory"
+        <toolWindow id="Dodona" factoryClass="be.ugent.piedcler.dodona.plugin.toolwindow.DodonaToolWindowFactory"
+                    icon="/icons/dodona.png" anchor="bottom"
                     secondary="false"
-                    conditionClass="be.ugent.piedcler.dodona.plugin.toolwindows.SubmissionsToolWindowCondition"
                     canCloseContents="true"/>
-
     </extensions>
+
+    <project-components>
+        <component>
+            <interface-class>be.ugent.piedcler.dodona.plugin.toolwindow.DodonaToolWindowView</interface-class>
+            <implementation-class>be.ugent.piedcler.dodona.plugin.toolwindow.DodonaToolWindowView</implementation-class>
+        </component>
+    </project-components>
 
     <actions>
         <action id="be.ugent.piedcler.dodona.plugin.actions.NewExercise"
