@@ -10,6 +10,7 @@ package be.ugent.piedcler.dodona.plugin.tasks;
 
 import be.ugent.piedcler.dodona.plugin.Api;
 import be.ugent.piedcler.dodona.plugin.identification.Identification;
+import be.ugent.piedcler.dodona.resources.Exercise;
 import be.ugent.piedcler.dodona.resources.submissions.PartialSubmission;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
@@ -21,27 +22,27 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Fetches the submissions of the current logged in user for a given exercise.
+ * Gets information about an exercise.
  */
-public class GetSubmissionsTask extends Task.WithResult<List<PartialSubmission>, RuntimeException> {
+public class GetExerciseInfoTask extends Task.WithResult<Exercise, RuntimeException> {
 	private final Identification identification;
 	
 	/**
-	 * GetSubmissionsTask constructor.
+	 * GetExerciseInfoTask constructor.
 	 *
 	 * @param project        the project to display notifications in
-	 * @param identification exercise details
+	 * @param identification exercise identification
 	 */
-	public GetSubmissionsTask(@Nonnull final Project project, @Nonnull final Identification identification) {
-		super(project, "Load Submissions", false);
+	public GetExerciseInfoTask(@Nonnull final Project project, @Nonnull final Identification identification) {
+		super(project, "Load Exercise Info", false);
 		this.identification = identification;
 	}
 	
 	@Override
-	protected List<PartialSubmission> compute(@NotNull final ProgressIndicator indicator) throws RuntimeException {
+	protected Exercise compute(@NotNull final ProgressIndicator indicator) throws RuntimeException {
 		try {
 			return Api.call(this.myProject, dodona -> this.identification.getCourseId()
-				.map(course -> dodona.submissions().getAllByMe(course, identification.getExerciseId()))
+				.map(course -> dodona.exercises().get.getAllByMe(course, identification.getExerciseId()))
 				.orElseGet(() -> dodona.submissions().getAllByMe(identification.getExerciseId()))
 			);
 		} catch (final IOException ex) {

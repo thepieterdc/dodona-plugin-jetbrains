@@ -36,12 +36,11 @@ class SubmissionsTabPanel extends SimpleToolWindowPanel {
 	 */
 	void setSubmissions(@Nonnull final List<PartialSubmission> submissions) {
 		final TableModel submissionsTableModel = new SubmissionsTableModel(submissions);
-		
 		final JBTable submissionsTable = new JBTable(submissionsTableModel);
 		
 		final JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.add(submissionsTable);
+		mainPanel.add(new JScrollPane(submissionsTable));
 		
 		this.setContent(mainPanel);
 	}

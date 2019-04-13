@@ -11,6 +11,7 @@ package be.ugent.piedcler.dodona.plugin.toolwindow.submissions;
 import be.ugent.piedcler.dodona.plugin.identification.Identification;
 import be.ugent.piedcler.dodona.plugin.identification.IdentificationService;
 import be.ugent.piedcler.dodona.plugin.tasks.GetSubmissionsTask;
+import be.ugent.piedcler.dodona.resources.submissions.PartialSubmission;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -97,8 +99,9 @@ public class SubmissionsTabView {
 			.orElse(null);
 		
 		if(identification != null) {
-			ProgressManager.getInstance().run(new GetSubmissionsTask(this.project, identification))
-			System.out.println("yay!");
+			final List<PartialSubmission> submissions = ProgressManager.getInstance()
+				.run(new GetSubmissionsTask(this.project, identification));
+			this.panel.setSubmissions(submissions);
 		} else {
 			this.panel.setNoExercise();
 		}
