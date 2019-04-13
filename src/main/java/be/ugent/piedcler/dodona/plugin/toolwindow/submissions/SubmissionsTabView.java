@@ -8,8 +8,13 @@
  */
 package be.ugent.piedcler.dodona.plugin.toolwindow.submissions;
 
+import be.ugent.piedcler.dodona.plugin.identification.Identification;
+import be.ugent.piedcler.dodona.plugin.identification.IdentificationService;
+import be.ugent.piedcler.dodona.plugin.tasks.GetSubmissionsTask;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.content.Content;
@@ -17,6 +22,8 @@ import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
@@ -46,6 +53,8 @@ public class SubmissionsTabView {
 	
 	private final Content content;
 	
+	private final IdentificationService identificationService;
+	
 	private final SubmissionsTabPanel panel;
 	
 	private final Project project;
@@ -56,6 +65,7 @@ public class SubmissionsTabView {
 	 * @param project the project
 	 */
 	public SubmissionsTabView(@Nonnull final Project project) {
+		this.identificationService = ServiceManager.getService(project, IdentificationService.class);
 		this.panel = new SubmissionsTabPanel();
 		this.project = project;
 		
@@ -81,7 +91,16 @@ public class SubmissionsTabView {
 	 *
 	 * @param file the file to load
 	 */
-	public void loadFile(@Nonnull final VirtualFile file) {
-		System.out.println(file);
+	public void loadFile(@Nullable final VirtualFile file) {
+		final Identification identification = Optional.ofNullable(file)
+			.flatMap(f -> this.identificationService.identify(this.project, f))
+			.orElse(null);
+		
+		if(identification != null) {
+			ProgressManager.getInstance().run(new GetSubmissionsTask(this.project, identification))
+			System.out.println("yay!");
+		} else {
+			this.panel.setNoExercise();
+		}
 	}
 }

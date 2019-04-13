@@ -15,7 +15,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 
 import javax.annotation.Nonnull;
-import java.util.Optional;
 
 /**
  * Tool window containing last submissions for the current exercise.
@@ -31,17 +30,6 @@ public class DodonaToolWindowView {
 	 */
 	public DodonaToolWindowView(@Nonnull final Project project) {
 		this.project = project;
-	}
-	
-	/**
-	 * Gets the active opened file.
-	 *
-	 * @return the active opened file
-	 */
-	@Nonnull
-	private Optional<VirtualFile> getActiveFile() {
-		final VirtualFile[] files = FileEditorManager.getInstance(this.project).getSelectedFiles();
-		return Optional.ofNullable(files.length == 0 ? null : files[0]);
 	}
 	
 	/**
@@ -65,6 +53,7 @@ public class DodonaToolWindowView {
 		this.toolWindow.getContentManager().addContent(submissionsTab.getContent());
 		this.toolWindow.setToHideOnEmptyContent(true);
 		
-		this.getActiveFile().ifPresent(submissionsTab::loadFile);
+		final VirtualFile[] files = FileEditorManager.getInstance(this.project).getSelectedFiles();
+		submissionsTab.loadFile(files.length == 0 ? null : files[0]);
 	}
 }
