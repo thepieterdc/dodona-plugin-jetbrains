@@ -8,7 +8,6 @@
  */
 package be.ugent.piedcler.dodona.plugin.templates;
 
-import be.ugent.piedcler.dodona.plugin.dto.Template;
 import be.ugent.piedcler.dodona.resources.Exercise;
 
 import javax.annotation.Nonnull;

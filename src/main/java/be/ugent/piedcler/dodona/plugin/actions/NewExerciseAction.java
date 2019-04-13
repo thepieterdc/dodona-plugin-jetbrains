@@ -10,7 +10,7 @@ package be.ugent.piedcler.dodona.plugin.actions;
 
 import be.ugent.piedcler.dodona.plugin.Icons;
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider;
-import be.ugent.piedcler.dodona.plugin.dto.Template;
+import be.ugent.piedcler.dodona.plugin.templates.Template;
 import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.FileAlreadyExistsException;

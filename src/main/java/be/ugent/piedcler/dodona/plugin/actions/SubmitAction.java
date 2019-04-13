@@ -9,14 +9,14 @@
 package be.ugent.piedcler.dodona.plugin.actions;
 
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider;
-import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationParser;
 import be.ugent.piedcler.dodona.plugin.code.preprocess.FileSubmissionPreprocessor;
 import be.ugent.piedcler.dodona.plugin.code.preprocess.impl.CombinedSubmissionPreprocessor;
 import be.ugent.piedcler.dodona.plugin.code.preprocess.impl.JavaFileSubmissionPreprocessor;
-import be.ugent.piedcler.dodona.plugin.dto.Identification;
 import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import be.ugent.piedcler.dodona.plugin.exceptions.errors.CodeReadException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.ExerciseNotSetException;
+import be.ugent.piedcler.dodona.plugin.identification.Identification;
+import be.ugent.piedcler.dodona.plugin.identification.IdentificationService;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
 import be.ugent.piedcler.dodona.plugin.tasks.SubmitSolutionTask;
@@ -43,7 +43,7 @@ import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAct
  */
 public class SubmitAction extends AnAction {
 	private final IdentificationConfigurerProvider idConfigurer;
-	private final IdentificationParser idParser;
+	private final IdentificationService identificationSrv;
 	
 	private final FileSubmissionPreprocessor preprocessor =
 		new CombinedSubmissionPreprocessor()
@@ -54,7 +54,7 @@ public class SubmitAction extends AnAction {
 	 */
 	public SubmitAction() {
 		this.idConfigurer = ServiceManager.getService(IdentificationConfigurerProvider.class);
-		this.idParser = ServiceManager.getService(IdentificationParser.class);
+		this.identificationSrv = ServiceManager.getService(IdentificationService.class);
 	}
 	
 	@Override
@@ -80,7 +80,7 @@ public class SubmitAction extends AnAction {
 				.orElseThrow(CodeReadException::new);
 			
 			try {
-				final Identification identification = idParser.identify(code).orElseThrow(ExerciseNotSetException::new);
+				final Identification identification = this.identificationSrv.identify(code).orElseThrow(ExerciseNotSetException::new);
 				final Solution solution = Solution.create(identification, code);
 				
 				ProgressManager.getInstance().run(new SubmitSolutionTask(project, event.getPresentation(), solution));

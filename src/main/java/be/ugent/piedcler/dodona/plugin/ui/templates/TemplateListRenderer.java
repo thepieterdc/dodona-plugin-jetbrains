@@ -8,7 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui.templates;
 
-import be.ugent.piedcler.dodona.plugin.dto.Template;
+import be.ugent.piedcler.dodona.plugin.templates.Template;
 import com.intellij.ui.ColoredListCellRenderer;
 import org.jetbrains.annotations.NotNull;
 

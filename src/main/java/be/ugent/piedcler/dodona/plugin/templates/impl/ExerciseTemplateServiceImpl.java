@@ -8,7 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.templates.impl;
 
-import be.ugent.piedcler.dodona.plugin.dto.Template;
+import be.ugent.piedcler.dodona.plugin.templates.Template;
 import be.ugent.piedcler.dodona.plugin.templates.ExerciseTemplateService;
 import be.ugent.piedcler.dodona.resources.Exercise;
 import be.ugent.piedcler.dodona.resources.ProgrammingLanguage;

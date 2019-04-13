@@ -6,14 +6,14 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.code.identification.parsers;
+package be.ugent.piedcler.dodona.plugin.identification.impl;
 
 import java.util.regex.Pattern;
 
 /**
- * Parses identifications from urls.
+ * Performs identification by matching the url contained in the exercise.
  */
-public class UrlIdentificationParser extends RegexIdentificationParser {
+public class UrlIdentificationService extends RegexIdentificationService {
 	private static final Pattern courseRegex =
 		Pattern.compile("https?://.*/courses/(\\d+)", Pattern.CASE_INSENSITIVE);
 	
@@ -26,7 +26,7 @@ public class UrlIdentificationParser extends RegexIdentificationParser {
 	/**
 	 * UrlIdentificationParser constructor.
 	 */
-	public UrlIdentificationParser() {
+	public UrlIdentificationService() {
 		super(courseRegex, seriesRegex, exerciseRegex);
 	}
 }

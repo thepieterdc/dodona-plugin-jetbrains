@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.dto;
+package be.ugent.piedcler.dodona.plugin.templates;
 
 import org.jetbrains.annotations.NotNull;
 

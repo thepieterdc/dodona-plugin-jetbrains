@@ -6,10 +6,9 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.code.identification.parsers;
+package be.ugent.piedcler.dodona.plugin.identification.impl;
 
-import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationParser;
-import be.ugent.piedcler.dodona.plugin.dto.Identification;
+import be.ugent.piedcler.dodona.plugin.identification.Identification;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -17,9 +16,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Parses identifications using regexes.
+ * Performs identification using using regexes.
  */
-public class RegexIdentificationParser implements IdentificationParser {
+public class RegexIdentificationService extends AbstractIdentificationService {
 	private final Pattern courseRegex;
 	private final Pattern seriesRegex;
 	private final Pattern exerciseRegex;
@@ -31,9 +30,9 @@ public class RegexIdentificationParser implements IdentificationParser {
 	 * @param seriesRegex   regex used to identify the series id
 	 * @param exerciseRegex regex used to identify the exercise id
 	 */
-	public RegexIdentificationParser(@Nonnull final Pattern courseRegex,
-	                                 @Nonnull final Pattern seriesRegex,
-	                                 @Nonnull final Pattern exerciseRegex) {
+	public RegexIdentificationService(@Nonnull final Pattern courseRegex,
+	                                  @Nonnull final Pattern seriesRegex,
+	                                  @Nonnull final Pattern exerciseRegex) {
 		this.courseRegex = courseRegex;
 		this.seriesRegex = seriesRegex;
 		this.exerciseRegex = exerciseRegex;

@@ -8,7 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui.templates;
 
-import be.ugent.piedcler.dodona.plugin.dto.Template;
+import be.ugent.piedcler.dodona.plugin.templates.Template;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;

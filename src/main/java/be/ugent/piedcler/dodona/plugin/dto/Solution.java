@@ -8,6 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.dto;
 
+import be.ugent.piedcler.dodona.plugin.identification.Identification;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
