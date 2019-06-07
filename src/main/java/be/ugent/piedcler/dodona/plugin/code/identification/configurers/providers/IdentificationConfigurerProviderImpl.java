@@ -10,9 +10,7 @@ package be.ugent.piedcler.dodona.plugin.code.identification.configurers.provider
 
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurer;
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider;
-import be.ugent.piedcler.dodona.plugin.code.identification.configurers.JavaIdentificationConfigurer;
-import be.ugent.piedcler.dodona.plugin.code.identification.configurers.JavaScriptIdentificationConfigurer;
-import be.ugent.piedcler.dodona.plugin.code.identification.configurers.PythonIdentificationConfigurer;
+import be.ugent.piedcler.dodona.plugin.code.identification.configurers.LanguageIdentificationConfigurer;
 import be.ugent.piedcler.dodona.resources.ProgrammingLanguage;
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.FileType;
@@ -28,11 +26,11 @@ import java.util.Optional;
  */
 public class IdentificationConfigurerProviderImpl implements IdentificationConfigurerProvider {
 	private static final Collection<IdentificationConfigurer> configurers = Arrays.asList(
-		new JavaIdentificationConfigurer(),
-		new JavaScriptIdentificationConfigurer(),
-		new PythonIdentificationConfigurer()
+		LanguageIdentificationConfigurer.PYTHON,
+		LanguageIdentificationConfigurer.JAVASCRIPT,
+		LanguageIdentificationConfigurer.JAVA
 	);
-	
+
 	/**
 	 * Gets the identification configurer to use given a file extension.
 	 *
@@ -45,7 +43,7 @@ public class IdentificationConfigurerProviderImpl implements IdentificationConfi
 			.filter(config -> config.getFileExtension().equalsIgnoreCase(extension))
 			.findAny();
 	}
-	
+
 	@Nonnull
 	@Override
 	public Optional<IdentificationConfigurer> getConfigurer(@Nonnull final Language language) {
@@ -54,13 +52,13 @@ public class IdentificationConfigurerProviderImpl implements IdentificationConfi
 			.map(FileType::getDefaultExtension)
 			.flatMap(IdentificationConfigurerProviderImpl::getConfigurerByExtension);
 	}
-	
+
 	@Nonnull
 	@Override
 	public Optional<IdentificationConfigurer> getConfigurer(@Nonnull final ProgrammingLanguage language) {
 		return getConfigurerByExtension(language.getExtension());
 	}
-	
+
 	@Nonnull
 	@Override
 	public Optional<IdentificationConfigurer> getConfigurer(@Nonnull String fileName) {
