@@ -14,7 +14,7 @@ import com.intellij.openapi.editor.Document;
 import javax.annotation.Nonnull;
 
 /**
- * An abstract identification configurer to share common logic.
+ * An identification configurer that can discern various languages
  */
 public enum LanguageIdentificationConfigurer implements IdentificationConfigurer {
 
@@ -41,6 +41,10 @@ public enum LanguageIdentificationConfigurer implements IdentificationConfigurer
 		return this.getIdentificationLine(url) + code;
 	}
 
+	/**
+	 * Get the language-specific extension for a LanguageIdentificationConfigurer
+	 * @return The string containin the specific file extension
+	 */
 	@Nonnull
 	@Override
 	public String getFileExtension() {
