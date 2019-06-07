@@ -33,7 +33,7 @@ class SubmissionsTable extends JBTable {
 		this.model = new SubmissionsTableModel(submissions);
 		this.setModel(this.model);
 	}
-	
+
 	@Override
 	@NotNull
 	public Component prepareRenderer(@NotNull TableCellRenderer renderer, int row, int column) {
@@ -42,12 +42,8 @@ class SubmissionsTable extends JBTable {
 		final PartialSubmission submission = this.model.getRowValue(row);
 		
 		// Background color.
-		if (submission.isAccepted()) {
-			result.setBackground(JBColor.GREEN);
-		} else {
-			result.setBackground(JBColor.RED);
-		}
-		
+		result.setBackground(submission.isAccepted() ? JBColor.GREEN: JBColor.RED);
+
 		return result;
 	}
 }
