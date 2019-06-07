@@ -26,11 +26,9 @@ import java.util.Optional;
  */
 public class IdentificationConfigurerProviderImpl implements IdentificationConfigurerProvider {
 	private static final Collection<IdentificationConfigurer> configurers = Arrays.asList(
-		LanguageIdentificationConfigurer.PYTHON,
-		LanguageIdentificationConfigurer.JAVASCRIPT,
-		LanguageIdentificationConfigurer.JAVA
+		LanguageIdentificationConfigurer.values()
 	);
-
+	
 	/**
 	 * Gets the identification configurer to use given a file extension.
 	 *
@@ -43,7 +41,7 @@ public class IdentificationConfigurerProviderImpl implements IdentificationConfi
 			.filter(config -> config.getFileExtension().equalsIgnoreCase(extension))
 			.findAny();
 	}
-
+	
 	@Nonnull
 	@Override
 	public Optional<IdentificationConfigurer> getConfigurer(@Nonnull final Language language) {
@@ -52,13 +50,13 @@ public class IdentificationConfigurerProviderImpl implements IdentificationConfi
 			.map(FileType::getDefaultExtension)
 			.flatMap(IdentificationConfigurerProviderImpl::getConfigurerByExtension);
 	}
-
+	
 	@Nonnull
 	@Override
 	public Optional<IdentificationConfigurer> getConfigurer(@Nonnull final ProgrammingLanguage language) {
 		return getConfigurerByExtension(language.getExtension());
 	}
-
+	
 	@Nonnull
 	@Override
 	public Optional<IdentificationConfigurer> getConfigurer(@Nonnull String fileName) {
