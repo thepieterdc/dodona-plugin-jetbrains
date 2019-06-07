@@ -12,26 +12,34 @@ import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigu
 import com.intellij.openapi.editor.Document;
 
 import javax.annotation.Nonnull;
+import java.util.function.Function;
 
 /**
  * An identification configurer that can discern various languages
  */
 public enum LanguageIdentificationConfigurer implements IdentificationConfigurer {
 
-	HTML("html"),
-	PYTHON("py"),
-	JAVA("java"),
-	JAVASCRIPT("js");
+	HTML("html", (v) -> String.format("<!-- %s -->", v)),
+	PYTHON("py", v -> String.format("# %s", v)),
+	JAVA("java", v -> String.format("// %s", v)),
+	JAVASCRIPT("js", v -> String.format("// %s", v));
 
 	private String extension;
+	private Function<String, String> commentLambda;
 
-	LanguageIdentificationConfigurer(String extension){
+	/**
+	 * Construct a helper for generating the submission files
+	 * @param extension     The file extension for the kind of exercise
+	 * @param commentLambda How should the Identification line be generated
+	 */
+	LanguageIdentificationConfigurer(String extension, Function<String, String> commentLambda) {
 		this.extension = extension;
+		this.commentLambda = commentLambda;
 	}
 
 	@Override
 	public void configure(@Nonnull final Document document,
-	                      @Nonnull final String url) {
+						  @Nonnull final String url) {
 		document.insertString(0, this.getIdentificationLine(url));
 	}
 
@@ -53,12 +61,11 @@ public enum LanguageIdentificationConfigurer implements IdentificationConfigurer
 
 	/**
 	 * Gets the identification comment line
-	 *
 	 * @param identification the identification of the exercise
 	 * @return the line to write in the file
 	 */
 	@Nonnull
-	String getIdentificationLine(@Nonnull final String identification){
-		return String.format("// %s\n", identification);
+	String getIdentificationLine(@Nonnull final String identification) {
+		return commentLambda.apply(identification) + "\n";
 	}
 }
