@@ -18,12 +18,12 @@ import java.util.function.Function;
  * An identification configurer that can discern various languages.
  */
 public enum LanguageIdentificationConfigurer implements IdentificationConfigurer {
+	HASKELL("hs", v -> String.format("-- %s", v)),
 	HTML("html", v -> String.format("<!-- %s -->", v)),
 	JAVA("java", v -> String.format("// %s", v)),
 	JAVASCRIPT("js", v -> String.format("// %s", v)),
-	PYTHON("py", v -> String.format("# %s", v)),
-	HASKELL("hs", v -> String.format("-- %s", v)),
-	PROLOG("pl", v -> String.format("%% %s", v));
+	PROLOG("pl", v -> String.format("%% %s", v)),
+	PYTHON("py", v -> String.format("# %s", v));
 
 	private Function<String, String> commentFn;
 	private String extension;
