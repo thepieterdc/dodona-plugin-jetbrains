@@ -21,11 +21,13 @@ public enum LanguageIdentificationConfigurer implements IdentificationConfigurer
 	HTML("html", v -> String.format("<!-- %s -->", v)),
 	JAVA("java", v -> String.format("// %s", v)),
 	JAVASCRIPT("js", v -> String.format("// %s", v)),
-	PYTHON("py", v -> String.format("# %s", v));
-	
+	PYTHON("py", v -> String.format("# %s", v)),
+	HASKELL("hs", v -> String.format("-- %s", v)),
+	PROLOG("pl", v -> String.format("%% %s", v));
+
 	private Function<String, String> commentFn;
 	private String extension;
-	
+
 	/**
 	 * Construct a helper for generating the submission files.
 	 *
@@ -36,19 +38,19 @@ public enum LanguageIdentificationConfigurer implements IdentificationConfigurer
 		this.extension = extension;
 		this.commentFn = commentFn;
 	}
-	
+
 	@Override
 	public void configure(@Nonnull final Document document,
 	                      @Nonnull final String url) {
 		document.insertString(0, this.getIdentificationLine(url));
 	}
-	
+
 	@Nonnull
 	@Override
 	public String configure(@Nonnull final String code, @Nonnull final String url) {
 		return this.getIdentificationLine(url) + code;
 	}
-	
+
 	/**
 	 * Get the language-specific extension for a LanguageIdentificationConfigurer
 	 *
@@ -59,7 +61,7 @@ public enum LanguageIdentificationConfigurer implements IdentificationConfigurer
 	public String getFileExtension() {
 		return extension;
 	}
-	
+
 	/**
 	 * Gets the identification comment line
 	 *
