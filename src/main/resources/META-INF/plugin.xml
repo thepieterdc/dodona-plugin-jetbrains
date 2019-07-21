@@ -12,7 +12,7 @@
 
     <change-notes><![CDATA[
     <ul>
-        <li>[BUGFIX] Fix the retrieval of submissions to private exercises.</li>
+        <li>[BUGFIX] Update the API client to fix a bug when submitting solutions.</li>
     </ul>
     ]]>
     </change-notes>
