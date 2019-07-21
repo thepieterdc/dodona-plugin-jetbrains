@@ -12,7 +12,6 @@
 
     <change-notes><![CDATA[
     <ul>
-        <li>[BUGFIX] Update the API client to fix a bug when submitting solutions.</li>
     </ul>
     ]]>
     </change-notes>
