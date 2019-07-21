@@ -13,9 +13,9 @@ import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigu
 import be.ugent.piedcler.dodona.plugin.code.identification.configurers.JavaIdentificationConfigurer;
 import be.ugent.piedcler.dodona.plugin.code.identification.configurers.JavaScriptIdentificationConfigurer;
 import be.ugent.piedcler.dodona.plugin.code.identification.configurers.PythonIdentificationConfigurer;
-import be.ugent.piedcler.dodona.resources.ProgrammingLanguage;
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.FileType;
+import io.github.thepieterdc.dodona.resources.ProgrammingLanguage;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;

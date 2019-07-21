@@ -8,9 +8,6 @@
  */
 package be.ugent.piedcler.dodona.plugin;
 
-import be.ugent.piedcler.dodona.DodonaBuilder;
-import be.ugent.piedcler.dodona.DodonaClient;
-import be.ugent.piedcler.dodona.exceptions.AuthenticationException;
 import be.ugent.piedcler.dodona.plugin.authentication.LoginDialog;
 import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
 import be.ugent.piedcler.dodona.plugin.settings.DodonaSettings;
@@ -19,6 +16,9 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
+import io.github.thepieterdc.dodona.DodonaBuilder;
+import io.github.thepieterdc.dodona.DodonaClient;
+import io.github.thepieterdc.dodona.exceptions.AuthenticationException;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;

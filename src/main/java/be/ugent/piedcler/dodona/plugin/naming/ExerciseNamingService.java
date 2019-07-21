@@ -8,7 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.naming;
 
-import be.ugent.piedcler.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.Exercise;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -25,5 +25,5 @@ public interface ExerciseNamingService {
 	 * @return the generated filename, null if failed
 	 */
 	@Nonnull
-	Optional<String> generateFileName(@Nonnull Exercise exercise);
+	Optional<String> generateFileName(Exercise exercise);
 }

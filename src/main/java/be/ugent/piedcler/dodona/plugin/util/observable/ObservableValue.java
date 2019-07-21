@@ -8,7 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.util.observable;
 
-import be.ugent.piedcler.dodona.resources.Resource;
+import io.github.thepieterdc.dodona.resources.Resource;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

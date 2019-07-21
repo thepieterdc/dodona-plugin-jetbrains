@@ -10,4 +10,7 @@
 /**
  * Naming utilities.
  */
+@ParametersAreNonnullByDefault
 package be.ugent.piedcler.dodona.plugin.naming;
+
+import javax.annotation.ParametersAreNonnullByDefault;

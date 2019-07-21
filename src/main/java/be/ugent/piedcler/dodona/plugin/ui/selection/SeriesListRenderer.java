@@ -8,7 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui.selection;
 
-import be.ugent.piedcler.dodona.resources.Series;
+import io.github.thepieterdc.dodona.resources.Series;
 
 import javax.swing.*;
 import java.awt.*;

@@ -16,7 +16,6 @@ import be.ugent.piedcler.dodona.plugin.exceptions.warnings.FileAlreadyExistsExce
 import be.ugent.piedcler.dodona.plugin.naming.ExerciseNamingService;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
-import be.ugent.piedcler.dodona.resources.Exercise;
 import com.intellij.ide.IdeView;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -35,6 +34,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.ui.UIBundle;
+import io.github.thepieterdc.dodona.resources.Exercise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

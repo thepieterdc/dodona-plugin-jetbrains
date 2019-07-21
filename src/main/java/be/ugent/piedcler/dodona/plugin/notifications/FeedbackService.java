@@ -8,10 +8,8 @@
  */
 package be.ugent.piedcler.dodona.plugin.notifications;
 
-import be.ugent.piedcler.dodona.resources.Exercise;
-import be.ugent.piedcler.dodona.resources.Submission;
-
-import javax.annotation.Nonnull;
+import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.submissions.Submission;
 
 /**
  * Service that provides the user with feedback about an solution.
@@ -24,5 +22,5 @@ public interface FeedbackService {
 	 * @param exercise   the exercise
 	 * @param submission the submission
 	 */
-	void notify(@Nonnull Exercise exercise, @Nonnull Submission submission);
+	void notify(Exercise exercise, Submission submission);
 }

@@ -8,9 +8,9 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui.selection;
 
-import be.ugent.piedcler.dodona.data.ExerciseStatus;
 import be.ugent.piedcler.dodona.plugin.Icons;
-import be.ugent.piedcler.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.data.ExerciseStatus;
+import io.github.thepieterdc.dodona.resources.Exercise;
 
 import javax.swing.*;
 import java.awt.*;

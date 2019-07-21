@@ -10,11 +10,11 @@ package be.ugent.piedcler.dodona.plugin.ui.selection;
 
 import be.ugent.piedcler.dodona.plugin.ui.listeners.SelectedItemListener;
 import be.ugent.piedcler.dodona.plugin.util.observable.ObservableValue;
-import be.ugent.piedcler.dodona.resources.Course;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBTabbedPane;
+import io.github.thepieterdc.dodona.resources.Course;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

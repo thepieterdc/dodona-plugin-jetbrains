@@ -9,7 +9,7 @@
 package be.ugent.piedcler.dodona.plugin.ui.selection;
 
 import be.ugent.piedcler.dodona.plugin.Icons;
-import be.ugent.piedcler.dodona.resources.Course;
+import io.github.thepieterdc.dodona.resources.Course;
 
 import javax.swing.*;
 import java.awt.*;

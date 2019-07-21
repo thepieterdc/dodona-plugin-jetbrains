@@ -8,21 +8,21 @@
  */
 package be.ugent.piedcler.dodona.plugin.tasks;
 
-import be.ugent.piedcler.dodona.exceptions.DodonaException;
 import be.ugent.piedcler.dodona.plugin.Api;
 import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
 import be.ugent.piedcler.dodona.plugin.ui.selection.CourseSelectionDialog;
 import be.ugent.piedcler.dodona.plugin.ui.selection.ExerciseSelectionDialog;
 import be.ugent.piedcler.dodona.plugin.ui.selection.SelectionDialog;
 import be.ugent.piedcler.dodona.plugin.ui.selection.SeriesSelectionDialog;
-import be.ugent.piedcler.dodona.resources.Course;
-import be.ugent.piedcler.dodona.resources.Exercise;
-import be.ugent.piedcler.dodona.resources.Series;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.DialogWrapper;
+import io.github.thepieterdc.dodona.exceptions.DodonaException;
+import io.github.thepieterdc.dodona.resources.Course;
+import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.Series;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
