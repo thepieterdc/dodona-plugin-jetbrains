@@ -8,9 +8,9 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui.selection;
 
-import be.ugent.piedcler.dodona.resources.Series;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
+import io.github.thepieterdc.dodona.resources.Series;
 
 import javax.swing.*;
 import java.awt.*;

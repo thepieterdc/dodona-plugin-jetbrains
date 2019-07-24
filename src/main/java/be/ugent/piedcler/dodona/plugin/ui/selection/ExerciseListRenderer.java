@@ -8,10 +8,10 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui.selection;
 
-import be.ugent.piedcler.dodona.data.ExerciseStatus;
 import be.ugent.piedcler.dodona.plugin.Icons;
-import be.ugent.piedcler.dodona.resources.Exercise;
 import com.intellij.ui.ColoredListCellRenderer;
+import io.github.thepieterdc.dodona.data.ExerciseStatus;
+import io.github.thepieterdc.dodona.resources.Exercise;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;

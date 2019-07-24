@@ -10,7 +10,6 @@
 /**
  * UI components for selection.
  */
-
 @ParametersAreNonnullByDefault
 package be.ugent.piedcler.dodona.plugin.ui.selection;
 

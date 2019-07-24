@@ -1,28 +1,28 @@
 /*
- * Copyright (c) 2018. All rights reserved.
+ * Copyright (c) 2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/ugent-dodona/
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
 package be.ugent.piedcler.dodona.plugin.tasks;
 
-import be.ugent.piedcler.dodona.data.SubmissionStatus;
-import be.ugent.piedcler.dodona.exceptions.DodonaException;
 import be.ugent.piedcler.dodona.plugin.Api;
 import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
 import be.ugent.piedcler.dodona.plugin.notifications.FeedbackService;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
-import be.ugent.piedcler.dodona.resources.Exercise;
-import be.ugent.piedcler.dodona.resources.submissions.Submission;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
+import io.github.thepieterdc.dodona.data.SubmissionStatus;
+import io.github.thepieterdc.dodona.exceptions.DodonaException;
+import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.submissions.Submission;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

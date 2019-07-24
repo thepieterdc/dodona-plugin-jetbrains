@@ -10,10 +10,10 @@ package be.ugent.piedcler.dodona.plugin.tasks;
 
 import be.ugent.piedcler.dodona.plugin.Api;
 import be.ugent.piedcler.dodona.plugin.identification.Identification;
-import be.ugent.piedcler.dodona.resources.Exercise;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
+import io.github.thepieterdc.dodona.resources.Exercise;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;

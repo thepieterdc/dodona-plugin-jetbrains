@@ -9,11 +9,11 @@
 package be.ugent.piedcler.dodona.plugin.code.identification;
 
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.UndetectableProgrammingLanguageException;
-import be.ugent.piedcler.dodona.resources.Exercise;
-import be.ugent.piedcler.dodona.resources.ProgrammingLanguage;
 import com.intellij.lang.Language;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiFile;
+import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.ProgrammingLanguage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

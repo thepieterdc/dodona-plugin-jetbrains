@@ -8,11 +8,11 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui.selection;
 
-import be.ugent.piedcler.dodona.data.ExerciseStatus;
 import be.ugent.piedcler.dodona.plugin.settings.DodonaSettings;
-import be.ugent.piedcler.dodona.resources.Exercise;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
+import io.github.thepieterdc.dodona.data.ExerciseStatus;
+import io.github.thepieterdc.dodona.resources.Exercise;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;

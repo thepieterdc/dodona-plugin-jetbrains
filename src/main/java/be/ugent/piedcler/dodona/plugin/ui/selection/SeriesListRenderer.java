@@ -8,8 +8,8 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui.selection;
 
-import be.ugent.piedcler.dodona.resources.Series;
 import com.intellij.ui.ColoredListCellRenderer;
+import io.github.thepieterdc.dodona.resources.Series;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;

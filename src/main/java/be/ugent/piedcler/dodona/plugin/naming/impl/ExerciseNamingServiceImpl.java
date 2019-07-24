@@ -9,8 +9,8 @@
 package be.ugent.piedcler.dodona.plugin.naming.impl;
 
 import be.ugent.piedcler.dodona.plugin.naming.ExerciseNamingService;
-import be.ugent.piedcler.dodona.resources.Exercise;
-import be.ugent.piedcler.dodona.resources.ProgrammingLanguage;
+import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.ProgrammingLanguage;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -30,7 +30,7 @@ public class ExerciseNamingServiceImpl implements ExerciseNamingService {
 	
 	@Nonnull
 	@Override
-	public Optional<String> generateFilename(@Nonnull final Exercise exercise) {
+	public Optional<String> generateFileName(final Exercise exercise) {
 		final String extension = exercise.getProgrammingLanguage()
 			.map(ProgrammingLanguage::getExtension)
 			.orElse("");

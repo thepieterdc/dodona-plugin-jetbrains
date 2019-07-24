@@ -10,7 +10,6 @@ package be.ugent.piedcler.dodona.plugin.actions;
 
 import be.ugent.piedcler.dodona.plugin.Icons;
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider;
-import be.ugent.piedcler.dodona.plugin.templates.Template;
 import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.FileAlreadyExistsException;
@@ -18,8 +17,8 @@ import be.ugent.piedcler.dodona.plugin.naming.ExerciseNamingService;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
 import be.ugent.piedcler.dodona.plugin.templates.ExerciseTemplateService;
+import be.ugent.piedcler.dodona.plugin.templates.Template;
 import be.ugent.piedcler.dodona.plugin.ui.templates.TemplateSelectionDialog;
-import be.ugent.piedcler.dodona.resources.Exercise;
 import com.intellij.ide.IdeView;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -38,6 +37,7 @@ import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.ui.UIBundle;
+import io.github.thepieterdc.dodona.resources.Exercise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,7 +126,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 	 */
 	@Nonnull
 	private String getFileName(@Nonnull final Exercise exercise, final PsiDirectory directory) {
-		String name = this.namingService.generateFilename(exercise).orElse(null);
+		String name = this.namingService.generateFileName(exercise).orElse(null);
 		
 		while (true) {
 			name = Messages.showInputDialog(

@@ -8,7 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.templates;
 
-import be.ugent.piedcler.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.Exercise;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -26,5 +26,5 @@ public interface ExerciseTemplateService {
 	 * @return the matching templates
 	 */
 	@Nonnull
-	List<Template> listTemplates(final Exercise exercise);
+	List<Template> listTemplates(Exercise exercise);
 }

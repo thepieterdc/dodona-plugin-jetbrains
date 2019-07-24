@@ -8,9 +8,9 @@
  */
 package be.ugent.piedcler.dodona.plugin.toolwindow.submissions;
 
-import be.ugent.piedcler.dodona.resources.submissions.PartialSubmission;
 import com.intellij.ui.JBColor;
 import com.intellij.ui.table.JBTable;
+import io.github.thepieterdc.dodona.resources.submissions.PartialSubmission;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;

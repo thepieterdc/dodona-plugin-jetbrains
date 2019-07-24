@@ -8,10 +8,10 @@
  */
 package be.ugent.piedcler.dodona.plugin.toolwindow.submissions;
 
-import be.ugent.piedcler.dodona.resources.submissions.PartialSubmission;
 import com.intellij.util.ui.ColumnInfo;
 import com.intellij.util.ui.TableViewModel;
 import com.intellij.util.xml.ui.StringColumnInfo;
+import io.github.thepieterdc.dodona.resources.submissions.PartialSubmission;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
