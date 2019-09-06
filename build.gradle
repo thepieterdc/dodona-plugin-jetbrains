@@ -1,30 +1,12 @@
 plugins {
-    id 'de.fuerstenau.buildconfig' version '1.1.8'
-    id 'idea'
     id 'java'
-    id 'org.jetbrains.intellij' version '0.3.10'
+    id 'org.jetbrains.intellij' version '0.4.10'
 }
 
-group 'be.ugent.piedcler.dodona'
-version '1.3.7-SNAPSHOT'
+group 'io.github.thepieterdc.dodona'
+version '2.0.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
-
-buildConfig {
-    appName 'ugent-dodona'
-    version = project.version
-    packageName = 'be.ugent.piedcler.dodona.plugin'
-    clsName = 'BuildConfig'
-}
-
-intellij {
-    version ideaVersion
-    pluginName 'ugent-dodona'
-    updateSinceUntilBuild false
-    if (customIde == 'true') {
-        alternativeIdePath customIdePath
-    }
-}
 
 repositories {
     mavenCentral()
@@ -32,23 +14,30 @@ repositories {
     maven {
         url "https://dl.bintray.com/thepieterdc/dodona-api-java"
     }
-
-    if (customIde == 'true') {
-        flatDir {
-            dirs "$customIdePath/lib"
-        }
-    }
 }
 
 dependencies {
-    compile group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.3.1'
-    runtime group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.3.1'
+    compile group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.4.3'
+    runtime group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.4.3'
 
-    if (customIde == 'true') {
-        compileOnly name: customIdeName
-    }
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+intellij {
+    downloadSources false
+    pluginName 'dodona'
+    plugins = ['java', 'PythonCore:2019.2.192.5728.98']
+    version 'IU-192.5728.98'
 }
 
 patchPluginXml {
-    version project.version
+    changeNotes """
+      <b>This version features a complete rewrite of the plugin.</b>
+      
+      <b>Features</b>
+      <ul>
+      </ul>
+      """
+
+    sinceBuild '171.0'
 }
