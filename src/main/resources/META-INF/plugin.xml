@@ -1,80 +1,19 @@
 <idea-plugin url="https://plugins.jetbrains.com/plugin/11166-dodona">
-    <id>be.ugent.piedcler.dodona</id>
+    <id>io.github.thepieterdc.dodona.plugin</id>
     <name>Dodona</name>
-    <version>1.0.0</version>
-    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah
-        Lissens
+    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">
+        Pieter De Clercq and Tobiah Lissens
     </vendor>
 
-    <description><![CDATA[
-      This plugin makes it easy to solve your Dodona exercises, right from within your favourite JetBrains IDE.
-    ]]></description>
-
-    <change-notes><![CDATA[
-    <ul>
-        <li>[FEATURE] Create new exercise files using templates. For now only a Python doctest template is available.</li>
-        <li>[FEATURE] List previous submissions using a tab at the bottom of the IDE.</li>
-        <li>[IMPROVEMENT] General performance improvements.</li>
-        <li><em>[INTERNAL]</em> Updated API client.</li>
-    </ul>
-    ]]>
-    </change-notes>
-
-    <idea-version since-build="171.0"/>
+    <description>
+        Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from
+        within your favourite JetBrains IDE.
+    </description>
 
     <depends>com.intellij.modules.lang</depends>
-    <depends optional="true" config-file="java.xml">com.intellij.modules.java</depends>
+    <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationConfigurable
-            displayName="Dodona"
-            instance="be.ugent.piedcler.dodona.plugin.settings.SettingsConfigurable"/>
-        <applicationService serviceInterface="be.ugent.piedcler.dodona.plugin.settings.DodonaSettings"
-                            serviceImplementation="be.ugent.piedcler.dodona.plugin.settings.DodonaSettingsImpl"/>
-
-        <applicationService serviceInterface="be.ugent.piedcler.dodona.plugin.identification.IdentificationService"
-                            serviceImplementation="be.ugent.piedcler.dodona.plugin.identification.impl.UrlIdentificationService"/>
-
-        <applicationService
-            serviceInterface="be.ugent.piedcler.dodona.plugin.naming.ExerciseNamingService"
-            serviceImplementation="be.ugent.piedcler.dodona.plugin.naming.impl.ExerciseNamingServiceImpl"/>
-
-        <applicationService
-            serviceInterface="be.ugent.piedcler.dodona.plugin.templates.ExerciseTemplateService"
-            serviceImplementation="be.ugent.piedcler.dodona.plugin.templates.impl.ExerciseTemplateServiceImpl"/>
-
-        <applicationService
-            serviceInterface="be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider"
-            serviceImplementation="be.ugent.piedcler.dodona.plugin.code.identification.configurers.providers.IdentificationConfigurerProviderImpl"/>
-
-        <projectService serviceInterface="be.ugent.piedcler.dodona.plugin.notifications.FeedbackService"
-                        serviceImplementation="be.ugent.piedcler.dodona.plugin.notifications.FeedbackServiceImpl"/>
-
-        <toolWindow id="Dodona" factoryClass="be.ugent.piedcler.dodona.plugin.toolwindow.DodonaToolWindowFactory"
-                    icon="/icons/dodona.png" anchor="bottom"
-                    secondary="false"
-                    canCloseContents="true"/>
     </extensions>
 
-    <project-components>
-        <component>
-            <interface-class>be.ugent.piedcler.dodona.plugin.toolwindow.DodonaToolWindowView</interface-class>
-            <implementation-class>be.ugent.piedcler.dodona.plugin.toolwindow.DodonaToolWindowView</implementation-class>
-        </component>
-    </project-components>
-
-    <actions>
-        <action id="be.ugent.piedcler.dodona.plugin.actions.NewExercise"
-                class="be.ugent.piedcler.dodona.plugin.actions.NewExerciseAction">
-            <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewScratchFile"/>
-        </action>
-
-        <group id="be.ugent.piedcler.dodona.plugin.actions.DodonaActions" text="UGent Dodona" popup="false">
-            <add-to-group group-id="ToolbarRunGroup" anchor="after" relative-to-action="Stop"/>
-            <action id="be.ugent.piedcler.dodona.submit" class="be.ugent.piedcler.dodona.plugin.actions.SubmitAction"
-                    text="Submit to Dodona" description="Submits the current file to Dodona."
-                    icon="/icons/submitAction.png">
-            </action>
-        </group>
-    </actions>
 </idea-plugin>
