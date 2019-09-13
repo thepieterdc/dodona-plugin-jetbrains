@@ -8,9 +8,9 @@
  */
 
 /**
- * Authentication-related classes.
+ * Course-related UI components.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.authentication;
+package io.github.thepieterdc.dodona.plugin.ui.resources.course;
 
 import javax.annotation.ParametersAreNonnullByDefault;

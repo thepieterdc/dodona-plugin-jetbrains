@@ -42,6 +42,7 @@ patchPluginXml {
       
       <h3>Features</h3>
       <ul>
+        <li>Project wizard: Add Dodona support to new projects.</li>
       </ul>
       
       <h3>Improvements</h3>

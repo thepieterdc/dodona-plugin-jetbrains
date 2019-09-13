@@ -14,7 +14,7 @@ import javax.annotation.Nullable;
  * Listener for changes to selected items.
  */
 @FunctionalInterface
-public interface SelectedItemListener<T> {
+public interface ItemSelectedListener<T> {
 	/**
 	 * Called when the selected item is changed.
 	 *

@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.ui.selection;
+package io.github.thepieterdc.dodona.plugin.ui.resources.series;
 
 import com.intellij.ui.ColoredListCellRenderer;
 import io.github.thepieterdc.dodona.resources.Series;
@@ -18,7 +18,7 @@ import javax.swing.*;
 /**
  * Renders the series name correctly in a list of Series.
  */
-public class SeriesListRenderer extends ColoredListCellRenderer<Series> {
+public class SeriesNameRenderer extends ColoredListCellRenderer<Series> {
 	@Override
 	protected void customizeCellRenderer(@NotNull JList<? extends Series> list,
 	                                     @Nonnull final Series series,

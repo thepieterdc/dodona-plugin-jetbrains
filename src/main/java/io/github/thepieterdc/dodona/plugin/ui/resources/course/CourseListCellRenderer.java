@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.ui.selection;
+package io.github.thepieterdc.dodona.plugin.ui.resources.course;
 
 import be.ugent.piedcler.dodona.plugin.Icons;
 import com.intellij.ui.ColoredListCellRenderer;
@@ -19,7 +19,7 @@ import javax.swing.*;
 /**
  * Renders the course name correctly in a list of Courses.
  */
-public class CourseListRenderer extends ColoredListCellRenderer<Course> {
+public class CourseListCellRenderer extends ColoredListCellRenderer<Course> {
 	@Override
 	protected void customizeCellRenderer(@NotNull JList<? extends Course> list,
 	                                     @Nonnull final Course course,

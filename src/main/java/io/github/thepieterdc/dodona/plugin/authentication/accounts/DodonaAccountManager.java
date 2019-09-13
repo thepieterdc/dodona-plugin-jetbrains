@@ -14,6 +14,7 @@ import com.intellij.credentialStore.CredentialAttributesKt;
 import com.intellij.credentialStore.Credentials;
 import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
@@ -89,10 +90,32 @@ public class DodonaAccountManager implements PersistentStateComponent<DodonaAcco
 		return Optional.ofNullable(this.account);
 	}
 	
+	/**
+	 * Gets a shared instance of the account manager.
+	 *
+	 * @return the instance
+	 */
+	@Nonnull
+	public static DodonaAccountManager getInstance() {
+		return ServiceManager.getService(DodonaAccountManager.class);
+	}
+	
 	@Nullable
 	@Override
 	public DodonaAccount getState() {
 		return this.account;
+	}
+	
+	/**
+	 * Gets the token for the given account, if available.
+	 *
+	 * @param account the account
+	 */
+	public Optional<String> getToken(final DodonaAccount account) {
+		return this.getAccount()
+			.map(this::createCredentialAttributes)
+			.map(this.passwordSafe::get)
+			.map(Credentials::getPasswordAsString);
 	}
 	
 	@Override

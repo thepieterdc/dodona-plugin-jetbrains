@@ -1,73 +1,81 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package be.ugent.piedcler.dodona.plugin.settings;
 
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutorImpl;
-import com.intellij.credentialStore.CredentialAttributes;
-import com.intellij.ide.passwordSafe.PasswordSafe;
-import com.intellij.ide.util.PropertiesComponent;
+package io.github.thepieterdc.dodona.plugin.settings;
+
+import com.intellij.openapi.components.PersistentStateComponent;
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
-import io.github.thepieterdc.dodona.DodonaClient;
+import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.project.Project;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.util.Optional;
 
 /**
- * Manages the configured settings.
+ * Project-specific plugin settings.
  */
-@State(name = "DodonaSettings")
-public class DodonaProjectSettings implements DodonaSettings {
-	private static final String CREDENTIALS_SUBSYSTEM = "dodona";
-	private static final String CREDENTIALS_KEY_TOKEN = "token";
+@State(name = DodonaProjectSettings.STATE_NAME, storages = @Storage(DodonaProjectSettings.STORAGE_FILE))
+public class DodonaProjectSettings implements PersistentStateComponent<DodonaProjectSettings.State> {
+	@NonNls
+	static final String STATE_NAME = "DodonaProjectSettings";
 	
-	private static final String SETTING_HIDE_CORRECT_EXERCISES = "hideCorrectExercises";
+	@NonNls
+	static final String STORAGE_FILE = "dodona.xml";
+	
+	private State state = new State();
 	
 	/**
-	 * Creates the Credential attributes.
+	 * Gets the course id.
 	 *
-	 * @return credential attributes
+	 * @return the course id
+	 */
+	public int getCourseId() {
+		return this.state.course_id;
+	}
+	
+	/**
+	 * Gets an instance of the project settings.
+	 *
+	 * @param project the active project
+	 * @return the instance
 	 */
 	@Nonnull
-	private static CredentialAttributes createCredentialAttributes() {
-		return new CredentialAttributes(String.format("%s-%s", CREDENTIALS_SUBSYSTEM, CREDENTIALS_KEY_TOKEN));
+	public static DodonaProjectSettings getInstance(@Nonnull final Project project) {
+		return ServiceManager.getService(project, DodonaProjectSettings.class);
 	}
 	
 	@Nonnull
 	@Override
-	public String getHost() {
-		return DodonaClient.DEFAULT_HOST;
-	}
-	
-	@Nonnull
-	@Override
-	public String getToken() {
-		final CredentialAttributes credentials = createCredentialAttributes();
-		return Optional.ofNullable(PasswordSafe.getInstance().getPassword(credentials)).orElse("");
+	public State getState() {
+		return this.state;
 	}
 	
 	@Override
-	public boolean hideCorrectExercises() {
-		final PropertiesComponent properties = PropertiesComponent.getInstance();
-		return properties.getBoolean(SETTING_HIDE_CORRECT_EXERCISES, false);
+	public void loadState(@NotNull final State newState) {
+		this.state = newState;
 	}
 	
-	@Override
-	public void setHideCorrectExercises(final boolean hide) {
-		final PropertiesComponent properties = PropertiesComponent.getInstance();
-		properties.setValue(SETTING_HIDE_CORRECT_EXERCISES, hide);
+	/**
+	 * Sets the course id.
+	 *
+	 * @param id the course id
+	 */
+	public void setCourseId(final int id) {
+		this.state.course_id = id;
 	}
 	
-	@Override
-	public void setToken(@Nonnull final String token) {
-		final CredentialAttributes credentials = createCredentialAttributes();
-		PasswordSafe.getInstance().setPassword(credentials, token);
-		
-		DodonaExecutorImpl.clearClient();
+	/**
+	 * Setting values.
+	 */
+	public static class State {
+		public int course_id = 0;
 	}
 }
