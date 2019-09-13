@@ -8,9 +8,9 @@
  */
 
 /**
- * Authentication-related classes.
+ * Language-specific implementations of Dodona project types.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.authentication;
+package io.github.thepieterdc.dodona.plugin.project.types;
 
 import javax.annotation.ParametersAreNonnullByDefault;

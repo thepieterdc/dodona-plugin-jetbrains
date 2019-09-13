@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.ui.selection;
+package io.github.thepieterdc.dodona.plugin.ui.resources.exercise;
 
 import be.ugent.piedcler.dodona.plugin.Icons;
 import com.intellij.ui.ColoredListCellRenderer;
@@ -20,7 +20,7 @@ import javax.swing.*;
 /**
  * Renders the exercise name correctly in a list of Exercises.
  */
-public class ExerciseListRenderer extends ColoredListCellRenderer<Exercise> {
+public class ExerciseNameStatusRenderer extends ColoredListCellRenderer<Exercise> {
 	@Override
 	protected void customizeCellRenderer(@NotNull JList<? extends Exercise> list,
 	                                     @Nonnull final Exercise exercise,

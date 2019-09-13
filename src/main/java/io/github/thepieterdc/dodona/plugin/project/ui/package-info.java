@@ -8,9 +8,9 @@
  */
 
 /**
- * Authentication-related classes.
+ * UI components for wizard steps.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.authentication;
+package io.github.thepieterdc.dodona.plugin.project.ui;
 
 import javax.annotation.ParametersAreNonnullByDefault;

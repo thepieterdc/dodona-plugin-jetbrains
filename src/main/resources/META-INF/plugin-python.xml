@@ -1,0 +1,6 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <moduleType id="DODONA_PYTHON_MODULE"
+                    implementationClass="io.github.thepieterdc.dodona.plugin.project.types.DodonaPythonType"/>
+    </extensions>
+</idea-plugin>

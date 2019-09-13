@@ -38,9 +38,20 @@ public final class DodonaExecutorFactory {
 	 * @return the request executor
 	 */
 	public static DodonaExecutor create(final DodonaServer server, final String token) {
+		return DodonaExecutorFactory.create(server.getUrl(), token);
+	}
+	
+	/**
+	 * Creates a new DodonaExecutor for the given server and token.
+	 *
+	 * @param server the Dodona server address
+	 * @param token  the authentication token
+	 * @return the request executor
+	 */
+	public static DodonaExecutor create(final String server, final String token) {
 		final DodonaClient client = DodonaBuilder.builder()
 			.authenticate(token)
-			.setHost(server.getUrl())
+			.setHost(server)
 			.setUserAgent(DodonaExecutorFactory.getUserAgent())
 			.build();
 		return new DodonaExecutorImpl(client);

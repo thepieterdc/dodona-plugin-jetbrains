@@ -8,7 +8,6 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui.selection;
 
-import be.ugent.piedcler.dodona.plugin.ui.listeners.SelectedItemListener;
 import be.ugent.piedcler.dodona.plugin.util.observable.ObservableValue;
 
 import javax.annotation.Nonnull;
@@ -35,7 +34,7 @@ public abstract class SelectionDialog<T> extends JDialog {
 	 *
 	 * @param listener the listener
 	 */
-	public void addListener(@Nonnull final SelectedItemListener<T> listener) {
+	public void addListener(@Nonnull final be.ugent.piedcler.dodona.plugin.ui.listeners.ItemSelectedListener<T> listener) {
 		this.value.addListener(listener::onItemSelected);
 	}
 	

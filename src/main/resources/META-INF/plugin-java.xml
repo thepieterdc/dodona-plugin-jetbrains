@@ -1,0 +1,6 @@
+<idea-plugin>
+    <extensions defaultExtensionNs="com.intellij">
+        <moduleType id="DODONA_JAVA_MODULE"
+                    implementationClass="io.github.thepieterdc.dodona.plugin.project.types.DodonaJavaType"/>
+    </extensions>
+</idea-plugin>
