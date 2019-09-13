@@ -24,7 +24,7 @@ public class Icons {
 	
 	private static final Icon CIRCLE = IconLoader.getIcon("/icons/circle.png");
 	
-	public static final Icon DODONA = IconLoader.getIcon("/icons/dodona.png");
+	public static final Icon DODONA = IconLoader.getIcon("/icons/dodona.svg");
 	
 	/**
 	 * Colors the white circle in the given color.

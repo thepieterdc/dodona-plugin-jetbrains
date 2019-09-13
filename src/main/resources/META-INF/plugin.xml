@@ -1,22 +1,27 @@
+<!-- DO NOT ALTER THE INDENTATION OF THIS FILE AS THIS WILL BREAK THINGS -->
 <idea-plugin url="https://plugins.jetbrains.com/plugin/11166-dodona">
     <id>be.ugent.piedcler.dodona</id>
     <name>Dodona</name>
 
-    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">
-        Pieter De Clercq and Tobiah Lissens
-    </vendor>
+    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah Lissens</vendor>
 
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
+
+    <!-- IDE-specific configurations -->
+    <depends optional="true" config-file="plugin-java.xml">com.intellij.modules.java</depends>
+    <depends optional="true" config-file="plugin-python.xml">com.intellij.modules.python</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Authentication -->
         <applicationService
             serviceImplementation="io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccountManager"/>
+        <applicationService
+            serviceImplementation="io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator"/>
 
         <!-- Settings -->
         <applicationConfigurable
             instance="io.github.thepieterdc.dodona.plugin.settings.DodonaSettingsConfigurable"/>
+        <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings"/>
     </extensions>
-
 </idea-plugin>
