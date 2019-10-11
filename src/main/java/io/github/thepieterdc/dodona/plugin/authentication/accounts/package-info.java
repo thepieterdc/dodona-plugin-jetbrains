@@ -8,9 +8,9 @@
  */
 
 /**
- * Plugin settings.
+ * Handles accounts on Dodona.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.settings;
+package io.github.thepieterdc.dodona.plugin.authentication.accounts;
 
 import javax.annotation.ParametersAreNonnullByDefault;

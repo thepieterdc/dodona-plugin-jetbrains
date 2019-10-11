@@ -1,19 +1,22 @@
 <idea-plugin url="https://plugins.jetbrains.com/plugin/11166-dodona">
-    <id>io.github.thepieterdc.dodona.plugin</id>
+    <id>be.ugent.piedcler.dodona</id>
     <name>Dodona</name>
+
     <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">
         Pieter De Clercq and Tobiah Lissens
     </vendor>
-
-    <description>
-        Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from
-        within your favourite JetBrains IDE.
-    </description>
 
     <depends>com.intellij.modules.lang</depends>
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
+        <!-- Authentication -->
+        <applicationService
+            serviceImplementation="io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccountManager"/>
+
+        <!-- Settings -->
+        <applicationConfigurable
+            instance="io.github.thepieterdc.dodona.plugin.settings.DodonaSettingsConfigurable"/>
     </extensions>
 
 </idea-plugin>

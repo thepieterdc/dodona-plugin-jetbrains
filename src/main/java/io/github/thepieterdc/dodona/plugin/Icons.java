@@ -1,12 +1,12 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package be.ugent.piedcler.dodona.plugin;
+package io.github.thepieterdc.dodona.plugin;
 
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.util.IconUtil;
@@ -15,24 +15,24 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Contains icons used throughout the plugin.
+ * Icons used throughout the plugin.
  */
-public enum Icons {
-	;
+public class Icons {
+	public static final Icon AVATAR_DEFAULT = IconLoader.getIcon("/icons/avatar-default.svg");
+	public static final Icon AVATAR_NAOS = IconLoader.getIcon("/icons/avatar-naos.svg");
+	public static final Icon AVATAR_OTHER = IconLoader.getIcon("/icons/avatar-other.svg");
 	
-	private static final Icon CIRCLE = IconLoader.findIcon("/icons/circle.png");
+	private static final Icon CIRCLE = IconLoader.getIcon("/icons/circle.png");
 	
-	public static final Icon CORRECT = IconLoader.getIcon("/icons/correct.png");
 	public static final Icon DODONA = IconLoader.getIcon("/icons/dodona.png");
-	public static final Icon INCORRECT = IconLoader.getIcon("/icons/incorrect.png");
 	
 	/**
-	 * Gets a colored circle.
+	 * Colors the white circle in the given color.
 	 *
 	 * @param color the color for the circle
 	 * @return the colored circle
 	 */
-	public static Icon getColoredCircle(final Color color) {
-		return IconUtil.colorize(CIRCLE, color);
+	public static Icon createColoredCircle(final Color color) {
+		return IconUtil.colorize(Icons.CIRCLE, color);
 	}
 }
