@@ -1,4 +1,6 @@
 plugins {
+    id 'de.fuerstenau.buildconfig' version '1.1.8'
+    id 'idea'
     id 'java'
     id 'org.jetbrains.intellij' version '0.4.10'
 }
@@ -7,6 +9,10 @@ group 'io.github.thepieterdc.dodona'
 version '2.0.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
+
+buildConfig {
+    packageName 'io.github.thepieterdc.dodona.plugin'
+}
 
 repositories {
     mavenCentral()
@@ -34,10 +40,19 @@ patchPluginXml {
     changeNotes """
       <b>This version features a complete rewrite of the plugin.</b>
       
-      <b>Features</b>
+      <h3>Features</h3>
       <ul>
       </ul>
+      
+      <h3>Improvements</h3>
+      <ul>
+        <li>Authentication should work smoother now.</li>
+        <li>General performance improvements.</li>
+        <li>Other servers besides dodona.ugent.be are now supported.</li>
+      </ul>
       """
+
+    pluginDescription "Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE."
 
     sinceBuild '171.0'
 }

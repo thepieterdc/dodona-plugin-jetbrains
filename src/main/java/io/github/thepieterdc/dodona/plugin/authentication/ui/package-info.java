@@ -8,9 +8,9 @@
  */
 
 /**
- * Plugin settings.
+ * UI components related to authentication and account management.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.settings;
+package io.github.thepieterdc.dodona.plugin.authentication.ui;
 
 import javax.annotation.ParametersAreNonnullByDefault;

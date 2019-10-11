@@ -1,59 +1,80 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
+
 package io.github.thepieterdc.dodona.plugin.settings.ui;
 
-import io.github.thepieterdc.dodona.plugin.authentication.ui.DodonaLoginPanel;
-import com.intellij.openapi.project.ProjectManager;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.options.ConfigurableUi;
+import com.intellij.openapi.util.Disposer;
+import com.intellij.openapi.util.Pair;
+import io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccount;
+import io.github.thepieterdc.dodona.plugin.authentication.ui.DodonaAccountPanel;
+import io.github.thepieterdc.dodona.plugin.settings.DodonaSettingsHolder;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
+import java.util.Optional;
 
 /**
- * Settings panel to modify plugin settings.
+ * Main panel for plugin settings.
  */
-public class DodonaSettingsPanel {
-	private DodonaLoginPanel credentialsPanel;
-	
-	private JPanel mainPane;
+public class DodonaSettingsPanel implements ConfigurableUi<DodonaSettingsHolder>, Disposable {
+	private final DodonaAccountPanel accountPanel;
 	
 	/**
-	 * Initializes components.
+	 * DodonaSettingsPanel constructor.
 	 */
-	private void createUIComponents() {
-		this.credentialsPanel = new DodonaLoginPanel(ProjectManager.getInstance().getDefaultProject(), true);
+	public DodonaSettingsPanel() {
+		this.accountPanel = new DodonaAccountPanel();
 	}
 	
-	/**
-	 * Gets the main panel.
-	 *
-	 * @return the main panel
-	 */
-	public JComponent getPanel() {
-		return this.mainPane;
+	@Override
+	public void apply(@NotNull final DodonaSettingsHolder holder) {
+		// Set the account.
+		final Pair<DodonaAccount, String> account = this.accountPanel.getAccount();
+		holder.accounts().setAccount(account.getFirst());
+		
+		// Set the authentication token for a new account.
+		Optional.ofNullable(account.getSecond()).ifPresent(token ->
+			holder.accounts().setToken(account.getFirst(), token)
+		);
+		
+		// Clear the new authentication data and the modification status.
+		this.accountPanel.clearModified();
+		this.accountPanel.clearNewData();
 	}
 	
-	/**
-	 * Gets the value of the token field.
-	 *
-	 * @return the token
-	 */
-	@Nonnull
-	public String getToken() {
-		return this.credentialsPanel.getToken();
+	@Override
+	public void dispose() {
+		Disposer.dispose(this.accountPanel);
 	}
 	
-	/**
-	 * Sets the value of the token field.
-	 *
-	 * @param token the token to set
-	 */
-	public void setToken(@Nonnull final String token) {
-		this.credentialsPanel.setToken(token);
+	@NotNull
+	@Override
+	public JComponent getComponent() {
+		return this.accountPanel;
+	}
+	
+	@Override
+	public boolean isModified(@NotNull final DodonaSettingsHolder s) {
+		return this.accountPanel.isModified();
+	}
+	
+	@Override
+	public void reset(@NotNull final DodonaSettingsHolder holder) {
+		// Set the accounts.
+		this.accountPanel.setAccount(
+			holder.accounts().getAccount().orElse(null)
+		);
+		
+		// Clear the new authentication data and the modification status.
+		this.accountPanel.clearModified();
+		this.accountPanel.clearNewData();
 	}
 }

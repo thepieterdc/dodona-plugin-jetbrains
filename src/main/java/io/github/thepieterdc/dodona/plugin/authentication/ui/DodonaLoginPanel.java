@@ -1,122 +1,188 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
+
 package io.github.thepieterdc.dodona.plugin.authentication.ui;
 
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutorImpl;
-import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
-import com.intellij.ide.BrowserUtil;
+import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
-import com.intellij.ui.HoverHyperlinkLabel;
+import com.intellij.openapi.ui.ComboBox;
+import com.intellij.openapi.ui.ValidationInfo;
+import com.intellij.ui.components.JBPasswordField;
+import com.intellij.ui.components.panels.Wrapper;
+import com.intellij.util.ui.UI;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.exceptions.AuthenticationException;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.api.DodonaExecutorFactory;
+import io.github.thepieterdc.dodona.plugin.api.DodonaFuture;
+import io.github.thepieterdc.dodona.plugin.api.DodonaServer;
+import io.github.thepieterdc.dodona.plugin.ui.util.Validators;
 import io.github.thepieterdc.dodona.resources.User;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
-import javax.swing.event.HyperlinkEvent;
-import java.awt.*;
-import java.io.IOException;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
+import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Center component of the login dialog.
+ * Panel that contains a server and API token field.
  */
-public class DodonaLoginPanel extends JPanel {
-	private JTextField hostField;
-	private JPasswordField tokenField;
+public final class DodonaLoginPanel extends Wrapper {
+	@Nullable
+	private final Project project;
 	
-	private JPanel helpPanel;
-	private JButton testBtn;
+	@Nullable
+	private ValidationInfo authError;
 	
-	private JPanel mainPane;
+	private final ComboBox<DodonaServer> cbServer;
+	private final JBPasswordField pwdToken;
 	
 	/**
-	 * CredentialsPanel constructor.
+	 * DodonaLoginPanel constructor.
 	 *
-	 * @param project        active project
-	 * @param showTestButton true to show the test connection button
+	 * @param project the current project
 	 */
-	public DodonaLoginPanel(@Nonnull final Project project, final boolean showTestButton) {
-		super(new BorderLayout());
-		this.add(this.mainPane, BorderLayout.CENTER);
+	public DodonaLoginPanel(@Nullable final Project project) {
+		this.cbServer = new ComboBox<>(DodonaServer.values(), 0);
+		this.project = project;
+		this.pwdToken = new JBPasswordField();
 		
-		this.hostField.setText(DodonaClient.DEFAULT_HOST);
-		
-		this.testBtn.addActionListener(e -> this.testCredentials(project));
-		this.testBtn.setVisible(showTestButton);
+		this.setContent(this.createCenter());
+		this.cbServer.setSelectedItem(DodonaClient.DEFAULT_HOST);
+		this.pwdToken.requestFocus();
 	}
 	
 	/**
-	 * Custom creator for the help text.
+	 * Attempts to authenticate the server and token.
+	 *
+	 * @param indicator progress indicator
+	 * @return the authenticated user if successful
 	 */
-	private void createUIComponents() {
-		this.helpPanel = new JPanel(new FlowLayout(FlowLayout.LEADING, 0, 0));
-		this.helpPanel.setBorder(BorderFactory.createEmptyBorder());
+	CompletableFuture<User> authenticate(final ProgressIndicator indicator) {
+		this.setBusy(true);
+		this.authError = null;
 		
-		this.helpPanel.add(new JLabel("Need help generating a token? "));
+		// Get the input values.
+		final DodonaServer server = this.getServer();
+		final String token = this.getToken();
 		
-		final HoverHyperlinkLabel readmeLink = new HoverHyperlinkLabel("View instructions");
-		readmeLink.addHyperlinkListener(e -> {
-			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
-				BrowserUtil.browse("https://github.com/thepieterdc/dodona-plugin-jetbrains/blob/master/README.md");
-			}
-		});
+		// Get an executor.
+		final DodonaExecutor executor = DodonaExecutorFactory.create(server, token);
 		
-		this.helpPanel.add(readmeLink);
+		// Send the request.
+		return executor
+			.execute(this.project, DodonaBundle.message("auth.dialog.authenticating"), true, indicator, DodonaClient::me)
+			.whenCompleteRunOnEdt((user, err) -> {
+				this.setBusy(false);
+				if (err != null && !DodonaFuture.cancelled(err)) {
+					this.authError = this.handleError(err);
+				}
+			});
 	}
 	
 	/**
-	 * Gets the entered host.
+	 * Creates the center panel.
 	 *
-	 * @return the host
+	 * @return the center panel
 	 */
 	@Nonnull
-	public String getHost() {
-		return String.valueOf(this.hostField.getText()).trim();
+	private JPanel createCenter() {
+		return UI.PanelFactory.grid()
+			.add(UI.PanelFactory.panel(this.cbServer).withLabel(DodonaBundle.message("auth.dialog.server")))
+			.add(UI.PanelFactory.panel(this.pwdToken).withLabel(DodonaBundle.message("auth.dialog.token")))
+			.createPanel();
 	}
 	
 	/**
-	 * Gets the entered token.
+	 * Gets the Dodona server.
 	 *
-	 * @return the token
+	 * @return the server
 	 */
 	@Nonnull
-	public String getToken() {
-		return String.valueOf(this.tokenField.getPassword()).trim();
+	DodonaServer getServer() {
+		return this.cbServer.getItemAt(this.cbServer.getSelectedIndex());
 	}
 	
 	/**
-	 * Sets the value of the token field.
+	 * Gets the API token.
 	 *
-	 * @param token the value to set
+	 * @return the API token
 	 */
-	public void setToken(@Nonnull final String token) {
-		this.tokenField.setText(token);
+	@Nonnull
+	String getToken() {
+		return String.valueOf(this.pwdToken.getPassword()).trim();
 	}
 	
 	/**
-	 * Tests the provided access token.
+	 * Gets the preferred focus element.
 	 *
-	 * @param project active project
+	 * @return the preferred focus field
 	 */
-	private void testCredentials(@Nonnull final Project project) {
-		try {
-			final User user = DodonaExecutorImpl.callModal(
-				project, "Verifying credentials", this.getHost(), this.getToken(), DodonaClient::me
-			);
-			
-			Notifier.success(this.mainPane,
-				String.format("Successfully authenticated as %s %s.", user.getFirstName(), user.getLastName())
-			);
-		} catch (final AuthenticationException ex) {
-			Notifier.error(this.mainPane, "The provided token was not valid.", ex);
-		} catch (final IOException | RuntimeException ex) {
-			Notifier.error(this.mainPane, String.format("Could not authenticate: %s", ex.getMessage()), ex);
+	@Nonnull
+	JComponent getPreferredFocus() {
+		return this.pwdToken;
+	}
+	
+	/**
+	 * Handles the given authentication error.
+	 *
+	 * @param error the error to handle
+	 * @return the error message
+	 */
+	@Nonnull
+	private ValidationInfo handleError(final Throwable error) {
+		if (error instanceof UnknownHostException) {
+			return new ValidationInfo(DodonaBundle.message("auth.error.unreachable")).withOKEnabled();
 		}
+		
+		if (error instanceof ConnectException) {
+			return new ValidationInfo(DodonaBundle.message("auth.error.unreachable")).withOKEnabled();
+		}
+		
+		if (error instanceof AuthenticationException) {
+			return new ValidationInfo(error.getMessage()).withOKEnabled();
+		}
+		
+		if (error.getCause() != null) {
+			return this.handleError(error.getCause());
+		}
+		
+		return new ValidationInfo(DodonaBundle.message("auth.error.custom", error.getMessage())).withOKEnabled();
+	}
+	
+	/**
+	 * Validates all input fields.
+	 *
+	 * @return validation results
+	 */
+	List<ValidationInfo> doValidateAll() {
+		return Stream
+			.of(Validators.notEmpty(this.pwdToken, DodonaBundle.message("auth.error.token_empty")),
+				this.authError)
+			.filter(Objects::nonNull)
+			.collect(Collectors.toList());
+	}
+	
+	/**
+	 * Sets the working status.
+	 *
+	 * @param busy true if an action is being executed
+	 */
+	private void setBusy(final boolean busy) {
+		this.cbServer.setEnabled(!busy);
+		this.pwdToken.setEnabled(!busy);
 	}
 }

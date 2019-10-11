@@ -8,9 +8,9 @@
  */
 
 /**
- * Plugin settings.
+ * UI utilities.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.settings;
+package io.github.thepieterdc.dodona.plugin.ui.util;
 
 import javax.annotation.ParametersAreNonnullByDefault;

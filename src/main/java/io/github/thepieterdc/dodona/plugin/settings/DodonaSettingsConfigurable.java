@@ -1,98 +1,52 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package be.ugent.piedcler.dodona.plugin.settings;
 
-import com.intellij.openapi.options.SearchableConfigurable;
-import com.intellij.openapi.util.Comparing;
-import org.jetbrains.annotations.Nls;
+package io.github.thepieterdc.dodona.plugin.settings;
+
+import com.intellij.openapi.options.Configurable;
+import com.intellij.openapi.options.ConfigurableBase;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccountManager;
+import io.github.thepieterdc.dodona.plugin.settings.ui.DodonaSettingsPanel;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import javax.annotation.Nonnull;
-import javax.swing.*;
 
 /**
- * Controller for changing plugin settings.
+ * Controller that handles changing plugin settings.
  */
-public class DodonaSettingsConfigurable implements SearchableConfigurable {
-	@Nullable
-	private SettingsPanel settingsPanel;
+public class DodonaSettingsConfigurable extends ConfigurableBase<DodonaSettingsPanel, DodonaSettingsHolder> implements Configurable.NoMargin {
+	@NonNls
+	private static final String HELP_TOPIC = DodonaSettingsConfigurable.SETTINGS_ID;
 	
-	@Nonnull
-	private final DodonaSettings settings;
+	@NonNls
+	private static final String SETTINGS_ID = "settings.dodona";
+	
+	private final DodonaAccountManager accountManager;
 	
 	/**
 	 * SettingsConfigurable constructor.
+	 *
+	 * @param accountManager account manager
 	 */
-	public DodonaSettingsConfigurable() {
-		this.settings = DodonaSettings.getInstance();
+	DodonaSettingsConfigurable(final DodonaAccountManager accountManager) {
+		super(DodonaSettingsConfigurable.SETTINGS_ID, DodonaBundle.NAME, DodonaSettingsConfigurable.HELP_TOPIC);
+		this.accountManager = accountManager;
 	}
 	
 	@Override
-	public void apply() {
-		if(this.settingsPanel == null) {
-			return;
-		}
-		
-		this.settings.setToken(this.settingsPanel.getToken());
-	}
-	
-	@Nonnull
-	@Override
-	public JComponent createComponent() {
-		if(this.settingsPanel == null) {
-			this.settingsPanel = new SettingsPanel();
-		}
-		return this.settingsPanel.getPanel();
-	}
-	
-	@Override
-	public void disposeUIResources() {
-		this.settingsPanel = null;
-	}
-	
-	@Nullable
-	@Override
-	public Runnable enableSearch(String option) {
-		return null;
-	}
-	
-	@Nls(capitalization = Nls.Capitalization.Title)
-	@Override
-	public String getDisplayName() {
-		return "Dodona";
-	}
-	
-	@Nullable
-	@Override
-	public String getHelpTopic() {
-		return null;
+	protected DodonaSettingsPanel createUi() {
+		return new DodonaSettingsPanel();
 	}
 	
 	@NotNull
 	@Override
-	public String getId() {
-		return this.getDisplayName();
-	}
-	
-	@Override
-	public boolean isModified() {
-		return this.settingsPanel == null
-			|| !Comparing.equal(this.settings.getToken(), this.settingsPanel.getToken());
-	}
-	
-	@Override
-	public void reset() {
-		if(this.settingsPanel == null) {
-			return;
-		}
-		
-		this.settingsPanel.setToken(this.settings.getToken());
+	protected DodonaSettingsHolder getSettings() {
+		return new DodonaSettingsHolder(this.accountManager);
 	}
 }
