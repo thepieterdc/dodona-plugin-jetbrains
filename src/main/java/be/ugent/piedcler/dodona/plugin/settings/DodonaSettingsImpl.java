@@ -8,12 +8,12 @@
  */
 package be.ugent.piedcler.dodona.plugin.settings;
 
-import be.ugent.piedcler.dodona.DodonaClient;
 import be.ugent.piedcler.dodona.plugin.Api;
 import com.intellij.credentialStore.CredentialAttributes;
 import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.components.State;
+import io.github.thepieterdc.dodona.DodonaClient;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;

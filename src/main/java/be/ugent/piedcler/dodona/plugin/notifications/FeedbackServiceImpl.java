@@ -8,10 +8,10 @@
  */
 package be.ugent.piedcler.dodona.plugin.notifications;
 
-import be.ugent.piedcler.dodona.data.SubmissionStatus;
-import be.ugent.piedcler.dodona.resources.Exercise;
-import be.ugent.piedcler.dodona.resources.submissions.Submission;
 import com.intellij.openapi.project.Project;
+import io.github.thepieterdc.dodona.data.SubmissionStatus;
+import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.submissions.Submission;
 
 import javax.annotation.Nonnull;
 import java.util.EnumMap;

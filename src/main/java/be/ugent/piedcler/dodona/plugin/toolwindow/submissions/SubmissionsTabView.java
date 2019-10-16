@@ -12,8 +12,6 @@ import be.ugent.piedcler.dodona.plugin.identification.Identification;
 import be.ugent.piedcler.dodona.plugin.identification.IdentificationService;
 import be.ugent.piedcler.dodona.plugin.tasks.GetExerciseInfoTask;
 import be.ugent.piedcler.dodona.plugin.tasks.GetSubmissionsTask;
-import be.ugent.piedcler.dodona.resources.Exercise;
-import be.ugent.piedcler.dodona.resources.submissions.PartialSubmission;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
@@ -22,6 +20,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
+import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.submissions.PartialSubmission;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;

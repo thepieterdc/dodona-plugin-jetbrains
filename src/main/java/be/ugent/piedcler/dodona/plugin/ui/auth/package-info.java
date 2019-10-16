@@ -10,7 +10,6 @@
 /**
  * UI components for authentication.
  */
-
 @ParametersAreNonnullByDefault
 package be.ugent.piedcler.dodona.plugin.ui.auth;
 

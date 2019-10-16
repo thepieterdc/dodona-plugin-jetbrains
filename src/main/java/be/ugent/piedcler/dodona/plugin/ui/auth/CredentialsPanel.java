@@ -8,14 +8,14 @@
  */
 package be.ugent.piedcler.dodona.plugin.ui.auth;
 
-import be.ugent.piedcler.dodona.DodonaClient;
-import be.ugent.piedcler.dodona.exceptions.AuthenticationException;
 import be.ugent.piedcler.dodona.plugin.Api;
 import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
-import be.ugent.piedcler.dodona.resources.User;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.HoverHyperlinkLabel;
+import io.github.thepieterdc.dodona.DodonaClient;
+import io.github.thepieterdc.dodona.exceptions.AuthenticationException;
+import io.github.thepieterdc.dodona.resources.User;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;

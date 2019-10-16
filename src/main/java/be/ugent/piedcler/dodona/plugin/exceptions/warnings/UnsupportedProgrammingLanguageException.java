@@ -9,7 +9,7 @@
 package be.ugent.piedcler.dodona.plugin.exceptions.warnings;
 
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
-import be.ugent.piedcler.dodona.resources.ProgrammingLanguage;
+import io.github.thepieterdc.dodona.resources.ProgrammingLanguage;
 
 import javax.annotation.Nonnull;
 
