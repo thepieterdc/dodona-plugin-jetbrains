@@ -22,7 +22,7 @@ import java.util.Optional;
  * Manages the configured settings.
  */
 @State(name = "DodonaSettings")
-public class DodonaSettingsImpl implements DodonaSettings {
+public class DodonaProjectSettings implements DodonaSettings {
 	private static final String CREDENTIALS_SUBSYSTEM = "dodona";
 	private static final String CREDENTIALS_KEY_TOKEN = "token";
 	

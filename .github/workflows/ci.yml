@@ -1,0 +1,24 @@
+name: Java
+
+on: [push]
+
+jobs:
+  build:
+    name: Build on jdk ${{ matrix.java }} and ${{ matrix.os }}
+    
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: true
+      matrix:
+        java: [1.8, 11.x.x, 12.x.x]
+        os: [ubuntu-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java}}
+    - name: Assemble the plugin using Gradle
+      run: ./gradlew assemble
