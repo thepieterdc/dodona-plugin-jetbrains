@@ -9,11 +9,9 @@
 
 package io.github.thepieterdc.dodona.plugin.ui;
 
-import com.intellij.ui.JBColor;
 import com.intellij.util.ui.GridBag;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -24,23 +22,7 @@ import java.awt.*;
  *
  * @param <T> type of the list cell object
  */
-public abstract class IconListCellRenderer<T> extends JPanel implements ListCellRenderer<T> {
-	private static final Color defaultSelectedFocusedBackground = new JBColor(0xE9EEF5, 0x464A4D);
-	private static final Color defaultSelectedBackground = new JBColor(0xF5F5F5, 0x464A4D);
-	
-	@NonNls
-	private static final String selectedFocusedBackground = "Table.lightSelectionBackground";
-	@NonNls
-	private static final String selectedBackground = "Table.lightSelectionInactiveBackground";
-	@NonNls
-	private static final String selectedFocusedForeground = "Table.lightSelectionForeground";
-	@NonNls
-	private static final String selectedForeground = "Table.lightSelectionInactiveForeground";
-	@NonNls
-	private static final String unselectedForeground = "Table.foreground";
-	@NonNls
-	private static final String unselectedSecondaryForeground = "Component.infoForeground";
-	
+public abstract class IconListCellRenderer<T> extends AbstractListCellRenderer<T> {
 	protected final JLabel icon;
 	
 	/**
@@ -87,36 +69,6 @@ public abstract class IconListCellRenderer<T> extends JPanel implements ListCell
 		this.add(detailsPanel);
 	}
 	
-	/**
-	 * Gets the background color.
-	 *
-	 * @param selected true if the item is the selected item
-	 * @return the background color
-	 */
-	private static Color getBackground(final JList<?> list, final boolean selected) {
-		if (selected) {
-			return list.hasFocus()
-				? JBColor.namedColor(IconListCellRenderer.selectedFocusedBackground, IconListCellRenderer.defaultSelectedFocusedBackground)
-				: JBColor.namedColor(IconListCellRenderer.selectedBackground, IconListCellRenderer.defaultSelectedBackground);
-		}
-		return list.getBackground();
-	}
-	
-	/**
-	 * Gets the foreground color.
-	 *
-	 * @param selected true if the item is the selected item
-	 * @return the foreground color
-	 */
-	private static Color getForeground(final JList<?> list, final boolean selected) {
-		if (selected) {
-			return list.hasFocus()
-				? JBColor.namedColor(IconListCellRenderer.selectedFocusedForeground, UIUtil.getListForeground())
-				: JBColor.namedColor(IconListCellRenderer.selectedForeground, UIUtil.getListForeground());
-		}
-		return JBColor.namedColor(IconListCellRenderer.unselectedForeground, UIUtil.getListForeground());
-	}
-	
 	@Override
 	public Component getListCellRendererComponent(final JList<? extends T> list,
 	                                              final T value,
@@ -124,29 +76,16 @@ public abstract class IconListCellRenderer<T> extends JPanel implements ListCell
 	                                              final boolean isSelected,
 	                                              final boolean cellHasFocus) {
 		// Set the cell background color.
-		UIUtil.setBackgroundRecursively(this, IconListCellRenderer.getBackground(list, isSelected));
+		UIUtil.setBackgroundRecursively(this, AbstractListCellRenderer.getBackground(list, isSelected));
 		
 		// Determine the text colors.
-		final Color primary = IconListCellRenderer.getForeground(list, isSelected);
-		final Color secondary = IconListCellRenderer.getSecondaryForeground(list, isSelected);
+		final Color primary = AbstractListCellRenderer.getForeground(list, isSelected);
+		final Color secondary = AbstractListCellRenderer.getSecondaryForeground(list, isSelected);
 		
 		// Set the field values.
 		this.renderValue(value, primary, secondary);
 		
 		return this;
-	}
-	
-	/**
-	 * Gets the secondary foreground color.
-	 *
-	 * @param selected true if the item is the selected item
-	 * @return the foreground color
-	 */
-	private static Color getSecondaryForeground(final JList<?> list, final boolean selected) {
-		if (selected) {
-			return IconListCellRenderer.getForeground(list, true);
-		}
-		return JBColor.namedColor(IconListCellRenderer.unselectedSecondaryForeground, UIUtil.getContextHelpForeground());
 	}
 	
 	/**

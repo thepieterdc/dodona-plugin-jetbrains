@@ -23,5 +23,9 @@
         <applicationConfigurable
             instance="io.github.thepieterdc.dodona.plugin.settings.DodonaSettingsConfigurable"/>
         <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings"/>
+
+        <!-- Tool window -->
+        <toolWindow id="Dodona" anchor="right" icon="/icons/dodona.svg" secondary="true"
+                    factoryClass="io.github.thepieterdc.dodona.plugin.toolwindows.DodonaToolWindowFactory"/>
     </extensions>
 </idea-plugin>
