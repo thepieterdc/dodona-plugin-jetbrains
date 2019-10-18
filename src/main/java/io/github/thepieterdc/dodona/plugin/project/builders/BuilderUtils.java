@@ -19,8 +19,6 @@ import io.github.thepieterdc.dodona.plugin.project.ui.CourseWizardStep;
 import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
 import io.github.thepieterdc.dodona.resources.Course;
 
-import javax.annotation.Nullable;
-
 /**
  * Utilities for building a module.
  */
@@ -50,7 +48,7 @@ final class BuilderUtils {
 	 * @param module the created module
 	 * @param course the selected course
 	 */
-	static void finish(final Module module, @Nullable final Course course) {
+	static void finish(final Module module, final Course course) {
 		// Find the newly created project.
 		final Project project = module.getProject();
 		

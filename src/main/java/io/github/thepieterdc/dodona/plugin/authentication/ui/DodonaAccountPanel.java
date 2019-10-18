@@ -13,7 +13,11 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.actionSystem.CommonShortcuts;
 import com.intellij.openapi.keymap.KeymapUtil;
 import com.intellij.openapi.util.Pair;
-import com.intellij.ui.*;
+import com.intellij.ui.CollectionListModel;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.SideBorder;
+import com.intellij.ui.SimpleTextAttributes;
+import com.intellij.ui.ToolbarDecorator;
 import com.intellij.ui.components.JBList;
 import com.intellij.util.ui.StatusText;
 import com.intellij.util.ui.UIUtil;
@@ -131,7 +135,7 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
 	
 	@Override
 	public void dispose() {
-	
+		// Not implemented.
 	}
 	
 	/**
