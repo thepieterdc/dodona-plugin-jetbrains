@@ -20,13 +20,18 @@ repositories {
     maven {
         url "https://dl.bintray.com/thepieterdc/dodona-api-java"
     }
+
+    maven {
+        url "https://dl.bintray.com/thepieterdc/random-java"
+    }
 }
 
 dependencies {
-    compile group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.4.3'
-    runtime group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.4.3'
+    compile group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.4.5'
+    runtime group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.4.5'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'io.github.thepieterdc.random', name: 'random', version: '0.3.0'
 }
 
 intellij {
@@ -43,6 +48,7 @@ patchPluginXml {
       <h3>Features</h3>
       <ul>
         <li>Project wizard: Add Dodona support to new projects.</li>
+        <li>ToolWindow: List upcoming deadlines for this course.</li>
       </ul>
       
       <h3>Improvements</h3>
