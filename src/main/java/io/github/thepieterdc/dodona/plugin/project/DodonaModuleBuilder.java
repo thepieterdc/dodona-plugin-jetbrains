@@ -9,6 +9,7 @@
 package io.github.thepieterdc.dodona.plugin.project;
 
 import com.intellij.ide.util.projectWizard.ModuleBuilderListener;
+import io.github.thepieterdc.dodona.resources.Course;
 
 /**
  * Builder for Dodona projects.
@@ -24,5 +25,5 @@ public interface DodonaModuleBuilder extends ModuleBuilderListener {
 	 *
 	 * @param course the id of the course to set
 	 */
-	void setCourse(int course);
+	void setCourse(Course course);
 }

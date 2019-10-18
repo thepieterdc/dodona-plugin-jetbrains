@@ -12,14 +12,12 @@ import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.ide.util.projectWizard.WizardContext;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.project.Project;
 import com.jetbrains.python.module.PythonModuleBuilder;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.Icons;
-import io.github.thepieterdc.dodona.plugin.project.CourseWizardStep;
 import io.github.thepieterdc.dodona.plugin.project.DodonaModuleBuilder;
 import io.github.thepieterdc.dodona.plugin.project.types.DodonaPythonType;
-import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
+import io.github.thepieterdc.dodona.resources.Course;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,14 +31,13 @@ public final class DodonaPythonBuilder extends PythonModuleBuilder implements Do
 	@NonNls
 	private static final String BUILDER_ID = "dodona-python";
 	
-	private int courseId;
+	private Course course;
 	
 	/**
 	 * DodonaJavaBuilder constructor.
 	 */
 	public DodonaPythonBuilder() {
 		super();
-		this.courseId = -1;
 		this.addListener(this);
 	}
 	
@@ -53,7 +50,7 @@ public final class DodonaPythonBuilder extends PythonModuleBuilder implements Do
 	@Nonnull
 	@Override
 	public ModuleWizardStep getCustomOptionsStep(final WizardContext context, final Disposable parentDisposable) {
-		return new CourseWizardStep(this);
+		return BuilderUtils.createCourseSelectionStep(this);
 	}
 	
 	@Override
@@ -88,18 +85,11 @@ public final class DodonaPythonBuilder extends PythonModuleBuilder implements Do
 	
 	@Override
 	public void moduleCreated(@NotNull final Module module) {
-		// Find the newly created project.
-		final Project project = module.getProject();
-		
-		// Set the course id.
-		DodonaProjectSettings.getInstance(project).setCourseId(this.courseId);
-		
-		// Save the project.
-		project.save();
+		BuilderUtils.finish(module, this.course);
 	}
 	
 	@Override
-	public void setCourse(final int course) {
-		this.courseId = course;
+	public void setCourse(final Course course) {
+		this.course = course;
 	}
 }
