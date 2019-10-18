@@ -34,6 +34,8 @@ public interface DodonaExecutor {
 	              ProgressIndicator indicator);
 	
 	/**
+	 * Executes the given call, asynchronously.
+	 *
 	 * @param project     the project
 	 * @param title       the dialog title
 	 * @param cancellable whether this request can be cancelled
@@ -48,4 +50,14 @@ public interface DodonaExecutor {
 	                            boolean cancellable,
 	                            ProgressIndicator indicator,
 	                            Function<? super DodonaClient, ? extends T> call);
+	
+	/**
+	 * Executes the given call, asynchronously.
+	 *
+	 * @param call the call to execute
+	 * @param <T>  return type of the response
+	 * @return the response from the call
+	 */
+	@Nonnull
+	<T> DodonaFuture<T> execute(Function<? super DodonaClient, ? extends T> call);
 }
