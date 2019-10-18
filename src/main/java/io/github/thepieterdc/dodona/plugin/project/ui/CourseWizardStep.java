@@ -67,13 +67,19 @@ public class CourseWizardStep extends ModuleWizardStep {
 		this.coursesPanel.add(this.coursesList, CourseWizardStep.COURSES_CARD_COURSES);
 		
 		final JPanel loadingInnerPanel = new JPanel(new BorderLayout(10, 10));
-		loadingInnerPanel.add(new JLabel(DodonaBundle.message("module.course.loading")), BorderLayout.PAGE_START);
+		loadingInnerPanel.add(
+			new JLabel(DodonaBundle.message("module.course.loading")),
+			BorderLayout.PAGE_END
+		);
 		loadingInnerPanel.add(this.loadingIcon, BorderLayout.CENTER);
 		
 		final JPanel loadingPanel = new JPanel(new GridBagLayout());
 		loadingPanel.add(loadingInnerPanel, new GridBagConstraints());
 		
-		this.coursesPanel.add(ScrollPaneFactory.createScrollPane(loadingPanel), CourseWizardStep.COURSES_CARD_LOADING);
+		this.coursesPanel.add(
+			ScrollPaneFactory.createScrollPane(loadingPanel),
+			CourseWizardStep.COURSES_CARD_LOADING
+		);
 		this.showCard(CourseWizardStep.COURSES_CARD_COURSES);
 		
 		this.requestUpdate();
