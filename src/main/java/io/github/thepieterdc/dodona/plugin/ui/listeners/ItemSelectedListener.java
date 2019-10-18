@@ -1,24 +1,26 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package be.ugent.piedcler.dodona.plugin.ui.listeners;
+
+package io.github.thepieterdc.dodona.plugin.ui.listeners;
 
 import javax.annotation.Nullable;
 
 /**
- * Listener for changes to selected items.
+ * Listener for selection of an item in a list.
  */
 @FunctionalInterface
 public interface ItemSelectedListener<T> {
 	/**
-	 * Called when the selected item is changed.
+	 * Called when a new item is changed.
 	 *
-	 * @param selectedValue the value of the current selected item
+	 * @param selectedValue the current selected item, can be null if nothing is
+	 *                      selected
 	 */
 	void onItemSelected(@Nullable final T selectedValue);
 }

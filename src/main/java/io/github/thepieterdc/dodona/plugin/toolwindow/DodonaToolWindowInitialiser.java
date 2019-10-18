@@ -19,7 +19,7 @@ import javax.annotation.Nonnull;
 /**
  * Tool window containing last submissions for the current exercise.
  */
-public class DodonaToolWindowView {
+public class DodonaToolWindowInitialiser {
 	private final Project project;
 	private ToolWindow toolWindow;
 	
@@ -28,7 +28,7 @@ public class DodonaToolWindowView {
 	 *
 	 * @param project current active project
 	 */
-	public DodonaToolWindowView(@Nonnull final Project project) {
+	public DodonaToolWindowInitialiser(@Nonnull final Project project) {
 		this.project = project;
 	}
 	
@@ -38,8 +38,8 @@ public class DodonaToolWindowView {
 	 * @param project current active project
 	 * @return instance
 	 */
-	public static DodonaToolWindowView getInstance(@Nonnull final Project project) {
-		return project.getComponent(DodonaToolWindowView.class);
+	public static be.ugent.piedcler.dodona.plugin.toolwindow.DodonaToolWindowInitialiser getInstance(@Nonnull final Project project) {
+		return project.getComponent(be.ugent.piedcler.dodona.plugin.toolwindow.DodonaToolWindowInitialiser.class);
 	}
 	
 	void initToolWindow(@Nonnull final ToolWindow toolWindow) {

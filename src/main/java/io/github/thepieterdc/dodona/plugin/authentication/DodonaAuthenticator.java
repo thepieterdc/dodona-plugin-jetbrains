@@ -44,16 +44,16 @@ public class DodonaAuthenticator {
 	}
 	
 	/**
-	 * Gets an executor for the default Dodona account if it's available.
+	 * Gets an executor for the default Dodona account.
 	 *
 	 * @return the executor
 	 */
-	public Optional<DodonaExecutor> getExecutor() {
+	public DodonaExecutor getExecutor() {
 		return this.accountManager.getAccount().flatMap(account ->
 			this.accountManager.getToken(account).map(token ->
 				DodonaExecutorFactory.create(account.getServer(), token)
 			)
-		);
+		).orElseGet(DodonaExecutorFactory::createMissing);
 	}
 	
 	/**
