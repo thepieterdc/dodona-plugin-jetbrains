@@ -37,7 +37,7 @@ public class DodonaProjectSettings implements PersistentStateComponent<DodonaPro
 	 *
 	 * @return the course id
 	 */
-	public int getCourseId() {
+	public long getCourseId() {
 		return this.state.course_id;
 	}
 	
@@ -68,7 +68,7 @@ public class DodonaProjectSettings implements PersistentStateComponent<DodonaPro
 	 *
 	 * @param id the course id
 	 */
-	public void setCourseId(final int id) {
+	public void setCourseId(final long id) {
 		this.state.course_id = id;
 	}
 	
@@ -76,6 +76,6 @@ public class DodonaProjectSettings implements PersistentStateComponent<DodonaPro
 	 * Setting values.
 	 */
 	public static class State {
-		public int course_id = 0;
+		public long course_id = 0L;
 	}
 }

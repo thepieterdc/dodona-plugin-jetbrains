@@ -1,16 +1,16 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
 /**
- * Notification utilities.
+ * Handle notifications.
  */
 @ParametersAreNonnullByDefault
-package be.ugent.piedcler.dodona.plugin.notifications;
+package io.github.thepieterdc.dodona.plugin.notifications;
 
 import javax.annotation.ParametersAreNonnullByDefault;

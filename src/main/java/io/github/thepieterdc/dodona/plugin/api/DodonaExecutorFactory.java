@@ -67,4 +67,14 @@ public final class DodonaExecutorFactory {
 	private static String getUserAgent() {
 		return String.format(DodonaExecutorFactory.UA_PATTERN, BuildConfig.VERSION);
 	}
+	
+	/**
+	 * Creates a new DodonaExecutor that errors on every call.
+	 *
+	 * @return the request executor
+	 */
+	@Nonnull
+	public static DodonaExecutor createMissing() {
+		return MissingExecutorImpl.INSTANCE;
+	}
 }

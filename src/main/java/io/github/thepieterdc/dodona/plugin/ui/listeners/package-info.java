@@ -1,16 +1,16 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
 /**
- * Custom user interface components.
+ * Event listeners used in UI components.
  */
 @ParametersAreNonnullByDefault
-package be.ugent.piedcler.dodona.plugin.ui.listeners;
+package io.github.thepieterdc.dodona.plugin.ui.listeners;
 
 import javax.annotation.ParametersAreNonnullByDefault;
