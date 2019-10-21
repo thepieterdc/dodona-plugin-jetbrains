@@ -8,8 +8,8 @@
  */
 package be.ugent.piedcler.dodona.plugin.toolwindow.submissions;
 
-import be.ugent.piedcler.dodona.plugin.identification.Identification;
-import be.ugent.piedcler.dodona.plugin.identification.IdentificationService;
+import io.github.thepieterdc.dodona.plugin.exercise.identification.Identification;
+import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import be.ugent.piedcler.dodona.plugin.tasks.GetExerciseInfoTask;
 import be.ugent.piedcler.dodona.plugin.tasks.GetSubmissionsTask;
 import com.intellij.openapi.components.ServiceManager;

@@ -10,11 +10,10 @@ package be.ugent.piedcler.dodona.plugin.actions;
 
 import be.ugent.piedcler.dodona.plugin.Icons;
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider;
-import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.FileAlreadyExistsException;
 import be.ugent.piedcler.dodona.plugin.naming.ExerciseNamingService;
-import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
+import io.github.thepieterdc.dodona.plugin.notifications.impl.NotificationServiceImpl;
 import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
 import be.ugent.piedcler.dodona.plugin.templates.ExerciseTemplateService;
 import be.ugent.piedcler.dodona.plugin.templates.Template;
@@ -75,12 +74,12 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 		
 		try {
 			ProgressManager.getInstance().run(new SelectExerciseTask(project)).ifPresent(ex -> create(project, view, ex));
-		} catch (final UserAbortedException ex) {
+		} catch (final be.ugent.piedcler.dodona.plugin.exceptions.CancelledException ex) {
 			//
 		} catch (final WarningMessageException ex) {
-			Notifier.warning(project, "Failed creating exercise", ex.getMessage(), ex);
+			NotificationServiceImpl.warning(project, "Failed creating exercise", ex.getMessage(), ex);
 		} catch (final RuntimeException ex) {
-			Notifier.error(project, "Failed creating exercise", ex.getMessage(), ex);
+			NotificationServiceImpl.error(project, "Failed creating exercise", ex.getMessage(), ex);
 		}
 	}
 	
@@ -136,7 +135,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 			);
 			
 			if (name == null) {
-				throw new UserAbortedException();
+				throw new be.ugent.piedcler.dodona.plugin.exceptions.CancelledException();
 			}
 			
 			if ("".equals(name.trim())) {

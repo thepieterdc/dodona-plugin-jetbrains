@@ -8,9 +8,9 @@
  */
 
 /**
- * Identify an exercise.
+ * Implementations of identification utilities.
  */
 @ParametersAreNonnullByDefault
-package be.ugent.piedcler.dodona.plugin.identification;
+package io.github.thepieterdc.dodona.plugin.exercise.identification.impl;
 
 import javax.annotation.ParametersAreNonnullByDefault;
