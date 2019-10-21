@@ -15,9 +15,9 @@ import be.ugent.piedcler.dodona.plugin.code.preprocess.impl.JavaFileSubmissionPr
 import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import be.ugent.piedcler.dodona.plugin.exceptions.errors.CodeReadException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.ExerciseNotSetException;
-import be.ugent.piedcler.dodona.plugin.identification.Identification;
-import be.ugent.piedcler.dodona.plugin.identification.IdentificationService;
-import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
+import io.github.thepieterdc.dodona.plugin.exercise.identification.Identification;
+import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
+import io.github.thepieterdc.dodona.plugin.notifications.impl.NotificationServiceImpl;
 import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
 import be.ugent.piedcler.dodona.plugin.tasks.SubmitSolutionTask;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -90,7 +90,7 @@ public class SubmitAction extends AnAction {
 				);
 			}
 		} catch (final RuntimeException ex) {
-			Notifier.error(project, "Failed configuring exercise.", ex.getMessage(), ex);
+			NotificationServiceImpl.error(project, "Failed configuring exercise.", ex.getMessage(), ex);
 		}
 	}
 	

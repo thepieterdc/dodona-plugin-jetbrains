@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.notifications;
+package io.github.thepieterdc.dodona.plugin.notifications.impl;
 
 import com.intellij.notification.*;
 import com.intellij.openapi.project.Project;
@@ -15,16 +15,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.awt.*;
 
 /**
  * Displays error/info/warning messages.
  */
-public enum Notifier {
+public enum NotificationServiceImpl {
 	;
 	
-	private static final Logger logger = LoggerFactory.getLogger(Notifier.class);
+	private static final Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
 	
 	private static final NotificationGroup NOTIFICATION_GROUP = new NotificationGroup(
 		"Dodona Notifications", NotificationDisplayType.BALLOON, true

@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.identification;
+package io.github.thepieterdc.dodona.plugin.exercise;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

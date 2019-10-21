@@ -11,13 +11,13 @@ package be.ugent.piedcler.dodona.plugin.exceptions;
 /**
  * The user aborted the ongoing action.
  */
-public final class UserAbortedException extends RuntimeException {
+public final class CancelledException extends RuntimeException {
 	private static final long serialVersionUID = 4266029459834672125L;
 	
 	/**
 	 * UserAbortedException constructor.
 	 */
-	public UserAbortedException() {
+	public CancelledException() {
 		super("Operation aborted.");
 	}
 }

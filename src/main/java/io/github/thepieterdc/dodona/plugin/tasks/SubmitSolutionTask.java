@@ -12,8 +12,8 @@ import io.github.thepieterdc.dodona.plugin.api.DodonaExecutorImpl;
 import be.ugent.piedcler.dodona.plugin.dto.Solution;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
-import be.ugent.piedcler.dodona.plugin.notifications.FeedbackService;
-import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
+import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
+import io.github.thepieterdc.dodona.plugin.notifications.impl.NotificationServiceImpl;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -110,9 +110,9 @@ public class SubmitSolutionTask extends Task.Backgroundable {
 			this.feedbackSrv.notify(exercise, submission);
 			
 		} catch (final WarningMessageException warning) {
-			Notifier.warning(this.myProject, warning.getMessage(), warning);
+			NotificationServiceImpl.warning(this.myProject, warning.getMessage(), warning);
 		} catch (final IOException | DodonaException error) {
-			Notifier.error(this.myProject, error.getMessage(), error);
+			NotificationServiceImpl.error(this.myProject, error.getMessage(), error);
 		} catch (final InterruptedException ex) {
 			throw new RuntimeException(ex);
 		} finally {
