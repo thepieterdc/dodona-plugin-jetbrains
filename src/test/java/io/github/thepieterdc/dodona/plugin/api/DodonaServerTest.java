@@ -38,8 +38,8 @@ public class DodonaServerTest {
 	@Test
 	public void testToDisplayNameUnknown() {
 		Assert.assertEquals(
-			DodonaServerTest.URL,
-			DodonaServer.toDisplayName(DodonaServerTest.URL)
+			URL,
+			DodonaServer.toDisplayName(URL)
 		);
 	}
 	
@@ -63,7 +63,7 @@ public class DodonaServerTest {
 	public void testToIconUnknown() {
 		Assert.assertEquals(
 			DodonaServer.LOCAL3000.getIcon(),
-			DodonaServer.toIcon(DodonaServerTest.URL)
+			DodonaServer.toIcon(URL)
 		);
 	}
 }

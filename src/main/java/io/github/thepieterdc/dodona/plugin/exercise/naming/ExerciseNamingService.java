@@ -1,13 +1,14 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package be.ugent.piedcler.dodona.plugin.naming;
+package io.github.thepieterdc.dodona.plugin.exercise.naming;
 
+import com.intellij.openapi.components.ServiceManager;
 import io.github.thepieterdc.dodona.resources.Exercise;
 
 import javax.annotation.Nonnull;
@@ -26,4 +27,14 @@ public interface ExerciseNamingService {
 	 */
 	@Nonnull
 	Optional<String> generateFileName(Exercise exercise);
+	
+	/**
+	 * Gets an instance of the ExerciseNamingService.
+	 *
+	 * @return the instance
+	 */
+	@Nonnull
+	static ExerciseNamingService getInstance() {
+		return ServiceManager.getService(ExerciseNamingService.class);
+	}
 }

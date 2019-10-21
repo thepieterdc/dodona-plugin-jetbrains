@@ -1,75 +1,68 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 package io.github.thepieterdc.dodona.plugin.code.identification;
 
-import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurer;
-import com.intellij.openapi.editor.Document;
+import io.github.thepieterdc.dodona.resources.Exercise;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import java.util.function.Function;
 
 /**
- * An identification configurer that can discern various languages.
+ * Identifiers for exercises.
  */
-public enum CodeIdentifier implements IdentificationConfigurer {
+@SuppressWarnings("HardCodedStringLiteral")
+public enum CodeIdentifier {
 	HASKELL("hs", v -> String.format("-- %s", v)),
 	HTML("html", v -> String.format("<!-- %s -->", v)),
 	JAVA("java", v -> String.format("// %s", v)),
 	JAVASCRIPT("js", v -> String.format("// %s", v)),
 	PROLOG("pl", v -> String.format("%% %s", v)),
 	PYTHON("py", v -> String.format("# %s", v));
-
-	private Function<String, String> commentFn;
-	private String extension;
-
+	
+	private final Function<? super String, String> commentFn;
+	private final String extension;
+	
 	/**
 	 * Construct a helper for generating the submission files.
 	 *
 	 * @param extension the file extension for the kind of exercise
 	 * @param commentFn how should the Identification line be generated
 	 */
-	CodeIdentifier(final String extension, final Function<String, String> commentFn) {
-		this.extension = extension;
+	CodeIdentifier(@NonNls final String extension,
+	               @NonNls final Function<? super String, String> commentFn) {
 		this.commentFn = commentFn;
+		this.extension = extension;
 	}
-
-	@Override
-	public void configure(@Nonnull final Document document,
-	                      @Nonnull final String url) {
-		document.insertString(0, this.getIdentificationLine(url));
-	}
-
-	@Nonnull
-	@Override
-	public String configure(@Nonnull final String code, @Nonnull final String url) {
-		return this.getIdentificationLine(url) + code;
-	}
-
+	
 	/**
-	 * Get the language-specific extension for a LanguageIdentificationConfigurer
+	 * Get the default file extension.
 	 *
-	 * @return The string containin the specific file extension
+	 * @return the file extension
 	 */
 	@Nonnull
-	@Override
 	public String getFileExtension() {
-		return extension;
+		return this.extension;
 	}
-
+	
 	/**
-	 * Gets the identification comment line
+	 * Processes the given file contents to include the identification string.
 	 *
-	 * @param identification the identification of the exercise
-	 * @return the line to write in the file
+	 * @param exercise the exercise to set
+	 * @param contents the original file contents
+	 * @return the processed file contents
 	 */
+	@SuppressWarnings("HardcodedLineSeparator")
+	@NonNls
 	@Nonnull
-	String getIdentificationLine(@Nonnull final String identification) {
-		return commentFn.apply(identification) + "\n";
+	public String process(final Exercise exercise, @NonNls final String contents) {
+		final String identification = this.commentFn.apply(exercise.getUrl());
+		return String.format("%s\n%s", identification, contents);
 	}
 }

@@ -13,16 +13,19 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
 
+import javax.annotation.Nullable;
+import java.util.Optional;
+
 /**
  * A condition for the tool window to be shown.
  */
 public class DodonaToolWindowCondition implements Condition<Project> {
 	@Override
-	public boolean value(final Project project) {
+	public boolean value(@Nullable final Project project) {
 		// Check whether the course id is set.
-		if (project != null) {
-			return DodonaProjectSettings.getInstance(project).getCourseId() > 0;
-		}
-		return false;
+		return Optional.ofNullable(project)
+			.map(DodonaProjectSettings::getInstance)
+			.flatMap(DodonaProjectSettings::getCourseId)
+			.isPresent();
 	}
 }

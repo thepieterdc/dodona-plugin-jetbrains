@@ -7,10 +7,10 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.code.identification.impl;
+package io.github.thepieterdc.dodona.plugin.exercise.identification.impl;
 
-import io.github.thepieterdc.dodona.plugin.code.Identification;
-import io.github.thepieterdc.dodona.plugin.code.identification.IdentificationService;
+import io.github.thepieterdc.dodona.plugin.exercise.Identification;
+import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import io.github.thepieterdc.dodona.resources.Course;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.Series;

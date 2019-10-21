@@ -6,10 +6,10 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package io.github.thepieterdc.dodona.plugin.code.identification;
+package io.github.thepieterdc.dodona.plugin.exercise.identification;
 
-import io.github.thepieterdc.dodona.plugin.code.Identification;
-import io.github.thepieterdc.dodona.plugin.code.identification.impl.IdentificationServiceImpl;
+import io.github.thepieterdc.dodona.plugin.exercise.Identification;
+import io.github.thepieterdc.dodona.plugin.exercise.identification.impl.IdentificationServiceImpl;
 import io.github.thepieterdc.random.RandomGenerator;
 import io.github.thepieterdc.random.numerical.RandomLongGenerator;
 import org.junit.Assert;

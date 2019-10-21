@@ -6,14 +6,11 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package io.github.thepieterdc.dodona.plugin.tasks;
 
 /**
- * A long-running job.
+ * Various services to handle exercises.
  */
-public interface DodonaTask {
-	/**
-	 * Executes the given task.
-	 */
-	void execute();
-}
+@ParametersAreNonnullByDefault
+package io.github.thepieterdc.dodona.plugin.exercise;
+
+import javax.annotation.ParametersAreNonnullByDefault;
