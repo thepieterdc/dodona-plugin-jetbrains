@@ -26,6 +26,8 @@ public class Icons {
 	
 	public static final Icon DODONA = IconLoader.getIcon("/icons/dodona.svg");
 	
+	public static final Icon SUBMIT_ACTION = IconLoader.getIcon("/icons/submit-action.svg");
+	
 	/**
 	 * Colors the white circle in the given color.
 	 *

@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.function.Function;
 
 /**
@@ -87,5 +88,18 @@ class DodonaExecutorImpl implements DodonaExecutor {
 			ret.complete(response);
 		});
 		return ret;
+	}
+	
+	@Nonnull
+	@Override
+	public <T> T executeWithModal(final Project project,
+	                              final String text,
+	                              final Function<? super DodonaClient, ? extends T> call) throws IOException {
+		return ProgressManager.getInstance().run(new Task.WithResult<T, IOException>(project, text, true) {
+			@Override
+			protected T compute(@NotNull final ProgressIndicator indicator) throws IOException {
+				return DodonaExecutorImpl.this.execute(call, indicator);
+			}
+		});
 	}
 }
