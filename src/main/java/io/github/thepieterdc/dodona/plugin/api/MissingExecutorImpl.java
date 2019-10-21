@@ -56,4 +56,12 @@ class MissingExecutorImpl implements DodonaExecutor {
 		ret.completeExceptionally(AuthenticationException.missing());
 		return ret;
 	}
+	
+	@Nonnull
+	@Override
+	public <T> T executeWithModal(final Project project,
+	                              final String text,
+	                              final Function<? super DodonaClient, ? extends T> call) {
+		throw AuthenticationException.missing();
+	}
 }
