@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.ui.selection;
+package io.github.thepieterdc.dodona.plugin.tasks.ui;
 
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBLabel;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 /**
  * A dialog that allows the user to select a course.
  */
-public class CourseSelectionDialog extends SelectionDialog<Course> {
+public class CourseSelectionDialog extends IdentifyExerciseDialog<Course> {
 	private JPanel contentPane;
 	
 	private final boolean hasItems;

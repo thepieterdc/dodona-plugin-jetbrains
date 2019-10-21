@@ -1,23 +1,37 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 package io.github.thepieterdc.dodona.plugin.feedback;
 
+import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
 
+import javax.annotation.Nonnull;
+
 /**
- * Service that provides the user with feedback about an solution.
+ * Renders feedback about submissions.
  */
 public interface FeedbackService {
 	/**
-	 * Sends a feedback notification for the given submission for the given
-	 * exercise.
+	 * Gets an instance of the FeedbackService.
+	 *
+	 * @param project the current project
+	 * @return the instance
+	 */
+	@Nonnull
+	static FeedbackService getInstance(final Project project) {
+		return ServiceManager.getService(project, FeedbackService.class);
+	}
+	
+	/**
+	 * Notifies the user about the submission result.
 	 *
 	 * @param exercise   the exercise
 	 * @param submission the submission

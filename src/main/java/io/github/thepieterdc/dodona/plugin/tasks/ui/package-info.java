@@ -11,6 +11,6 @@
  * UI components for selection.
  */
 @ParametersAreNonnullByDefault
-package be.ugent.piedcler.dodona.plugin.ui.selection;
+package io.github.thepieterdc.dodona.plugin.tasks.ui;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -10,11 +10,11 @@ package be.ugent.piedcler.dodona.plugin.actions;
 
 import be.ugent.piedcler.dodona.plugin.Icons;
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider;
+import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
 import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
 import be.ugent.piedcler.dodona.plugin.exceptions.warnings.FileAlreadyExistsException;
 import be.ugent.piedcler.dodona.plugin.naming.ExerciseNamingService;
-import io.github.thepieterdc.dodona.plugin.notifications.impl.NotificationServiceImpl;
-import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
+import be.ugent.piedcler.dodona.plugin.notifications.Notifier;
 import be.ugent.piedcler.dodona.plugin.templates.ExerciseTemplateService;
 import be.ugent.piedcler.dodona.plugin.templates.Template;
 import be.ugent.piedcler.dodona.plugin.ui.templates.TemplateSelectionDialog;
@@ -73,13 +73,13 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 		final IdeView view = Objects.requireNonNull(e.getData(LangDataKeys.IDE_VIEW));
 		
 		try {
-			ProgressManager.getInstance().run(new SelectExerciseTask(project)).ifPresent(ex -> create(project, view, ex));
-		} catch (final be.ugent.piedcler.dodona.plugin.exceptions.CancelledException ex) {
+			ProgressManager.getInstance().run(new be.ugent.piedcler.dodona.plugin.tasks.IdentifyTask(project)).ifPresent(ex -> create(project, view, ex));
+		} catch (final UserAbortedException ex) {
 			//
 		} catch (final WarningMessageException ex) {
-			NotificationServiceImpl.warning(project, "Failed creating exercise", ex.getMessage(), ex);
+			Notifier.warning(project, "Failed creating exercise", ex.getMessage(), ex);
 		} catch (final RuntimeException ex) {
-			NotificationServiceImpl.error(project, "Failed creating exercise", ex.getMessage(), ex);
+			Notifier.error(project, "Failed creating exercise", ex.getMessage(), ex);
 		}
 	}
 	
@@ -135,7 +135,7 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 			);
 			
 			if (name == null) {
-				throw new be.ugent.piedcler.dodona.plugin.exceptions.CancelledException();
+				throw new UserAbortedException();
 			}
 			
 			if ("".equals(name.trim())) {

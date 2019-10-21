@@ -9,19 +9,13 @@
 
 package io.github.thepieterdc.dodona.plugin.notifications;
 
-import com.intellij.openapi.ui.Messages;
-import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.annotation.Nullable;
 
 /**
  * Displays error notifications and logs them.
  */
-public final class ErrorReporter {
-	private static final String TITLE = DodonaBundle.message("alerts.error");
-	
+public class ErrorReporter {
 	private static final Logger logger = LoggerFactory.getLogger(ErrorReporter.class);
 	
 	/**
@@ -30,19 +24,16 @@ public final class ErrorReporter {
 	 * @param message the error message to log
 	 * @param cause   the error cause
 	 */
-	public static void error(final String message, @Nullable final Throwable cause) {
-		if (cause != null) {
-			ErrorReporter.logger.error(message, cause);
-		}
-		Messages.showErrorDialog(message, ErrorReporter.TITLE);
+	public static void report(final String message, final Throwable cause) {
+		ErrorReporter.logger.error(message, cause);
 	}
 	
 	/**
-	 * Displays an error message.
+	 * Displays an error message and logs the error.
 	 *
-	 * @param message the error message to log
+	 * @param cause the error cause
 	 */
-	public static void error(final String message) {
-		ErrorReporter.error(message, null);
+	public static void report(final Throwable cause) {
+		report(cause.getMessage(), cause);
 	}
 }

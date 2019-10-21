@@ -1,166 +1,87 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 package io.github.thepieterdc.dodona.plugin.notifications.impl;
 
-import com.intellij.notification.*;
+import com.intellij.notification.Notification;
+import com.intellij.notification.NotificationDisplayType;
+import com.intellij.notification.NotificationGroup;
+import com.intellij.notification.NotificationListener;
+import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.Messages;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.annotation.Nonnull;
-import java.awt.*;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.notifications.ErrorReporter;
+import io.github.thepieterdc.dodona.plugin.notifications.NotificationService;
+import org.jetbrains.annotations.NonNls;
 
 /**
- * Displays error/info/warning messages.
+ * Default implementation of a NotificationService.
  */
-public enum NotificationServiceImpl {
-	;
+public class NotificationServiceImpl implements NotificationService {
+	@NonNls
+	private static final String DODONA_NOTIFICATIONS = "Dodona Notifications";
 	
-	private static final Logger logger = LoggerFactory.getLogger(NotificationServiceImpl.class);
+	private static final String DEFAULT_ERROR_TITLE =
+		DodonaBundle.message("alerts.error");
 	
-	private static final NotificationGroup NOTIFICATION_GROUP = new NotificationGroup(
-		"Dodona Notifications", NotificationDisplayType.BALLOON, true
+	private static final NotificationGroup GROUP = new NotificationGroup(
+		DODONA_NOTIFICATIONS, NotificationDisplayType.BALLOON, true
 	);
 	
+	private final Project project;
+	
 	/**
-	 * Shows an error message in a component.
+	 * NotificationServiceImpl constructor.
 	 *
-	 * @param component the component
-	 * @param message   the message to display
-	 * @param cause     exception that lead to this error
+	 * @param project the project
 	 */
-	public static void error(@Nonnull final Component component, @Nonnull final String message, @Nonnull final Throwable cause) {
-		logger.error(message, cause);
-		Messages.showErrorDialog(component, message, "Error");
+	public NotificationServiceImpl(final Project project) {
+		this.project = project;
+	}
+	
+	@Override
+	public void error(final String title, final String message) {
+		this.notify(NotificationType.ERROR, title, message);
+	}
+	
+	@Override
+	public void error(final String message, final Throwable cause) {
+		this.error(NotificationServiceImpl.DEFAULT_ERROR_TITLE, message);
+		ErrorReporter.report(message, cause);
+	}
+	
+	@Override
+	public void info(final String title, final String message) {
+		this.notify(NotificationType.INFORMATION, title, message);
 	}
 	
 	/**
-	 * Shows an error message.
+	 * Sends a notification.
 	 *
-	 * @param project the project to display the message in
-	 * @param title   title of the message
-	 * @param message the message to display
-	 * @param cause   cause of the error
+	 * @param type    the type of the notification
+	 * @param title   the title
+	 * @param message the contents of the notification
 	 */
-	public static void error(@Nonnull final Project project, @Nonnull final String title,
-	                         @Nonnull final String message, @Nonnull final Throwable cause) {
-		logger.error(String.format("%s; %s", title, message), cause);
-		notify(project, NotificationType.ERROR, title, message);
-	}
-	
-	/**
-	 * Shows an error message.
-	 *
-	 * @param project the project to display the message in
-	 * @param message the message to display
-	 * @param cause   the cause
-	 */
-	public static void error(@Nonnull final Project project, @Nonnull final String message,
-	                         @Nonnull final Throwable cause) {
-		logger.error(message, cause);
-		notify(project, NotificationType.ERROR, "Error", message);
-	}
-	
-	/**
-	 * Shows an informative message in a component.
-	 *
-	 * @param component the component
-	 * @param message   the message to display
-	 */
-	public static void info(@Nonnull final Component component, @Nonnull final String message) {
-		logger.info(message);
-		Messages.showInfoMessage(component, message, "Information");
-	}
-	
-	/**
-	 * Shows an informative message.
-	 *
-	 * @param project the project to display the message in
-	 * @param title   title of the message
-	 * @param message the message to display
-	 */
-	public static void info(@Nonnull final Project project, @Nonnull final String title, @Nonnull final String message) {
-		logger.info(String.format("%s; %s", title, message));
-		notify(project, NotificationType.INFORMATION, title, message);
-	}
-	
-	/**
-	 * Shows a notification.
-	 *
-	 * @param project the project to dislpay the notification in
-	 * @param type    the type of the message
-	 * @param title   the title of the notification
-	 * @param message the message to display
-	 */
-	private static void notify(@Nonnull final Project project,
-	                           @Nonnull final NotificationType type,
-	                           @Nonnull final String title,
-	                           @Nonnull final String message) {
-		final Notification notification = NOTIFICATION_GROUP.createNotification(
+	private void notify(final NotificationType type,
+	                    final String title,
+	                    final String message) {
+		final Notification notification = NotificationServiceImpl.GROUP.createNotification(
 			title,
 			message,
 			type,
 			NotificationListener.URL_OPENING_LISTENER
 		);
 		
-		notification.notify(project);
+		notification.notify(this.project);
 	}
 	
-	/**
-	 * Shows an informative message in a component.
-	 *
-	 * @param component the component
-	 * @param message   the message to display
-	 */
-	public static void success(@Nonnull final Component component, @Nonnull final String message) {
-		logger.info(message);
-		Messages.showInfoMessage(component, message, "Success");
-	}
-	
-	/**
-	 * Shows a warning message.
-	 *
-	 * @param project the project to display the message in
-	 * @param title   title of the message
-	 * @param message the message to display
-	 * @param cause   error cause
-	 */
-	public static void warning(@Nonnull final Project project, @Nonnull final String title,
-	                           @Nonnull final String message,
-	                           @Nonnull final Throwable cause) {
-		logger.warn(String.format("%s; %s", title, message), cause);
-		notify(project, NotificationType.WARNING, title, message);
-	}
-	
-	/**
-	 * Shows a warning message.
-	 *
-	 * @param project the project to display the message in
-	 * @param title   title of the message
-	 * @param message the message to display
-	 */
-	public static void warning(@Nonnull final Project project, @Nonnull final String title, @Nonnull final String message) {
-		logger.warn(String.format("%s; %s", title, message));
-		notify(project, NotificationType.WARNING, title, message);
-	}
-	
-	/**
-	 * Shows a warning message.
-	 *
-	 * @param project the project to display the message in
-	 * @param message the message to display
-	 * @param cause   error cause
-	 */
-	public static void warning(@Nonnull final Project project, @Nonnull final String message,
-	                           @Nonnull final Throwable cause) {
-		logger.warn(message, cause);
-		notify(project, NotificationType.WARNING, "Warning", message);
+	@Override
+	public void warning(final String title, final String message) {
+		this.notify(NotificationType.WARNING, title, message);
 	}
 }

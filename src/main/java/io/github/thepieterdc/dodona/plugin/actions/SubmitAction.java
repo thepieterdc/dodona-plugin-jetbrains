@@ -1,106 +1,104 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package be.ugent.piedcler.dodona.plugin.actions;
+package io.github.thepieterdc.dodona.plugin.actions;
 
-import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider;
-import be.ugent.piedcler.dodona.plugin.code.preprocess.FileSubmissionPreprocessor;
-import be.ugent.piedcler.dodona.plugin.code.preprocess.impl.CombinedSubmissionPreprocessor;
-import be.ugent.piedcler.dodona.plugin.code.preprocess.impl.JavaFileSubmissionPreprocessor;
-import be.ugent.piedcler.dodona.plugin.dto.Solution;
-import be.ugent.piedcler.dodona.plugin.exceptions.errors.CodeReadException;
-import be.ugent.piedcler.dodona.plugin.exceptions.warnings.ExerciseNotSetException;
-import io.github.thepieterdc.dodona.plugin.exercise.identification.Identification;
-import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
-import io.github.thepieterdc.dodona.plugin.notifications.impl.NotificationServiceImpl;
-import be.ugent.piedcler.dodona.plugin.tasks.SelectExerciseTask;
-import be.ugent.piedcler.dodona.plugin.tasks.SubmitSolutionTask;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
-import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.Icons;
+import io.github.thepieterdc.dodona.plugin.tasks.SubmitSolutionTask;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Objects;
 import java.util.Optional;
 
-import static com.intellij.openapi.command.WriteCommandAction.runWriteCommandAction;
-
 /**
- * Action that submits the current file to Dodona.
+ * Action: Submit the current file to Dodona.
  */
 public class SubmitAction extends AnAction {
-	private final IdentificationConfigurerProvider idConfigurer;
-	private final IdentificationService identificationSrv;
-	
-	private final FileSubmissionPreprocessor preprocessor =
-		new CombinedSubmissionPreprocessor()
-			.registerEntry(ServiceManager.getService(JavaFileSubmissionPreprocessor.class));
-	
 	/**
 	 * SubmitAction constructor.
 	 */
-	public SubmitAction() {
-		this.idConfigurer = ServiceManager.getService(IdentificationConfigurerProvider.class);
-		this.identificationSrv = ServiceManager.getService(IdentificationService.class);
+	SubmitAction() {
+		super(
+			DodonaBundle.message("actions.submit.text"),
+			DodonaBundle.message("actions.submit.description"),
+			Icons.SUBMIT_ACTION
+		);
 	}
 	
 	@Override
-	public void actionPerformed(@NotNull final AnActionEvent event) {
-		final Project project = Optional.ofNullable(event.getData(PlatformDataKeys.PROJECT))
-			.orElseThrow(CodeReadException::new);
+	public void actionPerformed(@NotNull final AnActionEvent e) {
+		// Get the document.
+		final Optional<Document> optDocument =
+			SubmitAction.getDocument(e.getProject());
 		
-		final Document document = Optional.ofNullable(FileEditorManager.getInstance(project))
-			.map(FileEditorManager::getSelectedTextEditor)
-			.map(Editor::getDocument)
-			.orElseThrow(CodeReadException::new);
+		// Get the code.
+		final Optional<String> optCode = optDocument
+			.flatMap(doc -> SubmitAction.getPsiFile(e.getProject(), doc))
+			.map(PsiElement::getText);
 		
-		try {
-			final PsiFile file = Optional.ofNullable(PsiDocumentManager.getInstance(project))
-				.map(mgr -> mgr.getPsiFile(document))
-				.orElseThrow(CodeReadException::new);
-			
-			final String code = Optional.of(file)
-				.map(PsiElement::copy)
-				.map(e -> (PsiFile) e)
-				.map(preprocessor::preprocess)
-				.map(PsiElement::getText)
-				.orElseThrow(CodeReadException::new);
-			
+		// Create a new SubmitTask and execute it.
+		optCode.ifPresent(code -> {
 			try {
-				final Identification identification = this.identificationSrv.identify(code).orElseThrow(ExerciseNotSetException::new);
-				final Solution solution = Solution.create(identification, code);
-				
-				ProgressManager.getInstance().run(new SubmitSolutionTask(project, event.getPresentation(), solution));
-			} catch (final ExerciseNotSetException exception) {
-				ProgressManager.getInstance().run(new SelectExerciseTask(project)).ifPresent(ex ->
-					runWriteCommandAction(project, () -> idConfigurer.getConfigurer(ex, file).configure(document, ex.getUrl()))
-				);
+				e.getPresentation().setEnabled(false);
+				SubmitSolutionTask
+					.create(Objects.requireNonNull(e.getProject()), code)
+					.execute();
+			} finally {
+				e.getPresentation().setEnabled(true);
 			}
-		} catch (final RuntimeException ex) {
-			NotificationServiceImpl.error(project, "Failed configuring exercise.", ex.getMessage(), ex);
-		}
+		});
 	}
 	
-	@Override
-	public void update(final AnActionEvent event) {
-		event.getPresentation().setEnabled(Optional.ofNullable(event.getData(PlatformDataKeys.PROJECT))
+	/**
+	 * Gets the currently opened document, if available.
+	 *
+	 * @param project the current project
+	 * @return the current document if it is open
+	 */
+	@Nonnull
+	private static Optional<Document> getDocument(@Nullable final Project project) {
+		return Optional.ofNullable(project)
 			.map(FileEditorManager::getInstance)
 			.map(FileEditorManager::getSelectedTextEditor)
-			.map(Editor::getDocument)
-			.isPresent()
+			.map(Editor::getDocument);
+	}
+	
+	/**
+	 * Gets the PsiFile of the given document.
+	 *
+	 * @param project  the current project
+	 * @param document the current document
+	 * @return the PsiFile if found
+	 */
+	@Nonnull
+	private static Optional<PsiFile> getPsiFile(@Nullable final Project project,
+	                                            @Nonnull final Document document) {
+		return Optional.ofNullable(project)
+			.map(PsiDocumentManager::getInstance)
+			.map(mgr -> mgr.getPsiFile(document));
+	}
+	
+	@Override
+	public void update(@NotNull final AnActionEvent e) {
+		e.getPresentation().setEnabled(
+			SubmitAction.getDocument(e.getProject()).isPresent()
 		);
 	}
 }

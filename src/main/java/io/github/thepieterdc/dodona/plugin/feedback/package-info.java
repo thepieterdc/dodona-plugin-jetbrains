@@ -8,9 +8,9 @@
  */
 
 /**
- * Classes related to code manipulation and parsing.
+ * Classes that help parsing submission results.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.code;
+package io.github.thepieterdc.dodona.plugin.feedback;
 
 import javax.annotation.ParametersAreNonnullByDefault;

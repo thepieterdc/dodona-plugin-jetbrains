@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.ui.selection;
+package io.github.thepieterdc.dodona.plugin.tasks.ui;
 
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
@@ -19,7 +19,7 @@ import java.util.Collection;
 /**
  * A dialog that allows the user to select a series.
  */
-public class SeriesSelectionDialog extends SelectionDialog<Series> {
+public class SeriesSelectionDialog extends IdentifyExerciseDialog<Series> {
 	private JPanel contentPane;
 	private JBList<Series> seriesList;
 	

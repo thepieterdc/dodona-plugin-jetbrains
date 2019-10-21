@@ -1,122 +1,193 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package be.ugent.piedcler.dodona.plugin.tasks;
 
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutorImpl;
-import be.ugent.piedcler.dodona.plugin.dto.Solution;
-import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
-import be.ugent.piedcler.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
-import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
-import io.github.thepieterdc.dodona.plugin.notifications.impl.NotificationServiceImpl;
-import com.intellij.openapi.actionSystem.Presentation;
-import com.intellij.openapi.components.ServiceManager;
+package io.github.thepieterdc.dodona.plugin.tasks;
+
 import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
+import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.data.SubmissionStatus;
-import io.github.thepieterdc.dodona.exceptions.DodonaException;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
+import io.github.thepieterdc.dodona.plugin.exercise.Identification;
+import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
+import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
+import io.github.thepieterdc.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
+import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
+import io.github.thepieterdc.dodona.plugin.notifications.ErrorReporter;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 
 /**
- * Submits a solution to Dodona.
+ * Submits code to Dodona.
  */
-public class SubmitSolutionTask extends Task.Backgroundable {
+public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	private static final double DELAY_BACKOFF_FACTOR = 1.15;
-	private static final long DELAY_MAX = 20_000L;
-	private static final long DELAY_INITIAL = 3_000L;
-	private static final long DELAY_TIMEOUT = 120_000L;
+	private static final long DELAY_INITIAL_MS = 3_000L;
+	private static final long DELAY_TIMEOUT_MS = 120_000L;
+	private static final long DELAY_MAX_WAIT_MS = 20_000L;
+	private static final long DELAY_MIN_WAIT_MS = 2_000L;
 	
-	private final FeedbackService feedbackSrv;
-	private final Solution solution;
-	private final Presentation presentation;
+	private static final double PROGRESS_SUBMITTED = 0.5;
+	
+	private final String code;
+	private final Identification identification;
+	
+	private final DodonaExecutor executor;
+	private final FeedbackService feedback;
 	
 	/**
 	 * SubmitSolutionTask constructor.
 	 *
-	 * @param project  the project to display notifications in
+	 * @param project  the current project
+	 * @param exercise the exercise to submit to
 	 * @param solution the solution to submit
 	 */
-	public SubmitSolutionTask(final Project project, final Presentation presentation, final Solution solution) {
-		super(project, "Submitting Solution");
-		this.feedbackSrv = ServiceManager.getService(project, FeedbackService.class);
-		this.solution = solution;
-		this.presentation = presentation;
+	private SubmitSolutionTask(final Project project,
+	                           final Identification exercise,
+	                           final String solution) {
+		super(project, DodonaBundle.message("tasks.submit_solution.title"));
+		this.code = solution;
+		this.executor = DodonaAuthenticator.getInstance().getExecutor();
+		this.feedback = FeedbackService.getInstance(project);
+		this.identification = exercise;
+	}
+	
+	/**
+	 * Awaits until the submission is evaluated.
+	 *
+	 * @param progress     the progress indicator
+	 * @param exercise     the exercise
+	 * @param submissionId the id of the submission
+	 * @return the submission
+	 */
+	@Nonnull
+	private Submission awaitEvaluation(final ProgressIndicator progress,
+	                                   final Exercise exercise,
+	                                   final long submissionId) throws InterruptedException {
+		Submission submission = null;
+		
+		long currentDelay = DELAY_INITIAL_MS;
+		long totalWaited = 0L;
+		
+		// Perform exponential backoff until the solution is accepted or the
+		// timeout is reached.
+		while (submission == null
+			|| submission.getStatus() == SubmissionStatus.RUNNING
+			|| submission.getStatus() == SubmissionStatus.QUEUED) {
+			
+			// Check for timeouts.
+			if (currentDelay < DELAY_MIN_WAIT_MS) {
+				throw new SubmissionTimeoutException(exercise, submission);
+			}
+			
+			// Await the delay.
+			Thread.sleep(currentDelay);
+			
+			totalWaited += currentDelay;
+			
+			// Refresh the status.
+			submission = this.executor.execute(
+				dodona -> dodona.submissions().get(submissionId),
+				progress
+			);
+			
+			// Determine the next delay amount.
+			currentDelay = Math.min(
+				(long) (((double) currentDelay) * DELAY_BACKOFF_FACTOR),
+				DELAY_MAX_WAIT_MS
+			);
+			
+			// Ensure the delay is still within bounds.
+			currentDelay = Math.min(
+				DELAY_TIMEOUT_MS - totalWaited,
+				currentDelay
+			);
+		}
+		
+		return submission;
+	}
+	
+	/**
+	 * Creates a code submission task from the given code.
+	 *
+	 * @param project the current project
+	 * @param code    the code to submit
+	 * @return the task
+	 */
+	@Nonnull
+	public static DodonaBackgroundTask create(final Project project, final String code) {
+		// Attempt to identify the exercise, otherwise return a new task to
+		// perform this job.
+		return IdentificationService.getInstance()
+			.identify(code)
+			.map(result -> new SubmitSolutionTask(project, result, code))
+			.orElseThrow(RuntimeException::new);
 	}
 	
 	@Override
-	public void run(@NotNull final ProgressIndicator progressIndicator) {
+	public void run(@NotNull final ProgressIndicator progress) {
 		try {
-			this.presentation.setEnabled(false);
+			// Update the progress bar.
+			progress.setIndeterminate(true);
 			
-			final long createdSubmissionId = DodonaExecutorImpl.callModal(this.myProject, "Submitting solution", dodona ->
-				dodona.submissions().create(
-					this.solution.getCourseId().orElse(null),
-					this.solution.getSeriesId().orElse(null),
-					this.solution.getExerciseId(),
-					this.solution.getCode()
-				)
+			// Submit the solution and get the id of the submission.
+			final long id = this.executor.executeWithModal(
+				this.myProject,
+				DodonaBundle.message("tasks.submit_solution.submitting"),
+				this::submit
 			);
 			
-			Submission submission = DodonaExecutorImpl.call(this.myProject, dodona -> dodona.submissions().get(createdSubmissionId));
+			// Get information about the exercise.
+			final Exercise exercise = this.executor.execute(
+				dodona -> dodona.exercises().get(this.identification.getExercise()),
+				progress
+			);
 			
-			progressIndicator.setFraction(0.50);
-			progressIndicator.setText("Awaiting evaluation...");
+			// Update the progress bar.
+			progress.setIndeterminate(false);
+			progress.setFraction(PROGRESS_SUBMITTED);
+			progress.setText(DodonaBundle.message("tasks.submit_solution.evaluating"));
 			
-			Thread.sleep(SubmitSolutionTask.DELAY_INITIAL);
+			// Await the evaluation.
+			final Submission evaluated = this.awaitEvaluation(progress, exercise, id);
 			
-			long delay = SubmitSolutionTask.DELAY_INITIAL;
-			long total = 0L;
-			while (submission.getStatus() == SubmissionStatus.RUNNING
-				|| submission.getStatus() == SubmissionStatus.QUEUED) {
-				if (total > DELAY_TIMEOUT) {
-					break;
-				}
-				
-				Thread.sleep(delay);
-				
-				submission = DodonaExecutorImpl.call(this.myProject, dodona -> dodona.submissions().get(createdSubmissionId));
-				
-				delay = Math.min(
-					(long) ((double) delay * SubmitSolutionTask.DELAY_BACKOFF_FACTOR),
-					SubmitSolutionTask.DELAY_MAX
-				);
-				
-				total += delay;
-			}
+			// Update the progess bar.
+			progress.setFraction(1.0);
+			progress.setText(DodonaBundle.message("tasks.submit_solution.evaluated"));
 			
-			// Ugly hack to make the submission available in the api call.
-			final Submission finalSubmission = submission;
-			
-			final Exercise exercise = DodonaExecutorImpl.call(this.myProject, dodona -> dodona.exercises().get(finalSubmission));
-			
-			if ((submission.getStatus() == SubmissionStatus.RUNNING)
-				|| (submission.getStatus() == SubmissionStatus.QUEUED)) {
-				throw new SubmissionTimeoutException(submission, exercise);
-			}
-			
-			progressIndicator.setFraction(1.0);
-			progressIndicator.setText("Evaluation completed");
-			
-			this.feedbackSrv.notify(exercise, submission);
-			
-		} catch (final WarningMessageException warning) {
-			NotificationServiceImpl.warning(this.myProject, warning.getMessage(), warning);
-		} catch (final IOException | DodonaException error) {
-			NotificationServiceImpl.error(this.myProject, error.getMessage(), error);
+			// Provide feedback to the user.
+			this.feedback.notify(exercise, evaluated);
+		} catch (final IOException error) {
+			ErrorReporter.report(error);
 		} catch (final InterruptedException ex) {
-			throw new RuntimeException(ex);
-		} finally {
-			this.presentation.setEnabled(true);
+			throw new CancelledException();
 		}
+	}
+	
+	/**
+	 * Submits the solution.
+	 *
+	 * @param client the Dodona client
+	 * @return the submission id
+	 */
+	private long submit(final DodonaClient client) {
+		return client.submissions().create(
+			this.identification.getCourse().orElse(null),
+			this.identification.getSeries().orElse(null),
+			this.identification.getExercise(),
+			this.code
+		);
 	}
 }
