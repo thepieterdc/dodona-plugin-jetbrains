@@ -10,7 +10,7 @@ package be.ugent.piedcler.dodona.plugin.code.identification.configurers.provider
 
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurer;
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurerProvider;
-import be.ugent.piedcler.dodona.plugin.code.identification.configurers.LanguageIdentificationConfigurer;
+import io.github.thepieterdc.dodona.plugin.code.identification.CodeIdentifier;
 import com.intellij.lang.Language;
 import com.intellij.openapi.fileTypes.FileType;
 import io.github.thepieterdc.dodona.resources.ProgrammingLanguage;
@@ -26,7 +26,7 @@ import java.util.Optional;
  */
 public class IdentificationConfigurerProviderImpl implements IdentificationConfigurerProvider {
 	private static final Collection<IdentificationConfigurer> configurers = Arrays.asList(
-		LanguageIdentificationConfigurer.values()
+		CodeIdentifier.values()
 	);
 	
 	/**

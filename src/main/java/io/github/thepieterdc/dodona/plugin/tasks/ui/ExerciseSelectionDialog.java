@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.ui.selection;
+package io.github.thepieterdc.dodona.plugin.tasks.ui;
 
 import be.ugent.piedcler.dodona.plugin.settings.DodonaSettings;
 import com.intellij.ui.CollectionListModel;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 /**
  * A dialog that allows the user to select an exercise.
  */
-public class ExerciseSelectionDialog extends SelectionDialog<Exercise> {
+public class ExerciseSelectionDialog extends IdentifyExerciseDialog<Exercise> {
 	private JPanel contentPane;
 	
 	private JBList<Exercise> exercisesList;

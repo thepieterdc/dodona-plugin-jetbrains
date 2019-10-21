@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.ui.selection;
+package io.github.thepieterdc.dodona.plugin.tasks.ui;
 
 import be.ugent.piedcler.dodona.plugin.util.observable.ObservableValue;
 
@@ -17,7 +17,7 @@ import javax.swing.*;
 /**
  * A dialog that allows the user to select something.
  */
-public abstract class SelectionDialog<T> extends JDialog {
+public abstract class IdentifyExerciseDialog<T> extends JDialog {
 	private final ObservableValue<T> value;
 	
 	/**
@@ -25,7 +25,7 @@ public abstract class SelectionDialog<T> extends JDialog {
 	 *
 	 * @param initial initial selected value
 	 */
-	SelectionDialog(@Nullable final T initial) {
+	IdentifyExerciseDialog(@Nullable final T initial) {
 		this.value = new ObservableValue<>(initial);
 	}
 	

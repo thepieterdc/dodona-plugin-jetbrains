@@ -8,9 +8,9 @@
  */
 
 /**
- * Classes related to code manipulation and parsing.
+ * Implementation classes of an IdentificationService.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.code;
+package io.github.thepieterdc.dodona.plugin.code.identification.impl;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -8,9 +8,9 @@
  */
 
 /**
- * Classes related to code manipulation and parsing.
+ * Implementations of NotificationServices.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.code;
+package io.github.thepieterdc.dodona.plugin.notifications.impl;
 
 import javax.annotation.ParametersAreNonnullByDefault;

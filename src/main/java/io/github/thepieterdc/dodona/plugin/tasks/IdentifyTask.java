@@ -9,10 +9,11 @@
 package be.ugent.piedcler.dodona.plugin.tasks;
 
 import io.github.thepieterdc.dodona.plugin.api.DodonaExecutorImpl;
-import be.ugent.piedcler.dodona.plugin.ui.selection.CourseSelectionDialog;
-import be.ugent.piedcler.dodona.plugin.ui.selection.ExerciseSelectionDialog;
-import be.ugent.piedcler.dodona.plugin.ui.selection.SelectionDialog;
-import be.ugent.piedcler.dodona.plugin.ui.selection.SeriesSelectionDialog;
+import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
+import io.github.thepieterdc.dodona.plugin.tasks.ui.CourseSelectionDialog;
+import io.github.thepieterdc.dodona.plugin.tasks.ui.ExerciseSelectionDialog;
+import io.github.thepieterdc.dodona.plugin.tasks.ui.IdentifyExerciseDialog;
+import io.github.thepieterdc.dodona.plugin.tasks.ui.SeriesSelectionDialog;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
@@ -35,7 +36,7 @@ import java.util.Optional;
 /**
  * Requests the user to select a course, series and exercise.
  */
-public class SelectExerciseTask extends Task.WithResult<Optional<Exercise>, RuntimeException> {
+public class IdentifyTask extends Task.WithResult<Optional<Exercise>, RuntimeException> {
 	private Course selectedCourse;
 	private Exercise selectedExercise;
 	private Series selectedSeries;
@@ -45,7 +46,7 @@ public class SelectExerciseTask extends Task.WithResult<Optional<Exercise>, Runt
 	 *
 	 * @param project the project to display notifications in
 	 */
-	public SelectExerciseTask(@Nonnull final Project project) {
+	public IdentifyTask(@Nonnull final Project project) {
 		super(project, "Configure Exercise", false);
 	}
 	
@@ -58,7 +59,7 @@ public class SelectExerciseTask extends Task.WithResult<Optional<Exercise>, Runt
 	 * @return the chosen element, or null if canceled
 	 */
 	@Nullable
-	private <T> T choose(final String title, final SelectionDialog<T> dialog) {
+	private <T> T choose(final String title, final IdentifyExerciseDialog<T> dialog) {
 		final DialogBuilder builder = new DialogBuilder(this.myProject);
 		builder.setCenterPanel(dialog.getRootPane());
 		builder.setTitle(title);
@@ -116,7 +117,7 @@ public class SelectExerciseTask extends Task.WithResult<Optional<Exercise>, Runt
 			if (this.selectedExercise == null) return Optional.empty();
 			
 			return Optional.of(this.selectedExercise);
-		} catch (final be.ugent.piedcler.dodona.plugin.exceptions.CancelledException | InterruptedException ex) {
+		} catch (final UserAbortedException | InterruptedException ex) {
 			return Optional.empty();
 		} catch (final InvocationTargetException | IOException | DodonaException error) {
 			throw new RuntimeException(error);

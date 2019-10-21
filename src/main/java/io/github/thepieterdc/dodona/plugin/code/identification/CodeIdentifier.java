@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.code.identification.configurers;
+package io.github.thepieterdc.dodona.plugin.code.identification;
 
 import be.ugent.piedcler.dodona.plugin.code.identification.IdentificationConfigurer;
 import com.intellij.openapi.editor.Document;
@@ -17,7 +17,7 @@ import java.util.function.Function;
 /**
  * An identification configurer that can discern various languages.
  */
-public enum LanguageIdentificationConfigurer implements IdentificationConfigurer {
+public enum CodeIdentifier implements IdentificationConfigurer {
 	HASKELL("hs", v -> String.format("-- %s", v)),
 	HTML("html", v -> String.format("<!-- %s -->", v)),
 	JAVA("java", v -> String.format("// %s", v)),
@@ -34,7 +34,7 @@ public enum LanguageIdentificationConfigurer implements IdentificationConfigurer
 	 * @param extension the file extension for the kind of exercise
 	 * @param commentFn how should the Identification line be generated
 	 */
-	LanguageIdentificationConfigurer(final String extension, final Function<String, String> commentFn) {
+	CodeIdentifier(final String extension, final Function<String, String> commentFn) {
 		this.extension = extension;
 		this.commentFn = commentFn;
 	}

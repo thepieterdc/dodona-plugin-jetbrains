@@ -15,6 +15,7 @@ import io.github.thepieterdc.dodona.DodonaClient;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.function.Function;
 
 /**
@@ -55,9 +56,23 @@ public interface DodonaExecutor {
 	 * Executes the given call, asynchronously.
 	 *
 	 * @param call the call to execute
-	 * @param <T>  return type of the response
+	 * @param <T>  type of the response
 	 * @return the response from the call
 	 */
 	@Nonnull
 	<T> DodonaFuture<T> execute(Function<? super DodonaClient, ? extends T> call);
+	
+	/**
+	 * Executes the given call, synchronously, in a modal.
+	 *
+	 * @param project the current project
+	 * @param text    the text to display in the modal
+	 * @param call    the call to execute
+	 * @param <T>     type of the response
+	 * @return the response from the call
+	 */
+	@Nonnull
+	<T> T executeWithModal(Project project,
+	                       String text,
+	                       Function<? super DodonaClient, ? extends T> call) throws IOException;
 }

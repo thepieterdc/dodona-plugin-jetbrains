@@ -1,23 +1,26 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package be.ugent.piedcler.dodona.plugin.exceptions;
+
+package io.github.thepieterdc.dodona.plugin.exceptions;
+
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 
 /**
- * The user aborted the ongoing action.
+ * Action has been cancelled by the user.
  */
 public final class CancelledException extends RuntimeException {
-	private static final long serialVersionUID = 4266029459834672125L;
+	private static final long serialVersionUID = 8493202782174285992L;
 	
 	/**
-	 * UserAbortedException constructor.
+	 * CancelledException constructor.
 	 */
 	public CancelledException() {
-		super("Operation aborted.");
+		super(DodonaBundle.message("exceptions.cancelled"));
 	}
 }

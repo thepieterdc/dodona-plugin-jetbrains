@@ -1,16 +1,16 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
 /**
- * Exceptions that trigger a warning message.
+ * Custom exceptions that represent warnings (non-fatal errors).
  */
 @ParametersAreNonnullByDefault
-package be.ugent.piedcler.dodona.plugin.exceptions.warnings;
+package io.github.thepieterdc.dodona.plugin.exceptions.warnings;
 
 import javax.annotation.ParametersAreNonnullByDefault;
