@@ -1,66 +1,271 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 package io.github.thepieterdc.dodona.plugin.tasks.ui;
 
-import be.ugent.piedcler.dodona.plugin.util.observable.ObservableValue;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.util.ui.AsyncProcessIcon;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
+import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
+import io.github.thepieterdc.dodona.plugin.ui.resources.course.CourseComboBox;
+import io.github.thepieterdc.dodona.plugin.ui.resources.exercises.ExercisesList;
+import io.github.thepieterdc.dodona.plugin.ui.resources.series.SeriesComboBox;
+import io.github.thepieterdc.dodona.resources.Course;
+import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.Series;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
+import java.awt.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
- * A dialog that allows the user to select something.
+ * Controller dialog that prompts the user to identify an exercise.
  */
-public abstract class IdentifyExerciseDialog<T> extends JDialog {
-	private final ObservableValue<T> value;
+public class IdentifyExerciseDialog extends DialogWrapper {
+	@NonNls
+	private static final String CARD_COURSES = "SELECT_COURSES";
+	@NonNls
+	private static final String CARD_EXERCISES = "SELECT_EXERCISES";
+	@NonNls
+	private static final String CARD_SERIES = "SELECT_SERIES";
+	@NonNls
+	private static final String CARD_LOADING = "SELECT_LOADING";
+	
+	private static final int HEIGHT = 250;
+	private static final int WIDTH = 400;
+	
+	private final DodonaExecutor executor;
+	private final Project project;
+	
+	private final AsyncProcessIcon loadingIcon;
+	
+	private final CourseComboBox courseComboBox;
+	private JPanel courseSelectionPanel;
+	
+	private final ExercisesList exercisesList;
+	private JPanel exerciseSelectionPanel;
+	
+	private final SeriesComboBox seriesComboBox;
+	private JPanel seriesSelectionPanel;
+	
+	private JPanel rootPanel;
 	
 	/**
-	 * SelectionDialog constructor.
+	 * SelectExerciseDialog constructor.
 	 *
-	 * @param initial initial selected value
+	 * @param project  the current project
+	 * @param executor request executor
 	 */
-	IdentifyExerciseDialog(@Nullable final T initial) {
-		this.value = new ObservableValue<>(initial);
+	public IdentifyExerciseDialog(final Project project,
+	                              final DodonaExecutor executor) {
+		super(project, true);
+		this.courseComboBox = new CourseComboBox(this::onCourseSelected);
+		this.executor = executor;
+		this.exercisesList = new ExercisesList(this::doOKAction);
+		this.loadingIcon = new AsyncProcessIcon(this.getClass() + ".loading");
+		this.project = project;
+		this.rootPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		this.seriesComboBox = new SeriesComboBox(this::onSeriesSelected);
+		
+		this.setTitle(DodonaBundle.message("dialog.select_exercise.title"));
+		this.init();
+		
+		this.initialize();
+	}
+	
+	@Override
+	protected JComponent createCenterPanel() {
+		return this.rootPanel;
 	}
 	
 	/**
-	 * Adds a listener to the current selected item.
+	 * Creates a small loading panel.
 	 *
-	 * @param listener the listener
+	 * @return the loading panel
 	 */
-	public void addListener(@Nonnull final be.ugent.piedcler.dodona.plugin.ui.listeners.ItemSelectedListener<T> listener) {
-		this.value.addListener(listener::onItemSelected);
+	@Nonnull
+	private JComponent createLoadingPanel() {
+		final JPanel loadingPanel = new JPanel(new BorderLayout());
+		loadingPanel.add(this.loadingIcon, BorderLayout.CENTER);
+		return loadingPanel;
 	}
 	
 	/**
-	 * Gets the selected item.
+	 * Gets the selected exercise.
 	 *
-	 * @return the selected item
+	 * @return the exercise if selected
 	 */
-	@Nullable
-	public T getSelectedItem() {
-		return this.value.getValue();
+	@Nonnull
+	public Optional<FullIdentification> getSelectedExercise() {
+		return this.courseComboBox.getSelectedResource().flatMap(course ->
+			this.seriesComboBox.getSelectedResource().flatMap(series ->
+				this.exercisesList.getSelectedResource().map(exercise ->
+					new FullIdentification(course, series, exercise)
+				)
+			)
+		);
 	}
 	
 	/**
-	 * Gets whether or not items can be selected from this dialog.
-	 *
-	 * @return true if items exist
+	 * Initializes the UI.
 	 */
-	abstract public boolean hasItems();
+	private void initialize() {
+		// Initialize the courses.
+		this.courseSelectionPanel.add(this.courseComboBox, CARD_COURSES);
+		this.courseSelectionPanel.add(this.createLoadingPanel(), CARD_LOADING);
+		
+		// Initialize the exercises.
+		this.exerciseSelectionPanel.add(
+			ScrollPaneFactory.createScrollPane(this.exercisesList),
+			CARD_EXERCISES
+		);
+		this.exerciseSelectionPanel.add(this.createLoadingPanel(), CARD_LOADING);
+		this.exerciseSelectionPanel.setEnabled(false);
+		
+		// Initialize the series.
+		this.seriesSelectionPanel.add(this.seriesComboBox, CARD_SERIES);
+		this.seriesSelectionPanel.add(this.createLoadingPanel(), CARD_LOADING);
+		this.seriesComboBox.setEnabled(false);
+		
+		// Get the course of the project.
+		final Optional<Long> optCourse = DodonaProjectSettings
+			.getInstance(this.project)
+			.getCourseId();
+		
+		// Load the courses.
+		this.updateCourses().thenRun(() -> optCourse.ifPresent(id ->
+			this.courseComboBox.setSelectedResource(course -> course.getId() == id)
+		));
+	}
 	
 	/**
-	 * Sets the value.
+	 * Handler for selected courses.
 	 *
-	 * @param value the value
+	 * @param course the selected course
 	 */
-	void setValue(@Nullable final T value) {
-		this.value.setValue(value);
+	private void onCourseSelected(@Nullable final Course course) {
+		// Disable the series selection and clear the options.
+		this.seriesComboBox.setEnabled(false);
+		this.seriesComboBox.setResources(Collections.emptyList());
+		
+		// Disable the exercise selection and clear the options.
+		this.exercisesList.setEnabled(false);
+		this.exercisesList.setResources(Collections.emptyList());
+		
+		// No course was selected.
+		if (course == null) {
+			return;
+		}
+		
+		// Load the series.
+		this.updateSeries(course).thenRun(() ->
+			this.seriesComboBox.setEnabled(true)
+		);
+	}
+	
+	/**
+	 * Handler for selected series.
+	 *
+	 * @param series the selected series
+	 */
+	private void onSeriesSelected(@Nullable final Series series) {
+		// Disable the exercise selection and clear the options.
+		this.exercisesList.setEnabled(false);
+		this.exercisesList.setResources(Collections.emptyList());
+		
+		// No series was selected.
+		if (series == null) {
+			return;
+		}
+		
+		// Load the exercises.
+		this.updateExercises(series).thenRun(() ->
+			this.exercisesList.setEnabled(true)
+		);
+	}
+	
+	/**
+	 * Shows the card with the given name in the given panel.
+	 *
+	 * @param panel the panel
+	 * @param card  the card to show
+	 */
+	private static void showCard(final JPanel panel, @NonNls final String card) {
+		((CardLayout) panel.getLayout()).show(panel, card);
+	}
+	
+	/**
+	 * Updates the list of courses.
+	 *
+	 * @return the courses
+	 */
+	@Nonnull
+	private CompletableFuture<List<Course>> updateCourses() {
+		// Show the loading card.
+		showCard(this.courseSelectionPanel, CARD_LOADING);
+		
+		// Show the series and exercise cards.
+		showCard(this.seriesSelectionPanel, CARD_SERIES);
+		
+		// Load the courses.
+		return this.executor.execute(dodona -> dodona.me().getSubscribedCourses())
+			.whenComplete((courses, error) -> SwingUtilities.invokeLater(() -> {
+				this.courseComboBox.setResources(courses);
+				showCard(this.courseSelectionPanel, CARD_COURSES);
+			}));
+	}
+	
+	/**
+	 * Updates the list of exercises.
+	 *
+	 * @return the exercises
+	 */
+	@Nonnull
+	private CompletableFuture<List<Exercise>> updateExercises(final Series series) {
+		// Show the loading card.
+		showCard(this.exerciseSelectionPanel, CARD_LOADING);
+		
+		// Load the exercises.
+		return this.executor.execute(dodona -> dodona.exercises().getAll(series))
+			.whenComplete((exercises, error) -> SwingUtilities.invokeLater(() -> {
+				this.exercisesList.setResources(exercises);
+				showCard(this.exerciseSelectionPanel, CARD_EXERCISES);
+			}));
+	}
+	
+	/**
+	 * Updates the list of series.
+	 *
+	 * @return the series
+	 */
+	@Nonnull
+	private CompletableFuture<List<Series>> updateSeries(final Course course) {
+		// Show the loading card.
+		showCard(this.seriesSelectionPanel, CARD_LOADING);
+		
+		// Show the exercise card.
+		showCard(this.exerciseSelectionPanel, CARD_EXERCISES);
+		
+		// Load the series.
+		return this.executor.execute(dodona -> dodona.series().getAll(course))
+			.whenComplete((series, error) -> SwingUtilities.invokeLater(() -> {
+				this.seriesComboBox.setResources(series);
+				showCard(this.seriesSelectionPanel, CARD_SERIES);
+			}));
 	}
 }

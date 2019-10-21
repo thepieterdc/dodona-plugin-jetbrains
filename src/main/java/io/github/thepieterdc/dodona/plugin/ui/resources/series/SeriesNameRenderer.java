@@ -1,30 +1,35 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
+
 package io.github.thepieterdc.dodona.plugin.ui.resources.series;
 
 import com.intellij.ui.ColoredListCellRenderer;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.resources.Series;
-import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
 
 /**
- * Renders the series name correctly in a list of Series.
+ * Renders the course name.
  */
-public class SeriesNameRenderer extends ColoredListCellRenderer<Series> {
+final class SeriesNameRenderer extends ColoredListCellRenderer<Series> {
 	@Override
-	protected void customizeCellRenderer(@NotNull JList<? extends Series> list,
-	                                     @Nonnull final Series series,
-	                                     int index,
-	                                     boolean selected,
-	                                     boolean hasFocus) {
-		this.append(series.getName());
+	protected void customizeCellRenderer(final JList<? extends Series> jList,
+	                                     @Nullable final Series series,
+	                                     final int i,
+	                                     final boolean b,
+	                                     final boolean b1) {
+		if (series == null) {
+			this.append(DodonaBundle.message("dialog.select_exercise.series.placeholder"));
+		} else {
+			this.append(series.getName());
+		}
 	}
 }

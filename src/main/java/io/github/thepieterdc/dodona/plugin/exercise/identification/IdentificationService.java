@@ -1,58 +1,39 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 package io.github.thepieterdc.dodona.plugin.exercise.identification;
 
-import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
+import com.intellij.openapi.components.ServiceManager;
+import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
 /**
- * Identifies the exercise url from the code.
+ * Identifies an exercise.
  */
 public interface IdentificationService {
 	/**
-	 * Identifies the current exercise given some code.
+	 * Gets an instance of the IdentificationService.
 	 *
-	 * @param code the code to process
-	 * @return the found identification, if any
+	 * @return the instance
 	 */
 	@Nonnull
-	Optional<Identification> identify(@Nonnull final CharSequence code);
-	
+	static IdentificationService getInstance() {
+		return ServiceManager.getService(IdentificationService.class);
+	}
+
 	/**
-	 * Identifies the current exercise given a file.
+	 * Identifies the exercise based on the code.
 	 *
-	 * @param file the file to process
-	 * @return the found identification, if any
+	 * @param code the code
+	 * @return the identification if successful
 	 */
 	@Nonnull
-	Optional<Identification> identify(@Nonnull final PsiFile file);
-	
-	/**
-	 * Identifies the current exercise given a virtual file.
-	 *
-	 * @param project the opened project
-	 * @param file    the file to process
-	 * @return the found identification, if any
-	 */
-	@Nonnull
-	Optional<Identification> identify(@Nonnull final Project project, @Nonnull final VirtualFile file);
-	
-	/**
-	 * Identifies the currently opened exercise.
-	 *
-	 * @param project the current project
-	 * @return the found identification, if any
-	 */
-	@Nonnull
-	Optional<Identification> identifyOpened(@Nonnull final Project project);
+	Optional<Identification> identify(final String code);
 }

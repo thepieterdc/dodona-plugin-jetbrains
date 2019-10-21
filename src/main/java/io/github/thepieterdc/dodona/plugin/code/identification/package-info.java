@@ -8,7 +8,7 @@
  */
 
 /**
- * Identification parsing and setting of code.
+ * Writes identification data to code.
  */
 @ParametersAreNonnullByDefault
 package io.github.thepieterdc.dodona.plugin.code.identification;

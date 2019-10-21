@@ -1,126 +1,89 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package be.ugent.piedcler.dodona.plugin.tasks;
+package io.github.thepieterdc.dodona.plugin.tasks;
 
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutorImpl;
-import be.ugent.piedcler.dodona.plugin.exceptions.UserAbortedException;
-import io.github.thepieterdc.dodona.plugin.tasks.ui.CourseSelectionDialog;
-import io.github.thepieterdc.dodona.plugin.tasks.ui.ExerciseSelectionDialog;
-import io.github.thepieterdc.dodona.plugin.tasks.ui.IdentifyExerciseDialog;
-import io.github.thepieterdc.dodona.plugin.tasks.ui.SeriesSelectionDialog;
 import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.ui.DialogBuilder;
-import com.intellij.openapi.ui.DialogWrapper;
-import io.github.thepieterdc.dodona.exceptions.DodonaException;
-import io.github.thepieterdc.dodona.resources.Course;
-import io.github.thepieterdc.dodona.resources.Exercise;
-import io.github.thepieterdc.dodona.resources.Series;
-import org.jetbrains.annotations.NotNull;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
+import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
+import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
+import io.github.thepieterdc.dodona.plugin.tasks.ui.IdentifyExerciseDialog;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.awt.*;
-import java.io.IOException;
+import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Optional;
 
 /**
- * Requests the user to select a course, series and exercise.
+ * Prompts the user to identify the current exercise.
  */
-public class IdentifyTask extends Task.WithResult<Optional<Exercise>, RuntimeException> {
-	private Course selectedCourse;
-	private Exercise selectedExercise;
-	private Series selectedSeries;
+public class IdentifyTask extends AbstractDodonaResultTask<FullIdentification> {
+	private final DodonaExecutor executor;
 	
-	/**
-	 * SelectExerciseTask constructor.
-	 *
-	 * @param project the project to display notifications in
-	 */
-	public IdentifyTask(@Nonnull final Project project) {
-		super(project, "Configure Exercise", false);
-	}
-	
-	/**
-	 * Shows a selection dialog.
-	 *
-	 * @param dialog the dialog to show
-	 * @param title  title of the dialog
-	 * @param <T>    type class of the options
-	 * @return the chosen element, or null if canceled
-	 */
 	@Nullable
-	private <T> T choose(final String title, final IdentifyExerciseDialog<T> dialog) {
-		final DialogBuilder builder = new DialogBuilder(this.myProject);
-		builder.setCenterPanel(dialog.getRootPane());
-		builder.setTitle(title);
-		builder.removeAllActions();
-		
-		if (dialog.hasItems()) {
-			builder.addOkAction();
-			builder.addCancelAction();
-			builder.setOkActionEnabled(false);
-			dialog.addListener(i -> builder.setOkActionEnabled(i != null));
-		} else {
-			builder.addCloseButton();
-		}
-		
-		if (builder.show() == DialogWrapper.OK_EXIT_CODE) {
-			return dialog.getSelectedItem();
-		}
-		return null;
+	private FullIdentification identification;
+	
+	/**
+	 * SubmitSolutionTask constructor.
+	 *
+	 * @param project the current project
+	 */
+	private IdentifyTask(final Project project) {
+		super(project, DodonaBundle.message("tasks.select_exercise.title"));
+		this.executor = DodonaAuthenticator.getInstance().getExecutor();
 	}
 	
+	@Nonnull
 	@Override
-	protected Optional<Exercise> compute(@NotNull ProgressIndicator progressIndicator) throws RuntimeException {
+	protected FullIdentification compute(final ProgressIndicator progress) {
 		try {
-			final List<Course> myCourses = DodonaExecutorImpl.callModal(this.myProject, "Retrieving courses",
-				dodona -> dodona.me().getSubscribedCourses()
-			);
+			// Set the progressbar.
+			progress.setIndeterminate(true);
+			progress.setText(DodonaBundle.message("tasks.select_exercise.progress.identify"));
 			
-			progressIndicator.setFraction(0.30);
-			progressIndicator.setText("Waiting for course selection...");
+			// Perform the identification.
+			SwingUtilities.invokeAndWait(this::showDialog);
 			
-			EventQueue.invokeAndWait(() -> this.selectedCourse = choose("Select Course", new CourseSelectionDialog(myCourses)));
-			
-			if (this.selectedCourse == null) return Optional.empty();
-			
-			final List<Series> courseSeries = DodonaExecutorImpl.callModal(this.myProject, "Retrieving series",
-				dodona -> dodona.series().getAll(this.selectedCourse)
-			);
-			
-			progressIndicator.setFraction(0.60);
-			progressIndicator.setText("Waiting for series selection...");
-			
-			EventQueue.invokeAndWait(() -> this.selectedSeries = choose("Select Series", new SeriesSelectionDialog(courseSeries)));
-			
-			if (this.selectedSeries == null) return Optional.empty();
-			
-			final List<Exercise> exercises = DodonaExecutorImpl.callModal(this.myProject, "Retrieving exercises",
-				dodona -> dodona.exercises().getAll(this.selectedSeries)
-			);
-			
-			progressIndicator.setFraction(0.90);
-			progressIndicator.setText("Waiting for exercise selection...");
-			
-			EventQueue.invokeAndWait(() -> this.selectedExercise = choose("Select Exercise", new ExerciseSelectionDialog(exercises)));
-			
-			if (this.selectedExercise == null) return Optional.empty();
-			
-			return Optional.of(this.selectedExercise);
-		} catch (final UserAbortedException | InterruptedException ex) {
-			return Optional.empty();
-		} catch (final InvocationTargetException | IOException | DodonaException error) {
-			throw new RuntimeException(error);
+			// Return the result if available.
+			return Optional.ofNullable(this.identification)
+				.orElseThrow(CancelledException::new);
+		} catch (final InterruptedException | InvocationTargetException ex) {
+			throw new CancelledException();
+		}
+	}
+	
+	/**
+	 * Creates an exercise selection task.
+	 *
+	 * @param project the current project
+	 * @return the task
+	 */
+	@Nonnull
+	public static DodonaResultTask<FullIdentification> create(final Project project) {
+		return new IdentifyTask(project);
+	}
+	
+	/**
+	 * Shows the selection dialog.
+	 */
+	private void showDialog() {
+		final IdentifyExerciseDialog dialog = new IdentifyExerciseDialog(
+			this.myProject,
+			this.executor
+		);
+		
+		// Show the dialog.
+		if (dialog.showAndGet()) {
+			this.identification = dialog.getSelectedExercise().orElse(null);
 		}
 	}
 }

@@ -1,11 +1,12 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
+
 package io.github.thepieterdc.dodona.plugin.exercise;
 
 import javax.annotation.Nonnull;
@@ -13,23 +14,25 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 
 /**
- * An identification of an exercise.
+ * Identification of an exercise.
  */
 public final class Identification {
+	@Nullable
 	private final Long courseId;
 	private final Long exerciseId;
+	@Nullable
 	private final Long seriesId;
 	
 	/**
 	 * Identification constructor.
 	 *
-	 * @param courseId   the course id
-	 * @param seriesId   the series id
-	 * @param exerciseId the exercise id
+	 * @param courseId   the id of the course
+	 * @param seriesId   the id of the series
+	 * @param exerciseId the id of the exercise
 	 */
 	public Identification(@Nullable final Long courseId,
 	                      @Nullable final Long seriesId,
-	                      @Nonnull final Long exerciseId) {
+	                      final Long exerciseId) {
 		this.courseId = courseId;
 		this.exerciseId = exerciseId;
 		this.seriesId = seriesId;
@@ -41,7 +44,7 @@ public final class Identification {
 	 * @return the course id
 	 */
 	@Nonnull
-	public Optional<Long> getCourseId() {
+	public Optional<Long> getCourse() {
 		return Optional.ofNullable(this.courseId);
 	}
 	
@@ -51,7 +54,7 @@ public final class Identification {
 	 * @return the exercise id
 	 */
 	@Nonnull
-	public Long getExerciseId() {
+	public Long getExercise() {
 		return this.exerciseId;
 	}
 	
@@ -61,7 +64,17 @@ public final class Identification {
 	 * @return the series id
 	 */
 	@Nonnull
-	public Optional<Long> getSeriesId() {
+	public Optional<Long> getSeries() {
 		return Optional.ofNullable(this.seriesId);
+	}
+	
+	@Override
+	public String toString() {
+		return String.format(
+			"Identification{course=%s, series=%s, exercise=%s}",
+			this.courseId,
+			this.seriesId,
+			this.exerciseId
+		);
 	}
 }

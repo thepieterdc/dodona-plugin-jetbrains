@@ -1,16 +1,18 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package be.ugent.piedcler.dodona.plugin.naming.impl;
 
-import be.ugent.piedcler.dodona.plugin.naming.ExerciseNamingService;
+package io.github.thepieterdc.dodona.plugin.exercise.naming.impl;
+
+import io.github.thepieterdc.dodona.plugin.exercise.naming.ExerciseNamingService;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.ProgrammingLanguage;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -21,13 +23,31 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
- * Implementation of a naming service for exercises.
+ * Default implementation of an ExerciseNamingService.
  */
 public class ExerciseNamingServiceImpl implements ExerciseNamingService {
 	private static final String EXT_JAVA = "java";
 	
 	private static final Pattern JAVA_BOILERPLATE_REGEX = Pattern.compile("class (\\w*)");
+	private static final Pattern NON_ALPHA = Pattern.compile("[^a-zA-Z0-9-_. ]", Pattern.CASE_INSENSITIVE);
+	private static final Pattern WHITESPACE = Pattern.compile("\\s");
 	
+	/**
+	 * Generates a default filename by cleaning up the exercise name.
+	 *
+	 * @param exercise the exercise
+	 * @return the filename
+	 */
+	@Nonnull
+	private static Optional<String> generateDefaultFilename(@Nonnull final Exercise exercise) {
+		final String name = NON_ALPHA.matcher(exercise.getName()).replaceAll("");
+		return Optional.of(WHITESPACE.matcher(name))
+			.map(matcher -> matcher.replaceAll("_"))
+			.map(str -> str.toLowerCase(Locale.getDefault()))
+			.filter(s -> !s.isEmpty());
+	}
+	
+	@NonNls
 	@Nonnull
 	@Override
 	public Optional<String> generateFileName(final Exercise exercise) {
@@ -42,27 +62,15 @@ public class ExerciseNamingServiceImpl implements ExerciseNamingService {
 	}
 	
 	/**
-	 * Generates a default filename by cleaning up the exercise name.
-	 *
-	 * @param exercise the exercise
-	 * @return the filename
-	 */
-	@Nonnull
-	private static Optional<String> generateDefaultFilename(@Nonnull final Exercise exercise) {
-		String name = exercise.getName().toLowerCase(Locale.getDefault());
-		name = name.replaceAll("[^a-zA-Z0-9-_. ]", "");
-		return Optional.of(name.replaceAll("\\s", "_")).filter(s -> !s.isEmpty());
-	}
-	
-	/**
 	 * Generates a class name given an exercise name.
 	 *
 	 * @param name the name of the exercise
 	 * @return name of the class
 	 */
+	@NonNls
 	@Nonnull
-	private static String generateJavaClassName(@Nonnull final String name) {
-		return Arrays.stream(name.replaceAll("[^a-zA-Z0-9_ ]", "").split("\\s"))
+	private static String generateJavaClassName(@Nonnull final CharSequence name) {
+		return Arrays.stream(WHITESPACE.split(NON_ALPHA.matcher(name).replaceAll("")))
 			.map(s -> s.substring(0, 1) + s.substring(1))
 			.collect(Collectors.joining());
 	}
