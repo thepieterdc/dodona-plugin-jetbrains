@@ -1,6 +1,7 @@
 plugins {
     id 'de.fuerstenau.buildconfig' version '1.1.8'
     id 'idea'
+    id 'jacoco'
     id 'java'
     id 'org.jetbrains.intellij' version '0.4.10'
 }
@@ -39,6 +40,13 @@ intellij {
     pluginName 'dodona'
     plugins = ['java', 'PythonCore:2019.2.192.5728.98']
     version 'IU-192.5728.98'
+}
+
+jacocoTestReport {
+    reports {
+        html.enabled = false
+        xml.enabled = true
+    }
 }
 
 patchPluginXml {

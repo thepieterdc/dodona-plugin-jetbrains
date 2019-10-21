@@ -5,9 +5,9 @@ on: [push]
 jobs:
   build:
     name: Build on jdk ${{ matrix.java }} and ${{ matrix.os }}
-    
+
     runs-on: ${{ matrix.os }}
-    
+
     strategy:
       fail-fast: true
       matrix:
@@ -15,12 +15,18 @@ jobs:
         os: [ubuntu-latest]
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Setup Java
-      uses: actions/setup-java@v1
-      with:
-        java-version: ${{ matrix.java}}
-    - name: Assemble the plugin using Gradle
-      run: ./gradlew assemble
-    - name: Run the tests
-      run: ./gradlew test
+      - uses: actions/checkout@v1
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.java}}
+      - name: Build the plugin using Gradle
+        run: ./gradlew buildPlugin
+      - name: Run the tests
+        run: ./gradlew test
+      - name: Generate the coverage report
+        run: ./gradlew jacocoTestReport
+      - name: Upload the coverage report
+        uses: codecov/codecov-action@v1.0.3
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
