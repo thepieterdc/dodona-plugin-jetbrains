@@ -51,7 +51,7 @@ final class CourseListCellRenderer extends IconListCellRenderer<Course> {
 	                           final Color primary,
 	                           final Color secondary) {
 		// Set the circle.
-		this.icon.setIcon(Icons.createColoredCircle(course.getColor().getColor()));
+		this.icon.setIcon(Icons.createColoredCircle(course.getColor()));
 		
 		// Set the name field.
 		this.name.setForeground(primary);

@@ -138,7 +138,7 @@ public class TabbedCourseList extends JBTabbedPane {
 	 * @param course the selected course
 	 */
 	private void setSelectedCourse(@Nullable final Course course) {
-		if (this.selectedCourse != course) {
+		if (!Objects.equals(this.selectedCourse, course)) {
 			this.selectedCourse = course;
 			this.listeners.forEach(listener -> listener.onItemSelected(course));
 		}

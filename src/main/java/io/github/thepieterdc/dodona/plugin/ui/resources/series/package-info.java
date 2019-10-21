@@ -8,9 +8,9 @@
  */
 
 /**
- * Classes related to code manipulation and parsing.
+ * Series-related UI components.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.code;
+package io.github.thepieterdc.dodona.plugin.ui.resources.series;
 
 import javax.annotation.ParametersAreNonnullByDefault;

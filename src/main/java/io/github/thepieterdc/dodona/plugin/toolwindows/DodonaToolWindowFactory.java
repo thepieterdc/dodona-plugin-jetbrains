@@ -42,7 +42,7 @@ public class DodonaToolWindowFactory implements DumbAware, ToolWindowFactory {
 		// Create the deadlines tab.
 		final DeadlinesTab deadlines = new DeadlinesTab(
 			executor,
-			settings.getCourseId()
+			settings.getCourseId().orElse(0L)
 		);
 		
 		// Append all tabs to the content.
