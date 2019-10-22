@@ -9,17 +9,15 @@
 
 package io.github.thepieterdc.dodona.plugin.tasks;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.data.SubmissionStatus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
-import io.github.thepieterdc.dodona.plugin.code.Identification;
-import io.github.thepieterdc.dodona.plugin.code.identification.IdentificationService;
+import io.github.thepieterdc.dodona.plugin.exercise.Identification;
+import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
 import io.github.thepieterdc.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
 import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
@@ -34,7 +32,7 @@ import java.io.IOException;
 /**
  * Submits code to Dodona.
  */
-public class SubmitSolutionTask extends AbstractDodonaTask {
+public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	private static final double DELAY_BACKOFF_FACTOR = 1.15;
 	private static final long DELAY_INITIAL_MS = 3_000L;
 	private static final long DELAY_TIMEOUT_MS = 120_000L;
@@ -80,7 +78,7 @@ public class SubmitSolutionTask extends AbstractDodonaTask {
 	                                   final long submissionId) throws InterruptedException {
 		Submission submission = null;
 		
-		long currentDelay = SubmitSolutionTask.DELAY_INITIAL_MS;
+		long currentDelay = DELAY_INITIAL_MS;
 		long totalWaited = 0L;
 		
 		// Perform exponential backoff until the solution is accepted or the
@@ -90,7 +88,7 @@ public class SubmitSolutionTask extends AbstractDodonaTask {
 			|| submission.getStatus() == SubmissionStatus.QUEUED) {
 			
 			// Check for timeouts.
-			if (currentDelay < SubmitSolutionTask.DELAY_MIN_WAIT_MS) {
+			if (currentDelay < DELAY_MIN_WAIT_MS) {
 				throw new SubmissionTimeoutException(exercise, submission);
 			}
 			
@@ -107,13 +105,13 @@ public class SubmitSolutionTask extends AbstractDodonaTask {
 			
 			// Determine the next delay amount.
 			currentDelay = Math.min(
-				(long) (((double) currentDelay) * SubmitSolutionTask.DELAY_BACKOFF_FACTOR),
-				SubmitSolutionTask.DELAY_MAX_WAIT_MS
+				(long) (((double) currentDelay) * DELAY_BACKOFF_FACTOR),
+				DELAY_MAX_WAIT_MS
 			);
 			
 			// Ensure the delay is still within bounds.
 			currentDelay = Math.min(
-				SubmitSolutionTask.DELAY_TIMEOUT_MS - totalWaited,
+				DELAY_TIMEOUT_MS - totalWaited,
 				currentDelay
 			);
 		}
@@ -129,18 +127,13 @@ public class SubmitSolutionTask extends AbstractDodonaTask {
 	 * @return the task
 	 */
 	@Nonnull
-	public static DodonaTask create(final Project project, final String code) {
+	public static DodonaBackgroundTask create(final Project project, final String code) {
 		// Attempt to identify the exercise, otherwise return a new task to
 		// perform this job.
-		return ServiceManager.getService(IdentificationService.class)
+		return IdentificationService.getInstance()
 			.identify(code)
 			.map(result -> new SubmitSolutionTask(project, result, code))
 			.orElseThrow(RuntimeException::new);
-	}
-	
-	@Override
-	public void execute() {
-		ProgressManager.getInstance().run(this);
 	}
 	
 	@Override
@@ -164,7 +157,7 @@ public class SubmitSolutionTask extends AbstractDodonaTask {
 			
 			// Update the progress bar.
 			progress.setIndeterminate(false);
-			progress.setFraction(SubmitSolutionTask.PROGRESS_SUBMITTED);
+			progress.setFraction(PROGRESS_SUBMITTED);
 			progress.setText(DodonaBundle.message("tasks.submit_solution.evaluating"));
 			
 			// Await the evaluation.

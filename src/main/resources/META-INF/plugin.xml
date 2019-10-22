@@ -1,56 +1,68 @@
 <!-- DO NOT ALTER THE INDENTATION OF THIS FILE AS THIS WILL BREAK THINGS -->
 <idea-plugin url="https://plugins.jetbrains.com/plugin/11166-dodona">
-    <id>be.ugent.piedcler.dodona</id>
-    <name>Dodona</name>
+  <id>be.ugent.piedcler.dodona</id>
+  <name>Dodona</name>
 
-    <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah Lissens</vendor>
+  <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah Lissens</vendor>
 
-    <depends>com.intellij.modules.lang</depends>
-    <depends>com.intellij.modules.platform</depends>
+  <depends>com.intellij.modules.lang</depends>
+  <depends>com.intellij.modules.platform</depends>
 
-    <!-- IDE-specific configurations -->
-    <depends optional="true" config-file="plugin-java.xml">com.intellij.modules.java</depends>
-    <depends optional="true" config-file="plugin-python.xml">com.intellij.modules.python</depends>
+  <!-- IDE-specific configurations -->
+  <depends optional="true" config-file="plugin-java.xml">com.intellij.modules.java</depends>
+  <depends optional="true" config-file="plugin-python.xml">com.intellij.modules.python</depends>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <!-- Authentication -->
-        <applicationService
-            serviceImplementation="io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccountManager"/>
-        <applicationService
-            serviceImplementation="io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator"/>
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Authentication -->
+    <applicationService
+      serviceImplementation="io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccountManager"/>
+    <applicationService
+      serviceImplementation="io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator"/>
 
-        <!-- Code parsing/manipulation -->
-        <applicationService
-            serviceInterface="io.github.thepieterdc.dodona.plugin.code.identification.IdentificationService"
-            serviceImplementation="io.github.thepieterdc.dodona.plugin.code.identification.impl.IdentificationServiceImpl"/>
+    <!-- Code parsing/manipulation -->
+    <applicationService
+      serviceInterface="io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService"
+      serviceImplementation="io.github.thepieterdc.dodona.plugin.exercise.identification.impl.IdentificationServiceImpl"/>
+    <applicationService
+      serviceInterface="io.github.thepieterdc.dodona.plugin.code.identification.CodeIdentificationService"
+      serviceImplementation="io.github.thepieterdc.dodona.plugin.code.identification.impl.CodeIdentificationServiceImpl"/>
 
-        <!-- Feedback -->
-        <projectService serviceInterface="io.github.thepieterdc.dodona.plugin.feedback.FeedbackService"
-                        serviceImplementation="io.github.thepieterdc.dodona.plugin.feedback.impl.FeedbackServiceImpl"/>
+    <!-- Feedback -->
+    <projectService serviceInterface="io.github.thepieterdc.dodona.plugin.feedback.FeedbackService"
+                    serviceImplementation="io.github.thepieterdc.dodona.plugin.feedback.impl.FeedbackServiceImpl"/>
 
-        <!-- Naming -->
-        <applicationService serviceInterface="io.github.thepieterdc.dodona.plugin.naming.ExerciseNamingService"
-                            serviceImplementation="io.github.thepieterdc.dodona.plugin.naming.impl.ExerciseNamingServiceImpl"/>
+    <!-- File creation -->
+    <projectService serviceInterface="io.github.thepieterdc.dodona.plugin.exercise.creation.ExerciseCreationService"
+                    serviceImplementation="io.github.thepieterdc.dodona.plugin.exercise.creation.impl.ExerciseCreationServiceImpl"/>
 
-        <!-- Notifications -->
-        <projectService serviceInterface="io.github.thepieterdc.dodona.plugin.notifications.NotificationService"
-                        serviceImplementation="io.github.thepieterdc.dodona.plugin.notifications.impl.NotificationServiceImpl"/>
+    <!-- Filename generation -->
+    <applicationService serviceInterface="io.github.thepieterdc.dodona.plugin.exercise.naming.ExerciseNamingService"
+                        serviceImplementation="io.github.thepieterdc.dodona.plugin.exercise.naming.impl.ExerciseNamingServiceImpl"/>
 
-        <!-- Settings -->
-        <applicationConfigurable
-            instance="io.github.thepieterdc.dodona.plugin.settings.DodonaSettingsConfigurable"/>
-        <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings"/>
+    <!-- Notifications -->
+    <projectService serviceInterface="io.github.thepieterdc.dodona.plugin.notifications.NotificationService"
+                    serviceImplementation="io.github.thepieterdc.dodona.plugin.notifications.impl.NotificationServiceImpl"/>
 
-        <!-- Tool window -->
-        <toolWindow id="Dodona" anchor="right" icon="/icons/dodona.svg" secondary="true"
-                    factoryClass="io.github.thepieterdc.dodona.plugin.toolwindows.DodonaToolWindowFactory"/>
-    </extensions>
+    <!-- Settings -->
+    <applicationConfigurable
+      instance="io.github.thepieterdc.dodona.plugin.settings.DodonaSettingsConfigurable"/>
+    <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings"/>
 
-    <actions>
-        <group
-            id="io.github.thepieterdc.dodona.plugin.actions.SubmitAction.github.thepieterdc.dodona.actions.DodonaActions"
-            class="io.github.thepieterdc.dodona.plugin.actions.DodonaActionsGroup" text="Dodona" popup="false">
-            <add-to-group group-id="NavBarToolBar" anchor="after" relative-to-action="ToolbarRunGroup"/>
-        </group>
-    </actions>
+    <!-- Tool window -->
+    <toolWindow id="Dodona" anchor="right" icon="/icons/dodona.svg" secondary="true"
+                factoryClass="io.github.thepieterdc.dodona.plugin.toolwindows.DodonaToolWindowFactory"
+                conditionClass="io.github.thepieterdc.dodona.plugin.toolwindows.DodonaToolWindowCondition"/>
+  </extensions>
+
+  <actions>
+    <action id="dodona.actions.NewExercise" class="io.github.thepieterdc.dodona.plugin.actions.NewExerciseAction">
+      <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewScratchFile"/>
+    </action>
+
+    <group
+      id="dodona.actions.DodonaActions"
+      class="io.github.thepieterdc.dodona.plugin.actions.DodonaActionsGroup" text="Dodona" popup="false">
+      <add-to-group group-id="NavBarToolBar" anchor="after" relative-to-action="ToolbarRunGroup"/>
+    </group>
+  </actions>
 </idea-plugin>

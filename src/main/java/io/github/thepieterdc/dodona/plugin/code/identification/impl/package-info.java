@@ -8,7 +8,7 @@
  */
 
 /**
- * Implementation classes of an IdentificationService.
+ * Implementations of CodeIdentificationServices.
  */
 @ParametersAreNonnullByDefault
 package io.github.thepieterdc.dodona.plugin.code.identification.impl;

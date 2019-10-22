@@ -55,8 +55,8 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 	protected static Color getBackground(final JList<?> list, final boolean selected) {
 		if (selected) {
 			return list.hasFocus()
-				? JBColor.namedColor(AbstractListCellRenderer.selectedFocusedBackground, AbstractListCellRenderer.defaultSelectedFocusedBackground)
-				: JBColor.namedColor(AbstractListCellRenderer.selectedBackground, AbstractListCellRenderer.defaultSelectedBackground);
+				? JBColor.namedColor(selectedFocusedBackground, defaultSelectedFocusedBackground)
+				: JBColor.namedColor(selectedBackground, defaultSelectedBackground);
 		}
 		return list.getBackground();
 	}
@@ -72,10 +72,10 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 	                                     final boolean focused) {
 		if (selected) {
 			return focused
-				? JBColor.namedColor(AbstractListCellRenderer.selectedFocusedForeground, UIUtil.getListForeground())
-				: JBColor.namedColor(AbstractListCellRenderer.selectedForeground, UIUtil.getListForeground());
+				? JBColor.namedColor(selectedFocusedForeground, UIUtil.getListForeground())
+				: JBColor.namedColor(selectedForeground, UIUtil.getListForeground());
 		}
-		return JBColor.namedColor(AbstractListCellRenderer.unselectedForeground, UIUtil.getListForeground());
+		return JBColor.namedColor(unselectedForeground, UIUtil.getListForeground());
 	}
 	
 	/**
@@ -88,10 +88,10 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 	                                     final boolean selected) {
 		if (selected && list != null) {
 			return list.hasFocus()
-				? JBColor.namedColor(AbstractListCellRenderer.selectedFocusedForeground, UIUtil.getListForeground())
-				: JBColor.namedColor(AbstractListCellRenderer.selectedForeground, UIUtil.getListForeground());
+				? JBColor.namedColor(selectedFocusedForeground, UIUtil.getListForeground())
+				: JBColor.namedColor(selectedForeground, UIUtil.getListForeground());
 		}
-		return JBColor.namedColor(AbstractListCellRenderer.unselectedForeground, UIUtil.getListForeground());
+		return JBColor.namedColor(unselectedForeground, UIUtil.getListForeground());
 	}
 	
 	/**
@@ -104,9 +104,9 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 	protected static Color getSecondaryForeground(final boolean selected,
 	                                              final boolean focused) {
 		if (selected) {
-			return AbstractListCellRenderer.getForeground(true, focused);
+			return getForeground(true, focused);
 		}
-		return JBColor.namedColor(AbstractListCellRenderer.unselectedSecondaryForeground, UIUtil.getContextHelpForeground());
+		return JBColor.namedColor(unselectedSecondaryForeground, UIUtil.getContextHelpForeground());
 	}
 	
 	/**
@@ -118,8 +118,8 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 	protected static Color getSecondaryForeground(@Nullable final JList<?> list,
 	                                              final boolean selected) {
 		if (selected && list != null) {
-			return AbstractListCellRenderer.getForeground(list, true);
+			return getForeground(list, true);
 		}
-		return JBColor.namedColor(AbstractListCellRenderer.unselectedSecondaryForeground, UIUtil.getContextHelpForeground());
+		return JBColor.namedColor(unselectedSecondaryForeground, UIUtil.getContextHelpForeground());
 	}
 }
