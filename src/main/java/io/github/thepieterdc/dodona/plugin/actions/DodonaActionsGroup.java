@@ -45,13 +45,13 @@ public class DodonaActionsGroup extends ActionGroup implements DumbAware {
 		// Detect whether this is a Dodona project.
 		final DodonaProjectSettings settings =
 			DodonaProjectSettings.getInstance(project);
-		if (settings.getCourseId() > 0L) {
+		if (settings.getCourseId().isPresent()) {
 			// This is a Dodona project.
-			return DodonaActionsGroup.defaultActions.clone();
+			return defaultActions.clone();
 		}
 		
 		// This is not a Dodona project.
-		return DodonaActionsGroup.defaultActions.clone();
+		return defaultActions.clone();
 	}
 	
 	@Override

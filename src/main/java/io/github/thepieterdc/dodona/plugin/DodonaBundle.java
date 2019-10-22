@@ -23,7 +23,7 @@ public final class DodonaBundle {
 	private static final String BUNDLE_NAME = "messages.Dodona";
 	
 	@Nonnull
-	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(DodonaBundle.BUNDLE_NAME);
+	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);
 	
 	@NonNls
 	public static final String NAME = "Dodona";
@@ -44,8 +44,8 @@ public final class DodonaBundle {
 	 */
 	@Nonnull
 	public static String message(
-		@PropertyKey(resourceBundle = DodonaBundle.BUNDLE_NAME) final String key,
+		@PropertyKey(resourceBundle = BUNDLE_NAME) final String key,
 		final Object... params) {
-		return CommonBundle.message(DodonaBundle.BUNDLE, key, params);
+		return CommonBundle.message(BUNDLE, key, params);
 	}
 }

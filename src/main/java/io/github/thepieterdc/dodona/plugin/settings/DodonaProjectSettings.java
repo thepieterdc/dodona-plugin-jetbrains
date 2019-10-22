@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.Optional;
 
 /**
  * Project-specific plugin settings.
@@ -33,12 +34,13 @@ public class DodonaProjectSettings implements PersistentStateComponent<DodonaPro
 	private State state = new State();
 	
 	/**
-	 * Gets the course id.
+	 * Gets the course id if set.
 	 *
 	 * @return the course id
 	 */
-	public long getCourseId() {
-		return this.state.course_id;
+	@Nonnull
+	public Optional<Long> getCourseId() {
+		return Optional.of(this.state.course_id).filter(id -> id > 0L);
 	}
 	
 	/**

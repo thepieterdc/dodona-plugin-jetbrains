@@ -64,7 +64,7 @@ public class CourseWizardStep extends ModuleWizardStep {
 	 * Initializes the course selection panel.
 	 */
 	private void initialize() {
-		this.coursesPanel.add(this.coursesList, CourseWizardStep.COURSES_CARD_COURSES);
+		this.coursesPanel.add(this.coursesList, COURSES_CARD_COURSES);
 		
 		final JPanel loadingInnerPanel = new JPanel(new BorderLayout(10, 10));
 		loadingInnerPanel.add(
@@ -78,9 +78,9 @@ public class CourseWizardStep extends ModuleWizardStep {
 		
 		this.coursesPanel.add(
 			ScrollPaneFactory.createScrollPane(loadingPanel),
-			CourseWizardStep.COURSES_CARD_LOADING
+			COURSES_CARD_LOADING
 		);
-		this.showCard(CourseWizardStep.COURSES_CARD_COURSES);
+		this.showCard(COURSES_CARD_COURSES);
 		
 		this.requestUpdate();
 	}
@@ -90,12 +90,12 @@ public class CourseWizardStep extends ModuleWizardStep {
 	 */
 	private void requestUpdate() {
 		this.loadingIcon.setBackground(this.coursesList.getBackground());
-		this.showCard(CourseWizardStep.COURSES_CARD_LOADING);
+		this.showCard(COURSES_CARD_LOADING);
 		
 		this.executor.execute(dodona -> dodona.me().getSubscribedCourses())
 			.whenComplete((courses, error) -> SwingUtilities.invokeLater(() -> {
 				this.coursesList.setCourses(courses);
-				this.showCard(CourseWizardStep.COURSES_CARD_COURSES);
+				this.showCard(COURSES_CARD_COURSES);
 			}));
 	}
 	
