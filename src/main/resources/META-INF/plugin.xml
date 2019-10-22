@@ -28,6 +28,10 @@
         <projectService serviceInterface="io.github.thepieterdc.dodona.plugin.feedback.FeedbackService"
                         serviceImplementation="io.github.thepieterdc.dodona.plugin.feedback.impl.FeedbackServiceImpl"/>
 
+        <!-- Naming -->
+        <applicationService serviceInterface="io.github.thepieterdc.dodona.plugin.naming.ExerciseNamingService"
+                            serviceImplementation="io.github.thepieterdc.dodona.plugin.naming.impl.ExerciseNamingServiceImpl"/>
+
         <!-- Notifications -->
         <projectService serviceInterface="io.github.thepieterdc.dodona.plugin.notifications.NotificationService"
                         serviceImplementation="io.github.thepieterdc.dodona.plugin.notifications.impl.NotificationServiceImpl"/>
