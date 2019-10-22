@@ -19,6 +19,10 @@
         <applicationService
             serviceImplementation="io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator"/>
 
+        <!-- Caching -->
+        <applicationService serviceInterface="io.github.thepieterdc.dodona.plugin.caching.CachingService"
+                            serviceImplementation="io.github.thepieterdc.dodona.plugin.caching.impl.CachingServiceImpl"/>
+
         <!-- Code parsing/manipulation -->
         <applicationService
             serviceInterface="io.github.thepieterdc.dodona.plugin.code.identification.IdentificationService"
