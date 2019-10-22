@@ -62,6 +62,7 @@ patchPluginXml {
       <h3>Improvements</h3>
       <ul>
         <li>Authentication should work smoother now.</li>
+        <li>Caching of some resource data to save requests.</li>
         <li>General performance improvements.</li>
         <li>Other servers besides dodona.ugent.be are now supported.</li>
       </ul>
