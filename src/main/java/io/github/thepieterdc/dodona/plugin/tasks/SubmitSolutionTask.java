@@ -16,10 +16,9 @@ import io.github.thepieterdc.dodona.data.SubmissionStatus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
-import io.github.thepieterdc.dodona.plugin.exercise.Identification;
-import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
 import io.github.thepieterdc.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
+import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
 import io.github.thepieterdc.dodona.plugin.notifications.ErrorReporter;
 import io.github.thepieterdc.dodona.resources.Exercise;
@@ -128,12 +127,13 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	 */
 	@Nonnull
 	public static DodonaBackgroundTask create(final Project project, final String code) {
-		// Attempt to identify the exercise, otherwise return a new task to
-		// perform this job.
-		return IdentificationService.getInstance()
-			.identify(code)
-			.map(result -> new SubmitSolutionTask(project, result, code))
-			.orElseThrow(RuntimeException::new);
+//		// Attempt to identify the exercise, otherwise return a new task to
+//		// perform this job.
+//		return IdentificationService.getInstance()
+//			.identify(code)
+//			.map(result -> new SubmitSolutionTask(project, result, code))
+//			.orElseThrow(RuntimeException::new);
+		return ShowSubmissionTask.create(project, 4029932L);
 	}
 	
 	@Override

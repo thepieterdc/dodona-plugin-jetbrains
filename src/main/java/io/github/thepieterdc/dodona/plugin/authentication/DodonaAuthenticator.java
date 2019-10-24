@@ -34,6 +34,17 @@ public class DodonaAuthenticator {
 	}
 	
 	/**
+	 * Provides authentication details to the given consumer.
+	 *
+	 * @param consumer the consumer
+	 */
+	public void authenticate(final AuthenticationConsumer consumer) {
+		this.accountManager.getAccount()
+			.flatMap(this.accountManager::getToken)
+			.ifPresent(consumer::authenticate);
+	}
+	
+	/**
 	 * Gets the account if available.
 	 *
 	 * @return the account
