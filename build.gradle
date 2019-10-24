@@ -57,6 +57,7 @@ patchPluginXml {
       <h3>New features</h3>
       <ul>
         <li>Project wizard: Add Dodona support to new projects.</li>
+        <li>Show incorrect submissions in the IDE.</li>
         <li>ToolWindow: List upcoming deadlines for this course.</li>
       </ul>
       
