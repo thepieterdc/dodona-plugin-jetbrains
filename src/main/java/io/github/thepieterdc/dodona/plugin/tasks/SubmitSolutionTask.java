@@ -16,10 +16,10 @@ import io.github.thepieterdc.dodona.data.SubmissionStatus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
-import io.github.thepieterdc.dodona.plugin.exercise.Identification;
-import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
 import io.github.thepieterdc.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
+import io.github.thepieterdc.dodona.plugin.exercise.Identification;
+import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
 import io.github.thepieterdc.dodona.plugin.notifications.ErrorReporter;
 import io.github.thepieterdc.dodona.resources.Exercise;
@@ -27,7 +27,6 @@ import io.github.thepieterdc.dodona.resources.submissions.Submission;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 
 /**
  * Submits code to Dodona.
@@ -141,13 +140,12 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 		try {
 			// Update the progress bar.
 			progress.setIndeterminate(true);
+			progress.setText(
+				DodonaBundle.message("tasks.submit_solution.submitting")
+			);
 			
 			// Submit the solution and get the id of the submission.
-			final long id = this.executor.executeWithModal(
-				this.myProject,
-				DodonaBundle.message("tasks.submit_solution.submitting"),
-				this::submit
-			);
+			final long id = this.executor.execute(this::submit, progress);
 			
 			// Get information about the exercise.
 			final Exercise exercise = this.executor.execute(
@@ -169,10 +167,10 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 			
 			// Provide feedback to the user.
 			this.feedback.notify(exercise, evaluated);
-		} catch (final IOException error) {
-			ErrorReporter.report(error);
 		} catch (final InterruptedException ex) {
 			throw new CancelledException();
+		} catch (final RuntimeException ex) {
+			ErrorReporter.report(ex);
 		}
 	}
 	
