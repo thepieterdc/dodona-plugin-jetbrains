@@ -46,7 +46,7 @@ public final class DeadlinesPanel extends JPanel {
 	private void initialize() {
 		this.add(
 			ScrollPaneFactory.createScrollPane(this.deadlinesList, true),
-			DeadlinesPanel.DEADLINES_CARD_DEADLINES
+			DEADLINES_CARD_DEADLINES
 		);
 		
 		final JPanel loadingInnerPanel = new JPanel(new BorderLayout(10, 10));
@@ -61,7 +61,7 @@ public final class DeadlinesPanel extends JPanel {
 		
 		this.add(
 			ScrollPaneFactory.createScrollPane(loadingPanel, true),
-			DeadlinesPanel.DEADLINES_CARD_LOADING
+			DEADLINES_CARD_LOADING
 		);
 		
 		// Show the loading card.
@@ -75,7 +75,7 @@ public final class DeadlinesPanel extends JPanel {
 		this.loadingIcon.setBackground(this.deadlinesList.getBackground());
 		((CardLayout) this.getLayout()).show(
 			this,
-			DeadlinesPanel.DEADLINES_CARD_DEADLINES
+			DEADLINES_CARD_DEADLINES
 		);
 	}
 	
@@ -86,7 +86,7 @@ public final class DeadlinesPanel extends JPanel {
 		this.loadingIcon.setBackground(this.deadlinesList.getBackground());
 		((CardLayout) this.getLayout()).show(
 			this,
-			DeadlinesPanel.DEADLINES_CARD_LOADING
+			DEADLINES_CARD_LOADING
 		);
 	}
 	
