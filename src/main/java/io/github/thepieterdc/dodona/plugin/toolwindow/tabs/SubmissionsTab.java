@@ -1,122 +1,174 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
+
 package io.github.thepieterdc.dodona.plugin.toolwindow.tabs;
 
-import io.github.thepieterdc.dodona.plugin.exercise.identification.Identification;
-import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
-import be.ugent.piedcler.dodona.plugin.tasks.GetExerciseInfoTask;
-import be.ugent.piedcler.dodona.plugin.tasks.GetSubmissionsTask;
-import com.intellij.openapi.components.ServiceManager;
-import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
-import com.intellij.openapi.fileEditor.FileEditorManagerListener;
-import com.intellij.openapi.progress.ProgressManager;
+import com.intellij.openapi.fileEditor.FileEditor;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
-import io.github.thepieterdc.dodona.resources.Exercise;
-import io.github.thepieterdc.dodona.resources.submissions.PartialSubmission;
-import org.jetbrains.annotations.NotNull;
+import com.intellij.ui.ScrollPaneFactory;
+import com.intellij.util.messages.MessageBusConnection;
+import com.intellij.util.ui.AnimatedIcon;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.exercise.CurrentExerciseListener;
+import io.github.thepieterdc.dodona.plugin.exercise.Identification;
+import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
+import io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions.SubmissionsPanel;
+import io.github.thepieterdc.dodona.plugin.ui.AsyncContentPanel;
+import io.github.thepieterdc.dodona.plugin.ui.Icons;
+import io.github.thepieterdc.dodona.plugin.ui.TextColors;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.List;
+import javax.swing.*;
+import java.awt.*;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
-import java.util.function.Consumer;
+
 
 /**
- * Controller for the tab showing exercise submissions.
+ * Controller for the tab showing previous submissions.
  */
-public class SubmissionsTab {
-	/**
-	 * Listener for newly opened/closed files.
-	 */
-	private static class FileChangedListener implements FileEditorManagerListener {
-		private final Consumer<VirtualFile> handler;
-		
-		/**
-		 * FileChangedListener constructor.
-		 *
-		 * @param handler the handler
-		 */
-		FileChangedListener(@Nonnull final Consumer<VirtualFile> handler) {
-			this.handler = handler;
-		}
-		
-		@Override
-		public void selectionChanged(@NotNull final FileEditorManagerEvent event) {
-			this.handler.accept(event.getNewFile());
-		}
-	}
+public class SubmissionsTab extends AbstractTab {
+	private static final String TAB_TITLE = DodonaBundle.message("toolwindow.submissions.title");
 	
-	private final Content content;
+	@NonNls
+	private static final String CARD_NO_FILE = "SUBMISSIONS_NO_FILE";
+	@NonNls
+	private static final String CARD_UNKNOWN = "SUBMISSIONS_UNKNOWN";
+	@NonNls
+	private static final JComponent ICON_NO_FILE = new AnimatedIcon(
+		"ICON_NO_FILE", new Icon[0], Icons.FILE_CODE.color(TextColors.SECONDARY), 0
+	);
+	@NonNls
+	private static final JComponent ICON_UNKNOWN = new AnimatedIcon(
+		"ICON_UNKNOWN", new Icon[0], Icons.QUESTION.color(TextColors.SECONDARY), 0
+	);
+	
+	private final Collection<String> cards;
+	
+	private final JPanel panel;
 	
 	private final IdentificationService identificationService;
 	
-	private final SubmissionsTabPanel panel;
-	
+	private final DodonaExecutor executor;
 	private final Project project;
 	
 	/**
-	 * SubmissionsTabView constructor.
+	 * SubmissionsTab constructor.
 	 *
-	 * @param project the project
+	 * @param project  current active project
+	 * @param executor request executor
 	 */
-	public SubmissionsTab(@Nonnull final Project project) {
-		this.identificationService = ServiceManager.getService(project, IdentificationService.class);
-		this.panel = new SubmissionsTabPanel();
+	public SubmissionsTab(final Project project,
+	                      final DodonaExecutor executor) {
+		super(TAB_TITLE);
+		this.cards = new HashSet<>(5);
+		this.executor = executor;
+		this.identificationService = IdentificationService.getInstance();
+		this.panel = new JPanel(new CardLayout(0, 0));
 		this.project = project;
-		
-		this.content = ContentFactory.SERVICE.getInstance().createContent(this.panel, "Submissions", false);
-		this.content.setCloseable(false);
-		
-		project.getMessageBus()
-			.connect(this.content)
-			.subscribe(FileEditorManagerListener.FILE_EDITOR_MANAGER, new FileChangedListener(this::loadFile));
+		this.initialize();
+	}
+	
+	@Nonnull
+	@Override
+	JComponent createContent() {
+		return this.panel;
 	}
 	
 	/**
-	 * Gets the content pane.
+	 * Creates a simple card with an icon and text.
 	 *
-	 * @return content pane
+	 * @param icon the icon to display
+	 * @param text the text to display underneath the icon
+	 * @return the card
 	 */
-	public Content getContent() {
-		return this.content;
+	@Nonnull
+	private static JScrollPane createCard(final JComponent icon,
+	                                      @Nls final String text) {
+		final JPanel loadingInnerPanel = new JPanel(new BorderLayout(10, 10));
+		loadingInnerPanel.add(new JLabel(text), BorderLayout.PAGE_END);
+		loadingInnerPanel.add(icon, BorderLayout.CENTER);
+		
+		final JPanel loadingPanel = new JPanel(new GridBagLayout());
+		loadingPanel.add(loadingInnerPanel, new GridBagConstraints());
+		return ScrollPaneFactory.createScrollPane(loadingPanel, true);
 	}
 	
 	/**
-	 * Loads a file into the view.
+	 * Shows the correct card.
 	 *
-	 * @param file the file to load
+	 * @param file           the currently opened file
+	 * @param identification the identification of the file
 	 */
-	public void loadFile(@Nullable final VirtualFile file) {
-		final Identification identification = Optional.ofNullable(file)
-			.flatMap(f -> this.identificationService.identify(this.project, f))
-			.orElse(null);
-		
-		if (identification != null) {
-			
-			final Exercise exercise = ProgressManager.getInstance()
-				.run(new GetExerciseInfoTask(this.project, identification));
-			
-			this.content.setDisplayName("Submissions to " + exercise.getName());
-			
-			final List<PartialSubmission> submissions = ProgressManager.getInstance()
-				.run(new GetSubmissionsTask(this.project, identification));
-			if (submissions.isEmpty()) {
-				this.panel.setNoSubmissions();
-			} else {
-				this.panel.setSubmissions(submissions);
-			}
-		} else {
-			this.content.setDisplayName("Submissions");
-			this.panel.setNoExercise();
+	private void handle(@Nullable final VirtualFile file,
+	                    @Nullable final Identification identification) {
+		if (file == null) {
+			// Show the no-file card.
+			AsyncContentPanel.showCard(this.panel, CARD_NO_FILE);
+			return;
+		} else if (identification == null) {
+			// Show the unknown exercise card.
+			AsyncContentPanel.showCard(this.panel, CARD_UNKNOWN);
+			return;
 		}
+		
+		final String cardName = identification.toString();
+		
+		// Attempt to recycle a previous card.
+		if (!this.cards.contains(cardName)) {
+			// Create a new card.
+			final Component card = SubmissionsPanel.create(
+				this.project, this.executor, identification
+			);
+			this.cards.add(cardName);
+			this.panel.add(card, cardName);
+		}
+		
+		AsyncContentPanel.showCard(this.panel, cardName);
+	}
+	
+	/**
+	 * Initializes the component.
+	 */
+	private void initialize() {
+		// Add the no-file card.
+		this.panel.add(createCard(
+			ICON_NO_FILE,
+			DodonaBundle.message("toolwindow.submissions.no_file")
+		), CARD_NO_FILE);
+		
+		// Add the unknown exercise card.
+		this.panel.add(createCard(
+			ICON_UNKNOWN,
+			DodonaBundle.message("toolwindow.submissions.unknown")
+		), CARD_UNKNOWN);
+		
+		// Listen for changes in opened exercises.
+		final MessageBusConnection conn = this.project.getMessageBus().connect();
+		conn.subscribe(CurrentExerciseListener.CHANGED_TOPIC, this::handle);
+		
+		// Handle the current opened exercise.
+		final Optional<VirtualFile> vfile = Optional
+			.ofNullable(FileEditorManager.getInstance(this.project))
+			.map(FileEditorManager::getSelectedEditor)
+			.map(FileEditor::getFile);
+		final Optional<Identification> identification = vfile.flatMap(file ->
+			this.identificationService.identify(this.project, file)
+		);
+		
+		this.handle(vfile.orElse(null), identification.orElse(null));
 	}
 }

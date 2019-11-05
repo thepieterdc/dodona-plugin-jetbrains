@@ -13,7 +13,7 @@ import com.intellij.util.ui.GridBag;
 import com.intellij.util.ui.JBUI;
 import io.github.thepieterdc.dodona.plugin.api.DodonaServer;
 import io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccount;
-import io.github.thepieterdc.dodona.plugin.ui.IconListCellRenderer;
+import io.github.thepieterdc.dodona.plugin.ui.renderers.list.IconListCellRenderer;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,71 +1,99 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
+
 package io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions;
 
-import com.intellij.openapi.ui.SimpleToolWindowPanel;
-import com.intellij.ui.table.JBTable;
+import com.intellij.openapi.project.Project;
+import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.exercise.Identification;
+import io.github.thepieterdc.dodona.plugin.ui.AsyncContentPanel;
+import io.github.thepieterdc.dodona.plugin.ui.resources.submission.SubmissionDetailsDialog;
+import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.submissions.PartialSubmission;
+import io.github.thepieterdc.dodona.resources.submissions.Submission;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 /**
- * Panel for the tab showing exercise submissions.
+ * UI for the Submissions tab.
  */
-class SubmissionsPanel extends SimpleToolWindowPanel {
+public final class SubmissionsPanel extends AsyncContentPanel<SubmissionsTable> {
+	private final DodonaExecutor executor;
+	private final Project project;
 	
 	/**
-	 * DodonaToolWindowView constructor.
-	 */
-	public SubmissionsPanel() {
-		super(false, true);
-	}
-	
-	/**
-	 * Sets a list of submissions.
+	 * SubmissionsPanel constructor.
 	 *
-	 * @param submissions the submissions
+	 * @param project           current active project
+	 * @param executor          request executor
+	 * @param table             the submissions table
+	 * @param futureSubmissions submissions request
 	 */
-	void setSubmissions(@Nonnull final List<PartialSubmission> submissions) {
-		final JBTable submissionsTable = new SubmissionsTable(submissions);
+	private SubmissionsPanel(final Project project,
+	                         final DodonaExecutor executor,
+	                         final SubmissionsTable table,
+	                         final CompletionStage<? extends List<PartialSubmission>> futureSubmissions) {
+		super(table, "toolwindow.submissions.loading", true);
+		this.setBorder(BorderFactory.createEmptyBorder());
 		
-		final JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.add(new JScrollPane(submissionsTable));
+		this.executor = executor;
+		this.project = project;
 		
-		this.setContent(mainPanel);
+		this.content.addListener(this::showSubmissionDialog);
+		
+		futureSubmissions.whenComplete((submissions, error) -> {
+			this.content.setSubmissions(submissions);
+			this.showContentCard();
+		});
 	}
 	
 	/**
-	 * No active exercise.
+	 * Creates a SubmissionsPanel to render submissions of an exercise.
+	 *
+	 * @param project        current active project
+	 * @param executor       request executor
+	 * @param identification exercise identification
+	 * @return the panel
 	 */
-	void setNoExercise() {
-		final JLabel noExerciseLabel = new JLabel("No active exercise is loaded.");
+	@Nonnull
+	public static SubmissionsPanel create(final Project project,
+	                                      final DodonaExecutor executor,
+	                                      final Identification identification) {
+		final long exerciseId = identification.getExercise();
+		final CompletableFuture<List<PartialSubmission>> submissions = executor
+			.execute(dodona -> identification.getCourse()
+				.map(course -> dodona.submissions().getAllByMe(course, exerciseId))
+				.orElseGet(() -> dodona.submissions().getAllByMe(exerciseId))
+			);
 		
-		final JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.add(noExerciseLabel);
+		final SubmissionsTable table = new SubmissionsTable();
 		
-		this.setContent(mainPanel);
+		return new SubmissionsPanel(project, executor, table, submissions);
 	}
 	
 	/**
-	 * No submissions.
+	 * Shows the submission dialog.
+	 *
+	 * @param submission submission to show
 	 */
-	void setNoSubmissions() {
-		final JLabel noExerciseLabel = new JLabel("No submissions to this exercise were made yet.");
+	private void showSubmissionDialog(final PartialSubmission submission) {
+		final CompletableFuture<Exercise> futureExercise = this.executor
+			.execute(dodona -> dodona.exercises().get(submission));
+		final CompletableFuture<Submission> futureSubmission = this.executor
+			.execute(dodona -> dodona.submissions().get(submission));
 		
-		final JPanel mainPanel = new JPanel();
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-		mainPanel.add(noExerciseLabel);
-		
-		this.setContent(mainPanel);
+		new SubmissionDetailsDialog(
+			this.project, this.content, submission, futureExercise, futureSubmission)
+			.show();
 	}
 }

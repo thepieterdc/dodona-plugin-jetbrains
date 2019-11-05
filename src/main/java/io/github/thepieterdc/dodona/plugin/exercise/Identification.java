@@ -71,7 +71,7 @@ public final class Identification {
 	@Override
 	public String toString() {
 		return String.format(
-			"Identification{course=%s, series=%s, exercise=%s}",
+			"Identification[course=%s, series=%s, exercise=%s]",
 			this.courseId,
 			this.seriesId,
 			this.exerciseId

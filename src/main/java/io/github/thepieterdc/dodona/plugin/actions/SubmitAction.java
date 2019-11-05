@@ -18,7 +18,7 @@ import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.Icons;
+import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.plugin.tasks.SubmitSolutionTask;
 import org.jetbrains.annotations.NotNull;
 

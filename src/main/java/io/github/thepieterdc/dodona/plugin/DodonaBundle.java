@@ -20,7 +20,7 @@ import java.util.ResourceBundle;
  */
 public final class DodonaBundle {
 	@NonNls
-	private static final String BUNDLE_NAME = "messages.Dodona";
+	public static final String BUNDLE_NAME = "messages.Dodona";
 	
 	@Nonnull
 	private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(BUNDLE_NAME);

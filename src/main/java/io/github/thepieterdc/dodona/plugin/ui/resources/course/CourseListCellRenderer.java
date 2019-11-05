@@ -11,8 +11,8 @@ package io.github.thepieterdc.dodona.plugin.ui.resources.course;
 
 import com.intellij.util.ui.GridBag;
 import com.intellij.util.ui.JBUI;
-import io.github.thepieterdc.dodona.plugin.Icons;
-import io.github.thepieterdc.dodona.plugin.ui.IconListCellRenderer;
+import io.github.thepieterdc.dodona.plugin.ui.Icons;
+import io.github.thepieterdc.dodona.plugin.ui.renderers.list.IconListCellRenderer;
 import io.github.thepieterdc.dodona.resources.Course;
 
 import javax.swing.*;

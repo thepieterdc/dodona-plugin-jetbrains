@@ -12,7 +12,7 @@ package io.github.thepieterdc.dodona.plugin.toolwindow.ui.deadlines;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.toolwindow.tabs.DeadlinesTab;
+import io.github.thepieterdc.dodona.plugin.ui.Deadline;
 
 import javax.swing.*;
 import java.util.List;
@@ -20,8 +20,8 @@ import java.util.List;
 /**
  * Renders a list of deadlines.
  */
-final class DeadlinesList extends JBList<DeadlinesTab.Deadline> {
-	private final CollectionListModel<DeadlinesTab.Deadline> model;
+final class DeadlinesList extends JBList<Deadline> {
+	private final CollectionListModel<Deadline> model;
 	
 	/**
 	 * DeadlinesList constructor.
@@ -39,7 +39,7 @@ final class DeadlinesList extends JBList<DeadlinesTab.Deadline> {
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 	
-	void setDeadlines(final List<? extends DeadlinesTab.Deadline> deadlines) {
+	void setDeadlines(final List<? extends Deadline> deadlines) {
 		this.model.replaceAll(deadlines);
 	}
 }

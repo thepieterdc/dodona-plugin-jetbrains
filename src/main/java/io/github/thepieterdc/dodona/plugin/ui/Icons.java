@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package io.github.thepieterdc.dodona.plugin;
+package io.github.thepieterdc.dodona.plugin.ui;
 
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.util.IconUtil;
@@ -33,7 +33,10 @@ public enum Icons implements Icon {
 	DODONA("dodona"),
 	// Exercise status.
 	EXERCISE_CORRECT("exercise-correct"),
-	EXERCISE_WRONG("exercise-wrong");
+	EXERCISE_WRONG("exercise-wrong"),
+	// Other icons.
+	FILE_CODE("file-code"),
+	QUESTION("question");
 	
 	@NonNls
 	private static final String ICON_PATH = "/icons/%s.svg";

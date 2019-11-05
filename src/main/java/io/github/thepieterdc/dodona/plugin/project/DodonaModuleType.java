@@ -10,7 +10,7 @@ package io.github.thepieterdc.dodona.plugin.project;
 
 import com.intellij.ide.util.projectWizard.ModuleBuilder;
 import com.intellij.openapi.module.ModuleType;
-import io.github.thepieterdc.dodona.plugin.Icons;
+import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 

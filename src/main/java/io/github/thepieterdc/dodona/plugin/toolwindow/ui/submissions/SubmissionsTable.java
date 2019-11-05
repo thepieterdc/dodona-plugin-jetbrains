@@ -1,49 +1,69 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
+
 package io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions;
 
-import com.intellij.ui.JBColor;
 import com.intellij.ui.table.JBTable;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.ui.listeners.DoubleClickListener;
 import io.github.thepieterdc.dodona.resources.submissions.PartialSubmission;
-import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
-import javax.swing.table.TableCellRenderer;
-import java.awt.*;
-import java.util.List;
+import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
- * Renders a list of submissions.
+ * Renders a table of submissions.
  */
-class SubmissionsTable extends JBTable {
+public final class SubmissionsTable extends JBTable {
 	private final SubmissionsTableModel model;
 	
 	/**
-	 * SubmissionsTableModel constructor.
-	 *
-	 * @param submissions list of submissions to display
+	 * SubmissionsTable constructor.
 	 */
-	SubmissionsTable(@Nonnull final List<PartialSubmission> submissions) {
-		this.model = new SubmissionsTableModel(submissions);
-		this.setModel(this.model);
+	public SubmissionsTable() {
+		this(new SubmissionsTableModel());
 	}
-
-	@Override
-	@NotNull
-	public Component prepareRenderer(@NotNull TableCellRenderer renderer, int row, int column) {
-		final Component result = super.prepareRenderer(renderer, row, column);
+	
+	/**
+	 * SubmissionsTable constructor.
+	 *
+	 * @param model the table model
+	 */
+	private SubmissionsTable(final SubmissionsTableModel model) {
+		super(model);
+		this.model = model;
 		
-		final PartialSubmission submission = this.model.getRowValue(row);
+		this.getEmptyText().setText(
+			DodonaBundle.message("toolwindow.submissions.none")
+		);
 		
-		// Background color.
-		result.setBackground(submission.isAccepted() ? JBColor.GREEN: JBColor.RED);
-
-		return result;
+		this.model.setColumnRenderers(this.getColumnModel());
+	}
+	
+	/**
+	 * Configures the listener.
+	 *
+	 * @param handler handler to call
+	 */
+	public void addListener(final Consumer<? super PartialSubmission> handler) {
+		this.addMouseListener((DoubleClickListener) e -> {
+			final int row = this.rowAtPoint(e.getPoint());
+			this.model.getItemAtRow(row).ifPresent(handler);
+		});
+	}
+	
+	/**
+	 * Sets the submissions in the table.
+	 *
+	 * @param submissions the submissions to set
+	 */
+	void setSubmissions(final Collection<? extends PartialSubmission> submissions) {
+		this.model.replaceItems(submissions);
 	}
 }
