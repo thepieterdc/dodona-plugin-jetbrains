@@ -13,15 +13,15 @@ import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
 import io.github.thepieterdc.dodona.plugin.toolwindow.ui.deadlines.DeadlinesPanel;
+import io.github.thepieterdc.dodona.plugin.ui.Deadline;
 import io.github.thepieterdc.dodona.resources.Course;
 import io.github.thepieterdc.dodona.responses.RootResponse;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 /**
@@ -30,63 +30,35 @@ import java.util.stream.Collectors;
 public class DeadlinesTab extends AbstractTab {
 	private static final String TAB_TITLE = DodonaBundle.message("toolwindow.deadlines.title");
 	
-	private final DodonaExecutor executor;
-	
 	private final DeadlinesPanel deadlinesPanel;
-	
-	/**
-	 * DTO class representing a deadline.
-	 */
-	public static class Deadline implements Comparable<Deadline> {
-		public final long courseId;
-		public final String courseName;
-		public final ZonedDateTime deadline;
-		public final String seriesName;
-		
-		/**
-		 * Deadline constructor.
-		 *
-		 * @param courseId   the id of the course
-		 * @param courseName the name of the course
-		 * @param seriesName the name of the series
-		 * @param deadline   the deadline
-		 */
-		public Deadline(final long courseId,
-		                final String courseName,
-		                final String seriesName,
-		                final ZonedDateTime deadline) {
-			this.courseId = courseId;
-			this.courseName = courseName;
-			this.deadline = deadline;
-			this.seriesName = seriesName;
-		}
-		
-		@Override
-		public int compareTo(@NotNull final Deadline o) {
-			final int compareDeadline = this.deadline.compareTo(o.deadline);
-			if (compareDeadline == 0) {
-				return this.courseName.compareTo(o.courseName);
-			}
-			return compareDeadline;
-		}
-	}
 	
 	/**
 	 * DeadlinesTab constructor.
 	 *
+	 * @param executor request executor
 	 * @param courseId the id of the current active course
 	 */
 	public DeadlinesTab(final DodonaExecutor executor, final long courseId) {
-		super(DeadlinesTab.TAB_TITLE);
-		this.executor = executor;
-		this.deadlinesPanel = new DeadlinesPanel(courseId);
-		this.update();
+		super(TAB_TITLE);
+		this.deadlinesPanel = new DeadlinesPanel(courseId, getFutureDeadlines(executor));
 	}
 	
 	@Nonnull
 	@Override
 	JComponent createContent() {
 		return this.deadlinesPanel;
+	}
+	
+	/**
+	 * Gets the deadlines request.
+	 *
+	 * @param executor request executor
+	 * @return request
+	 */
+	@Nonnull
+	private static CompletableFuture<List<Deadline>> getFutureDeadlines(final DodonaExecutor executor) {
+		return executor.execute(DodonaClient::root)
+			.thenApply(DeadlinesTab::parseDeadlines);
 	}
 	
 	private static List<Deadline> parseDeadlines(final RootResponse root) {
@@ -106,18 +78,5 @@ public class DeadlinesTab extends AbstractTab {
 		)
 			.sorted()
 			.collect(Collectors.toList());
-	}
-	
-	/**
-	 * Updates the list of deadlines.
-	 */
-	private void update() {
-		this.deadlinesPanel.showLoading();
-		this.executor.execute(DodonaClient::root).whenComplete(
-			(root, error) -> SwingUtilities.invokeLater(() -> {
-				this.deadlinesPanel.update(DeadlinesTab.parseDeadlines(root));
-				this.deadlinesPanel.showDeadlines();
-			})
-		);
 	}
 }

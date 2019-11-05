@@ -9,7 +9,7 @@
 
 package io.github.thepieterdc.dodona.plugin.api;
 
-import io.github.thepieterdc.dodona.plugin.Icons;
+import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

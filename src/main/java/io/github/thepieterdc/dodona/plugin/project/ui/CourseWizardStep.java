@@ -10,30 +10,26 @@ package io.github.thepieterdc.dodona.plugin.project.ui;
 
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.openapi.options.ConfigurationException;
-import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.util.ui.AsyncProcessIcon;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
 import io.github.thepieterdc.dodona.plugin.project.DodonaModuleBuilder;
+import io.github.thepieterdc.dodona.plugin.ui.AsyncContentPanel;
 import io.github.thepieterdc.dodona.plugin.ui.resources.course.TabbedCourseList;
 import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Wizard step: Select course.
  */
 public class CourseWizardStep extends ModuleWizardStep {
 	@NonNls
-	private static final String COURSES_CARD_COURSES = "COURSES_COURSES";
+	private static final String CARD_COURSES = "COURSES_COURSES";
 	@NonNls
-	private static final String COURSES_CARD_LOADING = "COURSES_LOADING";
+	private static final String CARD_LOADING = "COURSES_LOADING";
 	
 	private final DodonaModuleBuilder builder;
 	private final DodonaExecutor executor;
-	
-	private final AsyncProcessIcon loadingIcon;
 	
 	private final TabbedCourseList coursesList;
 	
@@ -46,12 +42,12 @@ public class CourseWizardStep extends ModuleWizardStep {
 	 * @param builder  module builder
 	 * @param executor request executor
 	 */
-	public CourseWizardStep(final DodonaModuleBuilder builder, final DodonaExecutor executor) {
+	public CourseWizardStep(final DodonaModuleBuilder builder,
+	                        final DodonaExecutor executor) {
 		super();
 		this.builder = builder;
 		this.coursesList = new TabbedCourseList();
 		this.executor = executor;
-		this.loadingIcon = new AsyncProcessIcon.Big(this.getClass() + ".loading");
 		this.initialize();
 	}
 	
@@ -64,24 +60,18 @@ public class CourseWizardStep extends ModuleWizardStep {
 	 * Initializes the course selection panel.
 	 */
 	private void initialize() {
-		this.coursesPanel.add(this.coursesList, COURSES_CARD_COURSES);
+		// Card: courses list.
+		this.coursesPanel.add(this.coursesList, CARD_COURSES);
 		
-		final JPanel loadingInnerPanel = new JPanel(new BorderLayout(10, 10));
-		loadingInnerPanel.add(
-			new JLabel(DodonaBundle.message("module.course.loading")),
-			BorderLayout.PAGE_END
+		// Card: loading spinner.
+		this.coursesPanel.add(AsyncContentPanel.createLoadingCard(
+			this.coursesPanel,
+			this.getClass(),
+			"module.course.loading"),
+			CARD_LOADING
 		);
-		loadingInnerPanel.add(this.loadingIcon, BorderLayout.CENTER);
 		
-		final JPanel loadingPanel = new JPanel(new GridBagLayout());
-		loadingPanel.add(loadingInnerPanel, new GridBagConstraints());
-		
-		this.coursesPanel.add(
-			ScrollPaneFactory.createScrollPane(loadingPanel),
-			COURSES_CARD_LOADING
-		);
-		this.showCard(COURSES_CARD_COURSES);
-		
+		// Refresh the list of courses.
 		this.requestUpdate();
 	}
 	
@@ -89,23 +79,13 @@ public class CourseWizardStep extends ModuleWizardStep {
 	 * Updates the courses list.
 	 */
 	private void requestUpdate() {
-		this.loadingIcon.setBackground(this.coursesList.getBackground());
-		this.showCard(COURSES_CARD_LOADING);
+		AsyncContentPanel.showCard(this.coursesPanel, CARD_LOADING);
 		
 		this.executor.execute(dodona -> dodona.me().getSubscribedCourses())
 			.whenComplete((courses, error) -> SwingUtilities.invokeLater(() -> {
 				this.coursesList.setCourses(courses);
-				this.showCard(COURSES_CARD_COURSES);
+				AsyncContentPanel.showCard(this.coursesPanel, CARD_COURSES);
 			}));
-	}
-	
-	/**
-	 * Shows the card with the given name in the coursesPanel.
-	 *
-	 * @param card the card to show
-	 */
-	private void showCard(@NonNls final String card) {
-		((CardLayout) this.coursesPanel.getLayout()).show(this.coursesPanel, card);
 	}
 	
 	@Override

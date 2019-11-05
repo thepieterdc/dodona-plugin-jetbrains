@@ -7,10 +7,11 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.ui;
+package io.github.thepieterdc.dodona.plugin.ui.renderers.list;
 
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.UIUtil;
+import io.github.thepieterdc.dodona.plugin.ui.TextColors;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nullable;
@@ -36,8 +37,6 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 	private static final String selectedForeground = "Table.lightSelectionInactiveForeground";
 	@NonNls
 	private static final String unselectedForeground = "Table.foreground";
-	@NonNls
-	private static final String unselectedSecondaryForeground = "Component.infoForeground";
 	
 	/**
 	 * AbstractListCellRenderer constructor.
@@ -91,7 +90,7 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 				? JBColor.namedColor(selectedFocusedForeground, UIUtil.getListForeground())
 				: JBColor.namedColor(selectedForeground, UIUtil.getListForeground());
 		}
-		return JBColor.namedColor(unselectedForeground, UIUtil.getListForeground());
+		return TextColors.PRIMARY;
 	}
 	
 	/**
@@ -106,7 +105,7 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 		if (selected) {
 			return getForeground(true, focused);
 		}
-		return JBColor.namedColor(unselectedSecondaryForeground, UIUtil.getContextHelpForeground());
+		return TextColors.SECONDARY;
 	}
 	
 	/**
@@ -120,6 +119,6 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 		if (selected && list != null) {
 			return getForeground(list, true);
 		}
-		return JBColor.namedColor(unselectedSecondaryForeground, UIUtil.getContextHelpForeground());
+		return TextColors.SECONDARY;
 	}
 }

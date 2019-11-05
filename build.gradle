@@ -28,8 +28,10 @@ repositories {
 }
 
 dependencies {
-    compile group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.4.6'
-    runtime group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.4.6'
+    compile group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.4.7'
+    runtime group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.4.7'
+
+    compile group: 'com.github.marlonlom', name: 'timeago', version: '4.0.1'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '3.1.0'
@@ -58,6 +60,7 @@ patchPluginXml {
       <ul>
         <li>Project wizard: Add Dodona support to new projects.</li>
         <li>ToolWindow: List upcoming deadlines for this course.</li>
+        <li>ToolWindow: List previous submissions for the current opened exercise.</li>
       </ul>
       
       <h3>Improvements</h3>

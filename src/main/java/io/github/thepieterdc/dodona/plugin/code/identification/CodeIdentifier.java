@@ -8,10 +8,13 @@
  */
 package io.github.thepieterdc.dodona.plugin.code.identification;
 
+import io.github.thepieterdc.dodona.plugin.code.DodonaFileType;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -19,36 +22,39 @@ import java.util.function.Function;
  */
 @SuppressWarnings("HardCodedStringLiteral")
 public enum CodeIdentifier {
-	HASKELL("hs", v -> String.format("-- %s", v)),
-	HTML("html", v -> String.format("<!-- %s -->", v)),
-	JAVA("java", v -> String.format("// %s", v)),
-	JAVASCRIPT("js", v -> String.format("// %s", v)),
-	PROLOG("pl", v -> String.format("%% %s", v)),
-	PYTHON("py", v -> String.format("# %s", v));
+	HASKELL(DodonaFileType.HASKELL, v -> String.format("-- %s", v)),
+	HTML(DodonaFileType.HTML, v -> String.format("<!-- %s -->", v)),
+	JAVA(DodonaFileType.JAVA, v -> String.format("// %s", v)),
+	JAVASCRIPT(DodonaFileType.JAVASCRIPT, v -> String.format("// %s", v)),
+	PROLOG(DodonaFileType.PROLOG, v -> String.format("%% %s", v)),
+	PYTHON(DodonaFileType.PYTHON, v -> String.format("# %s", v));
 	
 	private final Function<? super String, String> commentFn;
-	private final String extension;
+	private final DodonaFileType fileType;
 	
 	/**
-	 * Construct a helper for generating the submission files.
+	 * CodeIdentifier constructor.
 	 *
-	 * @param extension the file extension for the kind of exercise
+	 * @param fileType  type of file
 	 * @param commentFn how should the Identification line be generated
 	 */
-	CodeIdentifier(@NonNls final String extension,
+	CodeIdentifier(final DodonaFileType fileType,
 	               @NonNls final Function<? super String, String> commentFn) {
 		this.commentFn = commentFn;
-		this.extension = extension;
+		this.fileType = fileType;
 	}
 	
 	/**
-	 * Get the default file extension.
+	 * Gets the appropriate code identifier for the given file extension.
 	 *
-	 * @return the file extension
+	 * @param extension the file extension
+	 * @return the identifier, if found
 	 */
 	@Nonnull
-	public String getFileExtension() {
-		return this.extension;
+	public static Optional<CodeIdentifier> getForExtension(final String extension) {
+		return Arrays.stream(CodeIdentifier.values())
+			.filter(identifier -> identifier.fileType.getExtension().equals(extension))
+			.findAny();
 	}
 	
 	/**

@@ -7,7 +7,7 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.ui;
+package io.github.thepieterdc.dodona.plugin.ui.renderers.list;
 
 import com.intellij.util.ui.GridBag;
 import com.intellij.util.ui.JBUI;
