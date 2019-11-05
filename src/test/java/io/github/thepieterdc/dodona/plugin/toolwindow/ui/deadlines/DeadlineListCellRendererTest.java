@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package io.github.thepieterdc.dodona.plugin.toolwindows.ui.deadlines;
+package io.github.thepieterdc.dodona.plugin.toolwindow.ui.deadlines;
 
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import org.junit.Assert;

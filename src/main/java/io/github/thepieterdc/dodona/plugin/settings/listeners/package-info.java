@@ -8,9 +8,9 @@
  */
 
 /**
- * Upcoming deadlines tab.
+ * Listeners for changes in project settings.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.toolwindows.ui.deadlines;
+package io.github.thepieterdc.dodona.plugin.settings.listeners;
 
 import javax.annotation.ParametersAreNonnullByDefault;
