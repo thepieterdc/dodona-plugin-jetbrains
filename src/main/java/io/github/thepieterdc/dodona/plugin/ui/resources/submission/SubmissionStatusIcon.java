@@ -9,33 +9,56 @@
 
 package io.github.thepieterdc.dodona.plugin.ui.resources.submission;
 
-import io.github.thepieterdc.dodona.plugin.Icons;
+import io.github.thepieterdc.dodona.data.SubmissionStatus;
+import io.github.thepieterdc.dodona.exceptions.SubmissionStatusNotFoundException;
+import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.reactivex.annotations.NonNull;
 import org.jetbrains.annotations.NonNls;
 
+import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 /**
  * Creates an icon for the given submission status.
  */
 public enum SubmissionStatusIcon implements Icon {
-	COMPILATION_ERROR("compilation-error"),
-	CORRECT("correct"),
-	MEMORY_LIMIT_EXCEEDED("memory-limit"),
-	RUNTIME_ERROR("runtime-error"),
-	TIME_LIMIT_EXCEEDED("time-limit"),
-	WRONG("wrong");
+	COMPILATION_ERROR(SubmissionStatus.COMPILATION_ERROR, "compilation-error"),
+	CORRECT(SubmissionStatus.CORRECT, "correct"),
+	INTERNAL_ERROR(SubmissionStatus.INTERNAL_ERROR, "internal-error"),
+	MEMORY_LIMIT_EXCEEDED(SubmissionStatus.MEMORY_LIMIT_EXCEEDED, "memory-limit"),
+	RUNTIME_ERROR(SubmissionStatus.RUNTIME_ERROR, "runtime-error"),
+	TIME_LIMIT_EXCEEDED(SubmissionStatus.TIME_LIMIT_EXCEEDED, "time-limit"),
+	WRONG(SubmissionStatus.WRONG, "wrong");
 	
 	private final Icon icon;
+	private final SubmissionStatus status;
 	
 	/**
 	 * SubmissionStatusIcon constructor.
 	 *
-	 * @param icon the icon
+	 * @param status the status
+	 * @param icon   the icon
 	 */
-	SubmissionStatusIcon(@NonNls final String icon) {
+	SubmissionStatusIcon(final SubmissionStatus status,
+	                     @NonNls final String icon) {
 		this.icon = get(icon);
+		this.status = status;
+	}
+	
+	/**
+	 * Gets the icon for the given status.
+	 *
+	 * @param status the status
+	 * @return the icon
+	 */
+	@Nonnull
+	public static SubmissionStatusIcon forStatus(final SubmissionStatus status) {
+		return Arrays.stream(SubmissionStatusIcon.values())
+			.filter(icon -> icon.status == status)
+			.findAny()
+			.orElseThrow(() -> new SubmissionStatusNotFoundException(status.getName()));
 	}
 	
 	/**

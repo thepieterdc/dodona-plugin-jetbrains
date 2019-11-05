@@ -66,4 +66,17 @@ public class DodonaServerTest {
 			DodonaServer.toIcon(URL)
 		);
 	}
+	
+	/**
+	 * Tests #toString().
+	 */
+	@Test
+	public void testToString() {
+		for (final DodonaServer server : DodonaServer.values()) {
+			Assert.assertEquals(
+				server.getDisplayName(),
+				server.toString()
+			);
+		}
+	}
 }

@@ -49,12 +49,15 @@ abstract class AbstractTab {
 	public void setup(final ToolWindow toolWindow) {
 		final ContentManager contentMgr = toolWindow.getContentManager();
 		
+		final JComponent component = this.createContent();
+		
 		final Content content = contentMgr.getFactory().createContent(
-			this.createContent(),
+			component,
 			this.title,
 			false
 		);
 		content.setCloseable(false);
+		content.setPreferredFocusableComponent(component);
 		
 		contentMgr.addContent(content);
 	}

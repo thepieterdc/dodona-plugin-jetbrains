@@ -10,7 +10,7 @@
 package io.github.thepieterdc.dodona.plugin.ui.resources.course;
 
 import com.intellij.ui.ColoredListCellRenderer;
-import io.github.thepieterdc.dodona.plugin.Icons;
+import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.resources.Course;
 import org.jetbrains.annotations.NonNls;
 

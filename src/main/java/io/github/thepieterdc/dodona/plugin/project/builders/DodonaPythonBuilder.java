@@ -14,7 +14,7 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.Module;
 import com.jetbrains.python.module.PythonModuleBuilder;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.Icons;
+import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.plugin.project.DodonaModuleBuilder;
 import io.github.thepieterdc.dodona.plugin.project.types.DodonaPythonType;
 import io.github.thepieterdc.dodona.resources.Course;

@@ -25,7 +25,7 @@ public class ErrorReporter {
 	 * @param cause   the error cause
 	 */
 	public static void report(final String message, final Throwable cause) {
-		ErrorReporter.logger.error(message, cause);
+		logger.error(message, cause);
 	}
 	
 	/**

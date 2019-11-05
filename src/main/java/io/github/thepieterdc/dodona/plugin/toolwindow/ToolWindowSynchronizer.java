@@ -17,6 +17,7 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowEP;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.openapi.wm.ToolWindowManager;
+import com.intellij.util.messages.MessageBusConnection;
 import io.github.thepieterdc.dodona.plugin.settings.listeners.ProjectCourseListener;
 
 /**
@@ -32,10 +33,11 @@ public class ToolWindowSynchronizer {
 	 */
 	public ToolWindowSynchronizer(final Project project) {
 		this.project = project;
-		this.project.getMessageBus().connect().subscribe(
-			ProjectCourseListener.CHANGED_TOPIC,
-			id -> this.update()
-		);
+		
+		final MessageBusConnection conn = this.project.getMessageBus().connect();
+		
+		// Listen for changes to project settings.
+		conn.subscribe(ProjectCourseListener.CHANGED_TOPIC, id -> this.update());
 	}
 	
 	/**
