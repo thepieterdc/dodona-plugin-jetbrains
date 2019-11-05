@@ -7,12 +7,12 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.toolwindows.tabs;
+package io.github.thepieterdc.dodona.plugin.toolwindow.tabs;
 
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
-import io.github.thepieterdc.dodona.plugin.toolwindows.ui.deadlines.DeadlinesPanel;
+import io.github.thepieterdc.dodona.plugin.toolwindow.ui.deadlines.DeadlinesPanel;
 import io.github.thepieterdc.dodona.resources.Course;
 import io.github.thepieterdc.dodona.responses.RootResponse;
 import org.jetbrains.annotations.NotNull;

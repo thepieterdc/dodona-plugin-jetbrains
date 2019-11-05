@@ -7,23 +7,34 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.toolwindows;
+package io.github.thepieterdc.dodona.plugin.toolwindow;
 
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Condition;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.Icons;
 import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
 import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
-import io.github.thepieterdc.dodona.plugin.toolwindows.tabs.DeadlinesTab;
+import io.github.thepieterdc.dodona.plugin.toolwindow.tabs.DeadlinesTab;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * Creates the tool window.
  */
-public class DodonaToolWindowFactory implements DumbAware, ToolWindowFactory {
+public class DodonaToolWindowFactory implements Condition<Project>, DumbAware,
+	ToolWindowFactory {
+	
+	@NonNls
+	static final String TOOL_WINDOW_ID = "Dodona";
+	
 	@Override
 	public void createToolWindowContent(@NotNull final Project project,
 	                                    @NotNull final ToolWindow toolWindow) {
@@ -45,7 +56,19 @@ public class DodonaToolWindowFactory implements DumbAware, ToolWindowFactory {
 			settings.getCourseId().orElse(0L)
 		);
 		
+		// Set the ToolWindow.
+		toolWindow.setIcon(Icons.DODONA);
+		toolWindow.setTitle(DodonaBundle.message("toolwindow.title"));
+		
 		// Append all tabs to the content.
-		toolWindow.getContentManager().addContent(deadlines.getContent());
+		deadlines.setup(toolWindow);
+	}
+	
+	@Override
+	public boolean value(@Nullable final Project project) {
+		return Optional.ofNullable(project)
+			.map(DodonaProjectSettings::getInstance)
+			.flatMap(DodonaProjectSettings::getCourseId)
+			.isPresent();
 	}
 }

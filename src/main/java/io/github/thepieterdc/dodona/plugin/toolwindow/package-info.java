@@ -11,6 +11,6 @@
  * Dodona ToolWindow, shown at the right side of the IDE.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.toolwindows;
+package io.github.thepieterdc.dodona.plugin.toolwindow;
 
 import javax.annotation.ParametersAreNonnullByDefault;

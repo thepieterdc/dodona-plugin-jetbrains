@@ -3,7 +3,9 @@
   <id>be.ugent.piedcler.dodona</id>
   <name>Dodona</name>
 
-  <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah Lissens</vendor>
+  <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah
+    Lissens
+  </vendor>
 
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.platform</depends>
@@ -50,9 +52,15 @@
 
     <!-- Tool window -->
     <toolWindow id="Dodona" anchor="right" icon="/icons/dodona.svg" secondary="true"
-                factoryClass="io.github.thepieterdc.dodona.plugin.toolwindows.DodonaToolWindowFactory"
-                conditionClass="io.github.thepieterdc.dodona.plugin.toolwindows.DodonaToolWindowCondition"/>
+                factoryClass="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory"
+                conditionClass="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory"/>
   </extensions>
+
+  <project-components>
+    <component>
+      <implementation-class>io.github.thepieterdc.dodona.plugin.toolwindow.ToolWindowSynchronizer</implementation-class>
+    </component>
+  </project-components>
 
   <actions>
     <action id="dodona.actions.NewExercise" class="io.github.thepieterdc.dodona.plugin.actions.NewExerciseAction">

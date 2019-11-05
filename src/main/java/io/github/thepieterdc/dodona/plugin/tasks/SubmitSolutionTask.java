@@ -22,6 +22,7 @@ import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
 import io.github.thepieterdc.dodona.plugin.notifications.ErrorReporter;
+import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +46,7 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	
 	private final DodonaExecutor executor;
 	private final FeedbackService feedback;
+	private final DodonaProjectSettings projectSettings;
 	
 	/**
 	 * SubmitSolutionTask constructor.
@@ -61,6 +63,7 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 		this.executor = DodonaAuthenticator.getInstance().getExecutor();
 		this.feedback = FeedbackService.getInstance(project);
 		this.identification = exercise;
+		this.projectSettings = DodonaProjectSettings.getInstance(project);
 	}
 	
 	/**
@@ -121,23 +124,43 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	/**
 	 * Creates a code submission task from the given code.
 	 *
+	 * @param project        the current project
+	 * @param identification the exercise to submit the solution to
+	 * @param code           the code to submit
+	 * @return the task
+	 */
+	@Nonnull
+	public static DodonaBackgroundTask create(final Project project,
+	                                          final Identification identification,
+	                                          final String code) {
+		return new SubmitSolutionTask(project, identification, code);
+	}
+	
+	/**
+	 * Identifies the exercise and creates a code submission task from the given
+	 * code.
+	 *
 	 * @param project the current project
 	 * @param code    the code to submit
 	 * @return the task
 	 */
 	@Nonnull
-	public static DodonaBackgroundTask create(final Project project, final String code) {
+	public static DodonaBackgroundTask create(final Project project,
+	                                          final String code) {
 		// Attempt to identify the exercise, otherwise return a new task to
 		// perform this job.
 		return IdentificationService.getInstance()
 			.identify(code)
-			.map(result -> new SubmitSolutionTask(project, result, code))
+			.map(result -> create(project, result, code))
 			.orElseThrow(RuntimeException::new);
 	}
 	
 	@Override
 	public void run(@NotNull final ProgressIndicator progress) {
 		try {
+			// Set the project course if this had not been set yet.
+			this.identification.getCourse().ifPresent(this.projectSettings::setCourseId);
+			
 			// Update the progress bar.
 			progress.setIndeterminate(true);
 			progress.setText(

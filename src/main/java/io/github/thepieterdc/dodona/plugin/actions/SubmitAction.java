@@ -46,12 +46,11 @@ public class SubmitAction extends AnAction {
 	@Override
 	public void actionPerformed(@NotNull final AnActionEvent e) {
 		// Get the document.
-		final Optional<Document> optDocument =
-			SubmitAction.getDocument(e.getProject());
+		final Optional<Document> optDocument = getDocument(e.getProject());
 		
 		// Get the code.
 		final Optional<String> optCode = optDocument
-			.flatMap(doc -> SubmitAction.getPsiFile(e.getProject(), doc))
+			.flatMap(doc -> getPsiFile(e.getProject(), doc))
 			.map(PsiElement::getText);
 		
 		// Create a new SubmitTask and execute it.
@@ -98,8 +97,6 @@ public class SubmitAction extends AnAction {
 	
 	@Override
 	public void update(@NotNull final AnActionEvent e) {
-		e.getPresentation().setEnabled(
-			SubmitAction.getDocument(e.getProject()).isPresent()
-		);
+		e.getPresentation().setEnabled(getDocument(e.getProject()).isPresent());
 	}
 }
