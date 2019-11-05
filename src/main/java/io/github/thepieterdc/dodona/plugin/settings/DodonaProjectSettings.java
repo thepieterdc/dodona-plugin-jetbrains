@@ -14,11 +14,14 @@ import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.openapi.project.Project;
+import com.intellij.util.messages.MessageBus;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
+
+import static io.github.thepieterdc.dodona.plugin.settings.listeners.ProjectCourseListener.CHANGED_TOPIC;
 
 /**
  * Project-specific plugin settings.
@@ -32,6 +35,17 @@ public class DodonaProjectSettings implements PersistentStateComponent<DodonaPro
 	static final String STORAGE_FILE = "dodona.xml";
 	
 	private State state = new State();
+	
+	private final MessageBus bus;
+	
+	/**
+	 * DodonaProjectSettings constructor.
+	 *
+	 * @param project the current project
+	 */
+	public DodonaProjectSettings(final Project project) {
+		this.bus = project.getMessageBus();
+	}
 	
 	/**
 	 * Gets the course id if set.
@@ -72,6 +86,7 @@ public class DodonaProjectSettings implements PersistentStateComponent<DodonaPro
 	 */
 	public void setCourseId(final long id) {
 		this.state.course_id = id;
+		this.bus.syncPublisher(CHANGED_TOPIC).onCourseChanged(id);
 	}
 	
 	/**

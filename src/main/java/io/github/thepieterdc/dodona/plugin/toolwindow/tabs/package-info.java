@@ -11,6 +11,6 @@
  * Tabs in the tool window.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.toolwindows.tabs;
+package io.github.thepieterdc.dodona.plugin.toolwindow.tabs;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -7,12 +7,12 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.toolwindows.ui.deadlines;
+package io.github.thepieterdc.dodona.plugin.toolwindow.ui.deadlines;
 
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.toolwindows.tabs.DeadlinesTab;
+import io.github.thepieterdc.dodona.plugin.toolwindow.tabs.DeadlinesTab;
 
 import javax.swing.*;
 import java.util.List;
