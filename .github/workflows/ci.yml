@@ -26,7 +26,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.gradle/caches
-          key: gradle-${{ runner.os }}-${{ matrix.java }}-${{ hashFiles{'**/*.gradle') }}
+          key: gradle-${{ runner.os }}-${{ matrix.java }}-${{ hashFiles('**/*.gradle') }}
           restore-keys: |
             gradle-${{ runner.os }}-
       - name: Build the plugin
