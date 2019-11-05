@@ -13,7 +13,7 @@ import com.intellij.ui.ColoredListCellRenderer;
 import com.intellij.util.ui.JBUI;
 import io.github.thepieterdc.dodona.data.ExerciseStatus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.Icons;
+import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import org.jetbrains.annotations.NotNull;
 

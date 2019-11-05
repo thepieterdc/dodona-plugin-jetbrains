@@ -14,7 +14,7 @@ import com.intellij.ui.components.JBList;
 import io.github.thepieterdc.dodona.data.ExerciseStatus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.ui.listeners.ConfirmationListener;
-import io.github.thepieterdc.dodona.plugin.ui.listeners.DoubleClickAdapter;
+import io.github.thepieterdc.dodona.plugin.ui.listeners.DoubleClickListener;
 import io.github.thepieterdc.dodona.plugin.ui.resources.ResourceSelector;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.Resource;
@@ -45,12 +45,7 @@ public class ExercisesList extends JBList<Exercise> implements ResourceSelector<
 		super();
 		this.model = new CollectionListModel<>();
 		// Detect double-clicks.
-		this.addMouseListener(new DoubleClickAdapter() {
-			@Override
-			protected void onDoubleClick() {
-				listener.onConfirmed();
-			}
-		});
+		this.addMouseListener((DoubleClickListener) e -> listener.onConfirmed());
 		this.setEmptyText(DodonaBundle.message("dialog.select_exercise.exercise.empty"));
 		this.setModel(this.model);
 		this.setCellRenderer(new ExerciseNameStatusRenderer());

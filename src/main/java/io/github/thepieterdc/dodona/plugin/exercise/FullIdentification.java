@@ -71,7 +71,7 @@ public final class FullIdentification {
 	@Override
 	public String toString() {
 		return String.format(
-			"FullIdentification{course=%s, series=%s, exercise=%s}",
+			"FullIdentification[course=%s, series=%s, exercise=%s]",
 			this.course.getId(),
 			this.series.getId(),
 			this.exercise.getId()
