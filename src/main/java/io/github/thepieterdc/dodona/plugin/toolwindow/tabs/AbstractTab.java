@@ -7,10 +7,11 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.toolwindows.tabs;
+package io.github.thepieterdc.dodona.plugin.toolwindow.tabs;
 
+import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.content.Content;
-import com.intellij.ui.content.ContentFactory;
+import com.intellij.ui.content.ContentManager;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
@@ -41,14 +42,20 @@ abstract class AbstractTab {
 	abstract JComponent createContent();
 	
 	/**
-	 * Gets the content pane.
+	 * Appends the tab to the tool window.
 	 *
-	 * @return the content pane
+	 * @param toolWindow the tool window
 	 */
-	@Nonnull
-	public Content getContent() {
-		final Content ret = ContentFactory.SERVICE.getInstance().createContent(this.createContent(), this.title, false);
-		ret.setCloseable(false);
-		return ret;
+	public void setup(final ToolWindow toolWindow) {
+		final ContentManager contentMgr = toolWindow.getContentManager();
+		
+		final Content content = contentMgr.getFactory().createContent(
+			this.createContent(),
+			this.title,
+			false
+		);
+		content.setCloseable(false);
+		
+		contentMgr.addContent(content);
 	}
 }
