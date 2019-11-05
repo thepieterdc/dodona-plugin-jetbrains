@@ -20,7 +20,16 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: ${{ matrix.java}}
-      - name: Build the plugin using Gradle
+      - name: Install dependencies using Gradle
+        run: ./gradlew dependencies
+      - name: Cache the dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: gradle-${{ runner.os }}-${{ matrix.java }}-${{ hashFiles{'**/*.gradle') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+      - name: Build the plugin
         run: ./gradlew buildPlugin
       - name: Run the tests
         run: ./gradlew test
