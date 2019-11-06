@@ -8,9 +8,9 @@
  */
 
 /**
- * Exercise-related UI components.
+ * Submission-related UI components.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.ui.resources.exercises;
+package io.github.thepieterdc.dodona.plugin.ui.resources.submission;
 
 import javax.annotation.ParametersAreNonnullByDefault;

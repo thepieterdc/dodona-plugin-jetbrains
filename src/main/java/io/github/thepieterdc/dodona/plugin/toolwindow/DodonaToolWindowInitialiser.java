@@ -8,7 +8,7 @@
  */
 package be.ugent.piedcler.dodona.plugin.toolwindow;
 
-import be.ugent.piedcler.dodona.plugin.toolwindow.submissions.SubmissionsTabView;
+import io.github.thepieterdc.dodona.plugin.toolwindow.tabs.SubmissionsTab;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -47,7 +47,7 @@ public class DodonaToolWindowInitialiser {
 			return;
 		}
 		
-		final SubmissionsTabView submissionsTab = new SubmissionsTabView(this.project);
+		final SubmissionsTab submissionsTab = new SubmissionsTab(this.project);
 		
 		this.toolWindow = toolWindow;
 		this.toolWindow.getContentManager().addContent(submissionsTab.getContent());

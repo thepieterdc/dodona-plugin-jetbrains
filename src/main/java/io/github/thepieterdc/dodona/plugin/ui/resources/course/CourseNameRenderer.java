@@ -30,6 +30,6 @@ final class CourseNameRenderer extends ColoredListCellRenderer<Course> {
 	                                     final boolean b,
 	                                     final boolean b1) {
 		this.append(String.format(cellText, course.getYear(), course.getName()));
-		this.setIcon(Icons.createColoredCircle(course.getColor()));
+		this.setIcon(Icons.CIRCLE.color(course.getColor()));
 	}
 }

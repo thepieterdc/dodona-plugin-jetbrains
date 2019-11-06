@@ -1,37 +1,55 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
+
 package io.github.thepieterdc.dodona.plugin.ui.resources.exercise;
 
-import be.ugent.piedcler.dodona.plugin.Icons;
 import com.intellij.ui.ColoredListCellRenderer;
+import com.intellij.util.ui.JBUI;
 import io.github.thepieterdc.dodona.data.ExerciseStatus;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.Icons;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
+import java.util.EnumMap;
+import java.util.Map;
 
 /**
- * Renders the exercise name correctly in a list of Exercises.
+ * Renders the exercise name and completion status.
  */
-public class ExerciseNameStatusRenderer extends ColoredListCellRenderer<Exercise> {
+final class ExerciseNameStatusRenderer extends ColoredListCellRenderer<Exercise> {
+	private final Map<ExerciseStatus, Icon> icons;
+	
+	/**
+	 * ExerciseNameStatusRenderer constructor.
+	 */
+	public ExerciseNameStatusRenderer() {
+		this.icons = new EnumMap<>(ExerciseStatus.class);
+		this.icons.put(ExerciseStatus.CORRECT, Icons.EXERCISE_CORRECT);
+		this.icons.put(ExerciseStatus.HAS_BEEN_CORRECT, Icons.EXERCISE_CORRECT);
+		this.icons.put(ExerciseStatus.INCORRECT, Icons.EXERCISE_WRONG.color(
+			JBUI.CurrentTheme.Focus.errorColor(true))
+		);
+	}
+	
 	@Override
-	protected void customizeCellRenderer(@NotNull JList<? extends Exercise> list,
-	                                     @Nonnull final Exercise exercise,
-	                                     int index,
-	                                     boolean selected,
-	                                     boolean hasFocus) {
-		this.append(exercise.getName());
-		if (exercise.getStatus() == ExerciseStatus.CORRECT) {
-			this.setIcon(Icons.CORRECT);
-		} else if (exercise.getStatus() != ExerciseStatus.NOT_ATTEMPTED) {
-			this.setIcon(Icons.INCORRECT);
+	protected void customizeCellRenderer(@NotNull final JList<? extends Exercise> jList,
+	                                     final Exercise exercise,
+	                                     final int i,
+	                                     final boolean b,
+	                                     final boolean b1) {
+		if (exercise == null) {
+			this.append(DodonaBundle.message("dialog.select_exercise.exercise.placeholder"));
+		} else {
+			this.append(exercise.getName());
+			this.setIcon(this.icons.get(exercise.getStatus()));
 		}
 	}
 }
