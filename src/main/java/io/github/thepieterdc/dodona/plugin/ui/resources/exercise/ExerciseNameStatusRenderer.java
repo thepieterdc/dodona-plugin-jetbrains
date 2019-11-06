@@ -7,7 +7,7 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.ui.resources.exercises;
+package io.github.thepieterdc.dodona.plugin.ui.resources.exercise;
 
 import com.intellij.ui.ColoredListCellRenderer;
 import com.intellij.util.ui.JBUI;
@@ -20,8 +20,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 import java.util.EnumMap;
 import java.util.Map;
-
-import static io.github.thepieterdc.dodona.plugin.Icons.colorize;
 
 /**
  * Renders the exercise name and completion status.
@@ -36,9 +34,9 @@ final class ExerciseNameStatusRenderer extends ColoredListCellRenderer<Exercise>
 		this.icons = new EnumMap<>(ExerciseStatus.class);
 		this.icons.put(ExerciseStatus.CORRECT, Icons.EXERCISE_CORRECT);
 		this.icons.put(ExerciseStatus.HAS_BEEN_CORRECT, Icons.EXERCISE_CORRECT);
-		this.icons.put(ExerciseStatus.INCORRECT, colorize(
-			Icons.EXERCISE_WRONG, JBUI.CurrentTheme.Focus.errorColor(true)
-		));
+		this.icons.put(ExerciseStatus.INCORRECT, Icons.EXERCISE_WRONG.color(
+			JBUI.CurrentTheme.Focus.errorColor(true))
+		);
 	}
 	
 	@Override

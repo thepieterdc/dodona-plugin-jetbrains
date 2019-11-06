@@ -18,7 +18,7 @@ import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
 import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
 import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
 import io.github.thepieterdc.dodona.plugin.ui.resources.course.CourseComboBox;
-import io.github.thepieterdc.dodona.plugin.ui.resources.exercises.ExercisesList;
+import io.github.thepieterdc.dodona.plugin.ui.resources.exercise.ExercisesList;
 import io.github.thepieterdc.dodona.plugin.ui.resources.series.SeriesComboBox;
 import io.github.thepieterdc.dodona.resources.Course;
 import io.github.thepieterdc.dodona.resources.Exercise;

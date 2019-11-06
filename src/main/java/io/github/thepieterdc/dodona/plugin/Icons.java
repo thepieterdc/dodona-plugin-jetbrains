@@ -11,6 +11,7 @@ package io.github.thepieterdc.dodona.plugin;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.util.IconUtil;
 import io.github.thepieterdc.dodona.data.CourseColor;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.swing.*;
@@ -19,51 +20,81 @@ import java.awt.*;
 /**
  * Icons used throughout the plugin.
  */
-public class Icons {
-	public static final Icon AVATAR_DEFAULT = IconLoader.getIcon("/icons/avatar-default.svg");
-	public static final Icon AVATAR_NAOS = IconLoader.getIcon("/icons/avatar-naos.svg");
-	public static final Icon AVATAR_OTHER = IconLoader.getIcon("/icons/avatar-other.svg");
+public enum Icons implements Icon {
+	// Actions.
+	ACTION_SUBMIT("submit-action"),
+	// Avatars.
+	AVATAR_DEFAULT("avatar-default"),
+	AVATAR_NAOS("avatar-naos"),
+	AVATAR_OTHER("avatar-other"),
+	// Circles.
+	CIRCLE("circle"),
+	// Dodona logo.
+	DODONA("dodona"),
+	// Exercise status.
+	EXERCISE_CORRECT("exercise-correct"),
+	EXERCISE_WRONG("exercise-wrong");
 	
-	private static final Icon CIRCLE = IconLoader.getIcon("/icons/circle.svg");
+	@NonNls
+	private static final String ICON_PATH = "/icons/%s.svg";
 	
-	public static final Icon DODONA = IconLoader.getIcon("/icons/dodona.svg");
-	
-	public static final Icon EXERCISE_CORRECT = IconLoader.getIcon("/icons/exercise-correct.svg");
-	public static final Icon EXERCISE_WRONG = IconLoader.getIcon("/icons/exercise-wrong.svg");
-	
-	public static final Icon SUBMIT_ACTION = IconLoader.getIcon("/icons/submit-action.svg");
+	private final Icon icon;
 	
 	/**
-	 * Colors the given icon in the requested color.
+	 * Icons constructor.
 	 *
-	 * @param icon the icon to colour
-	 * @param color the colour
-	 * @return the coloured icon
+	 * @param path the path to the icon
 	 */
-	@Nonnull
-	public static Icon colorize(final Icon icon, final Color color) {
-		return IconUtil.colorize(icon, color);
+	Icons(@NonNls final String path) {
+		this.icon = getIcon(path);
 	}
 	
 	/**
-	 * Colours the circle icon in the given colour.
+	 * Colors the icon in the given colour.
 	 *
-	 * @param color the colour for the circle
-	 * @return the coloured circle
+	 * @param colour the colour
+	 * @return the colored icon
 	 */
 	@Nonnull
-	public static Icon createColoredCircle(final Color color) {
-		return colorize(CIRCLE, color);
+	public Icon color(final Color colour) {
+		return IconUtil.colorize(this.icon, colour);
 	}
 	
 	/**
-	 * Colours the circle icon in the given colour.
+	 * Colors the icon in the given colour.
 	 *
-	 * @param color the colour for the circle
-	 * @return the coloured circle
+	 * @param colour the colour
+	 * @return the colored icon
 	 */
 	@Nonnull
-	public static Icon createColoredCircle(final CourseColor color) {
-		return createColoredCircle(color.getColor());
+	public Icon color(final CourseColor colour) {
+		return this.color(colour.getColor());
+	}
+	
+	/**
+	 * Gets the icon at the given path.
+	 *
+	 * @param path the path to the icon
+	 * @return the icon
+	 */
+	@Nonnull
+	public static Icon getIcon(@NonNls final String path) {
+		return IconLoader.getIcon(String.format(ICON_PATH, path));
+	}
+	
+	@Override
+	public int getIconHeight() {
+		return this.icon.getIconHeight();
+	}
+	
+	@Override
+	public int getIconWidth() {
+		return this.icon.getIconWidth();
+	}
+	
+	@Override
+	public void paintIcon(final Component c, final Graphics g, final int x,
+	                      final int y) {
+		this.icon.paintIcon(c, g, x, y);
 	}
 }

@@ -14,7 +14,9 @@ import io.github.thepieterdc.dodona.data.SubmissionStatus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
 import io.github.thepieterdc.dodona.plugin.notifications.NotificationService;
+import io.github.thepieterdc.dodona.plugin.ui.resources.submission.SubmissionStatusIcon;
 import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.submissions.PartialSubmission;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
 
 import java.util.EnumMap;
@@ -48,9 +50,10 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 * @param submission the submission
 	 */
 	private void compilationError(final Exercise exercise,
-	                              final Submission submission) {
+	                              final PartialSubmission submission) {
 		this.notifications.error(
 			DodonaBundle.message("feedback.compile_error.title"),
+			SubmissionStatusIcon.COMPILATION_ERROR,
 			DodonaBundle.message("feedback.compile_error.message", exercise.getName(), submission.getUrl())
 		);
 	}
@@ -63,6 +66,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	private void correct(final Exercise exercise) {
 		this.notifications.info(
 			DodonaBundle.message("feedback.correct.title"),
+			SubmissionStatusIcon.CORRECT,
 			DodonaBundle.message("feedback.correct.message", exercise.getName())
 		);
 	}
@@ -86,9 +90,10 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 * @param submission the submission
 	 */
 	private void memoryLimitExceeded(final Exercise exercise,
-	                                 final Submission submission) {
+	                                 final PartialSubmission submission) {
 		this.notifications.error(
 			DodonaBundle.message("feedback.memory_limit.title"),
+			SubmissionStatusIcon.MEMORY_LIMIT_EXCEEDED,
 			DodonaBundle.message("feedback.memory_limit.message", exercise.getName(), submission.getUrl())
 		);
 	}
@@ -107,9 +112,10 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 * @param submission the submission
 	 */
 	private void runtimeError(final Exercise exercise,
-	                          final Submission submission) {
+	                          final PartialSubmission submission) {
 		this.notifications.error(
 			DodonaBundle.message("feedback.runtime_error.title"),
+			SubmissionStatusIcon.RUNTIME_ERROR,
 			DodonaBundle.message("feedback.runtime_error.message", exercise.getName(), submission.getUrl())
 		);
 	}
@@ -121,9 +127,10 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 * @param submission the submission
 	 */
 	private void timeLimitExceeded(final Exercise exercise,
-	                               final Submission submission) {
+	                               final PartialSubmission submission) {
 		this.notifications.error(
 			DodonaBundle.message("feedback.time_limit.title"),
+			SubmissionStatusIcon.TIME_LIMIT_EXCEEDED,
 			DodonaBundle.message("feedback.time_limit.message", exercise.getName(), submission.getUrl())
 		);
 	}
@@ -137,6 +144,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	private void wrong(final Exercise exercise, final Submission submission) {
 		this.notifications.warning(
 			DodonaBundle.message("feedback.wrong.title"),
+			SubmissionStatusIcon.WRONG,
 			DodonaBundle.message("feedback.wrong.message", exercise.getName(), submission.getSummary(), submission.getUrl())
 		);
 	}
