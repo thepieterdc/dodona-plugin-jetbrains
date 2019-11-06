@@ -39,7 +39,7 @@ public class SubmitAction extends AnAction {
 		super(
 			DodonaBundle.message("actions.submit.text"),
 			DodonaBundle.message("actions.submit.description"),
-			Icons.SUBMIT_ACTION
+			Icons.ACTION_SUBMIT
 		);
 	}
 	

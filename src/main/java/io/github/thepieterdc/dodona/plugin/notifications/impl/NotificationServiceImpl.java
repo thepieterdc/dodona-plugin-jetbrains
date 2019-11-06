@@ -8,7 +8,6 @@
  */
 package io.github.thepieterdc.dodona.plugin.notifications.impl;
 
-import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationListener;
@@ -18,6 +17,9 @@ import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.notifications.ErrorReporter;
 import io.github.thepieterdc.dodona.plugin.notifications.NotificationService;
 import org.jetbrains.annotations.NonNls;
+
+import javax.annotation.Nullable;
+import javax.swing.*;
 
 /**
  * Default implementation of a NotificationService.
@@ -46,42 +48,57 @@ public class NotificationServiceImpl implements NotificationService {
 	
 	@Override
 	public void error(final String title, final String message) {
-		this.notify(NotificationType.ERROR, title, message);
+		this.notify(NotificationType.ERROR, null, title, message);
+	}
+	
+	@Override
+	public void error(final String title, final Icon icon,
+	                  final String message) {
+		this.notify(NotificationType.ERROR, icon, title, message);
 	}
 	
 	@Override
 	public void error(final String message, final Throwable cause) {
-		this.error(NotificationServiceImpl.DEFAULT_ERROR_TITLE, message);
+		this.error(DEFAULT_ERROR_TITLE, message);
 		ErrorReporter.report(message, cause);
 	}
 	
 	@Override
 	public void info(final String title, final String message) {
-		this.notify(NotificationType.INFORMATION, title, message);
+		this.notify(NotificationType.INFORMATION, null, title, message);
+	}
+	
+	@Override
+	public void info(final String title, final Icon icon, final String message) {
+		this.notify(NotificationType.INFORMATION, icon, title, message);
 	}
 	
 	/**
 	 * Sends a notification.
 	 *
 	 * @param type    the type of the notification
+	 * @param icon    the icon
 	 * @param title   the title
 	 * @param message the contents of the notification
 	 */
 	private void notify(final NotificationType type,
+	                    @Nullable final Icon icon,
 	                    final String title,
 	                    final String message) {
-		final Notification notification = NotificationServiceImpl.GROUP.createNotification(
-			title,
-			message,
-			type,
-			NotificationListener.URL_OPENING_LISTENER
-		);
-		
-		notification.notify(this.project);
+		GROUP
+			.createNotification(title, message, type, NotificationListener.URL_OPENING_LISTENER)
+			.setIcon(icon)
+			.notify(this.project);
 	}
 	
 	@Override
 	public void warning(final String title, final String message) {
-		this.notify(NotificationType.WARNING, title, message);
+		this.notify(NotificationType.WARNING, null, title, message);
+	}
+	
+	@Override
+	public void warning(final String title, final Icon icon,
+	                    final String message) {
+		this.notify(NotificationType.WARNING, icon, title, message);
 	}
 }
