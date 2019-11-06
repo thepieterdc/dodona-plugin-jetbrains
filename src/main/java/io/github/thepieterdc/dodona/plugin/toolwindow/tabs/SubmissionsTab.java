@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.toolwindow.submissions;
+package io.github.thepieterdc.dodona.plugin.toolwindow.tabs;
 
 import io.github.thepieterdc.dodona.plugin.exercise.identification.Identification;
 import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
@@ -33,7 +33,7 @@ import java.util.function.Consumer;
 /**
  * Controller for the tab showing exercise submissions.
  */
-public class SubmissionsTabView {
+public class SubmissionsTab {
 	/**
 	 * Listener for newly opened/closed files.
 	 */
@@ -68,7 +68,7 @@ public class SubmissionsTabView {
 	 *
 	 * @param project the project
 	 */
-	public SubmissionsTabView(@Nonnull final Project project) {
+	public SubmissionsTab(@Nonnull final Project project) {
 		this.identificationService = ServiceManager.getService(project, IdentificationService.class);
 		this.panel = new SubmissionsTabPanel();
 		this.project = project;

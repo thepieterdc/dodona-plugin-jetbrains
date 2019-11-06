@@ -7,7 +7,7 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.ui.resources.exercises;
+package io.github.thepieterdc.dodona.plugin.ui.resources.exercise;
 
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;

@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.toolwindow.submissions;
+package io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions;
 
 import com.intellij.openapi.ui.SimpleToolWindowPanel;
 import com.intellij.ui.table.JBTable;
@@ -19,12 +19,12 @@ import java.util.List;
 /**
  * Panel for the tab showing exercise submissions.
  */
-class SubmissionsTabPanel extends SimpleToolWindowPanel {
+class SubmissionsPanel extends SimpleToolWindowPanel {
 	
 	/**
 	 * DodonaToolWindowView constructor.
 	 */
-	public SubmissionsTabPanel() {
+	public SubmissionsPanel() {
 		super(false, true);
 	}
 	

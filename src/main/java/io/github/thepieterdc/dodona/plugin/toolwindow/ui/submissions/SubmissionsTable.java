@@ -6,7 +6,7 @@
  *
  * https://github.com/thepieterdc/dodona-plugin-jetbrains
  */
-package be.ugent.piedcler.dodona.plugin.toolwindow.submissions;
+package io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions;
 
 import com.intellij.ui.JBColor;
 import com.intellij.ui.table.JBTable;
