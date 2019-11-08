@@ -26,6 +26,8 @@ public enum HumanSubmissionStatus {
 	CORRECT(SubmissionStatus.CORRECT, "submission_status.correct"),
 	INTERNAL_ERROR(SubmissionStatus.INTERNAL_ERROR, "submission_status.internal_error"),
 	MEMORY_LIMIT_EXCEEDED(SubmissionStatus.MEMORY_LIMIT_EXCEEDED, "submission_status.memory_limit_exceeded"),
+	QUEUED(SubmissionStatus.QUEUED, "submission_status.queued"),
+	RUNNING(SubmissionStatus.RUNNING, "submission_status.running"),
 	RUNTIME_ERROR(SubmissionStatus.RUNTIME_ERROR, "submission_status.runtime_error"),
 	TIME_LIMIT_EXCEEDED(SubmissionStatus.TIME_LIMIT_EXCEEDED, "submission_status.time_limit_exceeded"),
 	WRONG(SubmissionStatus.WRONG, "submission_status.wrong");

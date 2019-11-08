@@ -60,9 +60,8 @@ public class SubmissionsTab extends AbstractTab {
 	
 	private final JPanel panel;
 	
-	private final IdentificationService identificationService;
-	
 	private final DodonaExecutor executor;
+	private final IdentificationService identificationService;
 	private final Project project;
 	
 	/**
@@ -130,9 +129,10 @@ public class SubmissionsTab extends AbstractTab {
 		// Attempt to recycle a previous card.
 		if (!this.cards.contains(cardName)) {
 			// Create a new card.
-			final Component card = SubmissionsPanel.create(
+			final SubmissionsPanel card = SubmissionsPanel.create(
 				this.project, this.executor, identification
 			);
+			
 			this.cards.add(cardName);
 			this.panel.add(card, cardName);
 		}
