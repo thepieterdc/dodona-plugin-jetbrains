@@ -16,8 +16,8 @@ import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
 import io.github.thepieterdc.dodona.plugin.notifications.NotificationService;
 import io.github.thepieterdc.dodona.plugin.ui.resources.submission.SubmissionStatusIcon;
 import io.github.thepieterdc.dodona.resources.Exercise;
-import io.github.thepieterdc.dodona.resources.submissions.PartialSubmission;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
+import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -26,7 +26,7 @@ import java.util.function.BiConsumer;
 
 public class FeedbackServiceImpl implements FeedbackService {
 	private final NotificationService notifications;
-	private final Map<SubmissionStatus, BiConsumer<Exercise, Submission>> providers = new EnumMap<>(SubmissionStatus.class);
+	private final Map<SubmissionStatus, BiConsumer<Exercise, SubmissionInfo>> providers = new EnumMap<>(SubmissionStatus.class);
 	
 	/**
 	 * FeedbackService constructor.
@@ -50,7 +50,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 * @param submission the submission
 	 */
 	private void compilationError(final Exercise exercise,
-	                              final PartialSubmission submission) {
+	                              final SubmissionInfo submission) {
 		this.notifications.error(
 			DodonaBundle.message("feedback.compile_error.title"),
 			SubmissionStatusIcon.COMPILATION_ERROR,
@@ -90,7 +90,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 * @param submission the submission
 	 */
 	private void memoryLimitExceeded(final Exercise exercise,
-	                                 final PartialSubmission submission) {
+	                                 final SubmissionInfo submission) {
 		this.notifications.error(
 			DodonaBundle.message("feedback.memory_limit.title"),
 			SubmissionStatusIcon.MEMORY_LIMIT_EXCEEDED,
@@ -99,7 +99,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	}
 	
 	@Override
-	public void notify(final Exercise exercise, final Submission submission) {
+	public void notify(final Exercise exercise, final SubmissionInfo submission) {
 		Optional.ofNullable(this.providers.get(submission.getStatus())).ifPresent(p ->
 			p.accept(exercise, submission)
 		);
@@ -112,7 +112,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 * @param submission the submission
 	 */
 	private void runtimeError(final Exercise exercise,
-	                          final PartialSubmission submission) {
+	                          final SubmissionInfo submission) {
 		this.notifications.error(
 			DodonaBundle.message("feedback.runtime_error.title"),
 			SubmissionStatusIcon.RUNTIME_ERROR,
@@ -127,7 +127,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 * @param submission the submission
 	 */
 	private void timeLimitExceeded(final Exercise exercise,
-	                               final PartialSubmission submission) {
+	                               final SubmissionInfo submission) {
 		this.notifications.error(
 			DodonaBundle.message("feedback.time_limit.title"),
 			SubmissionStatusIcon.TIME_LIMIT_EXCEEDED,
@@ -141,7 +141,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 	 * @param exercise   the exercise
 	 * @param submission the submission
 	 */
-	private void wrong(final Exercise exercise, final Submission submission) {
+	private void wrong(final Exercise exercise, final SubmissionInfo submission) {
 		this.notifications.warning(
 			DodonaBundle.message("feedback.wrong.title"),
 			SubmissionStatusIcon.WRONG,

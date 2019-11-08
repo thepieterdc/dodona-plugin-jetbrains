@@ -20,8 +20,8 @@ import com.intellij.util.ui.JBUI;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.ui.util.TimeUtils;
 import io.github.thepieterdc.dodona.resources.Exercise;
-import io.github.thepieterdc.dodona.resources.submissions.PartialSubmission;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
+import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,13 +39,13 @@ final class SubmissionDetailsPanel extends Wrapper implements Disposable {
 	/**
 	 * SubmissionDetailsPanel constructor.
 	 *
-	 * @param project           the current project
-	 * @param submissionDetails the submission details
-	 * @param futureExercise    exercise request
-	 * @param futureSubmission  submission request
+	 * @param project          the current project
+	 * @param submissionInfo   the submission details
+	 * @param futureExercise   exercise request
+	 * @param futureSubmission submission request
 	 */
 	SubmissionDetailsPanel(final Project project,
-	                       final PartialSubmission submissionDetails,
+	                       final SubmissionInfo submissionInfo,
 	                       final CompletionStage<? extends Exercise> futureExercise,
 	                       final CompletionStage<? extends Submission> futureSubmission) {
 		this.setLayout(new BorderLayout(0, 5));
@@ -60,7 +60,7 @@ final class SubmissionDetailsPanel extends Wrapper implements Disposable {
 			))
 		);
 		
-		this.initialize(submissionDetails);
+		this.initialize(submissionInfo);
 	}
 	
 	@Override
@@ -73,7 +73,7 @@ final class SubmissionDetailsPanel extends Wrapper implements Disposable {
 	 *
 	 * @param submissionDetails the submission details
 	 */
-	private void initialize(final PartialSubmission submissionDetails) {
+	private void initialize(final SubmissionInfo submissionDetails) {
 		// Create the status label.
 		final JLabel status = new JLabel(DodonaBundle.message(
 			"dialog.submission_details.status",

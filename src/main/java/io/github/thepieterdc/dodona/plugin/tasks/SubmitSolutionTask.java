@@ -11,6 +11,7 @@ package io.github.thepieterdc.dodona.plugin.tasks;
 
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
+import com.intellij.util.messages.MessageBus;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.data.SubmissionStatus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
@@ -23,6 +24,8 @@ import io.github.thepieterdc.dodona.plugin.exercise.identification.Identificatio
 import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
 import io.github.thepieterdc.dodona.plugin.notifications.ErrorReporter;
 import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
+import io.github.thepieterdc.dodona.plugin.submission.SubmissionCreatedListener;
+import io.github.thepieterdc.dodona.plugin.submission.SubmissionEvaluatedListener;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
 import org.jetbrains.annotations.NotNull;
@@ -40,6 +43,8 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	private static final long DELAY_MIN_WAIT_MS = 2_000L;
 	
 	private static final double PROGRESS_SUBMITTED = 0.5;
+	
+	private final MessageBus bus;
 	
 	private final String code;
 	private final Identification identification;
@@ -59,6 +64,7 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	                           final Identification exercise,
 	                           final String solution) {
 		super(project, DodonaBundle.message("tasks.submit_solution.title"));
+		this.bus = project.getMessageBus();
 		this.code = solution;
 		this.executor = DodonaAuthenticator.getInstance().getExecutor();
 		this.feedback = FeedbackService.getInstance(project);
@@ -80,11 +86,12 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	                                   final long submissionId) throws InterruptedException {
 		Submission submission = null;
 		
-		long currentDelay = DELAY_INITIAL_MS;
-		long totalWaited = 0L;
+		boolean broadcasted = false;
 		
 		// Perform exponential backoff until the solution is accepted or the
 		// timeout is reached.
+		long currentDelay = DELAY_INITIAL_MS;
+		long totalWaited = 0L;
 		while (submission == null
 			|| submission.getStatus() == SubmissionStatus.RUNNING
 			|| submission.getStatus() == SubmissionStatus.QUEUED) {
@@ -104,6 +111,13 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 				dodona -> dodona.submissions().get(submissionId),
 				progress
 			);
+			
+			// Broadcast the created submission.
+			if (!broadcasted) {
+				this.bus.syncPublisher(SubmissionCreatedListener.SUBMISSION_CREATED)
+					.onSubmissionCreated(submission);
+				broadcasted = true;
+			}
 			
 			// Determine the next delay amount.
 			currentDelay = Math.min(
@@ -184,12 +198,16 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 			// Await the evaluation.
 			final Submission evaluated = this.awaitEvaluation(progress, exercise, id);
 			
+			// Broadcast the evaluation result.
+			this.bus.syncPublisher(SubmissionEvaluatedListener.SUBMISSION_EVALUATED)
+				.onSubmissionEvaluated(evaluated);
+			
 			// Update the progess bar.
 			progress.setFraction(1.0);
 			progress.setText(DodonaBundle.message("tasks.submit_solution.evaluated"));
 			
 			// Provide feedback to the user.
-			this.feedback.notify(exercise, evaluated);
+			this.feedback.notify(exercise, evaluated.getInfo());
 		} catch (final InterruptedException ex) {
 			throw new CancelledException();
 		} catch (final RuntimeException ex) {
