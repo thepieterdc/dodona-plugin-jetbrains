@@ -15,8 +15,8 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.Disposer;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.resources.Exercise;
-import io.github.thepieterdc.dodona.resources.submissions.PartialSubmission;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
+import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
@@ -38,19 +38,19 @@ public final class SubmissionDetailsDialog extends DialogWrapper implements Disp
 	 *
 	 * @param project           the current project
 	 * @param parent            parent component
-	 * @param submissionDetails the submission details
+	 * @param submissionInfo the submission details
 	 * @param futureExercise    exercise request
 	 * @param futureSubmission  submission request
 	 */
 	public SubmissionDetailsDialog(final Project project,
 	                               @Nullable final Component parent,
-	                               final PartialSubmission submissionDetails,
+	                               final SubmissionInfo submissionInfo,
 	                               final CompletableFuture<Exercise> futureExercise,
 	                               final CompletableFuture<Submission> futureSubmission) {
 		super(project, parent, false, IdeModalityType.PROJECT);
 		
 		this.detailsPanel = new SubmissionDetailsPanel(
-			project, submissionDetails, futureExercise, futureSubmission
+			project, submissionInfo, futureExercise, futureSubmission
 		);
 		
 		// Set the default title of the dialog.

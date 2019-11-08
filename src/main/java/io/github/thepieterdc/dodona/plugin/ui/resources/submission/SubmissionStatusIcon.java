@@ -28,6 +28,8 @@ public enum SubmissionStatusIcon implements Icon {
 	CORRECT(SubmissionStatus.CORRECT, "correct"),
 	INTERNAL_ERROR(SubmissionStatus.INTERNAL_ERROR, "internal-error"),
 	MEMORY_LIMIT_EXCEEDED(SubmissionStatus.MEMORY_LIMIT_EXCEEDED, "memory-limit"),
+	QUEUED(SubmissionStatus.QUEUED, "queued-running"),
+	RUNNING(SubmissionStatus.RUNNING, "queued-running"),
 	RUNTIME_ERROR(SubmissionStatus.RUNTIME_ERROR, "runtime-error"),
 	TIME_LIMIT_EXCEEDED(SubmissionStatus.TIME_LIMIT_EXCEEDED, "time-limit"),
 	WRONG(SubmissionStatus.WRONG, "wrong");

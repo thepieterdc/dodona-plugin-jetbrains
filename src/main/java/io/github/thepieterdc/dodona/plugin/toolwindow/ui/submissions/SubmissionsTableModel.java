@@ -11,23 +11,24 @@ package io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions;
 
 import io.github.thepieterdc.dodona.data.SubmissionStatus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.ui.AbstractListTableModel;
 import io.github.thepieterdc.dodona.plugin.ui.renderers.table.FuzzyTimeCellRenderer;
+import io.github.thepieterdc.dodona.plugin.ui.resources.AbstractResourceTableModel;
 import io.github.thepieterdc.dodona.plugin.ui.resources.submission.SubmissionStatusCellRenderer;
-import io.github.thepieterdc.dodona.resources.submissions.PartialSubmission;
+import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
 
 import javax.swing.table.TableColumnModel;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.function.Function;
 
 /**
  * Model for the submissions of an exercise.
  */
-class SubmissionsTableModel extends AbstractListTableModel<PartialSubmission> {
+class SubmissionsTableModel extends AbstractResourceTableModel<SubmissionInfo> {
 	private static final SubmissionAccessor[] COLUMN_ACCESSORS = {
-		PartialSubmission::getStatus,
-		PartialSubmission::getCreatedAt,
-		PartialSubmission::getSummary
+		SubmissionInfo::getStatus,
+		SubmissionInfo::getCreatedAt,
+		SubmissionInfo::getSummary
 	};
 	
 	private static final String[] COLUMN_NAMES = {
@@ -46,14 +47,14 @@ class SubmissionsTableModel extends AbstractListTableModel<PartialSubmission> {
 	 * An accessor for a column.
 	 */
 	@FunctionalInterface
-	interface SubmissionAccessor extends Function<PartialSubmission, Object> {
+	interface SubmissionAccessor extends Function<SubmissionInfo, Object> {
 	}
 	
 	/**
 	 * SubmissionsTableModel constructor.
 	 */
 	SubmissionsTableModel() {
-		super(COLUMN_NAMES, COLUMN_TYPES, COLUMN_ACCESSORS);
+		super(COLUMN_NAMES, COLUMN_TYPES, COLUMN_ACCESSORS, Comparator.reverseOrder());
 	}
 	
 	/**

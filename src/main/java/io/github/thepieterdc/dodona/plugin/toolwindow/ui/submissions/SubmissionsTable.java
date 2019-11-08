@@ -12,7 +12,7 @@ package io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions;
 import com.intellij.ui.table.JBTable;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.ui.listeners.DoubleClickListener;
-import io.github.thepieterdc.dodona.resources.submissions.PartialSubmission;
+import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
 
 import java.util.Collection;
 import java.util.function.Consumer;
@@ -51,7 +51,7 @@ public final class SubmissionsTable extends JBTable {
 	 *
 	 * @param handler handler to call
 	 */
-	public void addListener(final Consumer<? super PartialSubmission> handler) {
+	public void addListener(final Consumer<? super SubmissionInfo> handler) {
 		this.addMouseListener((DoubleClickListener) e -> {
 			final int row = this.rowAtPoint(e.getPoint());
 			this.model.getItemAtRow(row).ifPresent(handler);
@@ -63,7 +63,25 @@ public final class SubmissionsTable extends JBTable {
 	 *
 	 * @param submissions the submissions to set
 	 */
-	void setSubmissions(final Collection<? extends PartialSubmission> submissions) {
+	void setSubmissions(final Collection<? extends SubmissionInfo> submissions) {
 		this.model.replaceItems(submissions);
+	}
+	
+	/**
+	 * Adds a newly created submission.
+	 *
+	 * @param submission the created submission
+	 */
+	public void submissionCreated(final SubmissionInfo submission) {
+		this.model.addItem(submission);
+	}
+	
+	/**
+	 * Updates an evaluated submission.
+	 *
+	 * @param submission the evaluated submission
+	 */
+	public void submissionEvaluated(final SubmissionInfo submission) {
+		this.model.update(submission);
 	}
 }
