@@ -7,26 +7,28 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.ui;
+package io.github.thepieterdc.dodona.plugin.ui.resources;
+
+import com.intellij.util.containers.SortedList;
+import io.github.thepieterdc.dodona.resources.Resource;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.table.AbstractTableModel;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Function;
 
 /**
- * Model for tables..
+ * TableModel for Resources.
  */
-public abstract class AbstractListTableModel<T> extends AbstractTableModel {
+public abstract class AbstractResourceTableModel<T extends Comparable<T> & Resource> extends AbstractTableModel {
 	private final Function<T, Object>[] columnAccessors;
 	private final String[] columnNames;
 	private final Class<?>[] columnTypes;
 	
-	private final List<T> items;
+	private final SortedList<T> items;
 	
 	/**
 	 * AbstractListTableModel constructor.
@@ -34,15 +36,27 @@ public abstract class AbstractListTableModel<T> extends AbstractTableModel {
 	 * @param columnNames     the names for the columns
 	 * @param columnTypes     the types of the values in the columns
 	 * @param columnAccessors accessors for values
+	 * @param comparator      comparator for the list
 	 */
-	public AbstractListTableModel(final String[] columnNames,
-	                              final Class<?>[] columnTypes,
-	                              final Function<T, Object>[] columnAccessors) {
+	public AbstractResourceTableModel(final String[] columnNames,
+	                                  final Class<?>[] columnTypes,
+	                                  final Function<T, Object>[] columnAccessors,
+	                                  final Comparator<T> comparator) {
 		super();
 		this.columnAccessors = columnAccessors.clone();
 		this.columnNames = columnNames.clone();
 		this.columnTypes = columnTypes.clone();
-		this.items = new ArrayList<>();
+		this.items = new SortedList<>(comparator);
+	}
+	
+	/**
+	 * Adds the item to the list.
+	 *
+	 * @param item the item to add
+	 */
+	public void addItem(final T item) {
+		this.items.add(item);
+		this.fireTableDataChanged();
 	}
 	
 	@Nullable
@@ -106,5 +120,15 @@ public abstract class AbstractListTableModel<T> extends AbstractTableModel {
 		this.items.clear();
 		this.items.addAll(nw);
 		this.fireTableDataChanged();
+	}
+	
+	/**
+	 * Updates the given resource.
+	 *
+	 * @param item the item to update
+	 */
+	public void update(final T item) {
+		this.items.removeIf(resource -> resource.getId() == item.getId());
+		this.addItem(item);
 	}
 }
