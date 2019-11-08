@@ -13,13 +13,13 @@ import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
 /**
  * Something went wrong while reading the code.
  */
-public class CodeReadException extends ErrorMessageException {
+public class CurrentFileReadException extends ErrorMessageException {
 	private static final long serialVersionUID = 2086238563554446197L;
 	
 	/**
 	 * CodeReadException constructor.
 	 */
-	public CodeReadException() {
+	public CurrentFileReadException() {
 		super("Something went wrong while trying to read your code, try again.");
 	}
 }
