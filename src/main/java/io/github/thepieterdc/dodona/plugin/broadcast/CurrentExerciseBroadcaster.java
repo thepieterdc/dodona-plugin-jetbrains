@@ -17,6 +17,7 @@ import com.intellij.util.messages.MessageBus;
 import io.github.thepieterdc.dodona.plugin.exercise.CurrentExerciseListener;
 import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
+import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -47,12 +48,16 @@ class CurrentExerciseBroadcaster implements FileEditorManagerListener {
 		final VirtualFile vFile = event.getNewFile();
 		
 		// Identify the current opened exercise.
-		final Identification identification = Optional.ofNullable(vFile)
-			.flatMap(file -> this.identificationService.identify(this.project, file))
-			.orElse(null);
+		final Optional<Identification> identification = Optional.ofNullable(vFile)
+			.flatMap(file -> this.identificationService.identify(this.project, file));
+		
+		// Set the project course in the settings.
+		identification.flatMap(Identification::getCourseId).ifPresent(course ->
+			DodonaProjectSettings.getInstance(this.project).setCourseId(course)
+		);
 		
 		// Publish the event.
 		this.bus.syncPublisher(CurrentExerciseListener.CHANGED_TOPIC)
-			.onCurrentExercise(vFile, identification);
+			.onCurrentExercise(vFile, identification.orElse(null));
 	}
 }

@@ -109,7 +109,7 @@ public class ExerciseCreationServiceImpl implements ExerciseCreationService {
 			if (name.trim().isEmpty()) {
 				showError(UIBundle.message("create.new.file.file.name.cannot.be.empty.error.message"));
 			} else {
-				if (directory.findFile(name) != null) {
+				if (directory.findFile(name) == null) {
 					return name;
 				} else {
 					showError(DodonaBundle.message("creation.already.exists"));
