@@ -10,13 +10,13 @@
 package io.github.thepieterdc.dodona.plugin.code.identification;
 
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.project.Project;
 
 import javax.annotation.Nonnull;
 
 /**
  * Service that sets the identification string in the code.
  */
-@FunctionalInterface
 public interface CodeIdentificationService {
 	/**
 	 * Gets the identifier for the given file name.
@@ -36,4 +36,11 @@ public interface CodeIdentificationService {
 	static CodeIdentificationService getInstance() {
 		return ServiceManager.getService(CodeIdentificationService.class);
 	}
+	
+	/**
+	 * Identifies the current opened file.
+	 *
+	 * @param project the active project
+	 */
+	void identifyCurrent(final Project project);
 }

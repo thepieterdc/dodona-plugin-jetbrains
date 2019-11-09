@@ -17,6 +17,7 @@ import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
 import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
 import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
 import io.github.thepieterdc.dodona.plugin.tasks.ui.IdentifyExerciseDialog;
+import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -37,9 +38,10 @@ public class IdentifyTask extends AbstractDodonaResultTask<FullIdentification> {
 	 * SubmitSolutionTask constructor.
 	 *
 	 * @param project the current project
+	 * @param title   the title
 	 */
-	private IdentifyTask(final Project project) {
-		super(project, DodonaBundle.message("tasks.select_exercise.title"));
+	private IdentifyTask(final Project project, final String title) {
+		super(project, title);
 		this.executor = DodonaAuthenticator.getInstance().getExecutor();
 	}
 	
@@ -49,7 +51,7 @@ public class IdentifyTask extends AbstractDodonaResultTask<FullIdentification> {
 		try {
 			// Set the progressbar.
 			progress.setIndeterminate(true);
-			progress.setText(DodonaBundle.message("tasks.select_exercise.progress.identify"));
+			progress.setText(DodonaBundle.message("tasks.identify.progress"));
 			
 			// Perform the identification.
 			SwingUtilities.invokeAndWait(this::showDialog);
@@ -70,7 +72,20 @@ public class IdentifyTask extends AbstractDodonaResultTask<FullIdentification> {
 	 */
 	@Nonnull
 	public static DodonaResultTask<FullIdentification> create(final Project project) {
-		return new IdentifyTask(project);
+		return create(project, DodonaBundle.message("tasks.identify.title.default"));
+	}
+	
+	/**
+	 * Creates an exercise selection task.
+	 *
+	 * @param project the current project
+	 * @param title   custom title
+	 * @return the task
+	 */
+	@Nonnull
+	public static DodonaResultTask<FullIdentification> create(final Project project,
+	                                                          @Nls final String title) {
+		return new IdentifyTask(project, title);
 	}
 	
 	/**

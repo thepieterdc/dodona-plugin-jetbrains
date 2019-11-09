@@ -14,13 +14,17 @@ import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.Series;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Optional;
 
 /**
  * Full identification of an exercise.
  */
-public final class FullIdentification {
+public final class FullIdentification extends Identification {
+	@Nullable
 	private final Course course;
 	private final Exercise exercise;
+	@Nullable
 	private final Series series;
 	
 	/**
@@ -30,9 +34,14 @@ public final class FullIdentification {
 	 * @param series   the series
 	 * @param exercise the exercise
 	 */
-	public FullIdentification(final Course course,
-	                          final Series series,
+	public FullIdentification(@Nullable final Course course,
+	                          @Nullable final Series series,
 	                          final Exercise exercise) {
+		super(
+			course != null ? course.getId() : null,
+			series != null ? series.getId() : null,
+			exercise.getId()
+		);
 		this.course = course;
 		this.exercise = exercise;
 		this.series = series;
@@ -44,8 +53,8 @@ public final class FullIdentification {
 	 * @return the course
 	 */
 	@Nonnull
-	public Course getCourse() {
-		return this.course;
+	public Optional<Course> getCourse() {
+		return Optional.ofNullable(this.course);
 	}
 	
 	/**
@@ -64,16 +73,16 @@ public final class FullIdentification {
 	 * @return the series
 	 */
 	@Nonnull
-	public Series getSeries() {
-		return this.series;
+	public Optional<Series> getSeries() {
+		return Optional.ofNullable(this.series);
 	}
 	
 	@Override
 	public String toString() {
 		return String.format(
 			"FullIdentification[course=%s, series=%s, exercise=%s]",
-			this.course.getId(),
-			this.series.getId(),
+			this.course,
+			this.series,
 			this.exercise.getId()
 		);
 	}
