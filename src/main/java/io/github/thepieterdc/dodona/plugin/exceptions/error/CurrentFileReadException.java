@@ -1,25 +1,27 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package be.ugent.piedcler.dodona.plugin.exceptions.errors;
 
-import be.ugent.piedcler.dodona.plugin.exceptions.ErrorMessageException;
+package io.github.thepieterdc.dodona.plugin.exceptions.error;
+
+import io.github.thepieterdc.dodona.exceptions.DodonaException;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 
 /**
- * Something went wrong while reading the code.
+ * The current opened file could not be read.
  */
-public class CurrentFileReadException extends ErrorMessageException {
-	private static final long serialVersionUID = 2086238563554446197L;
+public final class CurrentFileReadException extends DodonaException {
+	private static final long serialVersionUID = 6747543650128071349L;
 	
 	/**
-	 * CodeReadException constructor.
+	 * CurrentFileReadException constructor.
 	 */
 	public CurrentFileReadException() {
-		super("Something went wrong while trying to read your code, try again.");
+		super(DodonaBundle.message("exceptions.error.current_file_read"));
 	}
 }

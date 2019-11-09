@@ -22,10 +22,10 @@ import io.github.thepieterdc.dodona.plugin.exercise.CurrentExerciseListener;
 import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions.SubmissionsPanel;
+import io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions.UnknownExercisePanel;
 import io.github.thepieterdc.dodona.plugin.ui.AsyncContentPanel;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.plugin.ui.TextColors;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -50,10 +50,6 @@ public class SubmissionsTab extends AbstractTab {
 	@NonNls
 	private static final JComponent ICON_NO_FILE = new AnimatedIcon(
 		"ICON_NO_FILE", new Icon[0], Icons.FILE_CODE.color(TextColors.SECONDARY), 0
-	);
-	@NonNls
-	private static final JComponent ICON_UNKNOWN = new AnimatedIcon(
-		"ICON_UNKNOWN", new Icon[0], Icons.QUESTION.color(TextColors.SECONDARY), 0
 	);
 	
 	private final Collection<String> cards;
@@ -88,22 +84,22 @@ public class SubmissionsTab extends AbstractTab {
 	}
 	
 	/**
-	 * Creates a simple card with an icon and text.
+	 * Creates the card to display when no file is opened.
 	 *
-	 * @param icon the icon to display
-	 * @param text the text to display underneath the icon
 	 * @return the card
 	 */
 	@Nonnull
-	private static JScrollPane createCard(final JComponent icon,
-	                                      @Nls final String text) {
-		final JPanel loadingInnerPanel = new JPanel(new BorderLayout(10, 10));
-		loadingInnerPanel.add(new JLabel(text), BorderLayout.PAGE_END);
-		loadingInnerPanel.add(icon, BorderLayout.CENTER);
+	private static JScrollPane createNoFileCard() {
+		final JPanel innerPanel = new JPanel(new BorderLayout(10, 10));
+		innerPanel.add(
+			new JLabel(DodonaBundle.message("toolwindow.submissions.no_file")),
+			BorderLayout.PAGE_END
+		);
+		innerPanel.add(ICON_NO_FILE, BorderLayout.CENTER);
 		
-		final JPanel loadingPanel = new JPanel(new GridBagLayout());
-		loadingPanel.add(loadingInnerPanel, new GridBagConstraints());
-		return ScrollPaneFactory.createScrollPane(loadingPanel, true);
+		final JPanel cardPanel = new JPanel(new GridBagLayout());
+		cardPanel.add(innerPanel, new GridBagConstraints());
+		return ScrollPaneFactory.createScrollPane(cardPanel, true);
 	}
 	
 	/**
@@ -145,16 +141,14 @@ public class SubmissionsTab extends AbstractTab {
 	 */
 	private void initialize() {
 		// Add the no-file card.
-		this.panel.add(createCard(
-			ICON_NO_FILE,
-			DodonaBundle.message("toolwindow.submissions.no_file")
-		), CARD_NO_FILE);
+		this.panel.add(createNoFileCard(), CARD_NO_FILE);
 		
 		// Add the unknown exercise card.
-		this.panel.add(createCard(
-			ICON_UNKNOWN,
-			DodonaBundle.message("toolwindow.submissions.unknown")
-		), CARD_UNKNOWN);
+		this.panel.add(ScrollPaneFactory.createScrollPane(
+			new UnknownExercisePanel(this.project),
+			true),
+			CARD_UNKNOWN
+		);
 		
 		// Listen for changes in opened exercises.
 		final MessageBusConnection conn = this.project.getMessageBus().connect();

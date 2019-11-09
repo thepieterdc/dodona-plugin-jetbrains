@@ -8,6 +8,7 @@
  */
 package io.github.thepieterdc.dodona.plugin.code.identification;
 
+import com.intellij.openapi.editor.Document;
 import io.github.thepieterdc.dodona.plugin.code.DodonaFileType;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import org.jetbrains.annotations.NonNls;
@@ -58,17 +59,38 @@ public enum CodeIdentifier {
 	}
 	
 	/**
+	 * Gets the identification line to prepend.
+	 *
+	 * @param exercise the identified exercise
+	 * @return the line to add to the file
+	 */
+	@SuppressWarnings("HardcodedLineSeparator")
+	@Nonnull
+	private String getIdentificationLine(final Exercise exercise) {
+		return String.format("%s\n", this.commentFn.apply(exercise.getUrl()));
+	}
+	
+	/**
+	 * Prepends the identification line to the document.
+	 *
+	 * @param exercise the exercise to set
+	 * @param document the document to modify
+	 */
+	@NonNls
+	public void process(final Exercise exercise, @NonNls final Document document) {
+		document.insertString(0, this.getIdentificationLine(exercise));
+	}
+	
+	/**
 	 * Processes the given file contents to include the identification string.
 	 *
 	 * @param exercise the exercise to set
 	 * @param contents the original file contents
 	 * @return the processed file contents
 	 */
-	@SuppressWarnings("HardcodedLineSeparator")
 	@NonNls
 	@Nonnull
 	public String process(final Exercise exercise, @NonNls final String contents) {
-		final String identification = this.commentFn.apply(exercise.getUrl());
-		return String.format("%s\n%s", identification, contents);
+		return String.format("%s%s", this.getIdentificationLine(exercise), contents);
 	}
 }

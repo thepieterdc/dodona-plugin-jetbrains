@@ -28,15 +28,15 @@ public class IdentificationTest {
 		final Identification courseSet =
 			new Identification(courseId, random.generate(), random.generate());
 		Assert.assertNotNull(courseSet);
-		Assert.assertTrue(courseSet.getCourse().isPresent());
-		courseSet.getCourse().ifPresent(id ->
+		Assert.assertTrue(courseSet.getCourseId().isPresent());
+		courseSet.getCourseId().ifPresent(id ->
 			Assert.assertEquals(courseId, (long) id)
 		);
 		
 		final Identification courseNotSet =
 			new Identification(null, random.generate(), random.generate());
 		Assert.assertNotNull(courseNotSet);
-		Assert.assertFalse(courseNotSet.getCourse().isPresent());
+		Assert.assertFalse(courseNotSet.getCourseId().isPresent());
 	}
 	
 	/**
@@ -49,7 +49,7 @@ public class IdentificationTest {
 		final Identification identification =
 			new Identification(random.generate(), random.generate(), exerciseId);
 		Assert.assertNotNull(identification);
-		Assert.assertEquals(exerciseId, (long) identification.getExercise());
+		Assert.assertEquals(exerciseId, (long) identification.getExerciseId());
 	}
 	
 	/**
@@ -62,14 +62,14 @@ public class IdentificationTest {
 		final Identification seriesSet =
 			new Identification(random.generate(), seriesId, random.generate());
 		Assert.assertNotNull(seriesSet);
-		Assert.assertTrue(seriesSet.getSeries().isPresent());
-		seriesSet.getSeries().ifPresent(id ->
+		Assert.assertTrue(seriesSet.getSeriesId().isPresent());
+		seriesSet.getSeriesId().ifPresent(id ->
 			Assert.assertEquals(seriesId, (long) id)
 		);
 		
 		final Identification seriesNotSet =
 			new Identification(random.generate(), null, random.generate());
 		Assert.assertNotNull(seriesNotSet);
-		Assert.assertFalse(seriesNotSet.getSeries().isPresent());
+		Assert.assertFalse(seriesNotSet.getSeriesId().isPresent());
 	}
 }
