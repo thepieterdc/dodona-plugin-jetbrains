@@ -111,10 +111,10 @@ public class IdentifyExerciseDialog extends DialogWrapper {
 		return ScrollPaneFactory.createScrollPane(loadingPanel, true);
 	}
 	
-	@Nonnull
+	@Nullable
 	@Override
 	public JComponent getPreferredFocusedComponent() {
-		return this.courseComboBox;
+		return this.getButton(this.getCancelAction());
 	}
 	
 	/**
@@ -234,6 +234,9 @@ public class IdentifyExerciseDialog extends DialogWrapper {
 			.whenComplete((courses, error) -> SwingUtilities.invokeLater(() -> {
 				this.courseComboBox.setResources(courses);
 				AsyncContentPanel.showCard(this.courseSelectionPanel, CARD_COURSES);
+				
+				// Focus the course panel.
+				this.courseComboBox.requestFocus();
 			}));
 	}
 	
