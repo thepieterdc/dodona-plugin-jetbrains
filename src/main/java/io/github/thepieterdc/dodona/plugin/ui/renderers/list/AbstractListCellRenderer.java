@@ -40,9 +40,11 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 	
 	/**
 	 * AbstractListCellRenderer constructor.
+	 *
+	 * @param layout the layout manager
 	 */
-	protected AbstractListCellRenderer() {
-		super();
+	protected AbstractListCellRenderer(final LayoutManager layout) {
+		super(layout);
 	}
 	
 	/**
