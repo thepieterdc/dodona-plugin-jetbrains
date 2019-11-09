@@ -173,7 +173,7 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	public void run(@NotNull final ProgressIndicator progress) {
 		try {
 			// Set the project course if this had not been set yet.
-			this.identification.getCourse().ifPresent(this.projectSettings::setCourseId);
+			this.identification.getCourseId().ifPresent(this.projectSettings::setCourseId);
 			
 			// Update the progress bar.
 			progress.setIndeterminate(true);
@@ -186,7 +186,7 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 			
 			// Get information about the exercise.
 			final Exercise exercise = this.executor.execute(
-				dodona -> dodona.exercises().get(this.identification.getExercise()),
+				dodona -> dodona.exercises().get(this.identification.getExerciseId()),
 				progress
 			);
 			
@@ -223,9 +223,9 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	 */
 	private long submit(final DodonaClient client) {
 		return client.submissions().create(
-			this.identification.getCourse().orElse(null),
-			this.identification.getSeries().orElse(null),
-			this.identification.getExercise(),
+			this.identification.getCourseId().orElse(null),
+			this.identification.getSeriesId().orElse(null),
+			this.identification.getExerciseId(),
 			this.code
 		);
 	}

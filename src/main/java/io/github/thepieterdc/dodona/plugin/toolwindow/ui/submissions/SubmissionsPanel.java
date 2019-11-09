@@ -83,9 +83,9 @@ public final class SubmissionsPanel extends AsyncContentPanel<SubmissionsTable> 
 	public static SubmissionsPanel create(final Project project,
 	                                      final DodonaExecutor executor,
 	                                      final Identification identification) {
-		final long exerciseId = identification.getExercise();
+		final long exerciseId = identification.getExerciseId();
 		final CompletableFuture<List<SubmissionInfo>> submissions = executor
-			.execute(dodona -> identification.getCourse()
+			.execute(dodona -> identification.getCourseId()
 				.map(course -> dodona.submissions().getAllByMe(course, exerciseId))
 				.orElseGet(() -> dodona.submissions().getAllByMe(exerciseId))
 			);

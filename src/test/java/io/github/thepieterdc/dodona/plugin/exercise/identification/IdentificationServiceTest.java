@@ -60,9 +60,9 @@ public class IdentificationServiceTest {
 		// Validate the result.
 		Assert.assertTrue(result.isPresent());
 		result.ifPresent(identification -> {
-			Assert.assertEquals(courseId, (long) identification.getCourse().orElse(-1L));
-			Assert.assertEquals(seriesId, (long) identification.getSeries().orElse(-1L));
-			Assert.assertEquals(exerciseId, (long) identification.getExercise());
+			Assert.assertEquals(courseId, (long) identification.getCourseId().orElse(-1L));
+			Assert.assertEquals(seriesId, (long) identification.getSeriesId().orElse(-1L));
+			Assert.assertEquals(exerciseId, (long) identification.getExerciseId());
 		});
 	}
 	
@@ -89,9 +89,9 @@ public class IdentificationServiceTest {
 		// Validate the result.
 		Assert.assertTrue(result.isPresent());
 		result.ifPresent(identification -> {
-			Assert.assertFalse(identification.getCourse().isPresent());
-			Assert.assertFalse(identification.getSeries().isPresent());
-			Assert.assertEquals(exerciseId, (long) identification.getExercise());
+			Assert.assertFalse(identification.getCourseId().isPresent());
+			Assert.assertFalse(identification.getSeriesId().isPresent());
+			Assert.assertEquals(exerciseId, (long) identification.getExerciseId());
 		});
 	}
 	
