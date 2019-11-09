@@ -78,12 +78,16 @@ public class IdentifyExerciseDialog extends DialogWrapper {
 		super(project, true);
 		this.courseComboBox = new CourseComboBox(this::onCourseSelected);
 		this.executor = executor;
-		this.exercisesList = new ExercisesList(this::doOKAction);
+		this.exercisesList = new ExercisesList(
+			this::doOKAction,
+			item -> this.setOKActionEnabled(true)
+		);
 		this.loadingIcon = new AsyncProcessIcon(this.getClass() + ".loading");
 		this.project = project;
 		this.rootPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		this.seriesComboBox = new SeriesComboBox(this::onSeriesSelected);
 		
+		this.setOKActionEnabled(false);
 		this.setTitle(DodonaBundle.message("dialog.select_exercise.title"));
 		this.init();
 		
@@ -105,6 +109,12 @@ public class IdentifyExerciseDialog extends DialogWrapper {
 		final JPanel loadingPanel = new JPanel(new BorderLayout());
 		loadingPanel.add(this.loadingIcon, BorderLayout.CENTER);
 		return ScrollPaneFactory.createScrollPane(loadingPanel, true);
+	}
+	
+	@Nonnull
+	@Override
+	public JComponent getPreferredFocusedComponent() {
+		return this.courseComboBox;
 	}
 	
 	/**
@@ -169,6 +179,9 @@ public class IdentifyExerciseDialog extends DialogWrapper {
 		this.exercisesList.setEnabled(false);
 		this.exercisesList.setResources(Collections.emptyList());
 		
+		// Disable the OK action.
+		this.setOKActionEnabled(false);
+		
 		// No course was selected.
 		if (course == null) {
 			return;
@@ -189,6 +202,9 @@ public class IdentifyExerciseDialog extends DialogWrapper {
 		// Disable the exercise selection and clear the options.
 		this.exercisesList.setEnabled(false);
 		this.exercisesList.setResources(Collections.emptyList());
+		
+		// Disable the OK action.
+		this.setOKActionEnabled(false);
 		
 		// No series was selected.
 		if (series == null) {
@@ -235,6 +251,7 @@ public class IdentifyExerciseDialog extends DialogWrapper {
 		return this.executor.execute(dodona -> dodona.exercises().getAll(series))
 			.whenComplete((exercises, error) -> SwingUtilities.invokeLater(() -> {
 				this.exercisesList.setResources(exercises);
+				this.setOKActionEnabled(this.exercisesList.getSelectedResource().isPresent());
 				AsyncContentPanel.showCard(this.exerciseSelectionPanel, CARD_EXERCISES);
 			}));
 	}
