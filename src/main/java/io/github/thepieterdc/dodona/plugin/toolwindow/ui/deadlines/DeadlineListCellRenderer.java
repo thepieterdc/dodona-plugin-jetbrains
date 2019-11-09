@@ -17,6 +17,7 @@ import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.plugin.ui.renderers.list.AbstractListCellRenderer;
 import io.github.thepieterdc.dodona.plugin.ui.util.FontUtils;
 import io.github.thepieterdc.dodona.plugin.ui.util.TimeUtils;
+import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -36,6 +37,9 @@ final class DeadlineListCellRenderer extends AbstractListCellRenderer<Deadline> 
 	
 	private static final Color secondary =
 		AbstractListCellRenderer.getSecondaryForeground(false, false);
+	
+	@NonNls
+	private static final String HTML = "<html>%s</html>";
 	
 	private static final Border DIVIDER = BorderFactory.createMatteBorder(
 		1, 5, 5, 5, secondary
@@ -150,11 +154,11 @@ final class DeadlineListCellRenderer extends AbstractListCellRenderer<Deadline> 
 		
 		// Set the course name.
 		FontUtils.boldenIf(this.course, value.getCourseId() == this.activeCourseId);
-		this.course.setText(value.getCourseName());
+		this.course.setText(String.format(HTML, value.getCourseName()));
 		
 		// Set the series name.
 		FontUtils.boldenIf(this.series, value.getCourseId() == this.activeCourseId);
-		this.series.setText(value.getSeriesName());
+		this.series.setText(String.format(HTML, value.getSeriesName()));
 		
 		// Set the deadline text.
 		this.deadline.setFont(FontUtils.boldenIf(
