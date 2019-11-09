@@ -38,7 +38,7 @@ final class DeadlineListCellRenderer extends AbstractListCellRenderer<Deadline> 
 		AbstractListCellRenderer.getSecondaryForeground(false, false);
 	
 	private static final Border DIVIDER = BorderFactory.createMatteBorder(
-		1, 0, 0, 0, secondary
+		1, 5, 5, 5, secondary
 	);
 	
 	private static final float DEADLINE_FONT_RATIO = 1.4f;
@@ -67,10 +67,9 @@ final class DeadlineListCellRenderer extends AbstractListCellRenderer<Deadline> 
 	 * Creates the layout of the cell.
 	 */
 	private void createLayout() {
-		this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		final GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.BOTH;
-		constraints.insets = JBUI.insets(10, 2);
+		constraints.insets = JBUI.insets(4, 0, 0, 0);
 		constraints.weightx = 1.0;
 		constraints.weighty = 1.0;
 		
@@ -138,7 +137,7 @@ final class DeadlineListCellRenderer extends AbstractListCellRenderer<Deadline> 
 	                                              final boolean cellHasFocus) {
 		// Set the upper border.
 		if (index < 1) {
-			this.setBorder(BorderFactory.createEmptyBorder());
+			this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		} else {
 			this.setBorder(DIVIDER);
 		}
