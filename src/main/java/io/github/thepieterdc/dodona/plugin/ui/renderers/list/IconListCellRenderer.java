@@ -31,7 +31,7 @@ public abstract class IconListCellRenderer<T> extends AbstractListCellRenderer<T
 	 * @param border the border of the cell
 	 */
 	protected IconListCellRenderer(final Border border) {
-		super();
+		super(new FlowLayout(FlowLayout.LEADING, 0, 0));
 		this.icon = new JLabel();
 		this.initialize();
 		this.createLayout(border);
@@ -51,7 +51,6 @@ public abstract class IconListCellRenderer<T> extends AbstractListCellRenderer<T
 	private void createLayout(final Border border) {
 		// Main panel.
 		this.setBorder(border);
-		this.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0));
 		
 		// Details panel.
 		final JPanel detailsPanel = new JPanel();
