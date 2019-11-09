@@ -39,8 +39,8 @@ public class FullIdentificationTest {
 		);
 		Assert.assertNotNull(identification);
 		
-		Assert.assertNotNull(identification.getCourse());
-		Assert.assertEquals(id, identification.getCourse().getId());
+		Assert.assertTrue(identification.getCourse().isPresent());
+		Assert.assertEquals(id, identification.getCourse().get().getId());
 	}
 	
 	/**
@@ -81,7 +81,7 @@ public class FullIdentificationTest {
 		);
 		Assert.assertNotNull(identification);
 		
-		Assert.assertNotNull(identification.getSeries());
-		Assert.assertEquals(id, identification.getSeries().getId());
+		Assert.assertTrue(identification.getSeries().isPresent());
+		Assert.assertEquals(id, identification.getSeries().get().getId());
 	}
 }

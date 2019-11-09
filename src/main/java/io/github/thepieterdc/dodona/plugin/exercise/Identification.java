@@ -16,7 +16,7 @@ import java.util.Optional;
 /**
  * Identification of an exercise.
  */
-public final class Identification {
+public class Identification {
 	@Nullable
 	private final Long courseId;
 	private final Long exerciseId;
@@ -44,7 +44,7 @@ public final class Identification {
 	 * @return the course id
 	 */
 	@Nonnull
-	public Optional<Long> getCourse() {
+	public Optional<Long> getCourseId() {
 		return Optional.ofNullable(this.courseId);
 	}
 	
@@ -54,7 +54,7 @@ public final class Identification {
 	 * @return the exercise id
 	 */
 	@Nonnull
-	public Long getExercise() {
+	public Long getExerciseId() {
 		return this.exerciseId;
 	}
 	
@@ -64,7 +64,7 @@ public final class Identification {
 	 * @return the series id
 	 */
 	@Nonnull
-	public Optional<Long> getSeries() {
+	public Optional<Long> getSeriesId() {
 		return Optional.ofNullable(this.seriesId);
 	}
 	
