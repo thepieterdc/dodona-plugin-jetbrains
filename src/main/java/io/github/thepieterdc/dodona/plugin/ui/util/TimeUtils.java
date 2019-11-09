@@ -10,8 +10,10 @@
 package io.github.thepieterdc.dodona.plugin.ui.util;
 
 import com.github.marlonlom.utilities.timeago.TimeAgo;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.reactivex.annotations.NonNull;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.chrono.ChronoZonedDateTime;
 
@@ -19,6 +21,10 @@ import java.time.chrono.ChronoZonedDateTime;
  * Utilities for handling time.
  */
 public final class TimeUtils {
+	public static final long HOURS_PER_DAY = 24L;
+	public static final long MINUTES_PER_HOUR = 60L;
+	public static final long SECONDS_PER_MINUTE = 60L;
+	
 	private static final long MILLIS_PER_SECOND = 1000L;
 	
 	/**
@@ -31,5 +37,30 @@ public final class TimeUtils {
 	@NonNull
 	public static String fuzzy(final ChronoZonedDateTime<LocalDate> timestamp) {
 		return TimeAgo.using(timestamp.toEpochSecond() * MILLIS_PER_SECOND);
+	}
+	
+	/**
+	 * Gets a human readable time sentence for the given duration.
+	 *
+	 * @param duration the duration to format
+	 * @return the sentence
+	 */
+	@NonNull
+	public static String fuzzy(final Duration duration) {
+		if (duration.toMillis() < 10L * MILLIS_PER_SECOND) {
+			return DodonaBundle.message("duration.now");
+		}
+		
+		if (duration.toMinutes() < 2L) {
+			return DodonaBundle.message("duration.seconds", duration.toMillis() / MILLIS_PER_SECOND);
+		}
+		
+		if (duration.toHours() < 2L) {
+			return DodonaBundle.message("duration.minutes", duration.toMinutes());
+		}
+		
+		return duration.toDays() < 2L
+			? DodonaBundle.message("duration.hours", duration.toHours())
+			: DodonaBundle.message("duration.days", duration.toDays());
 	}
 }
