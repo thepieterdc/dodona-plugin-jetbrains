@@ -152,11 +152,9 @@ final class DeadlineListCellRenderer extends AbstractListCellRenderer<Deadline> 
 		);
 		
 		// Set the course name.
-		FontUtils.boldenIf(this.course, value.getCourseId() == this.currentCourse);
 		this.course.setText(String.format(HTML, value.getCourseName()));
 		
 		// Set the series name.
-		FontUtils.boldenIf(this.series, value.getCourseId() == this.currentCourse);
 		this.series.setText(String.format(HTML, value.getSeriesName()));
 		
 		// Set the deadline text.

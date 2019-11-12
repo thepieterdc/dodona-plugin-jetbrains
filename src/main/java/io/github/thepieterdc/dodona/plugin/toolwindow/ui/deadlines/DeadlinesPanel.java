@@ -31,8 +31,12 @@ public final class DeadlinesPanel extends AsyncContentPanel<DeadlinesList> {
 		this.setBorder(BorderFactory.createEmptyBorder());
 		
 		futureDeadlines.whenComplete((deadlines, error) -> {
-			this.content.setDeadlines(deadlines);
-			this.showContentCard();
+			if (error != null) {
+				this.showUnauthenticatedCard();
+			} else {
+				this.content.setDeadlines(deadlines);
+				this.showContentCard();
+			}
 		});
 	}
 	

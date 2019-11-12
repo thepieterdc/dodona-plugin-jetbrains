@@ -16,7 +16,7 @@ import java.awt.*;
  */
 public final class FontUtils {
 	/**
-	 * FontUtil constructor.
+	 * FontUtils constructor.
 	 */
 	private FontUtils() {
 		// Utility class.

@@ -14,7 +14,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.util.IconUtil;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
 import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
 import io.github.thepieterdc.dodona.plugin.toolwindow.tabs.DeadlinesTab;
@@ -51,7 +51,7 @@ public class DodonaToolWindowFactory implements DumbAware {
 	 */
 	void createToolWindowContent(@NotNull final ToolWindow toolWindow) {
 		// Get a request executor.
-		final DodonaExecutor executor =
+		final DodonaExecutorHolder executor =
 			DodonaAuthenticator.getInstance().getExecutor();
 		
 		// Set the title and auto close property.

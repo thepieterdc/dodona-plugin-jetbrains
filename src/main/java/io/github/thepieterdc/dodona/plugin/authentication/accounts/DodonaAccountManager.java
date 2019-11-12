@@ -13,10 +13,12 @@ import com.intellij.credentialStore.CredentialAttributes;
 import com.intellij.credentialStore.CredentialAttributesKt;
 import com.intellij.credentialStore.Credentials;
 import com.intellij.ide.passwordSafe.PasswordSafe;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.util.messages.MessageBus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.DodonaServer;
 import io.github.thepieterdc.dodona.resources.User;
@@ -41,15 +43,37 @@ public class DodonaAccountManager implements PersistentStateComponent<DodonaAcco
 	@javax.annotation.Nullable
 	private DodonaAccount account;
 	
+	private final MessageBus bus;
 	private final PasswordSafe passwordSafe;
 	
 	/**
 	 * DodonaAccountManager constructor.
-	 *
-	 * @param passwordSafe the password storage
 	 */
-	public DodonaAccountManager(final PasswordSafe passwordSafe) {
-		this.passwordSafe = passwordSafe;
+	public DodonaAccountManager() {
+		this.bus = ApplicationManager.getApplication().getMessageBus();
+		this.passwordSafe = ServiceManager.getService(PasswordSafe.class);
+	}
+	
+	/**
+	 * Clears the account and authentication token.
+	 */
+	public void clearAccount() {
+		// Clear the token if there is an account set.
+		Optional.ofNullable(this.account).ifPresent(acc -> this.passwordSafe.set(
+			this.createCredentialAttributes(acc),
+			null
+		));
+		
+		// Ensure that there was an account.
+		final boolean hadAccount = this.account != null;
+		
+		// Clear the account.
+		this.account = null;
+		
+		// Broadcast the removal of the account.
+		if (hadAccount) {
+			this.bus.syncPublisher(AccountRemovedListener.REMOVED_TOPIC).removed();
+		}
 	}
 	
 	/**
@@ -107,15 +131,24 @@ public class DodonaAccountManager implements PersistentStateComponent<DodonaAcco
 	}
 	
 	/**
-	 * Gets the token for the given account, if available.
-	 *
-	 * @param account the account
+	 * Gets the token for the current account, if available.
 	 */
-	public Optional<String> getToken(final DodonaAccount account) {
+	@Nonnull
+	public Optional<String> getToken() {
 		return this.getAccount()
 			.map(this::createCredentialAttributes)
 			.map(this.passwordSafe::get)
 			.map(Credentials::getPasswordAsString);
+	}
+	
+	/**
+	 * Validates whether the given account is already in the account list.
+	 *
+	 * @param acc the account to check
+	 * @return true if the account exists
+	 */
+	public boolean hasAccount(final DodonaAccount acc) {
+		return acc.equals(this.account);
 	}
 	
 	@Override
@@ -127,28 +160,23 @@ public class DodonaAccountManager implements PersistentStateComponent<DodonaAcco
 	 * Sets the account.
 	 *
 	 * @param account the account to set
+	 * @param token   the corresponding authentication token
 	 */
-	public void setAccount(@Nullable final DodonaAccount account) {
-		if (this.account != null && !this.account.equals(account)) {
-			// Purge the old account token.
-			this.setToken(this.account, null);
-		}
+	public void setAccount(final DodonaAccount account,
+	                       final String token) {
+		// Remove the previous account if set.
+		this.clearAccount();
 		
 		// Set the new account.
 		this.account = account;
-	}
-	
-	/**
-	 * Securely sets the token for the given account.
-	 *
-	 * @param account the account to set the token for
-	 * @param token   the token to set, null to remove it
-	 */
-	public void setToken(final DodonaAccount account,
-	                     @javax.annotation.Nullable final String token) {
+		
+		// Set the new account token.
 		this.passwordSafe.set(
 			this.createCredentialAttributes(account),
-			token != null ? new Credentials(account.getId(), token) : null
+			new Credentials(account.getId(), token)
 		);
+		
+		// Broadcast the new account.
+		this.bus.syncPublisher(AccountAddedListener.ADDED_TOPIC).added();
 	}
 }

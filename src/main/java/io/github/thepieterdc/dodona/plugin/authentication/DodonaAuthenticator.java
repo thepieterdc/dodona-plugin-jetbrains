@@ -9,9 +9,12 @@
 
 package io.github.thepieterdc.dodona.plugin.authentication;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.ServiceManager;
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutorFactory;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorFactory;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
+import io.github.thepieterdc.dodona.plugin.authentication.accounts.AccountAddedListener;
 import io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccount;
 import io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccountManager;
 
@@ -23,14 +26,34 @@ import java.util.Optional;
  */
 public class DodonaAuthenticator {
 	private final DodonaAccountManager accountManager;
+	private final DodonaExecutorHolder executorHolder;
 	
 	/**
 	 * DodonaAuthenticator constructor.
-	 *
-	 * @param accountManager account manager
 	 */
-	private DodonaAuthenticator(final DodonaAccountManager accountManager) {
-		this.accountManager = accountManager;
+	private DodonaAuthenticator() {
+		this.accountManager = ServiceManager.getService(DodonaAccountManager.class);
+		this.executorHolder = new DodonaExecutorHolder(this.createDefaultExecutor());
+		
+		// Listen for changes to accounts and update the executor accordingly.
+		ApplicationManager.getApplication().getMessageBus().connect().subscribe(
+			AccountAddedListener.ADDED_TOPIC,
+			() -> this.executorHolder.update(this.createDefaultExecutor())
+		);
+	}
+	
+	/**
+	 * Creates an executor for the default Dodona account.
+	 *
+	 * @return the executor
+	 */
+	@Nonnull
+	private DodonaExecutor createDefaultExecutor() {
+		return this.accountManager.getAccount().flatMap(account ->
+			this.accountManager.getToken().map(token ->
+				DodonaExecutorFactory.create(account.getServer(), token)
+			)
+		).orElseGet(DodonaExecutorFactory::createMissing);
 	}
 	
 	/**
@@ -48,12 +71,9 @@ public class DodonaAuthenticator {
 	 *
 	 * @return the executor
 	 */
-	public DodonaExecutor getExecutor() {
-		return this.accountManager.getAccount().flatMap(account ->
-			this.accountManager.getToken(account).map(token ->
-				DodonaExecutorFactory.create(account.getServer(), token)
-			)
-		).orElseGet(DodonaExecutorFactory::createMissing);
+	@Nonnull
+	public DodonaExecutorHolder getExecutor() {
+		return this.executorHolder;
 	}
 	
 	/**

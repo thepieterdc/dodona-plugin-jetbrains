@@ -52,7 +52,7 @@ public final class DodonaLoginDialog extends DialogWrapper {
 	 * @param project the current project
 	 * @param parent  parent component
 	 */
-	DodonaLoginDialog(@Nullable final Project project,
+	public DodonaLoginDialog(@Nullable final Project project,
 	                  @Nullable final Component parent) {
 		super(project, parent, false, IdeModalityType.PROJECT);
 		

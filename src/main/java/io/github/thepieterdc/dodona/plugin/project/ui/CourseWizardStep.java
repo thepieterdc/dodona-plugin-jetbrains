@@ -11,10 +11,10 @@ package io.github.thepieterdc.dodona.plugin.project.ui;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.openapi.options.ConfigurationException;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.project.DodonaModuleBuilder;
-import io.github.thepieterdc.dodona.plugin.ui.AsyncContentPanel;
 import io.github.thepieterdc.dodona.plugin.ui.resources.course.TabbedCourseList;
+import io.github.thepieterdc.dodona.plugin.ui.util.PanelUtils;
 import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
@@ -29,7 +29,7 @@ public class CourseWizardStep extends ModuleWizardStep {
 	private static final String CARD_LOADING = "COURSES_LOADING";
 	
 	private final DodonaModuleBuilder builder;
-	private final DodonaExecutor executor;
+	private final DodonaExecutorHolder executor;
 	
 	private final TabbedCourseList coursesList;
 	
@@ -43,7 +43,7 @@ public class CourseWizardStep extends ModuleWizardStep {
 	 * @param executor request executor
 	 */
 	public CourseWizardStep(final DodonaModuleBuilder builder,
-	                        final DodonaExecutor executor) {
+	                        final DodonaExecutorHolder executor) {
 		super();
 		this.builder = builder;
 		this.coursesList = new TabbedCourseList();
@@ -64,7 +64,7 @@ public class CourseWizardStep extends ModuleWizardStep {
 		this.coursesPanel.add(this.coursesList, CARD_COURSES);
 		
 		// Card: loading spinner.
-		this.coursesPanel.add(AsyncContentPanel.createLoadingCard(
+		this.coursesPanel.add(PanelUtils.createLoading(
 			this.coursesPanel,
 			this.getClass(),
 			"module.course.loading"),
@@ -79,12 +79,12 @@ public class CourseWizardStep extends ModuleWizardStep {
 	 * Updates the courses list.
 	 */
 	private void requestUpdate() {
-		AsyncContentPanel.showCard(this.coursesPanel, CARD_LOADING);
+		PanelUtils.showCard(this.coursesPanel, CARD_LOADING);
 		
-		this.executor.execute(dodona -> dodona.me().getSubscribedCourses())
+		this.executor.getExecutor().execute(dodona -> dodona.me().getSubscribedCourses())
 			.whenComplete((courses, error) -> SwingUtilities.invokeLater(() -> {
 				this.coursesList.setCourses(courses);
-				AsyncContentPanel.showCard(this.coursesPanel, CARD_COURSES);
+				PanelUtils.showCard(this.coursesPanel, CARD_COURSES);
 			}));
 	}
 	
