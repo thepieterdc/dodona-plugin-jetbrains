@@ -12,7 +12,7 @@ package io.github.thepieterdc.dodona.plugin.toolwindow.tabs;
 import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
 import io.github.thepieterdc.dodona.plugin.settings.listeners.ProjectCourseListener;
 import io.github.thepieterdc.dodona.plugin.toolwindow.ui.deadlines.DeadlinesPanel;
@@ -42,7 +42,7 @@ public class DeadlinesTab extends AbstractTab {
 	 * @param executor request executor
 	 */
 	public DeadlinesTab(final Project project,
-	                    final DodonaExecutor executor) {
+	                    final DodonaExecutorHolder executor) {
 		super(TAB_TITLE);
 		this.deadlinesPanel = new DeadlinesPanel(getFutureDeadlines(executor));
 		
@@ -70,8 +70,8 @@ public class DeadlinesTab extends AbstractTab {
 	 * @return request
 	 */
 	@Nonnull
-	private static CompletableFuture<List<Deadline>> getFutureDeadlines(final DodonaExecutor executor) {
-		return executor.execute(DodonaClient::root)
+	private static CompletableFuture<List<Deadline>> getFutureDeadlines(final DodonaExecutorHolder executor) {
+		return executor.getExecutor().execute(DodonaClient::root)
 			.thenApply(DeadlinesTab::parseDeadlines);
 	}
 	

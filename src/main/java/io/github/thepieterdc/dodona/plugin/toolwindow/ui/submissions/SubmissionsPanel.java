@@ -11,7 +11,7 @@ package io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBusConnection;
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.submission.SubmissionCreatedListener;
 import io.github.thepieterdc.dodona.plugin.submission.SubmissionEvaluatedListener;
@@ -31,7 +31,7 @@ import java.util.concurrent.CompletionStage;
  * UI for the Submissions tab.
  */
 public final class SubmissionsPanel extends AsyncContentPanel<SubmissionsTable> {
-	private final DodonaExecutor executor;
+	private final DodonaExecutorHolder executor;
 	private final Project project;
 	
 	/**
@@ -43,7 +43,7 @@ public final class SubmissionsPanel extends AsyncContentPanel<SubmissionsTable> 
 	 * @param futureSubmissions submissions request
 	 */
 	private SubmissionsPanel(final Project project,
-	                         final DodonaExecutor executor,
+	                         final DodonaExecutorHolder executor,
 	                         final SubmissionsTable table,
 	                         final CompletionStage<? extends List<SubmissionInfo>> futureSubmissions) {
 		super(table, "toolwindow.submissions.loading", true);
@@ -81,11 +81,11 @@ public final class SubmissionsPanel extends AsyncContentPanel<SubmissionsTable> 
 	 */
 	@Nonnull
 	public static SubmissionsPanel create(final Project project,
-	                                      final DodonaExecutor executor,
+	                                      final DodonaExecutorHolder executor,
 	                                      final Identification identification) {
 		final long exerciseId = identification.getExerciseId();
 		final CompletableFuture<List<SubmissionInfo>> submissions = executor
-			.execute(dodona -> identification.getCourseId()
+			.getExecutor().execute(dodona -> identification.getCourseId()
 				.map(course -> dodona.submissions().getAllByMe(course, exerciseId))
 				.orElseGet(() -> dodona.submissions().getAllByMe(exerciseId))
 			);
@@ -102,9 +102,9 @@ public final class SubmissionsPanel extends AsyncContentPanel<SubmissionsTable> 
 	 */
 	private void showSubmissionDialog(final SubmissionInfo submission) {
 		final CompletableFuture<Exercise> futureExercise = this.executor
-			.execute(dodona -> dodona.exercises().get(submission));
+			.getExecutor().execute(dodona -> dodona.exercises().get(submission));
 		final CompletableFuture<Submission> futureSubmission = this.executor
-			.execute(dodona -> dodona.submissions().get(submission));
+			.getExecutor().execute(dodona -> dodona.submissions().get(submission));
 		
 		new SubmissionDetailsDialog(
 			this.project, this.content, submission, futureExercise, futureSubmission)

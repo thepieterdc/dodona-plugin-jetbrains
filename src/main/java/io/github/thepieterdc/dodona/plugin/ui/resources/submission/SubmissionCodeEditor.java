@@ -17,7 +17,7 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.UnknownFileType;
 import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.plugin.code.DodonaFileType;
-import io.github.thepieterdc.dodona.plugin.ui.AsyncContentPanel;
+import io.github.thepieterdc.dodona.plugin.ui.util.PanelUtils;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
 import org.jetbrains.annotations.NonNls;
@@ -67,7 +67,7 @@ final class SubmissionCodeEditor extends JPanel implements Disposable {
 	 */
 	private void initialize() {
 		// Create a loading card.
-		final JScrollPane loadingCard = AsyncContentPanel.createLoadingCard(
+		final JScrollPane loadingCard = PanelUtils.createLoading(
 			this,
 			this.getClass(),
 			"dialog.submission_details.loading"
@@ -103,7 +103,7 @@ final class SubmissionCodeEditor extends JPanel implements Disposable {
 			
 			this.add(editorCard, CARD_EDITOR);
 			
-			AsyncContentPanel.showCard(this, CARD_EDITOR);
+			PanelUtils.showCard(this, CARD_EDITOR);
 		});
 	}
 }

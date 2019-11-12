@@ -15,7 +15,7 @@ import com.intellij.util.messages.MessageBus;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.data.SubmissionStatus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
 import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
 import io.github.thepieterdc.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
@@ -48,7 +48,7 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	private final String code;
 	private final Identification identification;
 	
-	private final DodonaExecutor executor;
+	private final DodonaExecutorHolder executor;
 	private final FeedbackService feedback;
 	
 	/**
@@ -104,7 +104,7 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 			totalWaited += currentDelay;
 			
 			// Refresh the status.
-			submission = this.executor.execute(
+			submission = this.executor.getExecutor().execute(
 				dodona -> dodona.submissions().get(submissionId),
 				progress
 			);
@@ -176,10 +176,10 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 			);
 			
 			// Submit the solution and get the id of the submission.
-			final long id = this.executor.execute(this::submit, progress);
+			final long id = this.executor.getExecutor().execute(this::submit, progress);
 			
 			// Get information about the exercise.
-			final Exercise exercise = this.executor.execute(
+			final Exercise exercise = this.executor.getExecutor().execute(
 				dodona -> dodona.exercises().get(this.identification.getExerciseId()),
 				progress
 			);

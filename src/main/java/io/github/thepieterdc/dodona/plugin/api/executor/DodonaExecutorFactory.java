@@ -7,11 +7,12 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.api;
+package io.github.thepieterdc.dodona.plugin.api.executor;
 
 import io.github.thepieterdc.dodona.DodonaBuilder;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.plugin.BuildConfig;
+import io.github.thepieterdc.dodona.plugin.api.DodonaServer;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
