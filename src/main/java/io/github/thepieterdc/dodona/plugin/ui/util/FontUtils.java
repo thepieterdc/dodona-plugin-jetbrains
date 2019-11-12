@@ -30,7 +30,7 @@ public final class FontUtils {
 	 * @param condition the condition to bolden the font
 	 */
 	public static void boldenIf(final Component component, final boolean condition) {
-		component.setFont(FontUtils.boldenIf(component.getFont(), condition));
+		component.setFont(boldenIf(component.getFont(), condition));
 	}
 	
 	/**
@@ -44,6 +44,6 @@ public final class FontUtils {
 		if (condition) {
 			return font.deriveFont(Font.BOLD);
 		}
-		return font;
+		return font.deriveFont(Font.PLAIN);
 	}
 }
