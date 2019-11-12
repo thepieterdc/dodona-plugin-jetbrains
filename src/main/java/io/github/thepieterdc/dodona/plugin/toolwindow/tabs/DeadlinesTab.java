@@ -9,9 +9,12 @@
 
 package io.github.thepieterdc.dodona.plugin.toolwindow.tabs;
 
+import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
+import io.github.thepieterdc.dodona.plugin.settings.listeners.ProjectCourseListener;
 import io.github.thepieterdc.dodona.plugin.toolwindow.ui.deadlines.DeadlinesPanel;
 import io.github.thepieterdc.dodona.plugin.ui.Deadline;
 import io.github.thepieterdc.dodona.resources.Course;
@@ -35,12 +38,23 @@ public class DeadlinesTab extends AbstractTab {
 	/**
 	 * DeadlinesTab constructor.
 	 *
+	 * @param project  the current project
 	 * @param executor request executor
-	 * @param courseId the id of the current active course
 	 */
-	public DeadlinesTab(final DodonaExecutor executor, final long courseId) {
+	public DeadlinesTab(final Project project,
+	                    final DodonaExecutor executor) {
 		super(TAB_TITLE);
-		this.deadlinesPanel = new DeadlinesPanel(courseId, getFutureDeadlines(executor));
+		this.deadlinesPanel = new DeadlinesPanel(getFutureDeadlines(executor));
+		
+		// Listen for project changes.
+		project.getMessageBus().connect().subscribe(
+			ProjectCourseListener.CHANGED_TOPIC,
+			this.deadlinesPanel::setCurrentCourse
+		);
+		
+		// Set the current project.
+		DodonaProjectSettings.getInstance(project)
+			.getCourseId().ifPresent(this.deadlinesPanel::setCurrentCourse);
 	}
 	
 	@Nonnull

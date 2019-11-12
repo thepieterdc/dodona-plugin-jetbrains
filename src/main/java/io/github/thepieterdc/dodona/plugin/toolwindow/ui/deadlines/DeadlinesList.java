@@ -14,6 +14,7 @@ import com.intellij.ui.components.JBList;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.ui.Deadline;
 
+import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.List;
 
@@ -22,23 +23,37 @@ import java.util.List;
  */
 final class DeadlinesList extends JBList<Deadline> {
 	private final CollectionListModel<Deadline> model;
+	private final DeadlineListCellRenderer renderer;
 	
 	/**
 	 * DeadlinesList constructor.
-	 *
-	 * @param courseId the id of the current active course
 	 */
-	DeadlinesList(final long courseId) {
+	DeadlinesList() {
 		super();
 		this.model = new CollectionListModel<>();
+		this.renderer = new DeadlineListCellRenderer();
 		
 		this.setBorder(BorderFactory.createEmptyBorder());
-		this.setCellRenderer(new DeadlineListCellRenderer(courseId));
+		this.setCellRenderer(this.renderer);
 		this.setEmptyText(DodonaBundle.message("toolwindow.deadlines.none"));
 		this.setModel(this.model);
 		this.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 	
+	/**
+	 * Sets the current course.
+	 *
+	 * @param course the current course
+	 */
+	public void setCurrentCourse(@Nullable final Long course) {
+		this.renderer.setCurrentCourse(course);
+	}
+	
+	/**
+	 * Set the deadlines in the list.
+	 *
+	 * @param deadlines the deadlines
+	 */
 	void setDeadlines(final List<? extends Deadline> deadlines) {
 		this.model.replaceAll(deadlines);
 	}
