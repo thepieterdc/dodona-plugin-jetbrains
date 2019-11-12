@@ -98,7 +98,7 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
 	}
 	
 	/**
-	 * Creates the list of DodonaAccounts.
+	 * Creates the list of Dodona accounts.
 	 *
 	 * @return the list
 	 */
@@ -146,9 +146,16 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
 	 */
 	@Nonnull
 	public Pair<DodonaAccount, String> getAccount() {
-		return Optional.ofNullable(this.accountListModel.getElementAt(0))
-			.map(acc -> Pair.create(acc, this.newToken))
-			.orElse(Pair.empty());
+		// Ensure that there is an account.
+		if (this.accountListModel.isEmpty()) {
+			return Pair.empty();
+		}
+		
+		// Return the account and its token.
+		return Pair.create(
+			this.accountListModel.getElementAt(0),
+			this.newToken
+		);
 	}
 	
 	/**

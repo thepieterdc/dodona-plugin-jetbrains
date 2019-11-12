@@ -11,7 +11,7 @@ package io.github.thepieterdc.dodona.plugin.tasks;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
 import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
 import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
@@ -28,7 +28,7 @@ import java.util.Optional;
  * Prompts the user to identify the current exercise.
  */
 public class IdentifyTask extends AbstractDodonaResultTask<FullIdentification> {
-	private final DodonaExecutor executor;
+	private final DodonaExecutorHolder executor;
 	
 	@Nullable
 	private FullIdentification identification;

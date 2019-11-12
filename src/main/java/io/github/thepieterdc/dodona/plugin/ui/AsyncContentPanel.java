@@ -10,14 +10,16 @@
 package io.github.thepieterdc.dodona.plugin.ui;
 
 import com.intellij.ui.ScrollPaneFactory;
-import com.intellij.util.ui.AsyncProcessIcon;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.ui.panels.UnauthenticatedPanel;
+import io.github.thepieterdc.dodona.plugin.ui.util.PanelUtils;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
-import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.awt.*;
+
+import static io.github.thepieterdc.dodona.plugin.ui.util.PanelUtils.showCard;
 
 /**
  * A panel of which the content is asynchronously loaded.
@@ -29,6 +31,8 @@ public class AsyncContentPanel<C extends Component> extends JPanel {
 	private static final String CARD_CONTENT = "ASYNC_CONTENT";
 	@NonNls
 	private static final String CARD_LOADING = "ASYNC_LOADING";
+	@NonNls
+	private static final String CARD_UNAUTHENTICATED = "ASYNC_UNAUTHENTICATED";
 	
 	protected final C content;
 	private final boolean scrollContent;
@@ -63,34 +67,6 @@ public class AsyncContentPanel<C extends Component> extends JPanel {
 	}
 	
 	/**
-	 * Creates a loading card.
-	 *
-	 * @param parent         the parent component
-	 * @param parentClass    the class of the parent
-	 * @param loadingTextKey the key to the loading text to display underneath
-	 *                       the spinner
-	 * @return the created card
-	 */
-	@Nonnull
-	public static JScrollPane createLoadingCard(final JPanel parent,
-	                                            final Class<?> parentClass,
-	                                            @PropertyKey(resourceBundle = DodonaBundle.BUNDLE_NAME) final String loadingTextKey) {
-		final AsyncProcessIcon loadingIcon = new AsyncProcessIcon.Big(parentClass + ".loading");
-		loadingIcon.setBackground(parent.getBackground());
-		
-		final JPanel loadingInnerPanel = new JPanel(new BorderLayout(10, 10));
-		loadingInnerPanel.add(
-			new JLabel(DodonaBundle.message(loadingTextKey)),
-			BorderLayout.PAGE_END
-		);
-		loadingInnerPanel.add(loadingIcon, BorderLayout.CENTER);
-		
-		final JPanel loadingPanel = new JPanel(new GridBagLayout());
-		loadingPanel.add(loadingInnerPanel, new GridBagConstraints());
-		return ScrollPaneFactory.createScrollPane(loadingPanel, true);
-	}
-	
-	/**
 	 * Adds the cards.
 	 *
 	 * @param loadingTextKey the key to the loading text to display underneath
@@ -98,7 +74,10 @@ public class AsyncContentPanel<C extends Component> extends JPanel {
 	 */
 	private void initialize(@PropertyKey(resourceBundle = DodonaBundle.BUNDLE_NAME) final String loadingTextKey) {
 		// Create a loading card.
-		final JScrollPane loadingCard = createLoadingCard(this, this.content.getClass(), loadingTextKey);
+		final JScrollPane loading = PanelUtils.createLoading(this, this.content.getClass(), loadingTextKey);
+		
+		// Create an unauthenticated card.
+		final JScrollPane unauthenticated = new UnauthenticatedPanel().wrap();
 		
 		// Add the content card.
 		if (this.scrollContent) {
@@ -111,21 +90,13 @@ public class AsyncContentPanel<C extends Component> extends JPanel {
 		}
 		
 		// Add the loading card.
-		this.add(loadingCard, CARD_LOADING);
+		this.add(loading, CARD_LOADING);
+		
+		// Add the unauthenticated card.
+		this.add(unauthenticated, CARD_UNAUTHENTICATED);
 		
 		// Show the loading card.
 		showCard(this, CARD_LOADING);
-	}
-	
-	/**
-	 * Shows the card with the given name in the parent panel.
-	 *
-	 * @param parent the container to show the card in
-	 * @param card   the card to show
-	 */
-	public static void showCard(final JPanel parent,
-	                            @NonNls final String card) {
-		((CardLayout) parent.getLayout()).show(parent, card);
 	}
 	
 	/**
@@ -133,5 +104,12 @@ public class AsyncContentPanel<C extends Component> extends JPanel {
 	 */
 	protected void showContentCard() {
 		showCard(this, CARD_CONTENT);
+	}
+	
+	/**
+	 * Shows the card that contains the authentication failure.
+	 */
+	protected void showUnauthenticatedCard() {
+		showCard(this, CARD_UNAUTHENTICATED);
 	}
 }

@@ -7,7 +7,7 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.api;
+package io.github.thepieterdc.dodona.plugin.api.executor;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
@@ -15,6 +15,7 @@ import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.DodonaClient;
+import io.github.thepieterdc.dodona.plugin.api.DodonaFuture;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
