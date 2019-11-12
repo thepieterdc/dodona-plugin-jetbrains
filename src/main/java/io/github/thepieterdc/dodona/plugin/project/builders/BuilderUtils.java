@@ -12,7 +12,7 @@ package io.github.thepieterdc.dodona.plugin.project.builders;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
 import io.github.thepieterdc.dodona.plugin.project.DodonaModuleBuilder;
 import io.github.thepieterdc.dodona.plugin.project.ui.CourseWizardStep;
@@ -38,7 +38,7 @@ final class BuilderUtils {
 	 */
 	static ModuleWizardStep createCourseSelectionStep(final DodonaModuleBuilder builder) {
 		final DodonaAuthenticator auth = DodonaAuthenticator.getInstance();
-		final DodonaExecutor executor = auth.getExecutor();
+		final DodonaExecutorHolder executor = auth.getExecutor();
 		return new CourseWizardStep(builder, executor);
 	}
 	

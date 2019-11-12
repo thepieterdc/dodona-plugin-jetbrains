@@ -10,21 +10,24 @@
 package io.github.thepieterdc.dodona.plugin.settings.ui;
 
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.ConfigurableUi;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.Pair;
+import com.intellij.util.messages.MessageBus;
 import io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccount;
 import io.github.thepieterdc.dodona.plugin.authentication.ui.DodonaAccountPanel;
 import io.github.thepieterdc.dodona.plugin.settings.DodonaSettingsHolder;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.util.Optional;
 
 /**
  * Main panel for plugin settings.
  */
 public class DodonaSettingsPanel implements ConfigurableUi<DodonaSettingsHolder>, Disposable {
+	private final MessageBus bus;
+	
 	private final DodonaAccountPanel accountPanel;
 	
 	/**
@@ -32,18 +35,20 @@ public class DodonaSettingsPanel implements ConfigurableUi<DodonaSettingsHolder>
 	 */
 	public DodonaSettingsPanel() {
 		this.accountPanel = new DodonaAccountPanel();
+		this.bus = ApplicationManager.getApplication().getMessageBus();
 	}
 	
 	@Override
 	public void apply(@NotNull final DodonaSettingsHolder holder) {
 		// Set the account.
 		final Pair<DodonaAccount, String> account = this.accountPanel.getAccount();
-		holder.accounts().setAccount(account.getFirst());
-		
-		// Set the authentication token for a new account.
-		Optional.ofNullable(account.getSecond()).ifPresent(token ->
-			holder.accounts().setToken(account.getFirst(), token)
-		);
+		if (account.getFirst() == null) {
+			// Clear the previous account.
+			holder.accounts().clearAccount();
+		} else if (!holder.accounts().hasAccount(account.getFirst())) {
+			// Set the new account.
+			holder.accounts().setAccount(account.getFirst(), account.getSecond());
+		}
 		
 		// Clear the new authentication data and the modification status.
 		this.accountPanel.clearModified();

@@ -7,7 +7,7 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions;
+package io.github.thepieterdc.dodona.plugin.ui.panels;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.util.ui.AnimatedIcon;
@@ -24,13 +24,11 @@ import java.awt.*;
 /**
  * Panel to display when the exercise has not yet been identified.
  */
-public final class UnknownExercisePanel extends JPanel {
+public final class UnknownExercisePanel extends IconTextPanel {
 	@NonNls
-	private static final JComponent ICON_UNKNOWN = new AnimatedIcon(
+	private static final JComponent ICON = new AnimatedIcon(
 		"ICON_UNKNOWN", new Icon[0], Icons.QUESTION.color(TextColors.SECONDARY), 0
 	);
-	
-	private final CodeIdentificationService identificationService;
 	
 	/**
 	 * UnknownExercisePanel constructor.
@@ -38,19 +36,11 @@ public final class UnknownExercisePanel extends JPanel {
 	 * @param project the current active project
 	 */
 	public UnknownExercisePanel(final Project project) {
-		super(new GridBagLayout());
-		this.identificationService = CodeIdentificationService.getInstance();
-		
-		final JPanel inner = new JPanel(new BorderLayout(10, 10));
-		inner.add(new JLabel(DodonaBundle.message(
-			"toolwindow.submissions.unknown")),
-			BorderLayout.PAGE_END
-		);
-		inner.add(ICON_UNKNOWN, BorderLayout.CENTER);
-		inner.addMouseListener((ClickListener) e ->
-			this.identificationService.identifyCurrent(project)
-		);
-		inner.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		this.add(inner, new GridBagConstraints());
+		super(ICON, DodonaBundle.message("panel.unknown_exercise.message"), inner -> {
+			inner.addMouseListener((ClickListener) e ->
+				CodeIdentificationService.getInstance().identifyCurrent(project)
+			);
+			inner.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		});
 	}
 }

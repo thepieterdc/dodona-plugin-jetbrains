@@ -37,7 +37,8 @@ public enum Icons implements Icon {
 	// Other icons.
 	CALENDAR("calendar"),
 	FILE_CODE("file-code"),
-	QUESTION("question");
+	QUESTION("question"),
+	USER_INVALID("user-invalid");
 	
 	@NonNls
 	private static final String ICON_PATH = "/icons/%s.svg";

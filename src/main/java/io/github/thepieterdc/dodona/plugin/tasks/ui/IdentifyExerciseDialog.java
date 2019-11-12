@@ -13,13 +13,13 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.ScrollPaneFactory;
 import com.intellij.util.ui.AsyncProcessIcon;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.api.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
 import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
-import io.github.thepieterdc.dodona.plugin.ui.AsyncContentPanel;
 import io.github.thepieterdc.dodona.plugin.ui.resources.course.CourseComboBox;
 import io.github.thepieterdc.dodona.plugin.ui.resources.exercise.ExercisesList;
 import io.github.thepieterdc.dodona.plugin.ui.resources.series.SeriesComboBox;
+import io.github.thepieterdc.dodona.plugin.ui.util.PanelUtils;
 import io.github.thepieterdc.dodona.resources.Course;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.Series;
@@ -50,7 +50,7 @@ public class IdentifyExerciseDialog extends DialogWrapper {
 	private static final int HEIGHT = 250;
 	private static final int WIDTH = 400;
 	
-	private final DodonaExecutor executor;
+	private final DodonaExecutorHolder executor;
 	private final Project project;
 	
 	private final AsyncProcessIcon loadingIcon;
@@ -73,7 +73,7 @@ public class IdentifyExerciseDialog extends DialogWrapper {
 	 * @param executor request executor
 	 */
 	public IdentifyExerciseDialog(final Project project,
-	                              final DodonaExecutor executor) {
+	                              final DodonaExecutorHolder executor) {
 		super(project, true);
 		this.courseComboBox = new CourseComboBox(this::onCourseSelected);
 		this.executor = executor;
@@ -224,15 +224,16 @@ public class IdentifyExerciseDialog extends DialogWrapper {
 	@Nonnull
 	private CompletableFuture<List<Course>> updateCourses() {
 		// Show the loading cards.
-		AsyncContentPanel.showCard(this.courseSelectionPanel, CARD_LOADING);
-		AsyncContentPanel.showCard(this.seriesSelectionPanel, CARD_LOADING);
-		AsyncContentPanel.showCard(this.exerciseSelectionPanel, CARD_LOADING);
+		PanelUtils.showCard(this.courseSelectionPanel, CARD_LOADING);
+		PanelUtils.showCard(this.seriesSelectionPanel, CARD_LOADING);
+		PanelUtils.showCard(this.exerciseSelectionPanel, CARD_LOADING);
 		
 		// Load the courses.
-		return this.executor.execute(dodona -> dodona.me().getSubscribedCourses())
+		return this.executor.getExecutor()
+			.execute(dodona -> dodona.me().getSubscribedCourses())
 			.whenComplete((courses, error) -> SwingUtilities.invokeLater(() -> {
 				this.courseComboBox.setResources(courses);
-				AsyncContentPanel.showCard(this.courseSelectionPanel, CARD_COURSES);
+				PanelUtils.showCard(this.courseSelectionPanel, CARD_COURSES);
 				
 				// Focus the course panel.
 				this.courseComboBox.requestFocus();
@@ -247,14 +248,15 @@ public class IdentifyExerciseDialog extends DialogWrapper {
 	@Nonnull
 	private CompletableFuture<List<Exercise>> updateExercises(final Series series) {
 		// Show the loading card.
-		AsyncContentPanel.showCard(this.exerciseSelectionPanel, CARD_LOADING);
+		PanelUtils.showCard(this.exerciseSelectionPanel, CARD_LOADING);
 		
 		// Load the exercises.
-		return this.executor.execute(dodona -> dodona.exercises().getAll(series))
+		return this.executor.getExecutor()
+			.execute(dodona -> dodona.exercises().getAll(series))
 			.whenComplete((exercises, error) -> SwingUtilities.invokeLater(() -> {
 				this.exercisesList.setResources(exercises);
 				this.setOKActionEnabled(this.exercisesList.getSelectedResource().isPresent());
-				AsyncContentPanel.showCard(this.exerciseSelectionPanel, CARD_EXERCISES);
+				PanelUtils.showCard(this.exerciseSelectionPanel, CARD_EXERCISES);
 			}));
 	}
 	
@@ -266,14 +268,15 @@ public class IdentifyExerciseDialog extends DialogWrapper {
 	@Nonnull
 	private CompletableFuture<List<Series>> updateSeries(final Course course) {
 		// Show the loading cards.
-		AsyncContentPanel.showCard(this.seriesSelectionPanel, CARD_LOADING);
-		AsyncContentPanel.showCard(this.exerciseSelectionPanel, CARD_LOADING);
+		PanelUtils.showCard(this.seriesSelectionPanel, CARD_LOADING);
+		PanelUtils.showCard(this.exerciseSelectionPanel, CARD_LOADING);
 		
 		// Load the series.
-		return this.executor.execute(dodona -> dodona.series().getAll(course))
+		return this.executor.getExecutor()
+			.execute(dodona -> dodona.series().getAll(course))
 			.whenComplete((series, error) -> SwingUtilities.invokeLater(() -> {
 				this.seriesComboBox.setResources(series);
-				AsyncContentPanel.showCard(this.seriesSelectionPanel, CARD_SERIES);
+				PanelUtils.showCard(this.seriesSelectionPanel, CARD_SERIES);
 			}));
 	}
 }
