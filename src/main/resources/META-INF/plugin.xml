@@ -47,16 +47,15 @@
     <applicationConfigurable
       instance="io.github.thepieterdc.dodona.plugin.settings.DodonaSettingsConfigurable"/>
     <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings"/>
-
-    <!-- Tool window -->
-    <toolWindow id="Dodona" anchor="right" secondary="true"
-                factoryClass="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory"
-                conditionClass="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory"/>
   </extensions>
 
   <project-components>
     <component>
       <implementation-class>io.github.thepieterdc.dodona.plugin.broadcast.EventBroadcaster</implementation-class>
+    </component>
+    <!-- Tool window -->
+    <component>
+      <implementation-class>io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory</implementation-class>
     </component>
     <component>
       <implementation-class>io.github.thepieterdc.dodona.plugin.toolwindow.ToolWindowSynchronizer</implementation-class>

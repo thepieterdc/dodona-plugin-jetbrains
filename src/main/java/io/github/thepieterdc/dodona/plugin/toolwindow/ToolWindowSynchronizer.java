@@ -10,12 +10,11 @@
 package io.github.thepieterdc.dodona.plugin.toolwindow;
 
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.DumbAwareRunnable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
-import com.intellij.openapi.wm.ToolWindowEP;
-import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.util.messages.MessageBusConnection;
 import io.github.thepieterdc.dodona.plugin.settings.listeners.ProjectCourseListener;
@@ -23,7 +22,8 @@ import io.github.thepieterdc.dodona.plugin.settings.listeners.ProjectCourseListe
 /**
  * Displays or hides the tool window.
  */
-public class ToolWindowSynchronizer {
+public class ToolWindowSynchronizer implements DumbAware {
+	private final DodonaToolWindowFactory factory;
 	private final Project project;
 	
 	/**
@@ -32,6 +32,7 @@ public class ToolWindowSynchronizer {
 	 * @param project the current active project
 	 */
 	public ToolWindowSynchronizer(final Project project) {
+		this.factory = project.getComponent(DodonaToolWindowFactory.class);
 		this.project = project;
 		
 		final MessageBusConnection conn = this.project.getMessageBus().connect();
@@ -41,26 +42,45 @@ public class ToolWindowSynchronizer {
 	}
 	
 	/**
+	 * Hides the tool window.
+	 *
+	 * @param mgr the tool window manager
+	 */
+	private static void hide(final ToolWindowManager mgr) {
+		mgr.unregisterToolWindow(DodonaToolWindowFactory.TOOL_WINDOW_ID);
+	}
+	
+	/**
+	 * Shows the tool window.
+	 *
+	 * @param mgr the tool window manager
+	 */
+	private void show(final ToolWindowManager mgr) {
+		final ToolWindow toolWindow = mgr.registerToolWindow(
+			DodonaToolWindowFactory.TOOL_WINDOW_ID,
+			true,
+			ToolWindowAnchor.RIGHT,
+			this.project,
+			false,
+			true
+		);
+		
+		this.factory.createToolWindowContent(toolWindow);
+	}
+	
+	/**
 	 * Updates the state of the ToolWindow visibility.
 	 */
 	private void update() {
 		ApplicationManager.getApplication().invokeLater((DumbAwareRunnable) () -> {
-			for (final ToolWindowEP ep : ToolWindowEP.EP_NAME.getExtensions()) {
-				if (DodonaToolWindowFactory.class.isAssignableFrom(ep.getFactoryClass())) {
-					final ToolWindowFactory factory = ep.getToolWindowFactory();
-					final ToolWindowManager mgr = ToolWindowManager.getInstance(this.project);
-					if (mgr.getToolWindow(DodonaToolWindowFactory.TOOL_WINDOW_ID) == null) {
-						final ToolWindow toolWindow = mgr.registerToolWindow(
-							DodonaToolWindowFactory.TOOL_WINDOW_ID,
-							true,
-							ToolWindowAnchor.RIGHT,
-							this.project,
-							false,
-							true
-						);
-						factory.createToolWindowContent(this.project, toolWindow);
-					}
-				}
+			final ToolWindowManager mgr = ToolWindowManager.getInstance(this.project);
+			final ToolWindow window = mgr
+				.getToolWindow(DodonaToolWindowFactory.TOOL_WINDOW_ID);
+			
+			if (this.factory.validate() && window == null) {
+				this.show(mgr);
+			} else if (!this.factory.validate() && window != null) {
+				hide(mgr);
 			}
 		});
 	}

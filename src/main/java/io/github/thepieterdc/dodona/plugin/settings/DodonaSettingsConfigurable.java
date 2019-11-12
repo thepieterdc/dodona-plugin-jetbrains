@@ -35,7 +35,7 @@ public class DodonaSettingsConfigurable extends ConfigurableBase<DodonaSettingsP
 	 * @param accountManager account manager
 	 */
 	DodonaSettingsConfigurable(final DodonaAccountManager accountManager) {
-		super(DodonaSettingsConfigurable.SETTINGS_ID, DodonaBundle.NAME, DodonaSettingsConfigurable.HELP_TOPIC);
+		super(SETTINGS_ID, DodonaBundle.NAME, HELP_TOPIC);
 		this.accountManager = accountManager;
 	}
 	

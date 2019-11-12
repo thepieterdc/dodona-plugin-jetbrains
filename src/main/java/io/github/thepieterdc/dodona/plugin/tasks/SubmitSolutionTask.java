@@ -23,7 +23,6 @@ import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
 import io.github.thepieterdc.dodona.plugin.notifications.ErrorReporter;
-import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
 import io.github.thepieterdc.dodona.plugin.submission.SubmissionCreatedListener;
 import io.github.thepieterdc.dodona.plugin.submission.SubmissionEvaluatedListener;
 import io.github.thepieterdc.dodona.resources.Exercise;
@@ -51,7 +50,6 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	
 	private final DodonaExecutor executor;
 	private final FeedbackService feedback;
-	private final DodonaProjectSettings projectSettings;
 	
 	/**
 	 * SubmitSolutionTask constructor.
@@ -69,7 +67,6 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 		this.executor = DodonaAuthenticator.getInstance().getExecutor();
 		this.feedback = FeedbackService.getInstance(project);
 		this.identification = exercise;
-		this.projectSettings = DodonaProjectSettings.getInstance(project);
 	}
 	
 	/**
@@ -172,9 +169,6 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	@Override
 	public void run(@NotNull final ProgressIndicator progress) {
 		try {
-			// Set the project course if this had not been set yet.
-			this.identification.getCourseId().ifPresent(this.projectSettings::setCourseId);
-			
 			// Update the progress bar.
 			progress.setIndeterminate(true);
 			progress.setText(
