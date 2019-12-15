@@ -7,15 +7,14 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.ui.resources.submission;
+package io.github.thepieterdc.dodona.plugin.ui.resources.submission.details;
 
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.Disposer;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.resources.Exercise;
-import io.github.thepieterdc.dodona.resources.submissions.Submission;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +22,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * Dialog that shows the details of a submission.
@@ -36,30 +34,22 @@ public final class SubmissionDetailsDialog extends DialogWrapper implements Disp
 	/**
 	 * SubmissionCodeDialog constructor.
 	 *
-	 * @param project           the current project
-	 * @param parent            parent component
+	 * @param project        the current project
+	 * @param executor       holder for the request executor
 	 * @param submissionInfo the submission details
-	 * @param futureExercise    exercise request
-	 * @param futureSubmission  submission request
+	 * @param parent         parent component
 	 */
 	public SubmissionDetailsDialog(final Project project,
-	                               @Nullable final Component parent,
+	                               final DodonaExecutorHolder executor,
 	                               final SubmissionInfo submissionInfo,
-	                               final CompletableFuture<Exercise> futureExercise,
-	                               final CompletableFuture<Submission> futureSubmission) {
+	                               @Nullable final Component parent) {
 		super(project, parent, false, IdeModalityType.PROJECT);
-		
 		this.detailsPanel = new SubmissionDetailsPanel(
-			project, submissionInfo, futureExercise, futureSubmission
+			project, executor, submissionInfo
 		);
 		
-		// Set the default title of the dialog.
-		this.setTitle(DodonaBundle.message("dialog.submission_details.title.default"));
-		
-		// When the exercise is loaded, change the title.
-		futureExercise.whenComplete((exercise, error) -> this.setTitle(
-			DodonaBundle.message("dialog.submission_details.title.exercise",
-				exercise.getName())));
+		// Set the title of the dialog.
+		this.setTitle(DodonaBundle.message("dialog.submission_details.title"));
 		
 		this.init();
 	}

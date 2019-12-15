@@ -9,10 +9,14 @@
 
 package io.github.thepieterdc.dodona.plugin.ui;
 
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.resources.Course;
+import io.github.thepieterdc.dodona.resources.Series;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.time.ZonedDateTime;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -32,10 +36,10 @@ public class Deadline implements Comparable<Deadline> {
 	 * @param seriesName the name of the series
 	 * @param deadline   the deadline
 	 */
-	public Deadline(final long courseId,
-	                final String courseName,
-	                final String seriesName,
-	                final ZonedDateTime deadline) {
+	private Deadline(final long courseId,
+	                 final String courseName,
+	                 final String seriesName,
+	                 final ZonedDateTime deadline) {
 		this.courseId = courseId;
 		this.courseName = courseName;
 		this.deadline = deadline;
@@ -101,5 +105,23 @@ public class Deadline implements Comparable<Deadline> {
 	@Override
 	public int hashCode() {
 		return Objects.hash(this.courseName, this.seriesName, this.deadline);
+	}
+	
+	/**
+	 * Parses a series to a deadline object.
+	 *
+	 * @param courses map from course ids to course names
+	 * @param series  the series to convert
+	 */
+	@Nonnull
+	public static Deadline parse(final Map<Long, String> courses,
+	                             final Series series) {
+		return new Deadline(
+			Course.getId(series.getCourseUrl()).orElse(0L),
+			Course.getId(series.getCourseUrl()).map(courses::get)
+				.orElse(DodonaBundle.message("course.unknown")),
+			series.getName(),
+			series.getDeadline().orElseThrow(RuntimeException::new)
+		);
 	}
 }

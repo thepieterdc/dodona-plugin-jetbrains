@@ -13,6 +13,7 @@ import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.components.JBList;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.ui.Deadline;
+import io.github.thepieterdc.dodona.plugin.ui.panels.async.AsyncPanelContent;
 
 import javax.annotation.Nullable;
 import javax.swing.*;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * Renders a list of deadlines.
  */
-final class DeadlinesList extends JBList<Deadline> {
+final class DeadlinesList extends JBList<Deadline> implements AsyncPanelContent<List<Deadline>> {
 	private final CollectionListModel<Deadline> model;
 	private final DeadlineListCellRenderer renderer;
 	
@@ -41,6 +42,15 @@ final class DeadlinesList extends JBList<Deadline> {
 	}
 	
 	/**
+	 * Gets the amount of items in the list.
+	 *
+	 * @return the amount of items
+	 */
+	public int listSize() {
+		return this.model.getSize();
+	}
+	
+	/**
 	 * Sets the current course.
 	 *
 	 * @param course the current course
@@ -49,12 +59,8 @@ final class DeadlinesList extends JBList<Deadline> {
 		this.renderer.setCurrentCourse(course);
 	}
 	
-	/**
-	 * Set the deadlines in the list.
-	 *
-	 * @param deadlines the deadlines
-	 */
-	void setDeadlines(final List<? extends Deadline> deadlines) {
+	@Override
+	public void update(final List<Deadline> deadlines) {
 		this.model.replaceAll(deadlines);
 	}
 }

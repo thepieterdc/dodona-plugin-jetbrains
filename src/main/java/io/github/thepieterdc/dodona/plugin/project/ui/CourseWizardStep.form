@@ -16,7 +16,7 @@
           <text resource-bundle="messages/Dodona" key="module.course"/>
         </properties>
       </component>
-      <grid id="d872d" binding="coursesPanel" layout-manager="CardLayout" hgap="0" vgap="0">
+      <grid id="d872d" class="io.github.thepieterdc.dodona.plugin.project.ui.CourseListPanel" binding="coursesPanel" custom-create="true" layout-manager="CardLayout" hgap="0" vgap="0">
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
         </constraints>

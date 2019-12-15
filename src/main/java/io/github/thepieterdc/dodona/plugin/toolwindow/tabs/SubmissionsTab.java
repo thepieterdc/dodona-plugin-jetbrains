@@ -29,8 +29,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
 import java.awt.*;
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -45,7 +45,7 @@ public class SubmissionsTab extends AbstractTab {
 	@NonNls
 	private static final String CARD_UNKNOWN = "SUBMISSIONS_UNKNOWN";
 	
-	private final Collection<String> cards;
+	private final Map<String, SubmissionsPanel> cards;
 	
 	private final JPanel panel;
 	
@@ -62,7 +62,7 @@ public class SubmissionsTab extends AbstractTab {
 	public SubmissionsTab(final Project project,
 	                      final DodonaExecutorHolder executor) {
 		super(TAB_TITLE);
-		this.cards = new HashSet<>(5);
+		this.cards = new HashMap<>(5);
 		this.executor = executor;
 		this.identificationService = IdentificationService.getInstance();
 		this.panel = new JPanel(new CardLayout(0, 0));
@@ -97,15 +97,19 @@ public class SubmissionsTab extends AbstractTab {
 		final String cardName = identification.toString();
 		
 		// Attempt to recycle a previous card.
-		if (!this.cards.contains(cardName)) {
+		if (!this.cards.containsKey(cardName)) {
 			// Create a new card.
-			final SubmissionsPanel card = SubmissionsPanel.create(
+			final SubmissionsPanel card = new SubmissionsPanel(
 				this.project, this.executor, identification
 			);
 			
-			this.cards.add(cardName);
+			this.cards.put(cardName, card);
 			this.panel.add(card, cardName);
 		}
+		
+		// Get the card and refresh the list of submissions.
+		final SubmissionsPanel card = this.cards.get(cardName);
+		card.requestUpdate();
 		
 		PanelUtils.showCard(this.panel, cardName);
 	}
