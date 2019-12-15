@@ -10,6 +10,7 @@ package io.github.thepieterdc.dodona.plugin.ui;
 
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.util.IconUtil;
+import com.intellij.util.ui.AnimatedIcon;
 import io.github.thepieterdc.dodona.data.CourseColor;
 import org.jetbrains.annotations.NonNls;
 
@@ -36,9 +37,15 @@ public enum Icons implements Icon {
 	EXERCISE_WRONG("exercise-wrong"),
 	// Other icons.
 	CALENDAR("calendar"),
+	DEADLINES_CHECK("deadlines-check"),
+	ERROR("error"),
 	FILE_CODE("file-code"),
+	NO_CONNECTION("no-connection"),
 	QUESTION("question"),
 	USER_INVALID("user-invalid");
+	
+	@NonNls
+	private static final String COMPONENT_PREFIX = "ICON_%s";
 	
 	@NonNls
 	private static final String ICON_PATH = "/icons/%s.svg";
@@ -101,5 +108,17 @@ public enum Icons implements Icon {
 	public void paintIcon(final Component c, final Graphics g, final int x,
 	                      final int y) {
 		this.icon.paintIcon(c, g, x, y);
+	}
+	
+	/**
+	 * Converts the given icon to a component.
+	 *
+	 * @param icon the icon to convert
+	 * @return the component
+	 */
+	@Nonnull
+	public static JComponent toComponent(final Icon icon) {
+		final String name = String.format(COMPONENT_PREFIX, icon);
+		return new AnimatedIcon(name, new Icon[0], icon, 0);
 	}
 }

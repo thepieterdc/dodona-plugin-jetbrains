@@ -13,6 +13,7 @@ import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBTabbedPane;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.ui.listeners.ItemSelectedListener;
+import io.github.thepieterdc.dodona.plugin.ui.panels.async.AsyncPanelContent;
 import io.github.thepieterdc.dodona.resources.Course;
 import org.jetbrains.annotations.NonNls;
 
@@ -22,14 +23,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * A list of courses, divided by academic year.
  */
-public class TabbedCourseList extends JBTabbedPane {
+public class TabbedCourseList extends JBTabbedPane implements AsyncPanelContent<List<Course>> {
 	private final Collection<ItemSelectedListener<Course>> listeners;
 	
 	@Nullable
@@ -106,11 +112,19 @@ public class TabbedCourseList extends JBTabbedPane {
 	}
 	
 	/**
-	 * Sets the courses the user can choose from.
+	 * Sets the selected course.
 	 *
-	 * @param courses the courses
+	 * @param course the selected course
 	 */
-	public void setCourses(final Collection<? extends Course> courses) {
+	private void setSelectedCourse(@Nullable final Course course) {
+		if (!Objects.equals(this.selectedCourse, course)) {
+			this.selectedCourse = course;
+			this.listeners.forEach(listener -> listener.onItemSelected(course));
+		}
+	}
+	
+	@Override
+	public void update(final List<Course> courses) {
 		// Remove the previous tabs.
 		this.removeAll();
 		
@@ -125,22 +139,10 @@ public class TabbedCourseList extends JBTabbedPane {
 				this.add(e.getKey(), this.createTab(e.getKey(), e.getValue()))
 			);
 		
-		// Failsafe for empty courses.
+		// Failsafe in case no courses were subscribed to.
 		if (courses.isEmpty()) {
-			final String year = TabbedCourseList.getAcademicYear();
+			final String year = getAcademicYear();
 			this.add(year, this.createTab(year, Collections.emptyList()));
-		}
-	}
-	
-	/**
-	 * Sets the selected course.
-	 *
-	 * @param course the selected course
-	 */
-	private void setSelectedCourse(@Nullable final Course course) {
-		if (!Objects.equals(this.selectedCourse, course)) {
-			this.selectedCourse = course;
-			this.listeners.forEach(listener -> listener.onItemSelected(course));
 		}
 	}
 }

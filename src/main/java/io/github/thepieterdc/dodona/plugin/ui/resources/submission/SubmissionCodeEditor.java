@@ -16,94 +16,95 @@ import com.intellij.openapi.editor.EditorFactory;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.UnknownFileType;
 import com.intellij.openapi.project.Project;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.code.DodonaFileType;
-import io.github.thepieterdc.dodona.plugin.ui.util.PanelUtils;
+import io.github.thepieterdc.dodona.plugin.code.SolutionWithLanguage;
+import io.github.thepieterdc.dodona.plugin.ui.panels.async.DynamicAsyncPanel;
 import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.ProgrammingLanguage;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
-import org.jetbrains.annotations.NonNls;
+import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Panel that displays the code of a submission.
  */
-final class SubmissionCodeEditor extends JPanel implements Disposable {
-	@NonNls
-	private static final String CARD_EDITOR = "CODE_EDITOR";
-	@NonNls
-	private static final String CARD_LOADING = "CODE_LOADING";
-	
-	private final Project project;
+public final class SubmissionCodeEditor
+	extends DynamicAsyncPanel<SolutionWithLanguage>
+	implements Disposable {
 	
 	private final EditorFactory editorFactory;
+	private final DodonaExecutorHolder executor;
+	private final Project project;
 	
 	@Nullable
 	private Editor editor;
 	
+	private final SubmissionInfo submissionInfo;
+	
 	/**
-	 * SubmissionDetails constructor.
+	 * SubmissionCodeEditor constructor.
 	 *
-	 * @param project the current active project
+	 * @param project        the current active project
+	 * @param executor       the holder for the request executor
+	 * @param submissionInfo submission details
 	 */
-	SubmissionCodeEditor(final Project project) {
-		super(new CardLayout(0, 0));
+	public SubmissionCodeEditor(final Project project,
+	                            final DodonaExecutorHolder executor,
+	                            final SubmissionInfo submissionInfo) {
+		super(DodonaBundle.message("dialog.submission_details.loading"));
 		this.editorFactory = EditorFactory.getInstance();
+		this.executor = executor;
 		this.project = project;
-		this.initialize();
+		this.submissionInfo = submissionInfo;
+	}
+	
+	@Nonnull
+	@Override
+	protected Component createContentPane(final SolutionWithLanguage submission) {
+		final Document document = this.editorFactory
+			.createDocument(submission.getCode());
+		document.setReadOnly(true);
+		
+		final FileType fileType = submission.getProgrammingLanguage()
+			.flatMap(DodonaFileType::find)
+			.orElse(UnknownFileType.INSTANCE);
+		
+		this.editor = this.editorFactory
+			.createEditor(document, this.project, fileType, true);
+		return this.editor.getComponent();
 	}
 	
 	@Override
 	public void dispose() {
 		if (this.editor != null) {
 			this.editorFactory.releaseEditor(this.editor);
+			this.editor = null;
 		}
 	}
 	
-	/**
-	 * Initializes the components.
-	 */
-	private void initialize() {
-		// Create a loading card.
-		final JScrollPane loadingCard = PanelUtils.createLoading(
-			this,
-			this.getClass(),
-			"dialog.submission_details.loading"
+	@Nonnull
+	@Override
+	protected CompletableFuture<SolutionWithLanguage> getData() {
+		// Get the programming language.
+		final CompletableFuture<ProgrammingLanguage> language = this.executor
+			.getExecutor()
+			.execute(dodona -> dodona.exercises().get(this.submissionInfo))
+			.thenApply(Exercise::getProgrammingLanguage)
+			.thenApply(optLanguage -> optLanguage.orElse(null));
+		
+		// Get the solution code.
+		final CompletableFuture<Submission> futureSubmission = this.executor
+			.getExecutor()
+			.execute(dodona -> dodona.submissions().get(this.submissionInfo));
+		
+		return futureSubmission.thenComposeAsync(submission -> language
+			.thenApply(lang -> new SolutionWithLanguage(submission, lang))
 		);
-		
-		// Add the loading card.
-		this.add(loadingCard, CARD_LOADING);
-	}
-	
-	/**
-	 * Shows the given submission in the card.
-	 *
-	 * @param exercise   the exercise
-	 * @param submission the submission
-	 */
-	void submissionLoaded(final Exercise exercise,
-	                      final Submission submission) {
-		final Document document = this.editorFactory
-			.createDocument(submission.getCode());
-		document.setReadOnly(true);
-		
-		final FileType fileType = exercise.getProgrammingLanguage()
-			.flatMap(DodonaFileType::find)
-			.orElse(UnknownFileType.INSTANCE);
-		
-		SwingUtilities.invokeLater(() -> {
-			this.editor = this.editorFactory.createEditor(
-				document, this.project, fileType, true
-			);
-			
-			final JPanel editorCard = new JPanel(new BorderLayout());
-			editorCard.add(Objects.requireNonNull(this.editor).getComponent(), BorderLayout.CENTER);
-			
-			this.add(editorCard, CARD_EDITOR);
-			
-			PanelUtils.showCard(this, CARD_EDITOR);
-		});
 	}
 }
