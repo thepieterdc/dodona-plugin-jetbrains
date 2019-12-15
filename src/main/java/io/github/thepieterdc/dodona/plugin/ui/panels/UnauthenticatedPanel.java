@@ -30,6 +30,6 @@ public final class UnauthenticatedPanel extends IconTextPanel {
 	 * UnauthenticatedPanel constructor.
 	 */
 	public UnauthenticatedPanel() {
-		super(ICON, DodonaBundle.message("panel.unauthenticated.message"));
+		super(ICON, DodonaBundle.message("panel.unauth.failed.message"));
 	}
 }

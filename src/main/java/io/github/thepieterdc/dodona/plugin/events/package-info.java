@@ -8,9 +8,9 @@
  */
 
 /**
- * Broadcasters for custom events.
+ * Handlers for custom events.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.broadcast;
+package io.github.thepieterdc.dodona.plugin.events;
 
 import javax.annotation.ParametersAreNonnullByDefault;

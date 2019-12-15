@@ -29,6 +29,7 @@ public interface CurrentExerciseListener {
 	 * be null if there are no opened files. The identification will be null if
 	 * the exercise could not be identified.
 	 *
+	 * @param file           the current opened file
 	 * @param identification the identification of the exercise
 	 */
 	void onCurrentExercise(@Nullable VirtualFile file,
