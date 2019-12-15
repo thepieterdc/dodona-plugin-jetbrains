@@ -1,59 +1,24 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
-package be.ugent.piedcler.dodona.plugin.toolwindow;
 
-import io.github.thepieterdc.dodona.plugin.toolwindow.tabs.SubmissionsTab;
-import com.intellij.openapi.fileEditor.FileEditorManager;
+package io.github.thepieterdc.dodona.plugin.toolwindow;
+
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.openapi.wm.ToolWindow;
-
-import javax.annotation.Nonnull;
+import com.intellij.openapi.startup.StartupActivity;
 
 /**
- * Tool window containing last submissions for the current exercise.
+ * Displays the tool window when the project is opened.
  */
-public class DodonaToolWindowInitialiser {
-	private final Project project;
-	private ToolWindow toolWindow;
-	
-	/**
-	 * DodonaToolWindowView constructor.
-	 *
-	 * @param project current active project
-	 */
-	public DodonaToolWindowInitialiser(@Nonnull final Project project) {
-		this.project = project;
-	}
-	
-	/**
-	 * Creates a new tool window view.
-	 *
-	 * @param project current active project
-	 * @return instance
-	 */
-	public static be.ugent.piedcler.dodona.plugin.toolwindow.DodonaToolWindowInitialiser getInstance(@Nonnull final Project project) {
-		return project.getComponent(be.ugent.piedcler.dodona.plugin.toolwindow.DodonaToolWindowInitialiser.class);
-	}
-	
-	void initToolWindow(@Nonnull final ToolWindow toolWindow) {
-		if (this.toolWindow != null) {
-			return;
-		}
-		
-		final SubmissionsTab submissionsTab = new SubmissionsTab(this.project);
-		
-		this.toolWindow = toolWindow;
-		this.toolWindow.getContentManager().addContent(submissionsTab.getContent());
-		this.toolWindow.setToHideOnEmptyContent(true);
-		
-		final VirtualFile[] files = FileEditorManager.getInstance(this.project).getSelectedFiles();
-		submissionsTab.loadFile(files.length == 0 ? null : files[0]);
+public class DodonaToolWindowInitialiser implements StartupActivity {
+	@Override
+	public void runActivity(final Project project) {
+		// Determine whether the tool window should be shown now.
+		project.getComponent(DodonaToolWindowFactory.class).update();
 	}
 }

@@ -47,18 +47,15 @@
     <applicationConfigurable
       instance="io.github.thepieterdc.dodona.plugin.settings.DodonaSettingsConfigurable"/>
     <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings"/>
+
+    <!-- ToolWindow -->
+    <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory"/>
+    <postStartupActivity implementation="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowInitialiser"/>
   </extensions>
 
   <project-components>
     <component>
-      <implementation-class>io.github.thepieterdc.dodona.plugin.broadcast.EventBroadcaster</implementation-class>
-    </component>
-    <!-- Tool window -->
-    <component>
-      <implementation-class>io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory</implementation-class>
-    </component>
-    <component>
-      <implementation-class>io.github.thepieterdc.dodona.plugin.toolwindow.ToolWindowSynchronizer</implementation-class>
+      <implementation-class>io.github.thepieterdc.dodona.plugin.events.ExerciseOpenedBroadcaster</implementation-class>
     </component>
   </project-components>
 

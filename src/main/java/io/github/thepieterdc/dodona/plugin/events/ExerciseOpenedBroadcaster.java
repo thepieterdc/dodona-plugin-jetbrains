@@ -7,7 +7,7 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.broadcast;
+package io.github.thepieterdc.dodona.plugin.events;
 
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
@@ -23,23 +23,30 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 /**
- * Listens for file manager events to determine the current opened exercise.
+ * Listens for file manager events to determine the current opened exercise. This
+ * should be listed directly in plugin.xml when the API has matured.
  */
-class CurrentExerciseBroadcaster implements FileEditorManagerListener {
+public class ExerciseOpenedBroadcaster implements FileEditorManagerListener {
 	private final IdentificationService identificationService;
 	
 	private final MessageBus bus;
 	private final Project project;
 	
 	/**
-	 * CurrentExerciseBroadcaster constructor.
+	 * ExerciseOpenedBroadcaster constructor.
 	 *
 	 * @param project current active project
 	 */
-	CurrentExerciseBroadcaster(final Project project) {
+	public ExerciseOpenedBroadcaster(final Project project) {
 		this.bus = project.getMessageBus();
 		this.identificationService = IdentificationService.getInstance();
 		this.project = project;
+		
+		// Listen for the current opened exercise.
+		this.bus.connect().subscribe(
+			FileEditorManagerListener.FILE_EDITOR_MANAGER,
+			this
+		);
 	}
 	
 	@Override
