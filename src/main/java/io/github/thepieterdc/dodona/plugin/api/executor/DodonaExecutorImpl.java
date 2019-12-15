@@ -85,7 +85,16 @@ class DodonaExecutorImpl implements DodonaExecutor {
 	public <T> DodonaFuture<T> execute(final Function<? super DodonaClient, ? extends T> call) {
 		final DodonaFuture<T> ret = new DodonaFuture<>();
 		ApplicationManager.getApplication().executeOnPooledThread(() -> {
-			final T response = call.apply(this.client);
+			final T response;
+			
+			try {
+				response = call.apply(this.client);
+			} catch (final RuntimeException ex) {
+				ret.completeExceptionally(ex);
+				return;
+			}
+			
+			// Successful.
 			ret.complete(response);
 		});
 		return ret;

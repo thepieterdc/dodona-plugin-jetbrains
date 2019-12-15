@@ -17,28 +17,27 @@ import javax.annotation.Nonnull;
 import javax.swing.*;
 
 /**
- * Panel to display when the user has entered incorrect authentication
- * credentials.
+ * Panel to display when the user is not connected to the internet.
  */
-public final class UnauthenticatedPanel extends IconTextPanel {
+public final class NoConnectionPanel extends IconTextPanel {
 	private static final JComponent ICON = Icons.toComponent(
-		Icons.USER_INVALID.color(TextColors.SECONDARY)
+		Icons.NO_CONNECTION.color(TextColors.SECONDARY)
 	);
 	
 	/**
-	 * UnauthenticatedPanel constructor.
+	 * NoConnectionPanel constructor.
 	 */
-	private UnauthenticatedPanel() {
-		super(ICON, DodonaBundle.message("panel.unauthenticated.message"));
+	public NoConnectionPanel() {
+		super(ICON, DodonaBundle.message("panel.no_connection.message"));
 	}
 	
 	/**
-	 * Creates a new instance of the UnauthenticatedPanel.
+	 * Creates a new instance of the NoConnectionPanel.
 	 *
 	 * @return the instance
 	 */
 	@Nonnull
-	public static UnauthenticatedPanel create() {
-		return new UnauthenticatedPanel();
+	public static NoConnectionPanel create() {
+		return new NoConnectionPanel();
 	}
 }
