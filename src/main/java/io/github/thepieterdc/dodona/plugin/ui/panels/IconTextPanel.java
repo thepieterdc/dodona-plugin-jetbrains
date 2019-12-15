@@ -10,6 +10,7 @@
 package io.github.thepieterdc.dodona.plugin.ui.panels;
 
 import com.intellij.ui.ScrollPaneFactory;
+import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
@@ -20,14 +21,25 @@ import java.util.function.Consumer;
 /**
  * Common panel that displays an icon and a line of text.
  */
-abstract class IconTextPanel extends JPanel {
+public class IconTextPanel extends JPanel {
 	/**
 	 * IconTextPanel constructor.
 	 *
 	 * @param icon the icon to display
 	 * @param text the text to display underneath the icon
 	 */
-	IconTextPanel(final JComponent icon, @Nls final String text) {
+	public IconTextPanel(final Icon icon, @Nls final String text) {
+		this(Icons.toComponent(icon), text, inner -> {
+		});
+	}
+	
+	/**
+	 * IconTextPanel constructor.
+	 *
+	 * @param icon the icon to display
+	 * @param text the text to display underneath the icon
+	 */
+	public IconTextPanel(final JComponent icon, @Nls final String text) {
 		this(icon, text, inner -> {
 		});
 	}

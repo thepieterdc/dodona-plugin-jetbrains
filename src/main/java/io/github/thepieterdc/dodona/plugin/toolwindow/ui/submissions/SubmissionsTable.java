@@ -12,15 +12,16 @@ package io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions;
 import com.intellij.ui.table.JBTable;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.ui.listeners.DoubleClickListener;
+import io.github.thepieterdc.dodona.plugin.ui.panels.async.AsyncPanelContent;
 import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
  * Renders a table of submissions.
  */
-public final class SubmissionsTable extends JBTable {
+public final class SubmissionsTable extends JBTable implements AsyncPanelContent<List<SubmissionInfo>> {
 	private final SubmissionsTableModel model;
 	
 	/**
@@ -59,15 +60,6 @@ public final class SubmissionsTable extends JBTable {
 	}
 	
 	/**
-	 * Sets the submissions in the table.
-	 *
-	 * @param submissions the submissions to set
-	 */
-	void setSubmissions(final Collection<? extends SubmissionInfo> submissions) {
-		this.model.replaceItems(submissions);
-	}
-	
-	/**
 	 * Adds a newly created submission.
 	 *
 	 * @param submission the created submission
@@ -83,5 +75,10 @@ public final class SubmissionsTable extends JBTable {
 	 */
 	public void submissionEvaluated(final SubmissionInfo submission) {
 		this.model.update(submission);
+	}
+	
+	@Override
+	public void update(final List<SubmissionInfo> submissions) {
+		this.model.replaceItems(submissions);
 	}
 }
