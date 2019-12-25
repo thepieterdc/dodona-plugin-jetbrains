@@ -14,10 +14,8 @@ import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.code.identification.CodeIdentificationService;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.plugin.ui.TextColors;
-import io.github.thepieterdc.dodona.plugin.ui.listeners.ClickListener;
 
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * Panel to display when the exercise could not be identified.
@@ -33,11 +31,8 @@ public final class UnknownExercisePanel extends IconTextPanel {
 	 * @param project the current active project
 	 */
 	public UnknownExercisePanel(final Project project) {
-		super(ICON, DodonaBundle.message("panel.unknown_exercise.message"), inner -> {
-			inner.addMouseListener((ClickListener) e ->
-				CodeIdentificationService.getInstance().identifyCurrent(project)
-			);
-			inner.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		});
+		super(ICON, DodonaBundle.message("panel.unknown_exercise.message"),
+			() -> CodeIdentificationService.getInstance().identifyCurrent(project)
+		);
 	}
 }

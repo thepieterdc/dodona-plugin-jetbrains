@@ -10,6 +10,7 @@
 package io.github.thepieterdc.dodona.plugin.ui.panels.async;
 
 import io.github.thepieterdc.dodona.exceptions.AuthenticationException;
+import io.github.thepieterdc.dodona.plugin.ui.Updatable;
 import io.github.thepieterdc.dodona.plugin.ui.panels.LoadingPanel;
 import io.github.thepieterdc.dodona.plugin.ui.panels.NoConnectionPanel;
 import io.github.thepieterdc.dodona.plugin.ui.panels.UnauthenticatedPanel;
@@ -27,7 +28,7 @@ import java.util.concurrent.CompletableFuture;
  *
  * @param <T> type class of the content
  */
-abstract class AsyncPanelBase<T> extends JPanel {
+abstract class AsyncPanelBase<T> extends JPanel implements Updatable {
 	@NonNls
 	static final String CARD_CONTENT = "ASYNC_CONTENT";
 	@NonNls
@@ -83,7 +84,7 @@ abstract class AsyncPanelBase<T> extends JPanel {
 			.wrap();
 		
 		// Create a no connection card.
-		final JScrollPane noConnection = NoConnectionPanel.create().wrap();
+		final JScrollPane noConnection = NoConnectionPanel.create(this).wrap();
 		
 		// Create an unauthenticated card.
 		final JScrollPane unauthenticated = UnauthenticatedPanel.create().wrap();
@@ -93,11 +94,6 @@ abstract class AsyncPanelBase<T> extends JPanel {
 		this.add(noConnection, CARD_NO_CONNECTION);
 		this.add(unauthenticated, CARD_UNAUTHENTICATED);
 	}
-	
-	/**
-	 * Requests an update of the content.
-	 */
-	public abstract void requestUpdate();
 	
 	/**
 	 * Displays the card with the given name.
