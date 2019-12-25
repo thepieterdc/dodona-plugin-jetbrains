@@ -44,14 +44,12 @@ public class DodonaAccountManager implements PersistentStateComponent<DodonaAcco
 	private DodonaAccount account;
 	
 	private final MessageBus bus;
-	private final PasswordSafe passwordSafe;
 	
 	/**
 	 * DodonaAccountManager constructor.
 	 */
 	public DodonaAccountManager() {
 		this.bus = ApplicationManager.getApplication().getMessageBus();
-		this.passwordSafe = ServiceManager.getService(PasswordSafe.class);
 	}
 	
 	/**
@@ -59,7 +57,7 @@ public class DodonaAccountManager implements PersistentStateComponent<DodonaAcco
 	 */
 	public void clearAccount() {
 		// Clear the token if there is an account set.
-		Optional.ofNullable(this.account).ifPresent(acc -> this.passwordSafe.set(
+		Optional.ofNullable(this.account).ifPresent(acc -> PasswordSafe.getInstance().set(
 			this.createCredentialAttributes(acc),
 			null
 		));
@@ -72,7 +70,7 @@ public class DodonaAccountManager implements PersistentStateComponent<DodonaAcco
 		
 		// Broadcast the removal of the account.
 		if (hadAccount) {
-			this.bus.syncPublisher(AccountRemovedListener.REMOVED_TOPIC).removed();
+			this.bus.syncPublisher(AccountListener.UPDATED_TOPIC).updated();
 		}
 	}
 	
@@ -137,7 +135,7 @@ public class DodonaAccountManager implements PersistentStateComponent<DodonaAcco
 	public Optional<String> getToken() {
 		return this.getAccount()
 			.map(this::createCredentialAttributes)
-			.map(this.passwordSafe::get)
+			.map(PasswordSafe.getInstance()::get)
 			.map(Credentials::getPasswordAsString);
 	}
 	
@@ -171,12 +169,12 @@ public class DodonaAccountManager implements PersistentStateComponent<DodonaAcco
 		this.account = account;
 		
 		// Set the new account token.
-		this.passwordSafe.set(
+		PasswordSafe.getInstance().set(
 			this.createCredentialAttributes(account),
 			new Credentials(account.getId(), token)
 		);
 		
 		// Broadcast the new account.
-		this.bus.syncPublisher(AccountAddedListener.ADDED_TOPIC).added();
+		this.bus.syncPublisher(AccountListener.UPDATED_TOPIC).updated();
 	}
 }
