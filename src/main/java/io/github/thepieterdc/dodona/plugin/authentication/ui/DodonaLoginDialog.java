@@ -75,7 +75,7 @@ public final class DodonaLoginDialog extends DialogWrapper {
 		return JBUI.Panels.simplePanel()
 			.addToCenter(LinkLabel.create(
 				DodonaBundle.message("auth.dialog.instructions"),
-				() -> BrowserUtil.browse(DodonaLoginDialog.API_TOKEN_URL)))
+				() -> BrowserUtil.browse(API_TOKEN_URL)))
 			.addToRight(new JBLabel(AllIcons.Ide.External_link_arrow));
 	}
 	

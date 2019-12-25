@@ -57,7 +57,7 @@ public final class SubmissionCodeEditor
 	public SubmissionCodeEditor(final Project project,
 	                            final DodonaExecutorHolder executor,
 	                            final SubmissionInfo submissionInfo) {
-		super(DodonaBundle.message("dialog.submission_details.loading"));
+		super(project, DodonaBundle.message("dialog.submission_details.loading"));
 		this.editorFactory = EditorFactory.getInstance();
 		this.executor = executor;
 		this.project = project;

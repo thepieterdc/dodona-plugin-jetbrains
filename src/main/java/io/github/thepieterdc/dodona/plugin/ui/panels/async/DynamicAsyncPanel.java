@@ -9,6 +9,7 @@
 
 package io.github.thepieterdc.dodona.plugin.ui.panels.async;
 
+import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
@@ -28,10 +29,12 @@ public abstract class DynamicAsyncPanel<T> extends AsyncPanelBase<T> {
 	/**
 	 * DynamicAsyncPanel constructor.
 	 *
+	 * @param project     current active project
 	 * @param loadingText the loading text to display underneath the spinner
 	 */
-	protected DynamicAsyncPanel(@Nls final String loadingText) {
-		super(loadingText);
+	protected DynamicAsyncPanel(@Nullable final Project project,
+	                            @Nls final String loadingText) {
+		super(project, loadingText);
 	}
 	
 	/**

@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Displays error notifications and logs them.
  */
-public class ErrorReporter {
+public final class ErrorReporter {
 	private static final Logger logger = LoggerFactory.getLogger(ErrorReporter.class);
 	
 	/**

@@ -49,8 +49,8 @@
     <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings"/>
 
     <!-- ToolWindow -->
-    <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory"/>
     <postStartupActivity implementation="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowInitialiser"/>
+    <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory"/>
   </extensions>
 
   <project-components>
