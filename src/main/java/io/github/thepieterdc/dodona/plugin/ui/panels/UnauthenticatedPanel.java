@@ -9,12 +9,16 @@
 
 package io.github.thepieterdc.dodona.plugin.ui.panels;
 
+import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.plugin.ui.TextColors;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Panel to display when the user has entered incorrect authentication
@@ -27,18 +31,27 @@ public final class UnauthenticatedPanel extends IconTextPanel {
 	
 	/**
 	 * UnauthenticatedPanel constructor.
+	 *
+	 * @param project current active project
+	 * @param parent  parent component
 	 */
-	private UnauthenticatedPanel() {
-		super(ICON, DodonaBundle.message("panel.unauthenticated.message"));
+	private UnauthenticatedPanel(@Nullable final Project project,
+	                             @Nullable final Component parent) {
+		super(ICON, DodonaBundle.message("panel.unauthenticated.message"), () ->
+			DodonaAuthenticator.getInstance().requestAuthentication(project, parent)
+		);
 	}
 	
 	/**
 	 * Creates a new instance of the UnauthenticatedPanel.
 	 *
+	 * @param project current active project
+	 * @param parent  parent component
 	 * @return the instance
 	 */
 	@Nonnull
-	public static UnauthenticatedPanel create() {
-		return new UnauthenticatedPanel();
+	public static UnauthenticatedPanel create(@Nullable final Project project,
+	                                          @Nullable final Component parent) {
+		return new UnauthenticatedPanel(project, parent);
 	}
 }

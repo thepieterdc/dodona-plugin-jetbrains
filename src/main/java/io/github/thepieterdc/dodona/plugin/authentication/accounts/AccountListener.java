@@ -15,14 +15,14 @@ import com.intellij.util.messages.Topic;
  * Listens for changes to the account.
  */
 @FunctionalInterface
-public interface AccountAddedListener {
-	Topic<AccountAddedListener> ADDED_TOPIC = Topic.create(
-		"The default account has been added",
-		AccountAddedListener.class
+public interface AccountListener {
+	Topic<AccountListener> UPDATED_TOPIC = Topic.create(
+		"The default account has been changed",
+		AccountListener.class
 	);
 	
 	/**
-	 * Called when the default account has been added.
+	 * Called when the default account has been changed.
 	 */
-	void added();
+	void updated();
 }

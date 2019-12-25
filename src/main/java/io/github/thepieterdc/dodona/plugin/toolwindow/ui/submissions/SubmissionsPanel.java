@@ -46,7 +46,7 @@ public final class SubmissionsPanel extends StaticAsyncPanel<List<SubmissionInfo
 	public SubmissionsPanel(final Project project,
 	                        final DodonaExecutorHolder executor,
 	                        final Identification identification) {
-		super(DodonaBundle.message("toolwindow.submissions.loading"));
+		super(project, DodonaBundle.message("toolwindow.submissions.loading"));
 		this.setBorder(BorderFactory.createEmptyBorder());
 		this.executor = executor;
 		this.identification = identification;
