@@ -14,6 +14,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBus;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.data.SubmissionStatus;
+import io.github.thepieterdc.dodona.exceptions.AuthenticationException;
+import io.github.thepieterdc.dodona.exceptions.accessdenied.ExerciseAccessDeniedException;
+import io.github.thepieterdc.dodona.exceptions.notfound.ExerciseNotFoundException;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
@@ -23,13 +26,16 @@ import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
 import io.github.thepieterdc.dodona.plugin.notifications.ErrorReporter;
+import io.github.thepieterdc.dodona.plugin.notifications.NotificationService;
 import io.github.thepieterdc.dodona.plugin.submission.SubmissionCreatedListener;
 import io.github.thepieterdc.dodona.plugin.submission.SubmissionEvaluatedListener;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
+import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 
 /**
  * Submits code to Dodona.
@@ -50,6 +56,7 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	
 	private final DodonaExecutorHolder executor;
 	private final FeedbackService feedback;
+	private final NotificationService notifications;
 	
 	/**
 	 * SubmitSolutionTask constructor.
@@ -67,6 +74,7 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 		this.executor = DodonaAuthenticator.getInstance().getExecutor();
 		this.feedback = FeedbackService.getInstance(project);
 		this.identification = exercise;
+		this.notifications = NotificationService.getInstance(project);
 	}
 	
 	/**
@@ -166,6 +174,18 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 			.orElseThrow(RuntimeException::new);
 	}
 	
+	/**
+	 * Shows an error message.
+	 *
+	 * @param message the message contents
+	 */
+	private void error(@Nls final String message) {
+		this.notifications.error(
+			DodonaBundle.message("tasks.submit_solution.failed"),
+			message
+		);
+	}
+	
 	@Override
 	public void run(@NotNull final ProgressIndicator progress) {
 		try {
@@ -202,10 +222,26 @@ public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 			
 			// Provide feedback to the user.
 			this.feedback.notify(exercise, evaluated.getInfo());
+		} catch (final AuthenticationException ex) {
+			this.error(DodonaBundle.message("tasks.submit_solution.error.auth"));
+			DodonaAuthenticator.getInstance()
+				.requestAuthentication(this.myProject, null);
+		} catch (final ExerciseAccessDeniedException ex) {
+			this.error(DodonaBundle.message("tasks.submit_solution.error.forbidden"));
+		} catch (final ExerciseNotFoundException ex) {
+			this.error(DodonaBundle.message("tasks.submit_solution.error.notfound"));
 		} catch (final InterruptedException ex) {
 			throw new CancelledException();
 		} catch (final RuntimeException ex) {
-			ErrorReporter.report(ex);
+			try {
+				if (ex.getCause() != null) {
+					throw ex.getCause();
+				}
+			} catch (final IOException exx) {
+				this.error(DodonaBundle.message("tasks.submit_solution.error.unreachable"));
+			} catch (final Throwable exx) {
+				ErrorReporter.report(ex);
+			}
 		}
 	}
 	

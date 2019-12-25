@@ -9,6 +9,7 @@
 
 package io.github.thepieterdc.dodona.plugin.toolwindow.ui.deadlines;
 
+import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
@@ -47,10 +48,12 @@ public final class DeadlinesPanel extends StaticAsyncPanel<List<Deadline>, Deadl
 	/**
 	 * DeadlinesPanel constructor.
 	 *
+	 * @param project  current active project
 	 * @param executor request executor holder
 	 */
-	public DeadlinesPanel(final DodonaExecutorHolder executor) {
-		super(DodonaBundle.message("toolwindow.deadlines.loading"));
+	public DeadlinesPanel(final Project project,
+	                      final DodonaExecutorHolder executor) {
+		super(project, DodonaBundle.message("toolwindow.deadlines.loading"));
 		this.executor = executor;
 		this.list = new DeadlinesList();
 		this.setBorder(BorderFactory.createEmptyBorder());

@@ -36,7 +36,7 @@ public class DeadlinesTab extends AbstractTab {
 	public DeadlinesTab(final Project project,
 	                    final DodonaExecutorHolder executor) {
 		super(TAB_TITLE);
-		this.deadlinesPanel = new DeadlinesPanel(executor);
+		this.deadlinesPanel = new DeadlinesPanel(project, executor);
 		
 		// Listen for project changes.
 		project.getMessageBus().connect().subscribe(

@@ -34,7 +34,7 @@ public class CourseListPanel extends StaticAsyncPanel<List<Course>, TabbedCourse
 	 * @param executor request executor
 	 */
 	public CourseListPanel(final DodonaExecutorHolder executor) {
-		super(DodonaBundle.message("module.course.loading"));
+		super(null, DodonaBundle.message("module.course.loading"));
 		this.coursesList = new TabbedCourseList();
 		this.executor = executor;
 	}
