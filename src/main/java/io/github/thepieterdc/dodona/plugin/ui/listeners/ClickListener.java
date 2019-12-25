@@ -13,7 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 /**
- * Listener for double click events.
+ * Listener for click events.
  */
 @FunctionalInterface
 public interface ClickListener extends MouseListener {

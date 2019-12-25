@@ -10,7 +10,7 @@
 package io.github.thepieterdc.dodona.plugin.ui.panels;
 
 import com.intellij.ui.ScrollPaneFactory;
-import io.github.thepieterdc.dodona.plugin.ui.Icons;
+import io.github.thepieterdc.dodona.plugin.ui.listeners.ClickListener;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
@@ -28,19 +28,23 @@ public class IconTextPanel extends JPanel {
 	 * @param icon the icon to display
 	 * @param text the text to display underneath the icon
 	 */
-	public IconTextPanel(final Icon icon, @Nls final String text) {
-		this(Icons.toComponent(icon), text, inner -> {
+	public IconTextPanel(final JComponent icon, @Nls final String text) {
+		this(icon, text, inner -> {
 		});
 	}
 	
 	/**
 	 * IconTextPanel constructor.
 	 *
-	 * @param icon the icon to display
-	 * @param text the text to display underneath the icon
+	 * @param icon    the icon to display
+	 * @param text    the text to display underneath the icon
+	 * @param handler handler to call upon clicking the panel
 	 */
-	public IconTextPanel(final JComponent icon, @Nls final String text) {
+	IconTextPanel(final JComponent icon, @Nls final String text,
+	              final Runnable handler) {
 		this(icon, text, inner -> {
+			inner.addMouseListener((ClickListener) e -> handler.run());
+			inner.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		});
 	}
 	
