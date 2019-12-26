@@ -27,6 +27,8 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 	private static final Color defaultSelectedFocusedBackground = new JBColor(0xE9EEF5, 0x464A4D);
 	private static final Color defaultSelectedBackground = new JBColor(0xF5F5F5, 0x464A4D);
 	
+	protected static final Color SECONDARY_FOREGROUND = TextColors.SECONDARY;
+	
 	@NonNls
 	private static final String selectedFocusedBackground = "Table.lightSelectionBackground";
 	@NonNls
@@ -99,21 +101,6 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 	 * Gets the secondary foreground color.
 	 *
 	 * @param selected true if the item is the selected item
-	 * @param focused  true if the list if focused
-	 * @return the foreground color
-	 */
-	protected static Color getSecondaryForeground(final boolean selected,
-	                                              final boolean focused) {
-		if (selected) {
-			return getForeground(true, focused);
-		}
-		return TextColors.SECONDARY;
-	}
-	
-	/**
-	 * Gets the secondary foreground color.
-	 *
-	 * @param selected true if the item is the selected item
 	 * @return the foreground color
 	 */
 	protected static Color getSecondaryForeground(@Nullable final JList<?> list,
@@ -121,6 +108,6 @@ public abstract class AbstractListCellRenderer<T> extends JPanel implements List
 		if (selected && list != null) {
 			return getForeground(list, true);
 		}
-		return TextColors.SECONDARY;
+		return SECONDARY_FOREGROUND;
 	}
 }

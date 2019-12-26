@@ -56,6 +56,7 @@ public class DodonaAccount {
 	/**
 	 * DodonaAccount constructor (serialization).
 	 */
+	@SuppressWarnings("unused")
 	private DodonaAccount() {
 		this.email = "";
 		this.fullName = "";

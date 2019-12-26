@@ -20,10 +20,9 @@ import java.time.chrono.ChronoZonedDateTime;
 /**
  * Utilities for handling time.
  */
-public final class TimeUtils {
+public enum TimeUtils {
+	;
 	public static final long HOURS_PER_DAY = 24L;
-	public static final long MINUTES_PER_HOUR = 60L;
-	public static final long SECONDS_PER_MINUTE = 60L;
 	
 	private static final long MILLIS_PER_SECOND = 1000L;
 	

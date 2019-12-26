@@ -10,7 +10,6 @@ package io.github.thepieterdc.dodona.plugin.code;
 
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
-import io.github.thepieterdc.dodona.resources.ProgrammingLanguage;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -43,17 +42,6 @@ public enum DodonaFileType {
 	}
 	
 	/**
-	 * Gets the file type corresponding to the given programming language.
-	 *
-	 * @param language the programming language
-	 * @return the file type
-	 */
-	@Nonnull
-	public static Optional<FileType> find(final ProgrammingLanguage language) {
-		return forExtension(language.getExtension());
-	}
-	
-	/**
 	 * Gets the file type corresponding to the given extension.
 	 *
 	 * @param extension the extension to match
@@ -75,16 +63,6 @@ public enum DodonaFileType {
 	@Nonnull
 	public String getExtension() {
 		return this.extension;
-	}
-	
-	/**
-	 * Gets the file type, UnknownFileType if nothing matches.
-	 *
-	 * @return the file type
-	 */
-	@Nonnull
-	public FileType getFileType() {
-		return this.fileType;
 	}
 	
 	@Override

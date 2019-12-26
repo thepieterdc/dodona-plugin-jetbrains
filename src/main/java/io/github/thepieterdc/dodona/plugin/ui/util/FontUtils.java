@@ -14,13 +14,8 @@ import java.awt.*;
 /**
  * Utilities related to fonts.
  */
-public final class FontUtils {
-	/**
-	 * FontUtils constructor.
-	 */
-	private FontUtils() {
-		// Utility class.
-	}
+public enum FontUtils {
+	;
 	
 	/**
 	 * Boldens the font used in the given component if the given condition

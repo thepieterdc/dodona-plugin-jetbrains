@@ -16,7 +16,6 @@ import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
 import io.github.thepieterdc.dodona.plugin.notifications.NotificationService;
 import io.github.thepieterdc.dodona.plugin.ui.resources.submission.SubmissionStatusIcon;
 import io.github.thepieterdc.dodona.resources.Exercise;
-import io.github.thepieterdc.dodona.resources.submissions.Submission;
 import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
 
 import java.util.EnumMap;

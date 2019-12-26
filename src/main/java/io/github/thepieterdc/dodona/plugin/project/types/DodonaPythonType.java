@@ -33,7 +33,7 @@ public class DodonaPythonType extends DodonaModuleType<DodonaPythonBuilder> {
 	 * DodonaPythonType constructor.
 	 */
 	public DodonaPythonType() {
-		super(DodonaPythonType.MODULE_TYPE_ID, DodonaPythonType.MODULE_TYPE_NAME, DodonaPythonType.MODULE_TYPE_DESCRIPTION);
+		super(MODULE_TYPE_ID, MODULE_TYPE_NAME, MODULE_TYPE_DESCRIPTION);
 	}
 	
 	@NotNull
@@ -49,6 +49,6 @@ public class DodonaPythonType extends DodonaModuleType<DodonaPythonBuilder> {
 	 */
 	@Nonnull
 	public static DodonaPythonType getInstance() {
-		return DodonaPythonType.INSTANCE;
+		return INSTANCE;
 	}
 }

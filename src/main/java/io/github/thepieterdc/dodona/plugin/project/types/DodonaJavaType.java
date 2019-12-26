@@ -33,7 +33,7 @@ public class DodonaJavaType extends DodonaModuleType<DodonaJavaBuilder> {
 	 * DodonaJavaType constructor.
 	 */
 	public DodonaJavaType() {
-		super(DodonaJavaType.MODULE_TYPE_ID, DodonaJavaType.MODULE_TYPE_NAME, DodonaJavaType.MODULE_TYPE_DESCRIPTION);
+		super(MODULE_TYPE_ID, MODULE_TYPE_NAME, MODULE_TYPE_DESCRIPTION);
 	}
 	
 	@NotNull
@@ -49,6 +49,6 @@ public class DodonaJavaType extends DodonaModuleType<DodonaJavaBuilder> {
 	 */
 	@Nonnull
 	public static DodonaJavaType getInstance() {
-		return DodonaJavaType.INSTANCE;
+		return INSTANCE;
 	}
 }

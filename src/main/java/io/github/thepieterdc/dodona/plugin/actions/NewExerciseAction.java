@@ -19,11 +19,11 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
 import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
 import io.github.thepieterdc.dodona.plugin.exercise.creation.ExerciseCreationService;
 import io.github.thepieterdc.dodona.plugin.tasks.IdentifyTask;
+import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;

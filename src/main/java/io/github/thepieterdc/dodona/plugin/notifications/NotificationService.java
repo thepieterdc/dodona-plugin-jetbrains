@@ -36,14 +36,6 @@ public interface NotificationService {
 	void error(final String title, final Icon icon, final String message);
 	
 	/**
-	 * Shows an error notification.
-	 *
-	 * @param message the message contents
-	 * @param cause   the exception
-	 */
-	void error(final String message, final Throwable cause);
-	
-	/**
 	 * Gets an instance of the NotificationService.
 	 *
 	 * @param project the current project
@@ -53,14 +45,6 @@ public interface NotificationService {
 	static NotificationService getInstance(final Project project) {
 		return ServiceManager.getService(project, NotificationService.class);
 	}
-	
-	/**
-	 * Shows an informational notification.
-	 *
-	 * @param title   the title
-	 * @param message the message contents
-	 */
-	void info(final String title, final String message);
 	
 	/**
 	 * Shows an informational notification.

@@ -52,12 +52,6 @@ public abstract class AbstractResourceComboBox<T extends Resource> extends Combo
 		return Optional.ofNullable(this.getItemAt(this.getSelectedIndex()));
 	}
 	
-	@Nonnull
-	@Override
-	public Optional<Long> getSelectedResourceId() {
-		return this.getSelectedResource().map(Resource::getId);
-	}
-	
 	@Override
 	public void setResources(final Collection<? extends T> resources) {
 		// Remove the previous items.
