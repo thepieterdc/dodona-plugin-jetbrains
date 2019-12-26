@@ -15,7 +15,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.Separator;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,15 +41,6 @@ public class DodonaActionsGroup extends ActionGroup implements DumbAware {
 			return AnAction.EMPTY_ARRAY;
 		}
 		
-		// Detect whether this is a Dodona project.
-		final DodonaProjectSettings settings =
-			DodonaProjectSettings.getInstance(project);
-		if (settings.getCourseId().isPresent()) {
-			// This is a Dodona project.
-			return defaultActions.clone();
-		}
-		
-		// This is not a Dodona project.
 		return defaultActions.clone();
 	}
 	

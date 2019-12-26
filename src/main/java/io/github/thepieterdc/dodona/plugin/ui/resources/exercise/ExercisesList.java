@@ -18,7 +18,6 @@ import io.github.thepieterdc.dodona.plugin.ui.listeners.DoubleClickListener;
 import io.github.thepieterdc.dodona.plugin.ui.listeners.ItemSelectedListener;
 import io.github.thepieterdc.dodona.plugin.ui.resources.ResourceSelector;
 import io.github.thepieterdc.dodona.resources.Exercise;
-import io.github.thepieterdc.dodona.resources.Resource;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -41,7 +40,7 @@ public class ExercisesList extends JBList<Exercise> implements ResourceSelector<
 	 * ExercisesList constructor.
 	 *
 	 * @param confirmed listener to call upon double click events
-	 * @param confirmed listener to call upon selection events
+	 * @param selected  listener to call upon selection events
 	 */
 	public ExercisesList(final Runnable confirmed,
 	                     final ItemSelectedListener<Exercise> selected) {
@@ -59,12 +58,6 @@ public class ExercisesList extends JBList<Exercise> implements ResourceSelector<
 	@Override
 	public Optional<Exercise> getSelectedResource() {
 		return Optional.ofNullable(this.getSelectedValue());
-	}
-	
-	@Nonnull
-	@Override
-	public Optional<Long> getSelectedResourceId() {
-		return this.getSelectedResource().map(Resource::getId);
 	}
 	
 	@Override

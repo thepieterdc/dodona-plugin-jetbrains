@@ -20,16 +20,10 @@ import javax.annotation.Nonnull;
 /**
  * Factory for DodonaExecutors.
  */
-public final class DodonaExecutorFactory {
+public enum DodonaExecutorFactory {
+	;
 	@NonNls
 	private static final String UA_PATTERN = "Plugin/JetBrains-%s";
-	
-	/**
-	 * DodonaRequestFactory constructor.
-	 */
-	private DodonaExecutorFactory() {
-	
-	}
 	
 	/**
 	 * Creates a new DodonaExecutor for the given server and token.
@@ -39,7 +33,7 @@ public final class DodonaExecutorFactory {
 	 * @return the request executor
 	 */
 	public static DodonaExecutor create(final DodonaServer server, final String token) {
-		return DodonaExecutorFactory.create(server.getUrl(), token);
+		return create(server.getUrl(), token);
 	}
 	
 	/**
@@ -53,20 +47,9 @@ public final class DodonaExecutorFactory {
 		final DodonaClient client = DodonaBuilder.builder()
 			.authenticate(token)
 			.setHost(server)
-			.setUserAgent(DodonaExecutorFactory.getUserAgent())
+			.setUserAgent(getUserAgent())
 			.build();
 		return new DodonaExecutorImpl(client);
-	}
-	
-	/**
-	 * Gets the user agent to send in API calls.
-	 *
-	 * @return the user agent
-	 */
-	@NonNls
-	@Nonnull
-	private static String getUserAgent() {
-		return String.format(DodonaExecutorFactory.UA_PATTERN, BuildConfig.VERSION);
 	}
 	
 	/**
@@ -77,5 +60,16 @@ public final class DodonaExecutorFactory {
 	@Nonnull
 	public static DodonaExecutor createMissing() {
 		return MissingExecutorImpl.INSTANCE;
+	}
+	
+	/**
+	 * Gets the user agent to send in API calls.
+	 *
+	 * @return the user agent
+	 */
+	@NonNls
+	@Nonnull
+	private static String getUserAgent() {
+		return String.format(UA_PATTERN, BuildConfig.VERSION);
 	}
 }

@@ -23,7 +23,6 @@ import io.github.thepieterdc.dodona.plugin.authentication.ui.DodonaLoginDialog;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.Optional;
 
 /**
  * Handles authentication of accounts.
@@ -36,7 +35,7 @@ public final class DodonaAuthenticator {
 	 * DodonaAuthenticator constructor.
 	 */
 	private DodonaAuthenticator() {
-		this.accountManager = ServiceManager.getService(DodonaAccountManager.class);
+		this.accountManager = DodonaAccountManager.getInstance();
 		this.executorHolder = new DodonaExecutorHolder(this.createDefaultExecutor());
 		
 		// Listen for changes to accounts and update the executor accordingly.
@@ -58,16 +57,6 @@ public final class DodonaAuthenticator {
 				DodonaExecutorFactory.create(account.getServer(), token)
 			)
 		).orElseGet(DodonaExecutorFactory::createMissing);
-	}
-	
-	/**
-	 * Gets the account if available.
-	 *
-	 * @return the account
-	 */
-	@Nonnull
-	public Optional<DodonaAccount> getAccount() {
-		return this.accountManager.getAccount();
 	}
 	
 	/**

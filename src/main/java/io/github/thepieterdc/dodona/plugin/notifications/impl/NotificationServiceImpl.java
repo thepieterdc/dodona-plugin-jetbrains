@@ -13,8 +13,6 @@ import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
-import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.notifications.ErrorReporter;
 import io.github.thepieterdc.dodona.plugin.notifications.NotificationService;
 import org.jetbrains.annotations.NonNls;
 
@@ -27,9 +25,6 @@ import javax.swing.*;
 public class NotificationServiceImpl implements NotificationService {
 	@NonNls
 	private static final String DODONA_NOTIFICATIONS = "Dodona Notifications";
-	
-	private static final String DEFAULT_ERROR_TITLE =
-		DodonaBundle.message("alerts.error");
 	
 	private static final NotificationGroup GROUP = new NotificationGroup(
 		DODONA_NOTIFICATIONS, NotificationDisplayType.BALLOON, true
@@ -55,17 +50,6 @@ public class NotificationServiceImpl implements NotificationService {
 	public void error(final String title, final Icon icon,
 	                  final String message) {
 		this.notify(NotificationType.ERROR, icon, title, message);
-	}
-	
-	@Override
-	public void error(final String message, final Throwable cause) {
-		this.error(DEFAULT_ERROR_TITLE, message);
-		ErrorReporter.report(message, cause);
-	}
-	
-	@Override
-	public void info(final String title, final String message) {
-		this.notify(NotificationType.INFORMATION, null, title, message);
 	}
 	
 	@Override

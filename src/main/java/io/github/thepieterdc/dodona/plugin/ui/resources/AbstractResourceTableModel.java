@@ -38,10 +38,10 @@ public abstract class AbstractResourceTableModel<T extends Comparable<T> & Resou
 	 * @param columnAccessors accessors for values
 	 * @param comparator      comparator for the list
 	 */
-	public AbstractResourceTableModel(final String[] columnNames,
-	                                  final Class<?>[] columnTypes,
-	                                  final Function<T, Object>[] columnAccessors,
-	                                  final Comparator<T> comparator) {
+	protected AbstractResourceTableModel(final String[] columnNames,
+	                                     final Class<?>[] columnTypes,
+	                                     final Function<T, Object>[] columnAccessors,
+	                                     final Comparator<T> comparator) {
 		super();
 		this.columnAccessors = columnAccessors.clone();
 		this.columnNames = columnNames.clone();

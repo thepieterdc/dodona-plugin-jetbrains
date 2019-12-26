@@ -17,7 +17,9 @@ import javax.swing.*;
 /**
  * Custom validators.
  */
-public final class Validators {
+public enum Validators {
+	;
+	
 	/**
 	 * Validates that an input field is not empty.
 	 *

@@ -22,7 +22,7 @@ import java.util.Objects;
 /**
  * A deadline.
  */
-public class Deadline implements Comparable<Deadline> {
+public final class Deadline implements Comparable<Deadline> {
 	private final long courseId;
 	private final String courseName;
 	private final ZonedDateTime deadline;

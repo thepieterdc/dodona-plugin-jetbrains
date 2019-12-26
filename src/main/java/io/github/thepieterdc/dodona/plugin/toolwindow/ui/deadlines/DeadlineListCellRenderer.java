@@ -37,7 +37,7 @@ final class DeadlineListCellRenderer extends AbstractListCellRenderer<Deadline> 
 		AbstractListCellRenderer.getForeground(false, false);
 	
 	private static final Color secondary =
-		AbstractListCellRenderer.getSecondaryForeground(false, false);
+		AbstractListCellRenderer.SECONDARY_FOREGROUND;
 	
 	@NonNls
 	private static final String HTML = "<html>%s</html>";

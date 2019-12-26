@@ -17,6 +17,7 @@ import io.github.thepieterdc.dodona.exceptions.accessdenied.ResourceAccessDenied
 import io.github.thepieterdc.dodona.exceptions.notfound.ResourceNotFoundException;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.ExecutorListener;
+import io.github.thepieterdc.dodona.plugin.exceptions.DodonaPluginException;
 import io.github.thepieterdc.dodona.plugin.ui.Updatable;
 import io.github.thepieterdc.dodona.plugin.ui.panels.ErrorPanel;
 import io.github.thepieterdc.dodona.plugin.ui.panels.LoadingPanel;
@@ -101,7 +102,7 @@ abstract class AsyncPanelBase<T> extends JPanel implements Disposable, Updatable
 		} else if (error.getCause() != null) {
 			this.handleError(error.getCause());
 		} else {
-			throw new RuntimeException(error);
+			throw new DodonaPluginException(error.getMessage(), error);
 		}
 	}
 	

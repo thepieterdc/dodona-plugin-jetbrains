@@ -40,7 +40,7 @@ public class CourseWizardStep extends ModuleWizardStep {
 		this.coursesPanel.requestUpdate();
 	}
 	
-	private void createUIComponents() {
+	public void createUIComponents() {
 		this.coursesPanel = new CourseListPanel(this.executor);
 	}
 	
