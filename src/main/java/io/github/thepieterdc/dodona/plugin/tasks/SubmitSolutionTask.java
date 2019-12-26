@@ -40,7 +40,7 @@ import java.io.IOException;
 /**
  * Submits code to Dodona.
  */
-public class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
+public final class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	private static final double DELAY_BACKOFF_FACTOR = 1.15;
 	private static final long DELAY_INITIAL_MS = 3_000L;
 	private static final long DELAY_TIMEOUT_MS = 120_000L;

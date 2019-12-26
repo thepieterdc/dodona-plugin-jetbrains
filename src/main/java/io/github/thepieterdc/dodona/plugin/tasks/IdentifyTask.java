@@ -27,7 +27,7 @@ import java.util.Optional;
 /**
  * Prompts the user to identify the current exercise.
  */
-public class IdentifyTask extends AbstractDodonaResultTask<FullIdentification> {
+public final class IdentifyTask extends AbstractDodonaResultTask<FullIdentification> {
 	private final DodonaExecutorHolder executor;
 	
 	@Nullable

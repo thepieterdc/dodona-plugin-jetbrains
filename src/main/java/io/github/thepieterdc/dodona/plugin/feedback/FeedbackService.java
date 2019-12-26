@@ -18,6 +18,7 @@ import javax.annotation.Nonnull;
 /**
  * Renders feedback about submissions.
  */
+@FunctionalInterface
 public interface FeedbackService {
 	/**
 	 * Gets an instance of the FeedbackService.

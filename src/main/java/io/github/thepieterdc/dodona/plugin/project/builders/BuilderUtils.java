@@ -22,13 +22,8 @@ import io.github.thepieterdc.dodona.resources.Course;
 /**
  * Utilities for building a module.
  */
-final class BuilderUtils {
-	/**
-	 * BuilderUtils constructor.
-	 */
-	private BuilderUtils() {
-		// Utility class.
-	}
+enum BuilderUtils {
+	;
 	
 	/**
 	 * Creates a wizard step that allows the user to select a course.

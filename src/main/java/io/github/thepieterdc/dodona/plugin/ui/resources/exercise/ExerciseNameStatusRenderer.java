@@ -30,7 +30,7 @@ final class ExerciseNameStatusRenderer extends ColoredListCellRenderer<Exercise>
 	/**
 	 * ExerciseNameStatusRenderer constructor.
 	 */
-	public ExerciseNameStatusRenderer() {
+	ExerciseNameStatusRenderer() {
 		this.icons = new EnumMap<>(ExerciseStatus.class);
 		this.icons.put(ExerciseStatus.CORRECT, Icons.EXERCISE_CORRECT);
 		this.icons.put(ExerciseStatus.HAS_BEEN_CORRECT, Icons.EXERCISE_CORRECT);

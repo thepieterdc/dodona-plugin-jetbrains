@@ -39,7 +39,8 @@ public enum DodonaServer {
 	 * @param url         the url
 	 * @param icon        the icon
 	 */
-	DodonaServer(final String displayName, final String url, final Icon icon) {
+	DodonaServer(@NonNls final String displayName, @NonNls final String url,
+	             final Icon icon) {
 		this.displayName = displayName;
 		this.icon = icon;
 		this.url = url;

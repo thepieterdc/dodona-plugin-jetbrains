@@ -67,14 +67,4 @@ public class Identification {
 	public Optional<Long> getSeriesId() {
 		return Optional.ofNullable(this.seriesId);
 	}
-	
-	@Override
-	public String toString() {
-		return String.format(
-			"Identification[course=%s, series=%s, exercise=%s]",
-			this.courseId,
-			this.seriesId,
-			this.exerciseId
-		);
-	}
 }

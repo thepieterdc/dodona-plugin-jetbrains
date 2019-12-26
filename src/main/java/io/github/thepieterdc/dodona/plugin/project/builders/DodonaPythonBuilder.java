@@ -14,9 +14,9 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.module.Module;
 import com.jetbrains.python.module.PythonModuleBuilder;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.plugin.project.DodonaModuleBuilder;
 import io.github.thepieterdc.dodona.plugin.project.types.DodonaPythonType;
+import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.resources.Course;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,7 @@ public final class DodonaPythonBuilder extends PythonModuleBuilder implements Do
 	@Nonnull
 	@Override
 	public String getBuilderId() {
-		return DodonaPythonBuilder.BUILDER_ID;
+		return BUILDER_ID;
 	}
 	
 	@Nonnull

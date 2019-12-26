@@ -14,6 +14,7 @@ import com.intellij.util.messages.Topic;
 /**
  * Listener for new executors.
  */
+@FunctionalInterface
 public interface ExecutorListener {
 	Topic<ExecutorListener> UPDATED_TOPIC = Topic.create(
 		"The executor has been updated",
