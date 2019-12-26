@@ -76,14 +76,4 @@ public final class FullIdentification extends Identification {
 	public Optional<Series> getSeries() {
 		return Optional.ofNullable(this.series);
 	}
-	
-	@Override
-	public String toString() {
-		return String.format(
-			"FullIdentification[course=%s, series=%s, exercise=%s]",
-			this.course,
-			this.series,
-			this.exercise.getId()
-		);
-	}
 }

@@ -56,31 +56,7 @@ public class DodonaFuture<T> extends CompletableFuture<T> {
 		future.handleAsync((BiFunction<T, Throwable, Object>) (t, throwable) -> {
 			handler.accept(t, throwable);
 			return Unit.INSTANCE;
-		}, DodonaFuture.EDT_EXECUTOR);
-	}
-	
-	/**
-	 * Executes the given handler on the event thread.
-	 *
-	 * @param handler the handler to execute
-	 */
-	public void handleOnEdt(final BiConsumer<? super T, ? super Throwable> handler) {
-		DodonaFuture.handleOnEdt(this, handler);
-	}
-	
-	/**
-	 * Runs the given action on the event thread.
-	 *
-	 * @param future  the future
-	 * @param handler the handler
-	 * @return this value
-	 */
-	public static <T> CompletableFuture<T> whenCompleteRunOnEdt(final CompletableFuture<T> future,
-	                                                            final BiConsumer<? super T, ? super Throwable> handler) {
-		return future.whenComplete((t, throwable) -> ActionsKt.runInEdt(null, () -> {
-			handler.accept(t, throwable);
-			return Unit.INSTANCE;
-		}));
+		}, EDT_EXECUTOR);
 	}
 	
 	/**
@@ -90,6 +66,9 @@ public class DodonaFuture<T> extends CompletableFuture<T> {
 	 * @return this value
 	 */
 	public CompletableFuture<T> whenCompleteRunOnEdt(final BiConsumer<? super T, ? super Throwable> handler) {
-		return DodonaFuture.whenCompleteRunOnEdt(this, handler);
+		return this.whenComplete((t, throwable) -> ActionsKt.runInEdt(null, () -> {
+			handler.accept(t, throwable);
+			return Unit.INSTANCE;
+		}));
 	}
 }

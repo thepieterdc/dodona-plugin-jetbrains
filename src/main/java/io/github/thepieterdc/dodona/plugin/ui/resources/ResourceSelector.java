@@ -32,14 +32,6 @@ public interface ResourceSelector<T extends Resource> {
 	Optional<T> getSelectedResource();
 	
 	/**
-	 * Gets the id of the selected resource, empty if no resource is selected.
-	 *
-	 * @return the selected resource id
-	 */
-	@Nonnull
-	Optional<Long> getSelectedResourceId();
-	
-	/**
 	 * Sets the resources the user can choose from.
 	 *
 	 * @param resources the resources

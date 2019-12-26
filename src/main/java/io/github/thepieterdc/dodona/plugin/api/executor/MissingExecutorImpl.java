@@ -22,8 +22,8 @@ import java.util.function.Function;
 /**
  * Executor that errors on every call.
  */
-class MissingExecutorImpl implements DodonaExecutor {
-	static DodonaExecutor INSTANCE = new MissingExecutorImpl();
+final class MissingExecutorImpl implements DodonaExecutor {
+	static final DodonaExecutor INSTANCE = new MissingExecutorImpl();
 	
 	/**
 	 * MissingExecutorImpl constructor.
@@ -56,13 +56,5 @@ class MissingExecutorImpl implements DodonaExecutor {
 		final DodonaFuture<T> ret = new DodonaFuture<>();
 		ret.completeExceptionally(AuthenticationException.missing());
 		return ret;
-	}
-	
-	@Nonnull
-	@Override
-	public <T> T executeWithModal(final Project project,
-	                              final String text,
-	                              final Function<? super DodonaClient, ? extends T> call) {
-		throw AuthenticationException.missing();
 	}
 }

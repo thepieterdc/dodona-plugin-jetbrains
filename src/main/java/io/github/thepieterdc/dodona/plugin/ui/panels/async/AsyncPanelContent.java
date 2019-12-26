@@ -13,6 +13,7 @@ package io.github.thepieterdc.dodona.plugin.ui.panels.async;
  *
  * @param <T> type class of the content
  */
+@FunctionalInterface
 public interface AsyncPanelContent<T> {
 	/**
 	 * Updates the data in the panel.

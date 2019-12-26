@@ -72,7 +72,8 @@ public final class SubmissionCodeEditor
 		document.setReadOnly(true);
 		
 		final FileType fileType = submission.getProgrammingLanguage()
-			.flatMap(DodonaFileType::find)
+			.map(ProgrammingLanguage::getExtension)
+			.flatMap(DodonaFileType::forExtension)
 			.orElse(UnknownFileType.INSTANCE);
 		
 		this.editor = this.editorFactory

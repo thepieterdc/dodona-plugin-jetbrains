@@ -43,14 +43,6 @@ public final class DodonaExecutorHolder {
 	}
 	
 	/**
-	 * Replaces this executor by a missing executor, causing all requests to
-	 * fail.
-	 */
-	public void invalidate() {
-		this.executor = MissingExecutorImpl.INSTANCE;
-	}
-	
-	/**
 	 * Replaces the executor.
 	 *
 	 * @param nw the new executor

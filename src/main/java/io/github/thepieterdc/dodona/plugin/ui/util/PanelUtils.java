@@ -17,13 +17,8 @@ import java.awt.*;
 /**
  * Utilities to create panels.
  */
-public final class PanelUtils {
-	/**
-	 * PanelUtils constructor.
-	 */
-	private PanelUtils() {
-		// Utility class.
-	}
+public enum PanelUtils {
+	;
 	
 	/**
 	 * Shows the card with the given name in the parent panel.

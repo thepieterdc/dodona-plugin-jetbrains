@@ -19,10 +19,10 @@ import com.intellij.util.ui.UI;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.exceptions.AuthenticationException;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutor;
-import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorFactory;
 import io.github.thepieterdc.dodona.plugin.api.DodonaFuture;
 import io.github.thepieterdc.dodona.plugin.api.DodonaServer;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutor;
+import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorFactory;
 import io.github.thepieterdc.dodona.plugin.ui.util.Validators;
 import io.github.thepieterdc.dodona.resources.User;
 
