@@ -10,9 +10,12 @@
 package io.github.thepieterdc.dodona.plugin.code.identification;
 
 import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.project.Project;
+import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 
 import javax.annotation.Nonnull;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Service that sets the identification string in the code.
@@ -30,17 +33,23 @@ public interface CodeIdentificationService {
 	/**
 	 * Gets an instance of the CodeIdentificationService.
 	 *
+	 * @param project the current project
 	 * @return the instance
 	 */
 	@Nonnull
-	static CodeIdentificationService getInstance() {
-		return ServiceManager.getService(CodeIdentificationService.class);
+	static CodeIdentificationService getInstance(final Project project) {
+		return ServiceManager.getService(project, CodeIdentificationService.class);
 	}
 	
 	/**
-	 * Identifies the current opened file.
+	 * Identifies the given document.
 	 *
-	 * @param project the active project
+	 * @param document document to identify
 	 */
-	void identifyCurrent(final Project project);
+	CompletableFuture<Identification> identify(Document document);
+	
+	/**
+	 * Identifies the current opened file.
+	 */
+	void identifyCurrent();
 }

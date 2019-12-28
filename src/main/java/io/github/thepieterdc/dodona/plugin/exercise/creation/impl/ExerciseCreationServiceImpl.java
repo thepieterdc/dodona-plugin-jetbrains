@@ -44,7 +44,7 @@ public class ExerciseCreationServiceImpl implements ExerciseCreationService {
 	 * @param project the current project
 	 */
 	public ExerciseCreationServiceImpl(final Project project) {
-		this.codeIdentificationService = CodeIdentificationService.getInstance();
+		this.codeIdentificationService = CodeIdentificationService.getInstance(project);
 		this.fileFactory = PsiFileFactory.getInstance(project);
 		this.naming = ExerciseNamingService.getInstance();
 	}

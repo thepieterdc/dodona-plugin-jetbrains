@@ -31,8 +31,8 @@ public final class UnknownExercisePanel extends IconTextPanel {
 	 * @param project the current active project
 	 */
 	public UnknownExercisePanel(final Project project) {
-		super(ICON, DodonaBundle.message("panel.unknown_exercise.message"),
-			() -> CodeIdentificationService.getInstance().identifyCurrent(project)
+		super(ICON, DodonaBundle.message("panel.unknown_exercise.message"), () ->
+			CodeIdentificationService.getInstance(project).identifyCurrent()
 		);
 	}
 }

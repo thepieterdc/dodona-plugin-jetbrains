@@ -13,6 +13,10 @@
   <depends optional="true" config-file="plugin-python.xml">com.intellij.modules.python</depends>
 
   <extensions defaultExtensionNs="com.intellij">
+    <!-- Analysis -->
+    <projectService serviceInterface="io.github.thepieterdc.dodona.plugin.code.analysis.CodeAnalysisService"
+                    serviceImplementation="io.github.thepieterdc.dodona.plugin.code.analysis.impl.CodeAnalysisServiceImpl"/>
+
     <!-- Authentication -->
     <applicationService
       serviceImplementation="io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccountManager"/>
@@ -23,7 +27,7 @@
     <applicationService
       serviceInterface="io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService"
       serviceImplementation="io.github.thepieterdc.dodona.plugin.exercise.identification.impl.IdentificationServiceImpl"/>
-    <applicationService
+    <projectService
       serviceInterface="io.github.thepieterdc.dodona.plugin.code.identification.CodeIdentificationService"
       serviceImplementation="io.github.thepieterdc.dodona.plugin.code.identification.impl.CodeIdentificationServiceImpl"/>
 
