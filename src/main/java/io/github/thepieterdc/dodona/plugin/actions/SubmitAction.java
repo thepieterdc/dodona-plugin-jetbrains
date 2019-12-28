@@ -8,16 +8,23 @@
  */
 package io.github.thepieterdc.dodona.plugin.actions;
 
+import com.intellij.codeInsight.CodeSmellInfo;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
+import com.intellij.util.messages.MessageBus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.code.analysis.CodeAnalysisService;
+import io.github.thepieterdc.dodona.plugin.code.identification.CodeIdentificationService;
 import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
+import io.github.thepieterdc.dodona.plugin.exceptions.error.UnidentifiedCodeException;
+import io.github.thepieterdc.dodona.plugin.exercise.CurrentExerciseListener;
 import io.github.thepieterdc.dodona.plugin.tasks.SubmitSolutionTask;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import org.jetbrains.annotations.NotNull;
@@ -44,28 +51,31 @@ public class SubmitAction extends AnAction {
 	
 	@Override
 	public void actionPerformed(@NotNull final AnActionEvent e) {
-		// Get the document.
-		final Optional<Document> optDocument = getDocument(e.getProject());
-
-		final Optional<String> optCode = Optional.of("test");
-		
-//		// Get the code.
-//		final Optional<String> optCode = optDocument
-//			.flatMap(doc -> getPsiFile(e.getProject(), doc))
-//			.map(PsiElement::getText);
-		
-		// Create a new SubmitTask and execute it.
-		optCode.ifPresent(code -> {
-			try {
-				e.getPresentation().setEnabled(false);
-				SubmitSolutionTask
-					.create(Objects.requireNonNull(e.getProject()), code)
-					.execute();
-			} catch (final CancelledException ignored) {
-			} finally {
-				e.getPresentation().setEnabled(true);
-			}
-		});
+		final Project project = Objects.requireNonNull(e.getProject());
+		try {
+			e.getPresentation().setEnabled(false);
+			submit(project, true);
+		} finally {
+			e.getPresentation().setEnabled(true);
+		}
+	}
+	
+	/**
+	 * Finds a syntax error in the code if it exists.
+	 *
+	 * @param project the current project
+	 * @param psiFile the file to analyse
+	 * @return the error if any
+	 */
+	@Nonnull
+	private static Optional<CodeSmellInfo> findSyntaxError(final Project project,
+	                                                       final PsiFile psiFile) {
+		final CodeAnalysisService codeAnalysisSrv = CodeAnalysisService
+			.getInstance(project);
+		return Optional.of(psiFile)
+			.map(PsiFile::getVirtualFile)
+			.map(codeAnalysisSrv::errors)
+			.flatMap(smells -> smells.stream().findFirst());
 	}
 	
 	/**
@@ -95,6 +105,58 @@ public class SubmitAction extends AnAction {
 		return Optional.ofNullable(project)
 			.map(PsiDocumentManager::getInstance)
 			.map(mgr -> mgr.getPsiFile(document));
+	}
+	
+	/**
+	 * Submits the current file to Dodona.
+	 *
+	 * @param project     the current project
+	 * @param checkSyntax true to validate the syntax of the file
+	 */
+	private static void submit(final Project project,
+	                           final boolean checkSyntax) {
+		// Get the document.
+		final Document document = getDocument(project).orElseThrow(RuntimeException::new);
+		
+		// Get the file.
+		final PsiFile file = getPsiFile(project, document).orElseThrow(RuntimeException::new);
+		
+		try {
+			// Get the code.
+			final String code = document.getText();
+			
+			// Validate the syntax.
+			if (checkSyntax) {
+				final Optional<CodeSmellInfo> syntaxError = findSyntaxError(project, file);
+				syntaxError.ifPresent(error -> {
+					final int result = Messages.showYesNoDialog(
+						project,
+						DodonaBundle.message("dialog.submit.syntax_errors.message", error.getStartLine() + 1),
+						DodonaBundle.message("dialog.submit.syntax_errors.title"),
+						Messages.getWarningIcon()
+					);
+					if (result == Messages.NO) {
+						throw new CancelledException();
+					}
+				});
+			}
+			
+			// Create a new SubmitTask and execute it.
+			SubmitSolutionTask.create(project, code).execute();
+		} catch (final CancelledException ignored) {
+		} catch (final UnidentifiedCodeException ignored) {
+			// Create a bus to broadcast the event when the exercise is identified.
+			final MessageBus bus = project.getMessageBus();
+			
+			// Identify the exercise.
+			CodeIdentificationService.getInstance(project).identify(document).whenComplete((id, ex) -> {
+				if (id != null) {
+					bus.syncPublisher(CurrentExerciseListener.CHANGED_TOPIC)
+						.onCurrentExercise(file.getVirtualFile(), id);
+					submit(project, false);
+				}
+			});
+		}
 	}
 	
 	@Override

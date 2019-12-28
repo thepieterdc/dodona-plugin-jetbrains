@@ -13,7 +13,6 @@ import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
-import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
 import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
 import io.github.thepieterdc.dodona.plugin.tasks.ui.IdentifyExerciseDialog;
 import org.jetbrains.annotations.Nls;
@@ -27,7 +26,7 @@ import java.util.Optional;
 /**
  * Prompts the user to identify the current exercise.
  */
-public final class IdentifyTask extends AbstractDodonaResultTask<FullIdentification> {
+public final class IdentifyTask extends AbstractDodonaResultTask<Optional<FullIdentification>> {
 	private final DodonaExecutorHolder executor;
 	
 	@Nullable
@@ -46,7 +45,7 @@ public final class IdentifyTask extends AbstractDodonaResultTask<FullIdentificat
 	
 	@Nonnull
 	@Override
-	protected FullIdentification compute(final ProgressIndicator progress) {
+	protected Optional<FullIdentification> compute(final ProgressIndicator progress) {
 		try {
 			// Set the progressbar.
 			progress.setIndeterminate(true);
@@ -56,10 +55,9 @@ public final class IdentifyTask extends AbstractDodonaResultTask<FullIdentificat
 			SwingUtilities.invokeAndWait(this::showDialog);
 			
 			// Return the result if available.
-			return Optional.ofNullable(this.identification)
-				.orElseThrow(CancelledException::new);
+			return Optional.ofNullable(this.identification);
 		} catch (final InterruptedException | InvocationTargetException ex) {
-			throw new CancelledException();
+			return Optional.empty();
 		}
 	}
 	
@@ -70,7 +68,7 @@ public final class IdentifyTask extends AbstractDodonaResultTask<FullIdentificat
 	 * @return the task
 	 */
 	@Nonnull
-	public static DodonaResultTask<FullIdentification> create(final Project project) {
+	public static DodonaResultTask<Optional<FullIdentification>> create(final Project project) {
 		return create(project, DodonaBundle.message("tasks.identify.title.default"));
 	}
 	
@@ -82,8 +80,8 @@ public final class IdentifyTask extends AbstractDodonaResultTask<FullIdentificat
 	 * @return the task
 	 */
 	@Nonnull
-	public static DodonaResultTask<FullIdentification> create(final Project project,
-	                                                          @Nls final String title) {
+	public static DodonaResultTask<Optional<FullIdentification>> create(final Project project,
+	                                                                    @Nls final String title) {
 		return new IdentifyTask(project, title);
 	}
 	

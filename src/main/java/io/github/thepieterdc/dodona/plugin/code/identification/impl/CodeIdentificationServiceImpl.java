@@ -24,16 +24,30 @@ import io.github.thepieterdc.dodona.plugin.code.identification.CodeIdentifier;
 import io.github.thepieterdc.dodona.plugin.exceptions.error.CurrentFileReadException;
 import io.github.thepieterdc.dodona.plugin.exercise.CurrentExerciseListener;
 import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
+import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.tasks.IdentifyTask;
+import io.github.thepieterdc.dodona.resources.Exercise;
 
 import javax.annotation.Nonnull;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Default implementation of a CodeIdentificationService.
  */
 public class CodeIdentificationServiceImpl implements CodeIdentificationService {
+	private final Project project;
+	
+	/**
+	 * CodeIdentificationServiceImpl constructor.
+	 *
+	 * @param project the current project
+	 */
+	public CodeIdentificationServiceImpl(final Project project) {
+		this.project = project;
+	}
+	
 	@Nonnull
 	@Override
 	public CodeIdentifier getIdentifier(final String fileName) {
@@ -45,42 +59,65 @@ public class CodeIdentificationServiceImpl implements CodeIdentificationService 
 	}
 	
 	@Override
-	public void identifyCurrent(final Project project) {
-		final Optional<FileEditorManager> editor = Optional
-			.ofNullable(FileEditorManager.getInstance(project));
+	public CompletableFuture<Identification> identify(final Document document) {
+		// Prepare the result.
+		final CompletableFuture<Identification> result = new CompletableFuture<>();
+		
+		// Prompt the user to identify the exercise.
+		final FullIdentification identification = IdentifyTask
+			.create(this.project, DodonaBundle.message("tasks.identify.title.identify"))
+			.execute()
+			.orElse(null);
+		
+		// Cancelled.
+		if (identification == null) {
+			result.cancel(true);
+			return result;
+		}
+		
+		// Find the identifier to use.
+		final CodeIdentifier identifier = Optional.of(identification)
+			.map(FullIdentification::getExercise)
+			.flatMap(Exercise::getProgrammingLanguage)
+			.flatMap(lang -> CodeIdentifier.getForExtension(lang.getExtension()))
+			.orElse(CodeIdentifier.JAVA);
+		
+		// Perform the identification in the file.
+		WriteCommandAction.runWriteCommandAction(this.project, () -> {
+			identifier.process(identification.getExercise(), document);
+			result.complete(identification);
+		});
+		
+		return result;
+	}
+	
+	@Override
+	public void identifyCurrent() {
+		// Get the current editor.
+		final Optional<FileEditorManager> optEditor = Optional
+			.ofNullable(FileEditorManager.getInstance(this.project));
 		
 		// Get the current document.
-		final Document document = editor
+		final Document document = optEditor
 			.map(FileEditorManager::getSelectedTextEditor)
 			.map(Editor::getDocument)
 			.orElseThrow(CurrentFileReadException::new);
 		
 		// Get the current file.
-		final VirtualFile file = editor
+		final VirtualFile file = optEditor
 			.map(FileEditorManager::getSelectedEditor)
 			.map(FileEditor::getFile)
 			.orElseThrow(CurrentFileReadException::new);
 		
-		// Prompt the user to identify the exercise.
-		final FullIdentification identification = IdentifyTask
-			.create(project, DodonaBundle.message("tasks.identify.title.identify"))
-			.execute();
-		
 		// Create a bus to broadcast the event when the exercise is identified.
-		final MessageBus bus = project.getMessageBus();
+		final MessageBus bus = this.project.getMessageBus();
 		
-		// Find the identifier to use.
-		final CodeIdentifier identifier = identification
-			.getExercise()
-			.getProgrammingLanguage()
-			.flatMap(lang -> CodeIdentifier.getForExtension(lang.getExtension()))
-			.orElse(CodeIdentifier.JAVA);
-		
-		// Perform the identification in the file.
-		WriteCommandAction.runWriteCommandAction(project, () -> {
-			identifier.process(identification.getExercise(), document);
-			bus.syncPublisher(CurrentExerciseListener.CHANGED_TOPIC)
-				.onCurrentExercise(file, identification);
+		// Perform the identification.
+		this.identify(document).whenComplete((identification, throwable) -> {
+			if (identification != null) {
+				bus.syncPublisher(CurrentExerciseListener.CHANGED_TOPIC)
+					.onCurrentExercise(file, identification);
+			}
 		});
 	}
 }

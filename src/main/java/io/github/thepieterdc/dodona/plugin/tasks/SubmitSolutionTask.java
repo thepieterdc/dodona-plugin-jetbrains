@@ -20,8 +20,8 @@ import io.github.thepieterdc.dodona.exceptions.notfound.ExerciseNotFoundExceptio
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
-import io.github.thepieterdc.dodona.plugin.code.identification.CodeIdentificationService;
 import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
+import io.github.thepieterdc.dodona.plugin.exceptions.error.UnidentifiedCodeException;
 import io.github.thepieterdc.dodona.plugin.exceptions.warnings.SubmissionTimeoutException;
 import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
@@ -169,15 +169,10 @@ public final class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 	@Nonnull
 	public static DodonaBackgroundTask create(final Project project,
 	                                          final String code) {
-		// Attempt to identify the exercise, otherwise return a new task to
-		// perform this job.
 		return IdentificationService.getInstance()
 			.identify(code)
 			.map(result -> create(project, result, code))
-			.orElseGet(() -> {
-				CodeIdentificationService.getInstance().identifyCurrent(project);
-				throw new CancelledException();
-			});
+			.orElseThrow(UnidentifiedCodeException::new);
 	}
 	
 	/**
