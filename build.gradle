@@ -3,7 +3,7 @@ plugins {
     id 'idea'
     id 'jacoco'
     id 'java'
-    id 'org.jetbrains.intellij' version '0.4.10'
+    id 'org.jetbrains.intellij' version '0.4.15'
 }
 
 group 'io.github.thepieterdc.dodona'
@@ -61,6 +61,7 @@ patchPluginXml {
       <h3>New features</h3>
       <ul>
         <li>Project wizard: Add Dodona support to new projects.</li>
+        <li>Submissions: You will now get a confirmation box if you attempt to submit a solution that contains syntax errors.</li>
         <li>ToolWindow: List upcoming deadlines for this course.</li>
         <li>ToolWindow: List previous submissions for the current opened exercise.</li>
       </ul>
