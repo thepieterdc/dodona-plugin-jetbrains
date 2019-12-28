@@ -15,9 +15,9 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
 import io.github.thepieterdc.dodona.plugin.tasks.SubmitSolutionTask;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import org.jetbrains.annotations.NotNull;
@@ -46,11 +46,13 @@ public class SubmitAction extends AnAction {
 	public void actionPerformed(@NotNull final AnActionEvent e) {
 		// Get the document.
 		final Optional<Document> optDocument = getDocument(e.getProject());
+
+		final Optional<String> optCode = Optional.of("test");
 		
-		// Get the code.
-		final Optional<String> optCode = optDocument
-			.flatMap(doc -> getPsiFile(e.getProject(), doc))
-			.map(PsiElement::getText);
+//		// Get the code.
+//		final Optional<String> optCode = optDocument
+//			.flatMap(doc -> getPsiFile(e.getProject(), doc))
+//			.map(PsiElement::getText);
 		
 		// Create a new SubmitTask and execute it.
 		optCode.ifPresent(code -> {
@@ -59,6 +61,7 @@ public class SubmitAction extends AnAction {
 				SubmitSolutionTask
 					.create(Objects.requireNonNull(e.getProject()), code)
 					.execute();
+			} catch (final CancelledException ignored) {
 			} finally {
 				e.getPresentation().setEnabled(true);
 			}
@@ -88,7 +91,7 @@ public class SubmitAction extends AnAction {
 	 */
 	@Nonnull
 	private static Optional<PsiFile> getPsiFile(@Nullable final Project project,
-	                                            @Nonnull final Document document) {
+	                                            final Document document) {
 		return Optional.ofNullable(project)
 			.map(PsiDocumentManager::getInstance)
 			.map(mgr -> mgr.getPsiFile(document));
