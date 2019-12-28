@@ -53,7 +53,8 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 			// Prompt the user to identify the exercise.
 			final FullIdentification identification = IdentifyTask
 				.create(Objects.requireNonNull(e.getProject()))
-				.execute();
+				.execute()
+				.orElseThrow(CancelledException::new);
 			
 			// Get the current directory.
 			final PsiDirectory directory = Optional

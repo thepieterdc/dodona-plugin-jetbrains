@@ -1,25 +1,27 @@
 /*
- * Copyright (c) 2019. All rights reserved.
+ * Copyright (c) 2018-2019. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
  *
- * https://github.com/thepieterdc/dodona-plugin-jetbrains
+ * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
+
 package io.github.thepieterdc.dodona.plugin.exceptions.error;
 
-import be.ugent.piedcler.dodona.plugin.exceptions.WarningMessageException;
+import io.github.thepieterdc.dodona.exceptions.DodonaException;
+import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 
 /**
- * Thrown when the course and/or exercise id are not found in the code.
+ * Code is not yet identified.
  */
-public class UnidentifiedCodeException extends WarningMessageException {
-	private static final long serialVersionUID = -8013381022764225379L;
+public final class UnidentifiedCodeException extends DodonaException {
+	private static final long serialVersionUID = -3401236427063000618L;
 	
 	/**
-	 * ExerciseNotSetException constructor.
+	 * UnidentifiedCodeException constructor.
 	 */
 	public UnidentifiedCodeException() {
-		super("The course and/or exercise id were not set in your code.");
+		super(DodonaBundle.message("exceptions.error.unidentified_code"));
 	}
 }
