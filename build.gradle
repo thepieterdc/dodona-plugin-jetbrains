@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.0.0'
+version '2.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
@@ -56,22 +56,6 @@ jacocoTestReport {
 
 patchPluginXml {
     changeNotes """
-      <b>This version features a complete rewrite of the plugin.</b>
-      
-      <h3>New features</h3>
-      <ul>
-        <li>Project wizard: Add Dodona support to new projects.</li>
-        <li>Submissions: You will now get a confirmation box if you attempt to submit a solution that contains syntax errors.</li>
-        <li>ToolWindow: List upcoming deadlines for this course.</li>
-        <li>ToolWindow: List previous submissions for the current opened exercise.</li>
-      </ul>
-      
-      <h3>Improvements</h3>
-      <ul>
-        <li>Authentication should work smoother now.</li>
-        <li>General performance improvements.</li>
-        <li>Other servers besides dodona.ugent.be are now supported.</li>
-      </ul>
       """
 
     pluginDescription "Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE."
