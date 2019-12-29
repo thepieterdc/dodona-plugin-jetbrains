@@ -56,6 +56,10 @@ jacocoTestReport {
 
 patchPluginXml {
     changeNotes """
+      <ul>
+        <li>[BUGFIX] Exercise identification card now correctly handles errors.</li>
+        <li>[BUGFIX] Fixed some memory leaks.</li>
+      </ul>
       """
 
     pluginDescription "Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE."

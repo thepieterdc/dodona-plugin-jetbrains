@@ -81,6 +81,11 @@ public class ExercisesList extends JBList<Exercise> implements ResourceSelector<
 	}
 	
 	@Override
+	public void setSelectedResource(final long id) {
+		this.setSelectedResource(exercise -> exercise.getId() == id);
+	}
+	
+	@Override
 	public void setSelectedResource(final Predicate<? super Exercise> predicate) {
 		this.setSelectedResource(this.model.getItems().stream()
 			.filter(predicate)

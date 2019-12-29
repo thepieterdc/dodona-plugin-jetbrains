@@ -7,26 +7,28 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.ui.panels;
+package io.github.thepieterdc.dodona.plugin.ui.cards;
 
-import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.plugin.ui.TextColors;
+import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
 
 /**
- * Panel to display when no file is opened.
+ * Card to display when an error has occurred.
  */
-public final class NoFileOpenedPanel extends IconTextPanel {
+public final class ErrorCard extends IconTextCard {
+	@NonNls
 	private static final JComponent ICON = Icons.toComponent(
-		Icons.FILE_CODE.color(TextColors.SECONDARY)
+		Icons.ERROR.color(TextColors.SECONDARY)
 	);
 	
 	/**
-	 * NoFileOpenedPanel constructor.
+	 * ErrorCard constructor.
 	 */
-	public NoFileOpenedPanel() {
-		super(ICON, DodonaBundle.message("panel.no_file_opened.message"));
+	public ErrorCard(@Nls final String message) {
+		super(ICON, message);
 	}
 }

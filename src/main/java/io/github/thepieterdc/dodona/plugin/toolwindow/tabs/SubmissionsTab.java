@@ -9,9 +9,11 @@
 
 package io.github.thepieterdc.dodona.plugin.toolwindow.tabs;
 
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.fileEditor.FileEditor;
 import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.messages.MessageBusConnection;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
@@ -20,8 +22,8 @@ import io.github.thepieterdc.dodona.plugin.exercise.CurrentExerciseListener;
 import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import io.github.thepieterdc.dodona.plugin.toolwindow.ui.submissions.SubmissionsPanel;
-import io.github.thepieterdc.dodona.plugin.ui.panels.NoFileOpenedPanel;
-import io.github.thepieterdc.dodona.plugin.ui.panels.UnknownExercisePanel;
+import io.github.thepieterdc.dodona.plugin.ui.cards.NoFileOpenedCard;
+import io.github.thepieterdc.dodona.plugin.ui.cards.UnknownExerciseCard;
 import io.github.thepieterdc.dodona.plugin.ui.util.PanelUtils;
 import org.jetbrains.annotations.NonNls;
 
@@ -37,7 +39,7 @@ import java.util.Optional;
 /**
  * Controller for the tab showing previous submissions.
  */
-public class SubmissionsTab extends AbstractTab {
+public class SubmissionsTab extends AbstractTab implements Disposable {
 	private static final String TAB_TITLE = DodonaBundle.message("toolwindow.submissions.title");
 	
 	@NonNls
@@ -74,6 +76,11 @@ public class SubmissionsTab extends AbstractTab {
 	@Override
 	JComponent createContent() {
 		return this.panel;
+	}
+	
+	@Override
+	public void dispose() {
+		this.cards.values().forEach(Disposer::dispose);
 	}
 	
 	/**
@@ -119,10 +126,10 @@ public class SubmissionsTab extends AbstractTab {
 	 */
 	private void initialize() {
 		// Add the no-file card.
-		this.panel.add(new NoFileOpenedPanel().wrap(), CARD_NO_FILE);
+		this.panel.add(new NoFileOpenedCard().wrap(), CARD_NO_FILE);
 		
 		// Add the unknown exercise card.
-		this.panel.add(new UnknownExercisePanel(this.project).wrap(), CARD_UNKNOWN);
+		this.panel.add(new UnknownExerciseCard(this.project).wrap(), CARD_UNKNOWN);
 		
 		// Listen for changes in opened exercises.
 		final MessageBusConnection conn = this.project.getMessageBus().connect();

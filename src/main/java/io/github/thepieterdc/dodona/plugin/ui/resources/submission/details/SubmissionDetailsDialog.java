@@ -9,7 +9,6 @@
 
 package io.github.thepieterdc.dodona.plugin.ui.resources.submission.details;
 
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.util.Disposer;
@@ -26,7 +25,7 @@ import java.awt.*;
 /**
  * Dialog that shows the details of a submission.
  */
-public final class SubmissionDetailsDialog extends DialogWrapper implements Disposable {
+public final class SubmissionDetailsDialog extends DialogWrapper {
 	private static final Action[] NO_ACTIONS = {};
 	
 	private final SubmissionDetailsPanel detailsPanel;

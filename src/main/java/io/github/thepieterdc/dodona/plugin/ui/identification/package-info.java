@@ -8,9 +8,9 @@
  */
 
 /**
- * UI components for tasks.
+ * UI components for identification.
  */
 @ParametersAreNonnullByDefault
-package io.github.thepieterdc.dodona.plugin.tasks.ui;
+package io.github.thepieterdc.dodona.plugin.ui.identification;
 
 import javax.annotation.ParametersAreNonnullByDefault;

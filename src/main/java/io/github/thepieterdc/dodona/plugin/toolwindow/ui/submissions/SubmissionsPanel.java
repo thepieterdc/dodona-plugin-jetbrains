@@ -23,6 +23,7 @@ import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
 import javax.annotation.Nonnull;
 import javax.swing.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -32,7 +33,6 @@ import java.util.concurrent.CompletableFuture;
 public final class SubmissionsPanel extends StaticAsyncPanel<List<SubmissionInfo>, SubmissionsTable> {
 	private final DodonaExecutorHolder executor;
 	private final Identification identification;
-	private final Project project;
 	
 	private final SubmissionsTable table;
 	
@@ -50,11 +50,10 @@ public final class SubmissionsPanel extends StaticAsyncPanel<List<SubmissionInfo
 		this.setBorder(BorderFactory.createEmptyBorder());
 		this.executor = executor;
 		this.identification = identification;
-		this.project = project;
 		this.table = new SubmissionsTable();
 		
 		// Watch for new submissions.
-		final MessageBusConnection bus = this.project.getMessageBus().connect();
+		final MessageBusConnection bus = project.getMessageBus().connect();
 		bus.subscribe(
 			SubmissionCreatedListener.SUBMISSION_CREATED,
 			submission -> this.table.submissionCreated(submission.getInfo())
@@ -93,7 +92,7 @@ public final class SubmissionsPanel extends StaticAsyncPanel<List<SubmissionInfo
 	 */
 	private void showSubmissionDialog(final SubmissionInfo submission) {
 		new SubmissionDetailsDialog(
-			this.project, this.executor, submission, this.table)
+			Objects.requireNonNull(this.project), this.executor, submission, this.table)
 			.show();
 	}
 }

@@ -25,7 +25,6 @@ import java.util.function.Predicate;
  */
 public abstract class AbstractResourceComboBox<T extends Resource> extends ComboBox<T>
 	implements ResourceSelector<T> {
-	private final ItemSelectedListener<? super T> listener;
 	private final DefaultComboBoxModel<T> model;
 	
 	/**
@@ -37,9 +36,8 @@ public abstract class AbstractResourceComboBox<T extends Resource> extends Combo
 	protected AbstractResourceComboBox(final ListCellRenderer<T> renderer,
 	                                   final ItemSelectedListener<? super T> listener) {
 		super(0);
-		this.listener = listener;
 		this.model = new DefaultComboBoxModel<>();
-		this.addActionListener(e -> this.listener.onItemSelected(
+		this.addActionListener(e -> listener.onItemSelected(
 			this.getSelectedResource().orElse(null)
 		));
 		this.setModel(this.model);
@@ -64,6 +62,11 @@ public abstract class AbstractResourceComboBox<T extends Resource> extends Combo
 		if (!resources.isEmpty()) {
 			this.setSelectedIndex(0);
 		}
+	}
+	
+	@Override
+	public void setSelectedResource(final long id) {
+		this.setSelectedResource(course -> course.getId() == id);
 	}
 	
 	@Override

@@ -9,7 +9,6 @@
 
 package io.github.thepieterdc.dodona.plugin.ui.resources.submission;
 
-import com.intellij.openapi.Disposable;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorFactory;
@@ -34,13 +33,10 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Panel that displays the code of a submission.
  */
-public final class SubmissionCodeEditor
-	extends DynamicAsyncPanel<SolutionWithLanguage>
-	implements Disposable {
+public final class SubmissionCodeEditor extends DynamicAsyncPanel<SolutionWithLanguage> {
 	
 	private final EditorFactory editorFactory;
 	private final DodonaExecutorHolder executor;
-	private final Project project;
 	
 	@Nullable
 	private Editor editor;
@@ -60,7 +56,6 @@ public final class SubmissionCodeEditor
 		super(project, DodonaBundle.message("dialog.submission_details.loading"));
 		this.editorFactory = EditorFactory.getInstance();
 		this.executor = executor;
-		this.project = project;
 		this.submissionInfo = submissionInfo;
 	}
 	

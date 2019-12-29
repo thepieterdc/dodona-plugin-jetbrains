@@ -14,7 +14,7 @@ import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
 import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
-import io.github.thepieterdc.dodona.plugin.tasks.ui.IdentifyExerciseDialog;
+import io.github.thepieterdc.dodona.plugin.ui.identification.IdentifyExerciseDialog;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;

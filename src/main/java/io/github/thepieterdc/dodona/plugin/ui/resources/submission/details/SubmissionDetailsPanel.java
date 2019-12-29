@@ -13,6 +13,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.ide.BrowserUtil;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.components.JBLabel;
 import com.intellij.ui.components.labels.LinkLabel;
 import com.intellij.util.ui.JBUI;
@@ -60,7 +61,7 @@ final class SubmissionDetailsPanel extends JPanel implements Disposable {
 	
 	@Override
 	public void dispose() {
-		this.editorPanel.dispose();
+		Disposer.dispose(this.editorPanel);
 	}
 
 	/**

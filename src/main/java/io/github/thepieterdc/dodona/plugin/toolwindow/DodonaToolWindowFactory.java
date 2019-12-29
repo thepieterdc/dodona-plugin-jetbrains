@@ -12,6 +12,7 @@ package io.github.thepieterdc.dodona.plugin.toolwindow;
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -64,12 +65,14 @@ public class DodonaToolWindowFactory implements DumbAware {
 		
 		// Create the deadlines tab.
 		final DeadlinesTab deadlines = new DeadlinesTab(this.project, executor);
+		Disposer.register(this.project, deadlines);
 		
 		// Create the submissions tab.
 		final SubmissionsTab submissions = new SubmissionsTab(
 			this.project,
 			executor
 		);
+		Disposer.register(this.project, submissions);
 		
 		// Set the ToolWindow.
 		toolWindow.setIcon(IconUtil.toSize(Icons.DODONA, TW_ICON_SIZE, TW_ICON_SIZE));

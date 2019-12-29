@@ -18,7 +18,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * An async panel of which the content pane is recreated after every update.
+ * An async panel of which the content pane is created once.
  *
  * @param <C> type class of the content pane
  * @param <T> type class of the content

@@ -39,6 +39,13 @@ public interface ResourceSelector<T extends Resource> {
 	void setResources(Collection<? extends T> resources);
 	
 	/**
+	 * Sets the selected resource to the resource with the given id.
+	 *
+	 * @param id the id
+	 */
+	void setSelectedResource(long id);
+	
+	/**
 	 * Sets the selected resource to the first one that matches the predicate.
 	 *
 	 * @param predicate the predicate to match

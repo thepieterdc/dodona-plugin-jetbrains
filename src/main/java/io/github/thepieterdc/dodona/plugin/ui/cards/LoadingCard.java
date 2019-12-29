@@ -7,7 +7,7 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.ui.panels;
+package io.github.thepieterdc.dodona.plugin.ui.cards;
 
 import com.intellij.util.ui.AsyncProcessIcon;
 import org.jetbrains.annotations.Nls;
@@ -15,30 +15,30 @@ import org.jetbrains.annotations.Nls;
 import javax.swing.*;
 
 /**
- * Panel to display when the content is being loaded.
+ * Card to display when the content is being loaded.
  */
-public final class LoadingPanel extends IconTextPanel {
+public final class LoadingCard extends IconTextCard {
 	/**
-	 * LoadingPanel constructor.
+	 * LoadingCard constructor.
 	 *
 	 * @param text the text ot display underneath the spinner
 	 * @param icon the loading icon
 	 */
-	private LoadingPanel(@Nls final String text, final JComponent icon) {
+	private LoadingCard(@Nls final String text, final JComponent icon) {
 		super(icon, text);
 	}
 	
 	/**
-	 * Creates a new loading panel.
+	 * Creates a new loading card.
 	 *
 	 * @param text   the text to display underneath the spinner
 	 * @param parent the parent panel
-	 * @return the loading panel
+	 * @return the loading card
 	 */
-	public static LoadingPanel create(@Nls final String text,
-	                                  final JPanel parent) {
+	public static LoadingCard create(@Nls final String text,
+	                                 final JPanel parent) {
 		final AsyncProcessIcon icon = new AsyncProcessIcon.Big(parent + ".loading");
 		icon.setBackground(parent.getBackground());
-		return new LoadingPanel(text, icon);
+		return new LoadingCard(text, icon);
 	}
 }

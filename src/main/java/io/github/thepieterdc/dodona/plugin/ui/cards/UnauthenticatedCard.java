@@ -7,7 +7,7 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.ui.panels;
+package io.github.thepieterdc.dodona.plugin.ui.cards;
 
 import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
@@ -21,37 +21,37 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Panel to display when the user has entered incorrect authentication
+ * Card to display when the user has entered incorrect authentication
  * credentials.
  */
-public final class UnauthenticatedPanel extends IconTextPanel {
+public final class UnauthenticatedCard extends IconTextCard {
 	private static final JComponent ICON = Icons.toComponent(
 		Icons.USER_INVALID.color(TextColors.SECONDARY)
 	);
 	
 	/**
-	 * UnauthenticatedPanel constructor.
+	 * UnauthenticatedCard constructor.
 	 *
 	 * @param project current active project
 	 * @param parent  parent component
 	 */
-	private UnauthenticatedPanel(@Nullable final Project project,
-	                             @Nullable final Component parent) {
-		super(ICON, DodonaBundle.message("panel.unauthenticated.message"), () ->
+	private UnauthenticatedCard(@Nullable final Project project,
+	                            @Nullable final Component parent) {
+		super(ICON, DodonaBundle.message("card.unauthenticated.message"), () ->
 			DodonaAuthenticator.getInstance().requestAuthentication(project, parent)
 		);
 	}
 	
 	/**
-	 * Creates a new instance of the UnauthenticatedPanel.
+	 * Creates a new instance of the UnauthenticatedCard.
 	 *
 	 * @param project current active project
 	 * @param parent  parent component
 	 * @return the instance
 	 */
 	@Nonnull
-	public static UnauthenticatedPanel create(@Nullable final Project project,
-	                                          @Nullable final Component parent) {
-		return new UnauthenticatedPanel(project, parent);
+	public static UnauthenticatedCard create(@Nullable final Project project,
+	                                         @Nullable final Component parent) {
+		return new UnauthenticatedCard(project, parent);
 	}
 }

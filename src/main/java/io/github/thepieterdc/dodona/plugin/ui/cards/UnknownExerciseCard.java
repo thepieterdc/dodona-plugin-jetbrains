@@ -7,7 +7,7 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.ui.panels;
+package io.github.thepieterdc.dodona.plugin.ui.cards;
 
 import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
@@ -18,20 +18,20 @@ import io.github.thepieterdc.dodona.plugin.ui.TextColors;
 import javax.swing.*;
 
 /**
- * Panel to display when the exercise could not be identified.
+ * Card to display when the exercise could not be identified.
  */
-public final class UnknownExercisePanel extends IconTextPanel {
+public final class UnknownExerciseCard extends IconTextCard {
 	private static final JComponent ICON = Icons.toComponent(
 		Icons.QUESTION.color(TextColors.SECONDARY)
 	);
 	
 	/**
-	 * UnknownExercisePanel constructor.
+	 * UnknownExerciseCard constructor.
 	 *
 	 * @param project the current active project
 	 */
-	public UnknownExercisePanel(final Project project) {
-		super(ICON, DodonaBundle.message("panel.unknown_exercise.message"), () ->
+	public UnknownExerciseCard(final Project project) {
+		super(ICON, DodonaBundle.message("card.unknown_exercise.message"), () ->
 			CodeIdentificationService.getInstance(project).identifyCurrent()
 		);
 	}

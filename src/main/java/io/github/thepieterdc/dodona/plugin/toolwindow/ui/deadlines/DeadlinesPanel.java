@@ -16,7 +16,7 @@ import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.ui.Deadline;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.plugin.ui.TextColors;
-import io.github.thepieterdc.dodona.plugin.ui.panels.IconTextPanel;
+import io.github.thepieterdc.dodona.plugin.ui.cards.IconTextCard;
 import io.github.thepieterdc.dodona.plugin.ui.panels.async.StaticAsyncPanel;
 import io.github.thepieterdc.dodona.resources.Course;
 import org.jetbrains.annotations.Nls;
@@ -90,7 +90,7 @@ public final class DeadlinesPanel extends StaticAsyncPanel<List<Deadline>, Deadl
 		// Create a card that is shown when no deadlines were found.
 		this.add(
 			CARD_NONE,
-			new IconTextPanel(ICON_NONE, DodonaBundle.message("toolwindow.deadlines.none")).wrap()
+			new IconTextCard(ICON_NONE, DodonaBundle.message("toolwindow.deadlines.none")).wrap()
 		);
 	}
 	

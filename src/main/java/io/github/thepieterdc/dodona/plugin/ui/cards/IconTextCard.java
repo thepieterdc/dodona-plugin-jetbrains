@@ -7,7 +7,7 @@
  * https://github.com/thepieterdc/dodona-plugin-jetbrains/
  */
 
-package io.github.thepieterdc.dodona.plugin.ui.panels;
+package io.github.thepieterdc.dodona.plugin.ui.cards;
 
 import com.intellij.ui.ScrollPaneFactory;
 import io.github.thepieterdc.dodona.plugin.ui.listeners.ClickListener;
@@ -19,29 +19,29 @@ import java.awt.*;
 import java.util.function.Consumer;
 
 /**
- * Common panel that displays an icon and a line of text.
+ * Common card that displays an icon and a line of text.
  */
-public class IconTextPanel extends JPanel {
+public class IconTextCard extends JPanel {
 	/**
-	 * IconTextPanel constructor.
+	 * IconTextCard constructor.
 	 *
 	 * @param icon the icon to display
 	 * @param text the text to display underneath the icon
 	 */
-	public IconTextPanel(final JComponent icon, @Nls final String text) {
+	public IconTextCard(final JComponent icon, @Nls final String text) {
 		this(icon, text, inner -> {
 		});
 	}
 	
 	/**
-	 * IconTextPanel constructor.
+	 * IconTextCard constructor.
 	 *
 	 * @param icon    the icon to display
 	 * @param text    the text to display underneath the icon
-	 * @param handler handler to call upon clicking the panel
+	 * @param handler handler to call upon clicking the card
 	 */
-	IconTextPanel(final JComponent icon, @Nls final String text,
-	              final Runnable handler) {
+	IconTextCard(final JComponent icon, @Nls final String text,
+	             final Runnable handler) {
 		this(icon, text, inner -> {
 			inner.addMouseListener((ClickListener) e -> handler.run());
 			inner.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -49,14 +49,14 @@ public class IconTextPanel extends JPanel {
 	}
 	
 	/**
-	 * IconTextPanel constructor.
+	 * IconTextCard constructor.
 	 *
 	 * @param icon          the icon to display
 	 * @param text          the text to display underneath the icon
 	 * @param innerModifier modifies the inner panel
 	 */
-	IconTextPanel(final JComponent icon, @Nls final String text,
-	              final Consumer<? super JPanel> innerModifier) {
+	IconTextCard(final JComponent icon, @Nls final String text,
+	             final Consumer<? super JPanel> innerModifier) {
 		super(new GridBagLayout());
 		
 		final JPanel inner = new JPanel(new BorderLayout(10, 10));
