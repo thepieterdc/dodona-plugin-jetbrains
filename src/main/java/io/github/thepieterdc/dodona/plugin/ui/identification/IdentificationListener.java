@@ -24,22 +24,19 @@ interface IdentificationListener {
 	 *
 	 * @param selected the selected course
 	 */
-	default void onCourseSelected(@Nullable final Course selected) {
-	}
+	void onCourseSelected(@Nullable final Course selected);
 	
 	/**
 	 * Called when an exercise has been selected.
 	 *
 	 * @param selected the selected exercise
 	 */
-	default void onExerciseSelected(@Nullable final Exercise selected) {
-	}
+	void onExerciseSelected(@Nullable final Exercise selected);
 	
 	/**
 	 * Called when a series has been selected.
 	 *
 	 * @param selected the selected series
 	 */
-	default void onSeriesSelected(@Nullable final Series selected) {
-	}
+	void onSeriesSelected(@Nullable final Series selected);
 }

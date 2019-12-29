@@ -11,8 +11,8 @@ package io.github.thepieterdc.dodona.plugin.ui.util;
 
 import com.github.marlonlom.utilities.timeago.TimeAgo;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.reactivex.annotations.NonNull;
 
+import javax.annotation.Nonnull;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.chrono.ChronoZonedDateTime;
@@ -33,7 +33,7 @@ public enum TimeUtils {
 	 * @param timestamp the timestamp to compare
 	 * @return the sentence
 	 */
-	@NonNull
+	@Nonnull
 	public static String fuzzy(final ChronoZonedDateTime<LocalDate> timestamp) {
 		return TimeAgo.using(timestamp.toEpochSecond() * MILLIS_PER_SECOND);
 	}
@@ -44,7 +44,7 @@ public enum TimeUtils {
 	 * @param duration the duration to format
 	 * @return the sentence
 	 */
-	@NonNull
+	@Nonnull
 	public static String fuzzy(final Duration duration) {
 		if (duration.toMillis() < 10L * MILLIS_PER_SECOND) {
 			return DodonaBundle.message("duration.now");

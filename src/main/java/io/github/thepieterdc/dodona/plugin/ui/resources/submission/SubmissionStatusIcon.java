@@ -12,7 +12,6 @@ package io.github.thepieterdc.dodona.plugin.ui.resources.submission;
 import io.github.thepieterdc.dodona.data.SubmissionStatus;
 import io.github.thepieterdc.dodona.exceptions.SubmissionStatusNotFoundException;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
-import io.reactivex.annotations.NonNull;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -69,7 +68,7 @@ public enum SubmissionStatusIcon implements Icon {
 	 * @param name the name
 	 * @return the icon
 	 */
-	@NonNull
+	@Nonnull
 	private static Icon get(@NonNls final String name) {
 		return Icons.getIcon("submission-status/" + name);
 	}
