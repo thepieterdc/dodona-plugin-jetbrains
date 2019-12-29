@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.0.1'
+version '2.0.2-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
@@ -57,11 +57,6 @@ jacocoTestReport {
 
 patchPluginXml {
     changeNotes """
-      <ul>
-        <li>[BUGFIX] Exercise identification card now correctly handles errors.</li>
-        <li>[BUGFIX] Fixed some memory leaks.</li>
-        <li>[BUGFIX] Plugin is now available for newer IntellIJ versions as well.</li>
-      </ul>
       """
 
     pluginDescription "Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE."
