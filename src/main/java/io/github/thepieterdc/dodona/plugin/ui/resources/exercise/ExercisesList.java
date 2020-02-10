@@ -34,6 +34,7 @@ public class ExercisesList extends JBList<Exercise> implements ResourceSelector<
 		exercise.getStatus() == ExerciseStatus.INCORRECT
 			|| exercise.getStatus() == ExerciseStatus.NOT_ATTEMPTED;
 	
+	private final ItemSelectedListener<Exercise> listener;
 	private final CollectionListModel<Exercise> model;
 	
 	/**
@@ -45,7 +46,9 @@ public class ExercisesList extends JBList<Exercise> implements ResourceSelector<
 	public ExercisesList(final Runnable confirmed,
 	                     final ItemSelectedListener<Exercise> selected) {
 		super();
+		this.listener = selected;
 		this.model = new CollectionListModel<>();
+		
 		// Detect double-clicks.
 		this.addMouseListener((DoubleClickListener) e -> confirmed.run());
 		this.addMouseListener((ClickListener) e -> selected.onItemSelected(this.getSelectedValue()));
@@ -97,5 +100,6 @@ public class ExercisesList extends JBList<Exercise> implements ResourceSelector<
 	@Override
 	public void setSelectedResource(@Nullable final Exercise resource) {
 		this.setSelectedValue(resource, true);
+		this.listener.onItemSelected(resource);
 	}
 }

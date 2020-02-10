@@ -57,7 +57,7 @@ jacocoTestReport {
 
 patchPluginXml {
     changeNotes """
-
+      [BUGFIX] Enable the OK button if an exercise is auto-selected at the Identification dialog.
       """
 
     pluginDescription "Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE."
