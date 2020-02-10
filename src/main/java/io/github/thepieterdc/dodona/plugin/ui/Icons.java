@@ -37,6 +37,7 @@ public enum Icons implements Icon {
 	EXERCISE_WRONG("exercise-wrong"),
 	// Other icons.
 	CALENDAR("calendar"),
+	COURSE("course"),
 	DEADLINES_CHECK("deadlines-check"),
 	ERROR("error"),
 	FILE_CODE("file-code"),
