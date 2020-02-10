@@ -57,6 +57,9 @@ jacocoTestReport {
 
 patchPluginXml {
     changeNotes """
+      <ul>
+        <li>[BUGFIX] Fixed NullPointerException when creating an exercise without having subscribed to any course yet.</li>
+      </ul>
       """
 
     pluginDescription "Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE."

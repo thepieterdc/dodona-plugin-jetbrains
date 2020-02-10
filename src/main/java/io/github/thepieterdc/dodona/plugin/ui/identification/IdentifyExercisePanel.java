@@ -15,10 +15,12 @@ import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.api.executor.ExecutorListener;
 import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
 import io.github.thepieterdc.dodona.plugin.ui.cards.NoConnectionCard;
+import io.github.thepieterdc.dodona.plugin.ui.cards.NoCourseSubscribedCard;
 import io.github.thepieterdc.dodona.plugin.ui.panels.ContentPanelBase;
 import io.github.thepieterdc.dodona.resources.Course;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.Series;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -31,6 +33,9 @@ import java.util.Optional;
  */
 final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanelContent>
 	implements Disposable, IdentificationListener {
+	@NonNls
+	private static final String CARD_NO_COURSES = "CARD_NO_COURSES";
+	
 	private final DodonaExecutorHolder executor;
 	
 	private final IdentifyExercisePanelContent content;
@@ -79,9 +84,18 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
 		// visible.
 	}
 	
+	private void handleNoCourses() {
+		this.showCard(CARD_NO_COURSES);
+	}
+	
 	@Override
 	protected void initialize() {
 		super.initialize();
+		
+		// Create a card that is shown when the user is not subscribed to any
+		// courses.
+		this.add(CARD_NO_COURSES, NoCourseSubscribedCard.create(this::updateCourses).wrap());
+		
 		this.updateCourses();
 	}
 	
@@ -151,11 +165,13 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
 		this.executor.getExecutor()
 			.execute(dodona -> dodona.me().getSubscribedCourses())
 			.whenComplete((courses, error) -> SwingUtilities.invokeLater(() -> {
-				if (error == null) {
+				if (error == null && !courses.isEmpty()) {
 					this.content.getCourseComboBox().setEnabled(true);
 					this.content.getCourseComboBox().setResources(courses);
 					this.content.setCoursesLoading(false);
 					this.content.getCourseComboBox().requestFocus();
+				} else if (courses.isEmpty()) {
+					this.handleNoCourses();
 				} else {
 					this.handleError(error);
 				}
