@@ -7,13 +7,14 @@ assignees: thepieterdc
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+# Description
+Provide a clear and concise description of the bug.
 
-**System:**
- - OS: [Linux, OSX, Windows] (also include the version)
-- IDE: [IntellIJ/PyCharm/WebStorm/..] (also include the version; e.g. 2018.3)
- - Plugin version [e.g. 1.3.1]
+# Environment
+- OS: [Linux, OSX, Windows] (also include the version; e.g. Windows 10)
+- IDE: [IntelliJ, PyCharm, WebStorm, ...] (also include the version; e.g. IntelliJ 2018.3)
+- Plugin version: (e.g. 2.0.2)
+- Java version: (e.g. OpenJDK 1.8.0_201)
 
-**Screenshots**
+# Screenshots
 If applicable, add screenshots to help explain your problem.
