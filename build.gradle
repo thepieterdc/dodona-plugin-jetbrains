@@ -58,6 +58,7 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       [BUGFIX] Enable the OK button if an exercise is auto-selected at the Identification dialog.
+      [BUGFIX] Set the class name based on the name of the file when creating new Java exercises. 
       """
 
     pluginDescription "Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE."

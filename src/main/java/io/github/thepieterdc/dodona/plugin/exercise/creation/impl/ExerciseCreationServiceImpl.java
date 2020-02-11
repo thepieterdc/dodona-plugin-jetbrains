@@ -9,13 +9,16 @@
 
 package io.github.thepieterdc.dodona.plugin.exercise.creation.impl;
 
+import com.intellij.ide.highlighter.JavaFileType;
 import com.intellij.openapi.application.ActionsKt;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.ui.UIBundle;
@@ -27,6 +30,7 @@ import io.github.thepieterdc.dodona.plugin.exercise.creation.ExerciseCreationSer
 import io.github.thepieterdc.dodona.plugin.exercise.naming.ExerciseNamingService;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
 
@@ -34,9 +38,16 @@ import javax.annotation.Nonnull;
  * Default implementation of an ExerciseCreationService.
  */
 public class ExerciseCreationServiceImpl implements ExerciseCreationService {
+	private static final char EXT_SEP = '.';
+	
+	@NonNls
+	private static final String JAVA_CLASS = "Class.java.ft";
+	
 	private final CodeIdentificationService codeIdentificationService;
 	private final PsiFileFactory fileFactory;
 	private final ExerciseNamingService naming;
+	
+	private final PsiElementFactory javaElementFactory;
 	
 	/**
 	 * ExerciseCreationServiceImpl constructor.
@@ -46,6 +57,7 @@ public class ExerciseCreationServiceImpl implements ExerciseCreationService {
 	public ExerciseCreationServiceImpl(final Project project) {
 		this.codeIdentificationService = CodeIdentificationService.getInstance(project);
 		this.fileFactory = PsiFileFactory.getInstance(project);
+		this.javaElementFactory = JavaPsiFacade.getElementFactory(project);
 		this.naming = ExerciseNamingService.getInstance();
 	}
 	
@@ -63,7 +75,7 @@ public class ExerciseCreationServiceImpl implements ExerciseCreationService {
 		// Generate the file contents.
 		final String rawContents = identification.getExercise()
 			.getBoilerplate()
-			.orElse("");
+			.orElseGet(() -> this.generateContents(filename));
 		
 		// Insert the identification string.
 		final String contents = this.codeIdentificationService
@@ -78,6 +90,28 @@ public class ExerciseCreationServiceImpl implements ExerciseCreationService {
 		return ActionsKt
 			.runWriteAction(() -> (PsiFile) directory.add(file))
 			.getVirtualFile();
+	}
+	
+	/**
+	 * Generates the file contents for the given exercise, mainly used for Java
+	 * class generation.
+	 *
+	 * @param filename the filename
+	 * @return the file contents
+	 */
+	@Nonnull
+	private String generateContents(final String filename) {
+		// Generate Java contents.
+		if (filename.endsWith(JavaFileType.DOT_DEFAULT_EXTENSION)) {
+			// Parse the class name from the file.
+			final String className = filename.substring(0, filename.indexOf(EXT_SEP));
+			
+			// Get the Java class template.
+			return this.javaElementFactory.createClass(className).getText();
+		}
+		
+		// Empty file.
+		return "";
 	}
 	
 	/**
