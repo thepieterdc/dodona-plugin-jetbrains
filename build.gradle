@@ -58,6 +58,7 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       [BUGFIX] Enable the OK button if an exercise is auto-selected at the Identification dialog.
+      [BUGFIX] Fixed a NullPointerException when no valid credentials are present.
       [BUGFIX] Set the class name based on the name of the file when creating new Java exercises. 
       """
 
