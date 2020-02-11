@@ -1,6 +1,12 @@
 <idea-plugin>
-    <extensions defaultExtensionNs="com.intellij">
-        <moduleType id="DODONA_JAVA_MODULE"
-                    implementationClass="io.github.thepieterdc.dodona.plugin.project.types.DodonaJavaType"/>
-    </extensions>
+  <extensions defaultExtensionNs="com.intellij">
+    <moduleType id="DODONA_JAVA_MODULE"
+                implementationClass="io.github.thepieterdc.dodona.plugin.project.types.DodonaJavaType"/>
+
+    <!-- File creation -->
+    <projectService
+      serviceImplementation="io.github.thepieterdc.dodona.plugin.exercise.creation.impl.JavaExerciseCreationServiceImpl"
+      serviceInterface="io.github.thepieterdc.dodona.plugin.exercise.creation.ExerciseCreationService"
+      overrides="true"/>
+  </extensions>
 </idea-plugin>

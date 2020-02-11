@@ -165,13 +165,15 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
 		this.executor.getExecutor()
 			.execute(dodona -> dodona.me().getSubscribedCourses())
 			.whenComplete((courses, error) -> SwingUtilities.invokeLater(() -> {
-				if (error == null && !courses.isEmpty()) {
-					this.content.getCourseComboBox().setEnabled(true);
-					this.content.getCourseComboBox().setResources(courses);
-					this.content.setCoursesLoading(false);
-					this.content.getCourseComboBox().requestFocus();
-				} else if (courses.isEmpty()) {
-					this.handleNoCourses();
+				if (error == null) {
+					if (courses.isEmpty()) {
+						this.handleNoCourses();
+					} else {
+						this.content.getCourseComboBox().setEnabled(true);
+						this.content.getCourseComboBox().setResources(courses);
+						this.content.setCoursesLoading(false);
+						this.content.getCourseComboBox().requestFocus();
+					}
 				} else {
 					this.handleError(error);
 				}
