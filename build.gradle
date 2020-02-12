@@ -41,9 +41,9 @@ dependencies {
 intellij {
     downloadSources false
     pluginName 'dodona'
-    plugins = ['java', 'PythonCore:193.5233.139']
+    plugins = ['java', 'PythonCore:2019.2.192.5728.98']
     updateSinceUntilBuild false
-    version 'IU-193.5662.53'
+    version 'IU-192.5728.98'
 }
 
 jacocoTestReport {
@@ -58,6 +58,7 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
+        <li>[BUGFIX] Compatibility with older versions.</li>
       </ul>
       """
 
