@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.0.3'
+version '2.0.4-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
@@ -58,9 +58,6 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
-        <li>[BUGFIX] Enable the OK button if an exercise is auto-selected at the Identification dialog.</li>
-        <li>[BUGFIX] Fixed a NullPointerException when no valid credentials are present.</li>
-        <li>[BUGFIX] Set the class name based on the name of the file when creating new Java exercises.</li>
       </ul>
       """
 
