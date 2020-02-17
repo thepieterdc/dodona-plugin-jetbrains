@@ -14,8 +14,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
-import io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings;
-import io.github.thepieterdc.dodona.plugin.settings.listeners.ProjectCourseListener;
 import io.github.thepieterdc.dodona.plugin.toolwindow.ui.deadlines.DeadlinesPanel;
 
 import javax.annotation.Nonnull;
@@ -39,16 +37,6 @@ public class DeadlinesTab extends AbstractTab implements Disposable {
 	                    final DodonaExecutorHolder executor) {
 		super(TAB_TITLE);
 		this.deadlinesPanel = new DeadlinesPanel(project, executor);
-		
-		// Listen for project changes.
-		project.getMessageBus().connect().subscribe(
-			ProjectCourseListener.CHANGED_TOPIC,
-			this.deadlinesPanel::setCurrentCourse
-		);
-		
-		// Set the current project.
-		DodonaProjectSettings.getInstance(project)
-			.getCourseId().ifPresent(this.deadlinesPanel::setCurrentCourse);
 		
 		// Load the deadlines.
 		this.deadlinesPanel.requestUpdate();

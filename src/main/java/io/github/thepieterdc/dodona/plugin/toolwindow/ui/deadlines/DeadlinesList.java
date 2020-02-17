@@ -15,7 +15,6 @@ import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.ui.Deadline;
 import io.github.thepieterdc.dodona.plugin.ui.panels.async.AsyncPanelContent;
 
-import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.List;
 
@@ -48,15 +47,6 @@ final class DeadlinesList extends JBList<Deadline> implements AsyncPanelContent<
 	 */
 	public int listSize() {
 		return this.model.getSize();
-	}
-	
-	/**
-	 * Sets the current course.
-	 *
-	 * @param course the current course
-	 */
-	public void setCurrentCourse(@Nullable final Long course) {
-		this.renderer.setCurrentCourse(course);
 	}
 	
 	@Override

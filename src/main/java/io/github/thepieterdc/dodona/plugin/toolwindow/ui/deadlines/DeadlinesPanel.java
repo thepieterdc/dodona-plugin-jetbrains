@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import javax.swing.*;
 import java.util.List;
 import java.util.Map;
@@ -92,15 +91,6 @@ public final class DeadlinesPanel extends StaticAsyncPanel<List<Deadline>, Deadl
 			CARD_NONE,
 			new IconTextCard(ICON_NONE, DodonaBundle.message("toolwindow.deadlines.none")).wrap()
 		);
-	}
-	
-	/**
-	 * Sets the current course.
-	 *
-	 * @param course the current course
-	 */
-	public void setCurrentCourse(@Nullable final Long course) {
-		this.list.setCurrentCourse(course);
 	}
 	
 	@Override

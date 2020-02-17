@@ -58,7 +58,8 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
-        <li>[BUGFIX] Preserve order of exercises when identifying an exercise.</li> 
+        <li>[BUGFIX] Deadline ToolWindow now looks better on light mode.</li> 
+        <li>[BUGFIX] Remember selected series when creating a new exercise.</li>
         <li>[BUGFIX] Remember selected series when creating a new exercise.</li>
       </ul>
       """

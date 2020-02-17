@@ -15,11 +15,9 @@ import com.intellij.util.ui.UIUtil;
 import io.github.thepieterdc.dodona.plugin.ui.Deadline;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.plugin.ui.renderers.list.AbstractListCellRenderer;
-import io.github.thepieterdc.dodona.plugin.ui.util.FontUtils;
 import io.github.thepieterdc.dodona.plugin.ui.util.TimeUtils;
 import org.jetbrains.annotations.NonNls;
 
-import javax.annotation.Nullable;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
@@ -42,13 +40,11 @@ final class DeadlineListCellRenderer extends AbstractListCellRenderer<Deadline> 
 	@NonNls
 	private static final String HTML = "<html>%s</html>";
 	
-	private static final Border DIVIDER = BorderFactory.createMatteBorder(
-		1, 7, 5, 7, secondary
-	);
+	private static final Border DIVIDER = BorderFactory.createCompoundBorder(
+		BorderFactory.createMatteBorder(0, 0, 3, 0, secondary),
+		BorderFactory.createEmptyBorder(0, 10, 4, 10));
 	
 	private static final float DEADLINE_FONT_RATIO = 1.4f;
-	
-	private long currentCourse;
 	
 	private final JLabel course;
 	private final JLabel deadline;
@@ -60,7 +56,6 @@ final class DeadlineListCellRenderer extends AbstractListCellRenderer<Deadline> 
 	DeadlineListCellRenderer() {
 		super(new GridBagLayout());
 		this.course = new JLabel("", SwingConstants.LEFT);
-		this.currentCourse = 0L;
 		this.deadline = new JLabel("", SwingConstants.RIGHT);
 		this.series = new JLabel("", SwingConstants.LEFT);
 		this.createLayout();
@@ -139,11 +134,7 @@ final class DeadlineListCellRenderer extends AbstractListCellRenderer<Deadline> 
 	                                              final boolean isSelected,
 	                                              final boolean cellHasFocus) {
 		// Set the upper border.
-		if (index < 1) {
-			this.setBorder(BorderFactory.createEmptyBorder(5, 7, 5, 7));
-		} else {
-			this.setBorder(DIVIDER);
-		}
+		this.setBorder(DIVIDER);
 		
 		// Set the cell background color.
 		UIUtil.setBackgroundRecursively(
@@ -158,21 +149,11 @@ final class DeadlineListCellRenderer extends AbstractListCellRenderer<Deadline> 
 		this.series.setText(String.format(HTML, value.getSeriesName()));
 		
 		// Set the deadline text.
-		FontUtils.boldenIf(this.deadline, value.getCourseId() == this.currentCourse);
 		this.deadline.setText(TimeUtils.fuzzy(Duration.between(
 			LocalDateTime.now(),
 			value.getDeadline()
 		)));
 		
 		return this;
-	}
-	
-	/**
-	 * Sets the current course.
-	 *
-	 * @param course the current course
-	 */
-	public void setCurrentCourse(@Nullable final Long course) {
-		this.currentCourse = course == null ? 0L : course;
 	}
 }
