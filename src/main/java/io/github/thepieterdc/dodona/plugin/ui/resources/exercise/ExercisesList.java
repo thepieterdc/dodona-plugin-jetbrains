@@ -21,10 +21,10 @@ import io.github.thepieterdc.dodona.resources.Exercise;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 /**
  * A list containing exercises.
@@ -72,9 +72,7 @@ public class ExercisesList extends JBList<Exercise> implements ResourceSelector<
 		);
 		
 		// Set the new items.
-		this.model.replaceAll(
-			resources.stream().sorted().collect(Collectors.toList())
-		);
+		this.model.replaceAll(new ArrayList<>(resources));
 		
 		// Find the first incorrect exercise and select it.
 		this.model.getItems().stream()

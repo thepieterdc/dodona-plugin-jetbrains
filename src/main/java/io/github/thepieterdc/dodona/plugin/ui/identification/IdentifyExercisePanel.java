@@ -217,6 +217,11 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
 		this.content.setExercisesLoading(true);
 		this.content.setSeriesLoading(true);
 		
+		// Get the current course, if available.
+		final Optional<Long> optSeries = Optional.ofNullable(this.project)
+			.map(DodonaProjectSettings::getInstance)
+			.flatMap(DodonaProjectSettings::getSeriesId);
+		
 		// Load the series.
 		this.executor.getExecutor()
 			.execute(dodona -> dodona.series().getAll(course))
@@ -229,6 +234,9 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
 				} else {
 					this.handleError(error);
 				}
-			}));
+			}))
+			.thenRun(() -> optSeries.ifPresent(seriesId ->
+				this.content.getSeriesComboBox().setSelectedResource(seriesId)
+			));
 	}
 }

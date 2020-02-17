@@ -15,6 +15,7 @@ import io.github.thepieterdc.dodona.resources.Course;
 
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.stream.Collectors;
 
 /**
  * A combo box containing courses.
@@ -31,10 +32,8 @@ public class CourseComboBox extends AbstractResourceComboBox<Course> {
 	
 	@Override
 	public void setResources(final Collection<? extends Course> resources) {
-		// Remove the previous items.
-		this.removeAllItems();
-		
-		// Set the new items.
-		resources.stream().sorted(Comparator.reverseOrder()).forEach(this::addItem);
+		super.setResources(resources.stream()
+			.sorted(Comparator.reverseOrder())
+			.collect(Collectors.toList()));
 	}
 }

@@ -63,6 +63,11 @@ public class ExerciseOpenedBroadcaster implements FileEditorManagerListener {
 			DodonaProjectSettings.getInstance(this.project).setCourseId(course)
 		);
 		
+		// Set the series in the settings.
+		identification.flatMap(Identification::getSeriesId).ifPresent(series ->
+			DodonaProjectSettings.getInstance(this.project).setSeriesId(series)
+		);
+		
 		// Publish the event.
 		this.bus.syncPublisher(CurrentExerciseListener.CHANGED_TOPIC)
 			.onCurrentExercise(vFile, identification.orElse(null));

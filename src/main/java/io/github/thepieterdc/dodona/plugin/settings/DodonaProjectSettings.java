@@ -67,6 +67,16 @@ public class DodonaProjectSettings implements PersistentStateComponent<DodonaPro
 		return ServiceManager.getService(project, DodonaProjectSettings.class);
 	}
 	
+	/**
+	 * Gets the series id if set.
+	 *
+	 * @return the series id
+	 */
+	@Nonnull
+	public Optional<Long> getSeriesId() {
+		return Optional.of(this.state.series_id).filter(id -> id > 0L);
+	}
+	
 	@Nonnull
 	@Override
 	public State getState() {
@@ -89,9 +99,20 @@ public class DodonaProjectSettings implements PersistentStateComponent<DodonaPro
 	}
 	
 	/**
+	 * Sets the series id.
+	 *
+	 * @param id the series id
+	 */
+	public void setSeriesId(final long id) {
+		this.state.series_id = id;
+		this.bus.syncPublisher(ProjectCourseListener.CHANGED_TOPIC).onCourseChanged(id);
+	}
+	
+	/**
 	 * Setting values.
 	 */
 	public static class State {
 		public long course_id = 0L;
+		public long series_id = 0L;
 	}
 }

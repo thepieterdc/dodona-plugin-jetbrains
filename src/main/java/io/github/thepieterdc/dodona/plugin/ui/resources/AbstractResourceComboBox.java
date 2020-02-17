@@ -56,7 +56,7 @@ public abstract class AbstractResourceComboBox<T extends Resource> extends Combo
 		this.model.removeAllElements();
 		
 		// Set the new items.
-		resources.stream().sorted().forEach(this.model::addElement);
+		resources.forEach(this.model::addElement);
 		
 		// Auto-select the first item.
 		if (!resources.isEmpty()) {
@@ -66,7 +66,7 @@ public abstract class AbstractResourceComboBox<T extends Resource> extends Combo
 	
 	@Override
 	public void setSelectedResource(final long id) {
-		this.setSelectedResource(course -> course.getId() == id);
+		this.setSelectedResource(resource -> resource.getId() == id);
 	}
 	
 	@Override
