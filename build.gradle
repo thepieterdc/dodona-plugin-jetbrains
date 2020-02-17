@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.0.5'
+version '2.0.6-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
@@ -58,9 +58,6 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
-        <li>[BUGFIX] Deadline ToolWindow now looks better on light mode.</li> 
-        <li>[BUGFIX] Preserve order of exercises when identifying an exercise.</li>
-        <li>[BUGFIX] Remember selected series when creating a new exercise.</li>
       </ul>
       """
 
