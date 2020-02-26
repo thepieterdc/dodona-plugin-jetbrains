@@ -34,7 +34,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 		this.notifications = NotificationService.getInstance(project);
 		
 		this.providers.put(SubmissionStatus.COMPILATION_ERROR, this::compilationError);
-		this.providers.put(SubmissionStatus.CORRECT, (ex, sub) -> this.correct(ex));
+		this.providers.put(SubmissionStatus.CORRECT, this::correct);
 		this.providers.put(SubmissionStatus.INTERNAL_ERROR, (ex, sub) -> this.internalError(ex));
 		this.providers.put(SubmissionStatus.MEMORY_LIMIT_EXCEEDED, this::memoryLimitExceeded);
 		this.providers.put(SubmissionStatus.RUNTIME_ERROR, this::runtimeError);
@@ -60,13 +60,14 @@ public class FeedbackServiceImpl implements FeedbackService {
 	/**
 	 * Correct solution handler.
 	 *
-	 * @param exercise   the exercise
+	 * @param exercise the exercise
 	 */
-	private void correct(final Exercise exercise) {
+	private void correct(final Exercise exercise,
+	                     final SubmissionInfo submission) {
 		this.notifications.info(
 			DodonaBundle.message("feedback.correct.title"),
 			SubmissionStatusIcon.CORRECT,
-			DodonaBundle.message("feedback.correct.message", exercise.getName())
+			DodonaBundle.message("feedback.correct.message", exercise.getName(), submission.getUrl())
 		);
 	}
 	
@@ -99,9 +100,8 @@ public class FeedbackServiceImpl implements FeedbackService {
 	
 	@Override
 	public void notify(final Exercise exercise, final SubmissionInfo submission) {
-		Optional.ofNullable(this.providers.get(submission.getStatus())).ifPresent(p ->
-			p.accept(exercise, submission)
-		);
+		Optional.ofNullable(this.providers.get(submission.getStatus()))
+			.ifPresent(p -> p.accept(exercise, submission));
 	}
 	
 	/**

@@ -58,6 +58,7 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
+        <li>[FEATURE] Added a link to the submission for successful submissions as well.
       </ul>
       """
 
