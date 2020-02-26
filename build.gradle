@@ -59,6 +59,7 @@ patchPluginXml {
     changeNotes """
       <ul>
         <li>[FEATURE] Added a link to the submission for successful submissions as well.
+        <li>[IMPROVEMENT] Improved the error messages to clarify which icons can be clicked on and which ones not.
       </ul>
       """
 

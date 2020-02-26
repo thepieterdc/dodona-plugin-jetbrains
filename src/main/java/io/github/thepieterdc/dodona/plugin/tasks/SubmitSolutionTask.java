@@ -9,6 +9,7 @@
 
 package io.github.thepieterdc.dodona.plugin.tasks;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBus;
@@ -231,8 +232,10 @@ public final class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 			this.feedback.notify(exercise, evaluated.getInfo());
 		} catch (final AuthenticationException ex) {
 			this.error(DodonaBundle.message("tasks.submit_solution.error.auth"));
-			DodonaAuthenticator.getInstance()
-				.requestAuthentication(this.myProject, null);
+			ApplicationManager.getApplication().invokeLater(() ->
+				DodonaAuthenticator.getInstance()
+					.requestAuthentication(this.myProject, null)
+			);
 		} catch (final ExerciseAccessDeniedException ex) {
 			this.error(DodonaBundle.message("tasks.submit_solution.error.forbidden"));
 		} catch (final ExerciseNotFoundException ex) {
