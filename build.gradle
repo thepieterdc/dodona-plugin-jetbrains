@@ -59,6 +59,7 @@ patchPluginXml {
     changeNotes """
       <ul>
         <li>[FEATURE] Added a link to the submission for successful submissions as well.</li>
+        <li>[FEATURE] Refactored the Action system to allow solutions to be submitted using a keyboard shortcut (defaults to Ctrl-Shift-F10).</li>
         <li>[IMPROVEMENT] Added a link to the courses list in case no courses have been subscribed to yet.</li>
         <li>[IMPROVEMENT] Improved the error messages to clarify which icons can be clicked on and which ones not.</li>
       </ul>

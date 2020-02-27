@@ -68,10 +68,13 @@
       <add-to-group group-id="NewGroup" anchor="after" relative-to-action="NewScratchFile"/>
     </action>
 
-    <group
-      id="dodona.actions.DodonaActions"
-      class="io.github.thepieterdc.dodona.plugin.actions.DodonaActionsGroup" text="Dodona" popup="false">
+    <group id="dodona.actions.DodonaActionsToolbar" text="Dodona" popup="false">
       <add-to-group group-id="NavBarToolBar" anchor="after" relative-to-action="ToolbarRunGroup"/>
+      <separator/>
+      <action id="dodona.actions.DodonaActionsToolbar.submit"
+              class="io.github.thepieterdc.dodona.plugin.actions.SubmitAction">
+        <keyboard-shortcut first-keystroke="control shift F10" keymap="$default"/>
+      </action>
     </group>
   </actions>
 </idea-plugin>
