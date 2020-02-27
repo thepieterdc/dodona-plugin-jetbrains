@@ -58,8 +58,9 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
-        <li>[FEATURE] Added a link to the submission for successful submissions as well.
-        <li>[IMPROVEMENT] Improved the error messages to clarify which icons can be clicked on and which ones not.
+        <li>[FEATURE] Added a link to the submission for successful submissions as well.</li>
+        <li>[IMPROVEMENT] Added a link to the courses list in case no courses have been subscribed to yet.</li>
+        <li>[IMPROVEMENT] Improved the error messages to clarify which icons can be clicked on and which ones not.</li>
       </ul>
       """
 
