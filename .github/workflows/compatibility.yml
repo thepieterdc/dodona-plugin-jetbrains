@@ -1,0 +1,27 @@
+name: Compatibility
+
+on:
+  push:
+  schedule:
+    - cron: '0 0 * * *'
+
+jobs:
+  compatibility:
+    name: Ensure compatibility against the lowest and latest EAP version.
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11.x.x
+      - name: Build the plugin using Gradle
+        run: ./gradlew buildPlugin
+      - uses: thepieterdc/intellij-plugin-verifier-action@v1.1.0
+        with:
+          plugin: '/home/runner/work/dodona-plugin-jetbrains/dodona-plugin-jetbrains/build/distributions/dodona-plugin-jetbrains-*'
+          versions: |
+            183.6156.11
+            LATEST-EAP-SNAPSHOT
