@@ -65,3 +65,7 @@ patchPluginXml {
 
     sinceBuild '183.6156'
 }
+
+wrapper {
+    gradleVersion = '6.2.1'
+}
