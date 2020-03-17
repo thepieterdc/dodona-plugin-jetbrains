@@ -21,7 +21,7 @@ jobs:
         run: ./gradlew buildPlugin
       - uses: thepieterdc/intellij-plugin-verifier-action@v1.1.0
         with:
-          plugin: '/home/runner/work/dodona-plugin-jetbrains/dodona-plugin-jetbrains/build/distributions/dodona-plugin-jetbrains-*'
+          plugin: '/home/runner/work/dodona-plugin-jetbrains/dodona-plugin-jetbrains/build/distributions/dodona-*'
           versions: |
             183.6156.11
             LATEST-EAP-SNAPSHOT
