@@ -18,6 +18,7 @@ import io.github.thepieterdc.dodona.data.SubmissionStatus;
 import io.github.thepieterdc.dodona.exceptions.AuthenticationException;
 import io.github.thepieterdc.dodona.exceptions.accessdenied.ExerciseAccessDeniedException;
 import io.github.thepieterdc.dodona.exceptions.notfound.ExerciseNotFoundException;
+import io.github.thepieterdc.dodona.managers.ExerciseManager;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
@@ -39,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -188,6 +190,32 @@ public final class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 		);
 	}
 	
+	/**
+	 * Gets information about the identified exercise.
+	 *
+	 * @param progress progress indicator
+	 * @return the exercise
+	 */
+	@Nonnull
+	private Exercise getExercise(final ProgressIndicator progress) {
+		// Get the id of the exercise.
+		final long id = this.identification.getExerciseId();
+		
+		// Get a resolver.
+		final Function<ExerciseManager, Exercise> resolver = this.identification
+			.getCourseId()
+			.map(course ->
+				(Function<ExerciseManager, Exercise>) mgr -> mgr.get(course, id)
+			)
+			.orElseGet(() -> mgr -> mgr.get(id));
+		
+		// Execute the resolver.
+		return this.executor.getExecutor().execute(
+			dodona -> resolver.apply(dodona.exercises()),
+			progress
+		);
+	}
+	
 	@Override
 	public void run(@NotNull final ProgressIndicator progress) {
 		try {
@@ -201,10 +229,7 @@ public final class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 			final long id = this.executor.getExecutor().execute(this::submit, progress);
 			
 			// Get information about the exercise.
-			final Exercise exercise = this.executor.getExecutor().execute(
-				dodona -> dodona.exercises().get(this.identification.getExerciseId()),
-				progress
-			);
+			final Exercise exercise = this.getExercise(progress);
 			
 			// Update the progress bar.
 			progress.setIndeterminate(false);

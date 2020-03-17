@@ -42,9 +42,9 @@ public class IdentificationServiceTest {
 	@Test
 	public void testCourseScoped() {
 		// Generate a random course, series and exercise id.
-		final long courseId = IdentificationServiceTest.random.generate();
-		final long exerciseId = IdentificationServiceTest.random.generate();
-		final long seriesId = IdentificationServiceTest.random.generate();
+		final long courseId = random.generate();
+		final long exerciseId = random.generate();
+		final long seriesId = random.generate();
 		
 		// Generate the url to the exercise.
 		final String urlPattern = "https://dodona.ugent.be/nl/courses/%d/series/%d/exercises/%d/";
@@ -73,7 +73,7 @@ public class IdentificationServiceTest {
 	@Test
 	public void testOutsideOfCourse() {
 		// Generate a random exercise id.
-		final long exerciseId = IdentificationServiceTest.random.generate();
+		final long exerciseId = random.generate();
 		
 		// Generate the url to the exercise.
 		final String urlPattern = "https://dodona.ugent.be/nl/exercises/%d/";

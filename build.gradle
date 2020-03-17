@@ -58,6 +58,7 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
+        <li>[BUGFIX] Submitting to private exercises no longer shows an error message.</li>
       </ul>
       """
 
