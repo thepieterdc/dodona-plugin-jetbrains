@@ -1,10 +1,22 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+        classpath 'io.github.thepieterdc.velocity:velocity-junit:0.0.1-SNAPSHOT'
+    }
+}
+
 plugins {
     id 'de.fuerstenau.buildconfig' version '1.1.8'
     id 'idea'
-    id 'jacoco'
     id 'java'
     id 'org.jetbrains.intellij' version '0.4.15'
 }
+
+apply plugin: 'velocity-junit'
 
 group 'io.github.thepieterdc.dodona'
 version '2.0.8-SNAPSHOT'
@@ -46,15 +58,6 @@ intellij {
     version 'IU-192.5728.98'
 }
 
-jacocoTestReport {
-    dependsOn test
-
-    reports {
-        html.enabled = true
-        xml.enabled = true
-    }
-}
-
 patchPluginXml {
     changeNotes """
       <ul>
@@ -64,6 +67,13 @@ patchPluginXml {
     pluginDescription "Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE."
 
     sinceBuild '183.6156'
+}
+
+velocity {
+    base 'src/main/java'
+    pollingFrequency 1000
+    repository 'https://github.com/thepieterdc/dodona-plugin-jetbrains'
+    server 'http://localhost:8080/'
 }
 
 wrapper {
