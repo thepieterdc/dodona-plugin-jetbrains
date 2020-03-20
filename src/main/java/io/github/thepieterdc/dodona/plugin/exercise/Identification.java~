@@ -55,7 +55,7 @@ public class Identification {
 	 */
 	@Nonnull
 	public Long getExerciseId() {
-		return this.courseId;
+		return this.exerciseId;
 	}
 	
 	/**
