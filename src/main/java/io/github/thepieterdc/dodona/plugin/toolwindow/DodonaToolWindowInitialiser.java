@@ -9,6 +9,7 @@
 
 package io.github.thepieterdc.dodona.plugin.toolwindow;
 
+import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.startup.StartupActivity;
 
@@ -19,6 +20,7 @@ public class DodonaToolWindowInitialiser implements StartupActivity {
 	@Override
 	public void runActivity(final Project project) {
 		// Determine whether the tool window should be shown now.
-		project.getComponent(DodonaToolWindowFactory.class).update();
+		ServiceManager.getService(project, DodonaToolWindowFactory.class)
+			.update();
 	}
 }

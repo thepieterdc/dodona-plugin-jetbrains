@@ -39,6 +39,7 @@ dependencies {
 }
 
 intellij {
+    alternativeIdePath '/home/pieter/.local/share/JetBrains/Toolbox/apps/PyCharm-P/ch-0/192.6262.12/'
     downloadSources false
     pluginName 'dodona'
     plugins = ['java', 'PythonCore:2019.2.192.5728.98']
