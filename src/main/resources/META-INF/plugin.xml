@@ -55,6 +55,9 @@
     <!-- ToolWindow -->
     <postStartupActivity implementation="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowInitialiser"/>
     <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory"/>
+
+    <!-- File templates -->
+    <internalFileTemplate name="Dodona Exercise"/>
   </extensions>
 
   <project-components>

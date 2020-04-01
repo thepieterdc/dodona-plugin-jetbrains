@@ -1,0 +1,6 @@
+${URL}
+
+#if (${CONTENTS} && ${CONTENTS} != "")
+    ${CONTENTS}
+#end
+#[[$END$]]#

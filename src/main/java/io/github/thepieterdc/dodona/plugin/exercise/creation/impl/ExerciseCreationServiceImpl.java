@@ -9,6 +9,7 @@
 
 package io.github.thepieterdc.dodona.plugin.exercise.creation.impl;
 
+import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.openapi.application.ActionsKt;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.fileTypes.FileTypeRegistry;
@@ -27,16 +28,23 @@ import io.github.thepieterdc.dodona.plugin.exercise.creation.ExerciseCreationSer
 import io.github.thepieterdc.dodona.plugin.exercise.naming.ExerciseNamingService;
 import io.github.thepieterdc.dodona.resources.Exercise;
 import org.jetbrains.annotations.Nls;
+import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 
 /**
  * Default implementation of an ExerciseCreationService.
  */
 public class ExerciseCreationServiceImpl implements ExerciseCreationService {
+	@NonNls
+	private static final String TEMPLATE_NAME = "Dodona Exercise";
+	
 	private final CodeIdentificationService codeIdentificationService;
 	private final PsiFileFactory fileFactory;
 	private final ExerciseNamingService naming;
+	
+	private final Project project;
 	
 	/**
 	 * ExerciseCreationServiceImpl constructor.
@@ -47,6 +55,7 @@ public class ExerciseCreationServiceImpl implements ExerciseCreationService {
 		this.codeIdentificationService = CodeIdentificationService.getInstance(project);
 		this.fileFactory = PsiFileFactory.getInstance(project);
 		this.naming = ExerciseNamingService.getInstance();
+		this.project = project;
 	}
 	
 	@Override
@@ -69,6 +78,9 @@ public class ExerciseCreationServiceImpl implements ExerciseCreationService {
 		final String contents = this.codeIdentificationService
 			.getIdentifier(filename)
 			.process(identification.getExercise(), rawContents);
+		
+		System.out.println(
+			Arrays.toString(FileTemplateManager.getInstance(this.project).getInternalTemplates()));
 		
 		// Create the file.
 		final PsiFile file = this.fileFactory

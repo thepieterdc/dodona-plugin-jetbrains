@@ -31,7 +31,6 @@ public class JavaExerciseCreationServiceImpl extends ExerciseCreationServiceImpl
 	 */
 	public JavaExerciseCreationServiceImpl(final Project project) {
 		super(project);
-//		this.javaElementFactory = PsiElementFactory.getInstance(project);
 		this.javaElementFactory = ServiceManager.getService(project, PsiElementFactory.class);
 	}
 	
