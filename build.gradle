@@ -41,9 +41,9 @@ dependencies {
 intellij {
     downloadSources false
     pluginName 'dodona'
-    plugins = ['java', 'PythonCore:2019.2.192.5728.98']
+    plugins = ['java', 'PythonCore:193.5233.102']
     updateSinceUntilBuild false
-    version 'IU-192.5728.98'
+    version '193.5233.102'
 }
 
 jacocoTestReport {
@@ -58,12 +58,13 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
+        <li>[BUGFIX] Fix ToolWindow crash on boot in 2020.x versions.</li>
       </ul>
       """
 
     pluginDescription "Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE."
 
-    sinceBuild '183.6156'
+    sinceBuild '193.3519.25'
 }
 
 wrapper {

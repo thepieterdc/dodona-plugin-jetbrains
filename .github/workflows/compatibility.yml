@@ -19,9 +19,9 @@ jobs:
           java-version: 11.x.x
       - name: Build the plugin using Gradle
         run: ./gradlew buildPlugin
-      - uses: thepieterdc/intellij-plugin-verifier-action@v1.1.0
+      - uses: thepieterdc/intellij-plugin-verifier-action@master
         with:
           plugin: '/home/runner/work/dodona-plugin-jetbrains/dodona-plugin-jetbrains/build/distributions/dodona-*'
           versions: |
-            183.6156.11
+            193.5233.102
             LATEST-EAP-SNAPSHOT

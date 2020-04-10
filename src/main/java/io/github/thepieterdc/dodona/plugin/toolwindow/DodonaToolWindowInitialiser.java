@@ -19,6 +19,6 @@ public class DodonaToolWindowInitialiser implements StartupActivity {
 	@Override
 	public void runActivity(final Project project) {
 		// Determine whether the tool window should be shown now.
-		project.getComponent(DodonaToolWindowFactory.class).update();
+		project.getService(DodonaToolWindowFactory.class).update();
 	}
 }
