@@ -10,7 +10,6 @@
 package io.github.thepieterdc.dodona.plugin.ui.resources.submission;
 
 import io.github.thepieterdc.dodona.data.SubmissionStatus;
-import io.github.thepieterdc.dodona.exceptions.SubmissionStatusNotFoundException;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import org.jetbrains.annotations.PropertyKey;
 
@@ -26,10 +25,12 @@ public enum HumanSubmissionStatus {
 	CORRECT(SubmissionStatus.CORRECT, "submission_status.correct"),
 	INTERNAL_ERROR(SubmissionStatus.INTERNAL_ERROR, "submission_status.internal_error"),
 	MEMORY_LIMIT_EXCEEDED(SubmissionStatus.MEMORY_LIMIT_EXCEEDED, "submission_status.memory_limit_exceeded"),
+	OUTPUT_LIMIT_EXCEEDED(SubmissionStatus.OUTPUT_LIMIT_EXCEEDED, "submission_status.output_limit_exceeded"),
 	QUEUED(SubmissionStatus.QUEUED, "submission_status.queued"),
 	RUNNING(SubmissionStatus.RUNNING, "submission_status.running"),
 	RUNTIME_ERROR(SubmissionStatus.RUNTIME_ERROR, "submission_status.runtime_error"),
 	TIME_LIMIT_EXCEEDED(SubmissionStatus.TIME_LIMIT_EXCEEDED, "submission_status.time_limit_exceeded"),
+	UNKNOWN(SubmissionStatus.UNKNOWN, "submission_status.unknown"),
 	WRONG(SubmissionStatus.WRONG, "submission_status.wrong");
 	
 	private final String human;
@@ -57,8 +58,8 @@ public enum HumanSubmissionStatus {
 	public static String forStatus(final SubmissionStatus status) {
 		return Arrays.stream(HumanSubmissionStatus.values())
 			.filter(name -> name.status == status)
-			.map(name -> name.human)
 			.findAny()
-			.orElseThrow(() -> new SubmissionStatusNotFoundException(status.getName()));
+			.orElse(HumanSubmissionStatus.UNKNOWN)
+			.human;
 	}
 }

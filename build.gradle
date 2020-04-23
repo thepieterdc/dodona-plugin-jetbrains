@@ -28,8 +28,8 @@ repositories {
 }
 
 dependencies {
-    compile group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.6.0'
-    runtime group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.6.0'
+    compile group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.7.0'
+    runtime group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.7.0'
 
     compile group: 'com.github.marlonlom', name: 'timeago', version: '4.0.1'
 
@@ -58,6 +58,7 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
+        <li>Support for the <i>output_limit_exceeded</i> status after submitting an exercise.</li>
       </ul>
       """
 

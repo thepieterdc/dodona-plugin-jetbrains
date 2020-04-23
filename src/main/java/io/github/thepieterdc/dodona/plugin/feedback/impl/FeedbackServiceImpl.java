@@ -37,6 +37,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 		this.providers.put(SubmissionStatus.CORRECT, this::correct);
 		this.providers.put(SubmissionStatus.INTERNAL_ERROR, (ex, sub) -> this.internalError(ex));
 		this.providers.put(SubmissionStatus.MEMORY_LIMIT_EXCEEDED, this::memoryLimitExceeded);
+		this.providers.put(SubmissionStatus.OUTPUT_LIMIT_EXCEEDED, this::outputLimitExceeded);
 		this.providers.put(SubmissionStatus.RUNTIME_ERROR, this::runtimeError);
 		this.providers.put(SubmissionStatus.TIME_LIMIT_EXCEEDED, this::timeLimitExceeded);
 		this.providers.put(SubmissionStatus.WRONG, this::wrong);
@@ -95,6 +96,21 @@ public class FeedbackServiceImpl implements FeedbackService {
 			DodonaBundle.message("feedback.memory_limit.title"),
 			SubmissionStatusIcon.MEMORY_LIMIT_EXCEEDED,
 			DodonaBundle.message("feedback.memory_limit.message", exercise.getName(), submission.getUrl())
+		);
+	}
+	
+	/**
+	 * Output limit handler.
+	 *
+	 * @param exercise   the exercise
+	 * @param submission the submission
+	 */
+	private void outputLimitExceeded(final Exercise exercise,
+	                                 final SubmissionInfo submission) {
+		this.notifications.error(
+			DodonaBundle.message("feedback.output_limit.title"),
+			SubmissionStatusIcon.OUTPUT_LIMIT_EXCEEDED,
+			DodonaBundle.message("feedback.output_limit.message", exercise.getName(), submission.getUrl())
 		);
 	}
 	

@@ -10,7 +10,6 @@
 package io.github.thepieterdc.dodona.plugin.ui.resources.submission;
 
 import io.github.thepieterdc.dodona.data.SubmissionStatus;
-import io.github.thepieterdc.dodona.exceptions.SubmissionStatusNotFoundException;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import org.jetbrains.annotations.NonNls;
 
@@ -27,10 +26,12 @@ public enum SubmissionStatusIcon implements Icon {
 	CORRECT(SubmissionStatus.CORRECT, "correct"),
 	INTERNAL_ERROR(SubmissionStatus.INTERNAL_ERROR, "internal-error"),
 	MEMORY_LIMIT_EXCEEDED(SubmissionStatus.MEMORY_LIMIT_EXCEEDED, "memory-limit"),
+	OUTPUT_LIMIT_EXCEEDED(SubmissionStatus.OUTPUT_LIMIT_EXCEEDED, "output-limit"),
 	QUEUED(SubmissionStatus.QUEUED, "queued-running"),
 	RUNNING(SubmissionStatus.RUNNING, "queued-running"),
 	RUNTIME_ERROR(SubmissionStatus.RUNTIME_ERROR, "runtime-error"),
 	TIME_LIMIT_EXCEEDED(SubmissionStatus.TIME_LIMIT_EXCEEDED, "time-limit"),
+	UNKNOWN(SubmissionStatus.UNKNOWN, "unknown"),
 	WRONG(SubmissionStatus.WRONG, "wrong");
 	
 	private final Icon icon;
@@ -59,7 +60,7 @@ public enum SubmissionStatusIcon implements Icon {
 		return Arrays.stream(SubmissionStatusIcon.values())
 			.filter(icon -> icon.status == status)
 			.findAny()
-			.orElseThrow(() -> new SubmissionStatusNotFoundException(status.getName()));
+			.orElse(UNKNOWN);
 	}
 	
 	/**
