@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.0.9'
+version '2.0.10-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
@@ -58,7 +58,6 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
-        <li>Support for the <i>output_limit_exceeded</i> status after submitting an exercise.</li>
       </ul>
       """
 
