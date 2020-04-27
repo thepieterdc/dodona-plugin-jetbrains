@@ -10,7 +10,7 @@ package io.github.thepieterdc.dodona.plugin.code.identification;
 
 import com.intellij.openapi.editor.Document;
 import io.github.thepieterdc.dodona.plugin.code.DodonaFileType;
-import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;

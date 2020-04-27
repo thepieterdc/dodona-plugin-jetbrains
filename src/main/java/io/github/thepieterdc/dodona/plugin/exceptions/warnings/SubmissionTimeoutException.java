@@ -11,7 +11,7 @@ package io.github.thepieterdc.dodona.plugin.exceptions.warnings;
 
 import io.github.thepieterdc.dodona.exceptions.DodonaException;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
-import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
 
 /**

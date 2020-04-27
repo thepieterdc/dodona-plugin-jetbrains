@@ -10,7 +10,7 @@
 package io.github.thepieterdc.dodona.plugin.ui.identification;
 
 import io.github.thepieterdc.dodona.resources.Course;
-import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import io.github.thepieterdc.dodona.resources.Series;
 
 import javax.annotation.Nullable;

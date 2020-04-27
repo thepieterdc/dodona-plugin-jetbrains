@@ -9,7 +9,7 @@
 package io.github.thepieterdc.dodona.plugin.exercise.naming;
 
 import com.intellij.openapi.components.ServiceManager;
-import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;

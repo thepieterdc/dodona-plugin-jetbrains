@@ -16,8 +16,8 @@ import com.intellij.util.messages.MessageBus;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.data.SubmissionStatus;
 import io.github.thepieterdc.dodona.exceptions.AuthenticationException;
-import io.github.thepieterdc.dodona.exceptions.accessdenied.ExerciseAccessDeniedException;
-import io.github.thepieterdc.dodona.exceptions.notfound.ExerciseNotFoundException;
+import io.github.thepieterdc.dodona.exceptions.accessdenied.ActivityAccessDeniedException;
+import io.github.thepieterdc.dodona.exceptions.notfound.ActivityNotFoundException;
 import io.github.thepieterdc.dodona.managers.ExerciseManager;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
@@ -33,7 +33,7 @@ import io.github.thepieterdc.dodona.plugin.notifications.NotificationService;
 import io.github.thepieterdc.dodona.plugin.submission.SubmissionCreatedListener;
 import io.github.thepieterdc.dodona.plugin.submission.SubmissionEvaluatedListener;
 import io.github.thepieterdc.dodona.plugin.ui.resources.submission.SubmissionStatusIcon;
-import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
@@ -261,9 +261,9 @@ public final class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
 				DodonaAuthenticator.getInstance()
 					.requestAuthentication(this.myProject, null)
 			);
-		} catch (final ExerciseAccessDeniedException ex) {
+		} catch (final ActivityAccessDeniedException ex) {
 			this.error(DodonaBundle.message("tasks.submit_solution.error.forbidden"));
-		} catch (final ExerciseNotFoundException ex) {
+		} catch (final ActivityNotFoundException ex) {
 			this.error(DodonaBundle.message("tasks.submit_solution.error.notfound"));
 		} catch (final InterruptedException ex) {
 			throw new CancelledException();

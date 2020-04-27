@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.0.10-SNAPSHOT'
+version '2.1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
@@ -28,8 +28,8 @@ repositories {
 }
 
 dependencies {
-    compile group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.7.0'
-    runtime group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.7.0'
+    compile group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.8.0'
+    runtime group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.8.0'
 
     compile group: 'com.github.marlonlom', name: 'timeago', version: '4.0.1'
 
@@ -58,6 +58,7 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
+        <li>Fix compatibility after Dodona content pages update.</li>
       </ul>
       """
 

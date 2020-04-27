@@ -16,8 +16,8 @@ import com.intellij.psi.PsiManager;
 import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import io.github.thepieterdc.dodona.resources.Course;
-import io.github.thepieterdc.dodona.resources.Exercise;
 import io.github.thepieterdc.dodona.resources.Series;
+import io.github.thepieterdc.dodona.resources.activities.Activity;
 
 import javax.annotation.Nonnull;
 import java.util.Optional;
@@ -36,7 +36,7 @@ public class IdentificationServiceImpl implements IdentificationService {
 		// Perform the identification.
 		final Long course = Course.getId(firstLine).orElse(null);
 		final Long series = Series.getId(firstLine).orElse(null);
-		final Optional<Long> exercise = Exercise.getId(firstLine);
+		final Optional<Long> exercise = Activity.getId(firstLine);
 		
 		// Get the identification.
 		return exercise.map(id -> new Identification(course, series, id));

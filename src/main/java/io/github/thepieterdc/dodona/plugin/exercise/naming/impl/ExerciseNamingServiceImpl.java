@@ -10,7 +10,7 @@
 package io.github.thepieterdc.dodona.plugin.exercise.naming.impl;
 
 import io.github.thepieterdc.dodona.plugin.exercise.naming.ExerciseNamingService;
-import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import io.github.thepieterdc.dodona.resources.ProgrammingLanguage;
 import org.jetbrains.annotations.NonNls;
 

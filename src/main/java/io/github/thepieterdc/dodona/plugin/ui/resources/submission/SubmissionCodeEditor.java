@@ -20,7 +20,7 @@ import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.plugin.code.DodonaFileType;
 import io.github.thepieterdc.dodona.plugin.code.SolutionWithLanguage;
 import io.github.thepieterdc.dodona.plugin.ui.panels.async.DynamicAsyncPanel;
-import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import io.github.thepieterdc.dodona.resources.ProgrammingLanguage;
 import io.github.thepieterdc.dodona.resources.submissions.Submission;
 import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;

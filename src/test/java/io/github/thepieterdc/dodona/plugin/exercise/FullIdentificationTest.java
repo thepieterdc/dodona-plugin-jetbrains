@@ -9,7 +9,7 @@
 package io.github.thepieterdc.dodona.plugin.exercise;
 
 import io.github.thepieterdc.dodona.resources.Course;
-import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import io.github.thepieterdc.dodona.resources.Resource;
 import io.github.thepieterdc.dodona.resources.Series;
 import io.github.thepieterdc.random.numerical.RandomLongGenerator;

@@ -14,7 +14,7 @@ import com.intellij.util.ui.JBUI;
 import io.github.thepieterdc.dodona.data.ExerciseStatus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
-import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;

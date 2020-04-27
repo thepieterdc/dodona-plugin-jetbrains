@@ -18,7 +18,7 @@ import io.github.thepieterdc.dodona.plugin.ui.cards.NoConnectionCard;
 import io.github.thepieterdc.dodona.plugin.ui.cards.NoCourseSubscribedCard;
 import io.github.thepieterdc.dodona.plugin.ui.panels.ContentPanelBase;
 import io.github.thepieterdc.dodona.resources.Course;
-import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import io.github.thepieterdc.dodona.resources.Series;
 import org.jetbrains.annotations.NonNls;
 

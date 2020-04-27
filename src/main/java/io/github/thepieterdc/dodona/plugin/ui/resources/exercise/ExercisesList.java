@@ -17,7 +17,7 @@ import io.github.thepieterdc.dodona.plugin.ui.listeners.ClickListener;
 import io.github.thepieterdc.dodona.plugin.ui.listeners.DoubleClickListener;
 import io.github.thepieterdc.dodona.plugin.ui.listeners.ItemSelectedListener;
 import io.github.thepieterdc.dodona.plugin.ui.resources.ResourceSelector;
-import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

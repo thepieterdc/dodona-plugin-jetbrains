@@ -25,7 +25,7 @@ import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
 import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
 import io.github.thepieterdc.dodona.plugin.exercise.creation.ExerciseCreationService;
 import io.github.thepieterdc.dodona.plugin.exercise.naming.ExerciseNamingService;
-import io.github.thepieterdc.dodona.resources.Exercise;
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import org.jetbrains.annotations.Nls;
 
 import javax.annotation.Nonnull;
