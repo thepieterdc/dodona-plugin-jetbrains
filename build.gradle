@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.1.0'
+version '2.1.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
@@ -58,7 +58,6 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
-        <li>Fix compatibility after Dodona content pages update.</li>
       </ul>
       """
 
