@@ -15,6 +15,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
 import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
+import io.github.thepieterdc.dodona.plugin.notifications.ErrorReporter;
 import io.github.thepieterdc.dodona.resources.Course;
 import io.github.thepieterdc.dodona.resources.Series;
 import io.github.thepieterdc.dodona.resources.activities.Activity;
@@ -46,9 +47,15 @@ public class IdentificationServiceImpl implements IdentificationService {
 	@Override
 	public Optional<Identification> identify(final Project project,
 	                                         final VirtualFile file) {
-		return Optional.of(PsiManager.getInstance(project))
-			.map(psiMgr -> psiMgr.findFile(file))
-			.map(PsiElement::getText)
-			.flatMap(this::identify);
+		try {
+			return Optional.of(PsiManager.getInstance(project))
+				.map(psiMgr -> psiMgr.findFile(file))
+				.map(PsiElement::getText)
+				.flatMap(this::identify);
+		} catch (final Throwable t) {
+			// Handle files that are too large.
+			ErrorReporter.report(t);
+			return Optional.empty();
+		}
 	}
 }
