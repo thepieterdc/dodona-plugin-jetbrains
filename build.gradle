@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.1.1'
+version '2.1.2-SNAPSHOT'
 
 sourceCompatibility = 1.8
 
@@ -62,8 +62,6 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
-        <li>[BUGFIX] Opening large files will no longer show an error message.</li>
-        <li>[INTERNAL] Update dependencies.</li>
       </ul>
       """
 
