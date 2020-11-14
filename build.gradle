@@ -72,6 +72,11 @@ patchPluginXml {
     sinceBuild '193.3519.25'
 }
 
+publishPlugin {
+    channels 'nightly'
+    token System.getenv("JETBRAINS_MARKETPLACE_TOKEN")
+}
+
 wrapper {
     gradleVersion = '6.2.1'
 }
