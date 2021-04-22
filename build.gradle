@@ -1,5 +1,4 @@
 plugins {
-    id 'de.fuerstenau.buildconfig' version '1.1.8'
     id 'idea'
     id 'jacoco'
     id 'java'
@@ -10,10 +9,6 @@ group 'io.github.thepieterdc.dodona'
 version '2.1.2-SNAPSHOT'
 
 sourceCompatibility = 1.8
-
-buildConfig {
-    packageName 'io.github.thepieterdc.dodona.plugin'
-}
 
 repositories {
     mavenCentral()
@@ -32,15 +27,30 @@ repositories {
 }
 
 dependencies {
-    compile group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.9.3'
-    runtime group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.9.3'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.9.3'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.9.3'
 
-    compile group: 'com.github.marlonlom', name: 'timeago', version: '4.0.1'
+    implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.0.1'
 
-    testCompile group: 'junit', name: 'junit', version: '4.13.2'
-    testCompile group: 'org.mockito', name: 'mockito-core', version: '3.9.0'
-    testCompile group: 'io.github.thepieterdc.random', name: 'random', version: '0.3.0'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.2'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.9.0'
+    testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '0.3.0'
 }
+
+task generateBuildConfig {
+    var outputDir = file("$projectDir/src/main/java/")
+    doFirst {
+        def srcFile = new File(outputDir, "io/github/thepieterdc/dodona/plugin/BuildConfig.java")
+        srcFile.parentFile.mkdirs()
+        srcFile.write("""
+package io.github.thepieterdc.dodona.plugin;
+public class BuildConfig {
+    public static final String VERSION = "$project.version";
+}
+""")
+    }
+}
+compileJava.dependsOn generateBuildConfig
 
 intellij {
     downloadSources false
@@ -62,6 +72,7 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
+        <li>[MAINTENANCE] Update dependencies.
       </ul>
       """
 
@@ -76,5 +87,5 @@ publishPlugin {
 }
 
 wrapper {
-    gradleVersion = '6.2.1'
+    gradleVersion = '7.0.0'
 }
