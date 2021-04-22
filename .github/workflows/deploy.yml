@@ -24,6 +24,8 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - name: Set the nightly version number
+        run: sh ./scripts/set-nightly-version.sh
       - name: Deploy to JetBrains Marketplace
         run: ./gradlew publishPlugin
         env:
