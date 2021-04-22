@@ -73,6 +73,7 @@ patchPluginXml {
     changeNotes """
       <ul>
         <li>[MAINTENANCE] Update dependencies.
+        <li>[MAINTENANCE] Fix nightly builds.
       </ul>
       """
 
