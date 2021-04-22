@@ -1,7 +1,6 @@
 # Dodona
 
 ![Build Status](https://img.shields.io/github/workflow/status/thepieterdc/dodona-plugin-jetbrains/Java)
-[![codecov](https://codecov.io/gh/thepieterdc/dodona-plugin-jetbrains/branch/master/graph/badge.svg)](https://codecov.io/gh/thepieterdc/dodona-plugin-jetbrains)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/00be2e2cc9654da6a8350f1c0bf5c620)](https://www.codacy.com/manual/thepieterdc/dodona-plugin-jetbrains)
 [![Version](https://img.shields.io/jetbrains/plugin/v/11166-dodona)][plugin-website]
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/11166-dodona)][plugin-website]
