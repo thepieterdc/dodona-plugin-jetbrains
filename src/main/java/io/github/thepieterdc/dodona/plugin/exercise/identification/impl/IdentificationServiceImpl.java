@@ -21,6 +21,7 @@ import io.github.thepieterdc.dodona.resources.Series;
 import io.github.thepieterdc.dodona.resources.activities.Activity;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.Optional;
 
 /**
@@ -32,12 +33,13 @@ public class IdentificationServiceImpl implements IdentificationService {
 	@SuppressWarnings("HardcodedLineSeparator")
 	public Optional<Identification> identify(final String code) {
 		// Get the first line of the code.
-		final String firstLine = code.split("\n")[0];
+		final Optional<String> firstLine = Arrays.stream(code.split("\n"))
+			.findFirst();
 		
 		// Perform the identification.
-		final Long course = Course.getId(firstLine).orElse(null);
-		final Long series = Series.getId(firstLine).orElse(null);
-		final Optional<Long> exercise = Activity.getId(firstLine);
+		final Long course = firstLine.flatMap(Course::getId).orElse(null);
+		final Long series = firstLine.flatMap(Series::getId).orElse(null);
+		final Optional<Long> exercise = firstLine.flatMap(Activity::getId);
 		
 		// Get the identification.
 		return exercise.map(id -> new Identification(course, series, id));

@@ -72,8 +72,9 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
-        <li>[MAINTENANCE] Update dependencies.
-        <li>[MAINTENANCE] Fix nightly builds.
+        <li>[BUGFIX] Support opening empty files.</li>
+        <li>[MAINTENANCE] Update dependencies.</li>
+        <li>[MAINTENANCE] Fix nightly builds.</li>
       </ul>
       """
 
