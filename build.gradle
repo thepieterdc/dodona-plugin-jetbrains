@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.1.2'
+version '2.1.3-SNAPSHOT'
 
 sourceCompatibility = 11
 
@@ -72,9 +72,7 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes """
       <ul>
-        <li>[BUGFIX] Support opening empty files.</li>
-        <li>[MAINTENANCE] Update dependencies.</li>
-        <li>[MAINTENANCE] Fix nightly builds.</li>
+        <li></li>
       </ul>
       """
 
