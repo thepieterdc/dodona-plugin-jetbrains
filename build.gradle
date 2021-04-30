@@ -30,7 +30,7 @@ dependencies {
     implementation group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.9.3'
     implementation group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.9.3'
 
-    implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.0.1'
+    implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.0.3'
 
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.9.0'
