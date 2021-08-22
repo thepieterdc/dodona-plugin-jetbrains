@@ -104,7 +104,7 @@ patchPluginXml {
 }
 
 publishPlugin {
-    channels = [(project.version as String).endsWith("SNAPSHOT") ? "nightly" : "stable"]
+    channels = [(project.version as String).contains("-SNAPSHOT") ? "nightly" : "stable"]
     token = System.getenv("JETBRAINS_MARKETPLACE_TOKEN")
 }
 

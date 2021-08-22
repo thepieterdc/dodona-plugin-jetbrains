@@ -1,0 +1,34 @@
+name: Publish snapshot to JetBrains Marketplace
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: 11.x.x
+      - name: Cache the dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Append the current time to the snapshot version
+        run: sed -i "s/^\(version.*-SNAPSHOT\)/\1-$(date +%s)/" build.gradle
+      - name: Publish the snapshot
+        run: ./gradlew publishPlugin
+        env:
+          JETBRAINS_MARKETPLACE_TOKEN: ${{secrets.JETBRAINS_MARKETPLACE_TOKEN}}
