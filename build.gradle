@@ -36,6 +36,13 @@ dependencies {
     testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '1.0.1'
 }
 
+task calculateNextVersion {
+    doLast {
+        def version = (project.version as String).split('\\.').collect { Integer.parseInt(it) }
+        println(String.format("%s.%s.%s", version[0], version[1], version[2] + 1))
+    }
+}
+
 task generateBuildConfig {
     var outputDir = file("$projectDir/src/main/java/")
     doFirst {
@@ -74,7 +81,7 @@ static def getVerifiableVersions() {
 }
 
 intellij {
-//    downloadSources.set(false)
+    downloadSources.set(false)
     pluginName.set('dodona')
     plugins.set(['java', 'PythonCore:193.5233.102'])
     updateSinceUntilBuild.set(false)
@@ -104,7 +111,7 @@ patchPluginXml {
 }
 
 publishPlugin {
-    channels = [(project.version as String).contains("-SNAPSHOT") ? "nightly" : "stable"]
+    channels = [(project.version as String).contains("SNAPSHOT") ? "nightly" : "stable"]
     token = System.getenv("JETBRAINS_MARKETPLACE_TOKEN")
 }
 

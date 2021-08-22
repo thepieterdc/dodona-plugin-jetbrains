@@ -1,0 +1,97 @@
+name: Publish release
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  publish:
+    name: Publish release to JetBrains Marketplace
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Java
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'zulu'
+          java-version: 11
+      - name: Configure git
+        run: |
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+      - name: Cache the dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Get the release version
+        id: version
+        run: |
+          VERSION_RAW=$(cat build.gradle | grep "^version" | egrep -o "([0-9].*)SNAPSHOT")
+          VERSION="${VERSION_RAW//-SNAPSHOT/}"
+          echo "::set-output name=version::$VERSION"
+      - name: Prepare the release
+        run: sed -i "s/-SNAPSHOT//" build.gradle
+      - name: Build the package
+        run: ./gradlew buildPlugin
+      - name: Make the release commit
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: 'build.gradle'
+          message: "Release v${{ steps.version.outputs.version }}"
+          signoff: true
+      - name: Create release
+        id: release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          draft: false
+          prerelease: false
+          release_name: v${{ steps.version.outputs.version }}
+          tag_name: v${{ steps.version.outputs.version }}
+      - name: Attach artifact to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.release.outputs.upload_url }}
+          asset_path: ./build/distributions/dodona-${{ steps.version.outputs.version }}.zip
+          asset_name: dodona-${{ steps.version.outputs.version }}.zip
+          asset_content_type: application/octet-stream
+      - name: Publish the version
+        run: ./gradlew publishPlugin
+        env:
+          JETBRAINS_MARKETPLACE_TOKEN: ${{secrets.JETBRAINS_MARKETPLACE_TOKEN}}
+      - name: Get the next version
+        id: nextversion
+        run: |
+          NEXT_VERSION=$(./gradlew --console plain -q calculateNextVersion)
+          echo "::set-output name=nextversion::$NEXT_VERSION"
+      - name: Prepare the next development cycle
+        run: |
+          sed -i "s/${{ steps.version.outputs.version }}/${{ steps.nextversion.outputs.nextversion }}/" build.gradle
+          sed -i "/<\/\?ul>/d" build.gradle
+          sed -i "/<li>/d" build.gradle
+      - name: Make the next development commit
+        uses: EndBug/add-and-commit@v7
+        with:
+          add: 'build.gradle'
+          message: "Prepare the next development cycle"
+          signoff: true
+      - name: Open a pull request
+        uses: repo-sync/pull-request@v2
+        with:
+          destination_branch: master
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          pr_assignee: thepieterdc
+          pr_body: Merge the release commits into the main branch.
+          pr_title: Release v${{ steps.version.outputs.version }}
