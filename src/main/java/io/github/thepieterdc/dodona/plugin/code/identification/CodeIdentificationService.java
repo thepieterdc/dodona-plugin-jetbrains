@@ -38,7 +38,7 @@ public interface CodeIdentificationService {
 	 */
 	@Nonnull
 	static CodeIdentificationService getInstance(final Project project) {
-		return ServiceManager.getService(project, CodeIdentificationService.class);
+		return project.getService(CodeIdentificationService.class);
 	}
 	
 	/**

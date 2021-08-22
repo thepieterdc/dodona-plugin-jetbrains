@@ -31,12 +31,10 @@ public class DodonaSettingsConfigurable extends ConfigurableBase<DodonaSettingsP
 	
 	/**
 	 * SettingsConfigurable constructor.
-	 *
-	 * @param accountManager account manager
 	 */
-	DodonaSettingsConfigurable(final DodonaAccountManager accountManager) {
+	DodonaSettingsConfigurable() {
 		super(SETTINGS_ID, DodonaBundle.NAME, HELP_TOPIC);
-		this.accountManager = accountManager;
+		this.accountManager = DodonaAccountManager.getInstance();
 	}
 	
 	@Override

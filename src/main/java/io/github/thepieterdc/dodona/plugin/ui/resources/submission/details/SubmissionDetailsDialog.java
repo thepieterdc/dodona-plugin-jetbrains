@@ -70,9 +70,4 @@ public final class SubmissionDetailsDialog extends DialogWrapper {
 		Disposer.dispose(this.detailsPanel);
 		super.dispose();
 	}
-	
-	@Override
-	public boolean isTypeAheadEnabled() {
-		return true;
-	}
 }

@@ -8,7 +8,6 @@
  */
 package io.github.thepieterdc.dodona.plugin.feedback;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
@@ -28,7 +27,7 @@ public interface FeedbackService {
 	 */
 	@Nonnull
 	static FeedbackService getInstance(final Project project) {
-		return ServiceManager.getService(project, FeedbackService.class);
+		return project.getService(FeedbackService.class);
 	}
 	
 	/**

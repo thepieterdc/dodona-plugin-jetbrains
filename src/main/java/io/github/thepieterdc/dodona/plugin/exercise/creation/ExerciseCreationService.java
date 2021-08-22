@@ -9,7 +9,6 @@
 
 package io.github.thepieterdc.dodona.plugin.exercise.creation;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
@@ -40,6 +39,6 @@ public interface ExerciseCreationService {
 	 */
 	@Nonnull
 	static ExerciseCreationService getInstance(final Project project) {
-		return ServiceManager.getService(project, ExerciseCreationService.class);
+		return project.getService(ExerciseCreationService.class);
 	}
 }

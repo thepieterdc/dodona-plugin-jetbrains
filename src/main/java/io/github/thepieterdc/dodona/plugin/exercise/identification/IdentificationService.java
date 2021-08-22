@@ -8,7 +8,7 @@
  */
 package io.github.thepieterdc.dodona.plugin.exercise.identification;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import io.github.thepieterdc.dodona.plugin.exercise.Identification;
@@ -27,9 +27,9 @@ public interface IdentificationService {
 	 */
 	@Nonnull
 	static IdentificationService getInstance() {
-		return ServiceManager.getService(IdentificationService.class);
+		return ApplicationManager.getApplication().getService(IdentificationService.class);
 	}
-
+	
 	/**
 	 * Identifies the exercise based on the code.
 	 *

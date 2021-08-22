@@ -10,7 +10,6 @@
 package io.github.thepieterdc.dodona.plugin.authentication;
 
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutor;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorFactory;
@@ -76,7 +75,7 @@ public final class DodonaAuthenticator {
 	 */
 	@Nonnull
 	public static DodonaAuthenticator getInstance() {
-		return ServiceManager.getService(DodonaAuthenticator.class);
+		return ApplicationManager.getApplication().getService(DodonaAuthenticator.class);
 	}
 	
 	/**

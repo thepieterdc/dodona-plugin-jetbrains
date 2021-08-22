@@ -92,7 +92,7 @@ public enum Icons implements Icon {
 	 */
 	@Nonnull
 	public static Icon getIcon(@NonNls final String path) {
-		return IconLoader.getIcon(String.format(ICON_PATH, path));
+		return IconLoader.getIcon(String.format(ICON_PATH, path), Icons.class);
 	}
 	
 	@Override

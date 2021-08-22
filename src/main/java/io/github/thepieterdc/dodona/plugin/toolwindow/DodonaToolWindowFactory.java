@@ -9,12 +9,12 @@
 
 package io.github.thepieterdc.dodona.plugin.toolwindow;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
+import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.util.IconUtil;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
@@ -91,7 +91,7 @@ public class DodonaToolWindowFactory implements DumbAware {
 	 */
 	@Nonnull
 	public static DodonaToolWindowFactory getInstance(final Project project) {
-		return ServiceManager.getService(project, DodonaToolWindowFactory.class);
+		return project.getService(DodonaToolWindowFactory.class);
 	}
 	
 	/**
