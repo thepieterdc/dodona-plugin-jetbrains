@@ -9,7 +9,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.1.3'
+version '2.1.4'
 
 sourceCompatibility = 11
 
@@ -99,10 +99,6 @@ jacocoTestReport {
 
 patchPluginXml {
     changeNotes = """
-      <ul>
-        <li>[BUGFIX] Fix crashes when starting the IDE.</li>
-        <li>[MAINTENANCE] Update dependencies.</li>
-      </ul>
       """
 
     pluginDescription = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
