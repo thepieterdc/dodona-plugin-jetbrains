@@ -1,8 +1,11 @@
+import groovy.json.JsonSlurper
+import org.jetbrains.intellij.tasks.RunPluginVerifierTask
+
 plugins {
     id 'idea'
     id 'jacoco'
     id 'java'
-    id 'org.jetbrains.intellij' version '0.7.3'
+    id 'org.jetbrains.intellij' version '1.1.4'
 }
 
 group 'io.github.thepieterdc.dodona'
@@ -20,21 +23,17 @@ repositories {
             password = "\u0064\u0064\u0066\u0039\u0036\u0065\u0030\u0063\u0061\u0032\u0066\u0065\u0032\u0039\u0033\u0033\u0036\u0030\u0035\u0062\u0031\u0033\u0031\u0035\u0038\u0063\u0061\u0064\u0061\u0033\u0030\u0031\u0030\u0035\u0062\u0037\u0035\u0032\u0066\u0061"
         }
     }
-
-    maven {
-        url "https://dl.bintray.com/thepieterdc/random-java"
-    }
 }
 
 dependencies {
-    implementation group: 'io.github.thepieterdc.dodona', name: 'dodona-api-interface', version: '1.9.3'
-    implementation group: 'io.github.thepieterdc.dodona', name: 'dodona-api-impl', version: '1.9.3'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.0'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'impl', version: '2.0.0'
 
     implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.0.3'
 
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.10.0'
-    testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '0.3.0'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.12.1'
+    testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '1.0.1'
 }
 
 task generateBuildConfig {
@@ -49,15 +48,37 @@ public class BuildConfig {
 }
 """)
     }
+
+    group = "build"
+    outputs.upToDateWhen { false }
 }
+
 compileJava.dependsOn generateBuildConfig
+prepareKotlinBuildScriptModel.dependsOn generateBuildConfig
+
+static def getVerifiableVersions() {
+    // FIXME: Re-enable PyCharm checks.
+    def versions = ["IC-193.5662.53", /*"PC-193.5233.109" */]
+
+    // Get the list of all versions.
+    def versionUrl = new URL("https://data.services.jetbrains.com/products?code=IIC%2CPCC&fields=code%2Creleases.build%2Creleases.type")
+    def parsedJson = new JsonSlurper().parse(versionUrl)
+
+    // Find the latest EAP IntelliJ version.
+    versions.add(String.format("IC-%s", parsedJson.find { it -> it.code == "IIC" }.releases.find { it -> it.type == "eap" }.build))
+
+    // Find the latest EAP PyCharm version.
+    // FIXME: Re-enable PyCharm checks.
+//    versions.add(String.format("PC-%s", parsedJson.find { it -> it.code == "PCC" }.releases.find { it -> it.type == "eap" }.build))
+    return versions
+}
 
 intellij {
-    downloadSources false
-    pluginName 'dodona'
-    plugins = ['java', 'PythonCore:193.5233.102']
-    updateSinceUntilBuild false
-    version '193.5233.102'
+//    downloadSources.set(false)
+    pluginName.set('dodona')
+    plugins.set(['java', 'PythonCore:193.5233.102'])
+    updateSinceUntilBuild.set(false)
+    version.set('193.5233.102')
 }
 
 jacocoTestReport {
@@ -70,20 +91,26 @@ jacocoTestReport {
 }
 
 patchPluginXml {
-    changeNotes """
+    changeNotes = """
       <ul>
-        <li></li>
+        <li>[BUGFIX] Fix crashes when starting the IDE.</li>
+        <li>[MAINTENANCE] Update dependencies.</li>
       </ul>
       """
 
-    pluginDescription "Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE."
+    pluginDescription = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
 
-    sinceBuild '193.3519.25'
+    sinceBuild = '193.3519.25'
 }
 
 publishPlugin {
-    channels 'nightly'
-    token System.getenv("JETBRAINS_MARKETPLACE_TOKEN")
+    channels = [(project.version as String).endsWith("SNAPSHOT") ? "nightly" : "stable"]
+    token = System.getenv("JETBRAINS_MARKETPLACE_TOKEN")
+}
+
+runPluginVerifier {
+    failureLevel = [RunPluginVerifierTask.FailureLevel.COMPATIBILITY_PROBLEMS]
+    ideVersions = getVerifiableVersions()
 }
 
 wrapper {

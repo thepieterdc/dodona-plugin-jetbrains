@@ -8,11 +8,11 @@
  */
 package io.github.thepieterdc.dodona.plugin;
 
-import com.intellij.CommonBundle;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
 import javax.annotation.Nonnull;
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 /**
@@ -46,6 +46,15 @@ public final class DodonaBundle {
 	public static String message(
 		@PropertyKey(resourceBundle = BUNDLE_NAME) final String key,
 		final Object... params) {
-		return CommonBundle.message(BUNDLE, key, params);
+		if (!BUNDLE.containsKey(key)) {
+			return "null";
+		}
+		
+		if (params.length == 0) {
+			return BUNDLE.getString(key);
+		}
+		
+		// Fill in the parameters.
+		return MessageFormat.format(BUNDLE.getString(key), params);
 	}
 }

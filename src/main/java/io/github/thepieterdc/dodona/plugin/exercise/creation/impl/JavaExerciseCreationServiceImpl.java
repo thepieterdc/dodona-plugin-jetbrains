@@ -10,7 +10,6 @@
 package io.github.thepieterdc.dodona.plugin.exercise.creation.impl;
 
 import com.intellij.ide.highlighter.JavaFileType;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElementFactory;
 
@@ -31,8 +30,7 @@ public class JavaExerciseCreationServiceImpl extends ExerciseCreationServiceImpl
 	 */
 	public JavaExerciseCreationServiceImpl(final Project project) {
 		super(project);
-//		this.javaElementFactory = PsiElementFactory.getInstance(project);
-		this.javaElementFactory = ServiceManager.getService(project, PsiElementFactory.class);
+		this.javaElementFactory = project.getService(PsiElementFactory.class);
 	}
 	
 	@Nonnull

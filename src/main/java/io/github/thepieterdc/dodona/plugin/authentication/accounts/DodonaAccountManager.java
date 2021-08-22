@@ -15,7 +15,6 @@ import com.intellij.credentialStore.Credentials;
 import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.messages.MessageBus;
@@ -119,7 +118,7 @@ public class DodonaAccountManager implements PersistentStateComponent<DodonaAcco
 	 */
 	@Nonnull
 	public static DodonaAccountManager getInstance() {
-		return ServiceManager.getService(DodonaAccountManager.class);
+		return ApplicationManager.getApplication().getService(DodonaAccountManager.class);
 	}
 	
 	@Nullable

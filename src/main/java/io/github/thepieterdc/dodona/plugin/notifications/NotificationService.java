@@ -8,7 +8,6 @@
  */
 package io.github.thepieterdc.dodona.plugin.notifications;
 
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 
 import javax.annotation.Nonnull;
@@ -43,7 +42,7 @@ public interface NotificationService {
 	 */
 	@Nonnull
 	static NotificationService getInstance(final Project project) {
-		return ServiceManager.getService(project, NotificationService.class);
+		return project.getService(NotificationService.class);
 	}
 	
 	/**

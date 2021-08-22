@@ -10,7 +10,6 @@
 package io.github.thepieterdc.dodona.plugin.code.analysis;
 
 import com.intellij.codeInsight.CodeSmellInfo;
-import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
@@ -38,6 +37,6 @@ public interface CodeAnalysisService {
 	 */
 	@Nonnull
 	static CodeAnalysisService getInstance(final Project project) {
-		return ServiceManager.getService(project, CodeAnalysisService.class);
+		return project.getService(CodeAnalysisService.class);
 	}
 }

@@ -24,11 +24,10 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Build the plugin using Gradle
-        run: ./gradlew buildPlugin
-      - uses: thepieterdc/intellij-plugin-verifier-action@master
+      - name: Cache verifier IDEs
+        uses: actions/cache@v2
         with:
-          plugin: '/home/runner/work/dodona-plugin-jetbrains/dodona-plugin-jetbrains/build/distributions/dodona-*'
-          versions: |
-            193.5233.102
-            LATEST-EAP-SNAPSHOT
+          path: ~/.pluginVerifier/ides
+          key: ${{ runner.os }}-plugin-verifier
+      - name: Build the plugin using Gradle
+        run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=~/.pluginVerifier

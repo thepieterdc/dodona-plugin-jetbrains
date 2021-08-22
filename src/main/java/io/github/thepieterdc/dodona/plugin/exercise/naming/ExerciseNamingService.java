@@ -8,7 +8,7 @@
  */
 package io.github.thepieterdc.dodona.plugin.exercise.naming;
 
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import io.github.thepieterdc.dodona.resources.activities.Exercise;
 
 import javax.annotation.Nonnull;
@@ -35,6 +35,6 @@ public interface ExerciseNamingService {
 	 */
 	@Nonnull
 	static ExerciseNamingService getInstance() {
-		return ServiceManager.getService(ExerciseNamingService.class);
+		return ApplicationManager.getApplication().getService(ExerciseNamingService.class);
 	}
 }
