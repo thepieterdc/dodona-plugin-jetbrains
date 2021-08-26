@@ -78,7 +78,7 @@ jobs:
           echo "::set-output name=nextversion::$NEXT_VERSION"
       - name: Prepare the next development cycle
         run: |
-          sed -i "s/${{ steps.version.outputs.version }}/${{ steps.nextversion.outputs.nextversion }}/" build.gradle
+          sed -i "s/${{ steps.version.outputs.version }}/${{ steps.nextversion.outputs.nextversion }}-SNAPSHOT/" build.gradle
           sed -i "/<\/\?ul>/d" build.gradle
           sed -i "/<li>/d" build.gradle
       - name: Make the next development commit
