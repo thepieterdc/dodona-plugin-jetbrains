@@ -32,7 +32,7 @@ dependencies {
     implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.0.3'
 
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.12.1'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '3.12.4'
     testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '1.0.1'
 }
 
