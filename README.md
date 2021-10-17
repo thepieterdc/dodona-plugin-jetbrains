@@ -10,6 +10,9 @@ Plugin for JetBrains IDE's to submit exercises to Dodona.
 ## Generating an API token
 You can authenticate by creating an API token. Instructions on how to do so can be found [here](https://dodona-edu.github.io/guides/creating-an-api-token/).
 
+## Releasing
+This process is automated via GitHub Actions. In order to make a new release, trigger the `Release` workflow.
+
 ## Credits
 - Plugin initially developed by [Pieter De Clercq](https://thepieterdc.github.io/).
 - Co-developed by [Tobiah Lissens](https://github.com/darktilrisen).
