@@ -18,7 +18,7 @@ import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.components.JBLabel;
-import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.labels.ActionLink;
 import com.intellij.util.ui.JBUI;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.DodonaFuture;
@@ -73,7 +73,7 @@ public final class DodonaLoginDialog extends DialogWrapper {
 	@Override
 	protected JPanel createSouthAdditionalPanel() {
 		return JBUI.Panels.simplePanel()
-			.addToCenter(LinkLabel.create(
+			.addToCenter(ActionLink.create(
 				DodonaBundle.message("auth.dialog.instructions"),
 				() -> BrowserUtil.browse(API_TOKEN_URL)))
 			.addToRight(new JBLabel(AllIcons.Ide.External_link_arrow));

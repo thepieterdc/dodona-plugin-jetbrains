@@ -15,7 +15,7 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.components.JBLabel;
-import com.intellij.ui.components.labels.LinkLabel;
+import com.intellij.ui.components.labels.ActionLink;
 import com.intellij.util.ui.JBUI;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
@@ -77,7 +77,7 @@ final class SubmissionDetailsPanel extends JPanel implements Disposable {
 
 		// Create the submission link.
 		final JPanel dodonaLink = JBUI.Panels.simplePanel()
-			.addToCenter(LinkLabel.create(
+			.addToCenter(ActionLink.create(
 				DodonaBundle.message("dialog.submission_details.link"),
 				() -> BrowserUtil.browse(this.submissionInfo.getUrl())))
 			.addToRight(new JBLabel(AllIcons.Ide.External_link_arrow));
