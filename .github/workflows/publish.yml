@@ -102,3 +102,4 @@ jobs:
           pr_assignee: thepieterdc
           pr_body: Merge the release commits into the main branch.
           pr_title: Release v${{ steps.version.outputs.version }}
+          source_branch: release
