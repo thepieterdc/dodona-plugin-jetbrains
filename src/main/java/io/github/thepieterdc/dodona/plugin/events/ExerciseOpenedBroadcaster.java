@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019. All rights reserved.
+ * Copyright (c) 2018-2021. All rights reserved.
  *
  * @author Pieter De Clercq
  * @author Tobiah Lissens
@@ -9,7 +9,7 @@
 
 package io.github.thepieterdc.dodona.plugin.events;
 
-import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.fileEditor.FileEditorManagerListener;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -41,22 +41,12 @@ public class ExerciseOpenedBroadcaster implements FileEditorManagerListener {
 		this.bus = project.getMessageBus();
 		this.identificationService = IdentificationService.getInstance();
 		this.project = project;
-		
-		// Listen for the current opened exercise.
-		this.bus.connect().subscribe(
-			FileEditorManagerListener.FILE_EDITOR_MANAGER,
-			this
-		);
 	}
 	
 	@Override
-	public void selectionChanged(@NotNull final FileEditorManagerEvent event) {
-		// Find the current opened file.
-		final VirtualFile vFile = event.getNewFile();
-		
+	public void fileOpened(@NotNull FileEditorManager source, @NotNull final VirtualFile file) {
 		// Identify the current opened exercise.
-		final Optional<Identification> identification = Optional.ofNullable(vFile)
-			.flatMap(file -> this.identificationService.identify(this.project, file));
+		final Optional<Identification> identification = this.identificationService.identify(this.project, file);
 		
 		// Set the project course in the settings.
 		identification.flatMap(Identification::getCourseId).ifPresent(course ->
@@ -70,6 +60,6 @@ public class ExerciseOpenedBroadcaster implements FileEditorManagerListener {
 		
 		// Publish the event.
 		this.bus.syncPublisher(CurrentExerciseListener.CHANGED_TOPIC)
-			.onCurrentExercise(vFile, identification.orElse(null));
+			.onCurrentExercise(file, identification.orElse(null));
 	}
 }
