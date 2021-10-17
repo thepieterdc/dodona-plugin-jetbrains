@@ -53,8 +53,7 @@
     <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings"/>
 
     <!-- ToolWindow -->
-    <postStartupActivity implementation="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowInitialiser"/>
-    <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory"/>
+    <toolWindow anchor="right" canCloseContents="true" factoryClass="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory" icon="/icons/toolwindow/icon.png" id="Dodona" secondary="true" />
   </extensions>
 
   <projectListeners>
