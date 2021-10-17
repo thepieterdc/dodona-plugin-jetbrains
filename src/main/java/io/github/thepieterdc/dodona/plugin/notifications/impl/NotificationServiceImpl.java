@@ -8,8 +8,8 @@
  */
 package io.github.thepieterdc.dodona.plugin.notifications.impl;
 
-import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
+import com.intellij.notification.NotificationGroupManager;
 import com.intellij.notification.NotificationListener;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
@@ -24,11 +24,7 @@ import javax.swing.*;
  */
 public class NotificationServiceImpl implements NotificationService {
 	@NonNls
-	private static final String DODONA_NOTIFICATIONS = "Dodona Notifications";
-	
-	private static final NotificationGroup GROUP = new NotificationGroup(
-		DODONA_NOTIFICATIONS, NotificationDisplayType.BALLOON, true
-	);
+	private static final String GROUP_ID = "Dodona Notifications";
 	
 	private final Project project;
 	
@@ -69,9 +65,15 @@ public class NotificationServiceImpl implements NotificationService {
 	                    @Nullable final Icon icon,
 	                    final String title,
 	                    final String message) {
-		GROUP
-			.createNotification(title, message, type, NotificationListener.URL_OPENING_LISTENER)
+		// Get the group.
+		final NotificationGroup group = NotificationGroupManager.getInstance()
+			.getNotificationGroup(GROUP_ID);
+		
+		// Build the notification.
+		group.createNotification(message, type)
 			.setIcon(icon)
+			.setListener(NotificationListener.URL_OPENING_LISTENER)
+			.setTitle(title)
 			.notify(this.project);
 	}
 	

@@ -65,7 +65,7 @@ prepareKotlinBuildScriptModel.dependsOn generateBuildConfig
 
 static def getVerifiableVersions() {
     // FIXME: Re-enable PyCharm checks.
-    def versions = ["IC-193.5662.53", /*"PC-193.5233.109" */]
+    def versions = ["IC-203.6682.168", /*"PC-203.6682.168" */]
 
     // Get the list of all versions.
     def versionUrl = new URL("https://data.services.jetbrains.com/products?code=IIC%2CPCC&fields=code%2Creleases.build%2Creleases.type")
@@ -83,9 +83,9 @@ static def getVerifiableVersions() {
 intellij {
     downloadSources.set(false)
     pluginName.set('dodona')
-    plugins.set(['java', 'PythonCore:193.5233.102'])
+    plugins.set(['java', 'PythonCore:203.6682.168'])
     updateSinceUntilBuild.set(false)
-    version.set('193.5233.102')
+    version.set('203.6682.168')
 }
 
 jacocoTestReport {
@@ -100,13 +100,14 @@ jacocoTestReport {
 patchPluginXml {
     changeNotes = """
       <ul>
-        <li>Remove deprecated function calls to support newer versions of the JetBrains suite.</li> 
+        <li><strong>Dropped support for versions lower than 2020.3</strong></li>
+        <li>Remove deprecated function calls to support newer versions of the JetBrains suite.</li>
       </ul>
       """
 
     pluginDescription = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
 
-    sinceBuild = '193.3519.25'
+    sinceBuild = '203.6682.168'
 }
 
 publishPlugin {
