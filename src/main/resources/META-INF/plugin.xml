@@ -44,6 +44,7 @@
                         serviceImplementation="io.github.thepieterdc.dodona.plugin.exercise.naming.impl.ExerciseNamingServiceImpl"/>
 
     <!-- Notifications -->
+    <notificationGroup displayType="BALLOON" id="Dodona Notifications" />
     <projectService serviceInterface="io.github.thepieterdc.dodona.plugin.notifications.NotificationService"
                     serviceImplementation="io.github.thepieterdc.dodona.plugin.notifications.impl.NotificationServiceImpl"/>
 
@@ -53,7 +54,9 @@
     <projectService serviceImplementation="io.github.thepieterdc.dodona.plugin.settings.DodonaProjectSettings"/>
 
     <!-- ToolWindow -->
-    <toolWindow anchor="right" canCloseContents="true" factoryClass="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory" icon="/icons/toolwindow/icon.png" id="Dodona" secondary="true" />
+    <toolWindow anchor="right" canCloseContents="true"
+                factoryClass="io.github.thepieterdc.dodona.plugin.toolwindow.DodonaToolWindowFactory"
+                icon="/icons/toolwindow/icon.png" id="Dodona" secondary="true" />
   </extensions>
 
   <projectListeners>
