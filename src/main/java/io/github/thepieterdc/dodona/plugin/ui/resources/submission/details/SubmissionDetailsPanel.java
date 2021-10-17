@@ -15,7 +15,7 @@ import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.ui.components.JBLabel;
-import com.intellij.ui.components.labels.ActionLink;
+import com.intellij.ui.components.ActionLink;
 import com.intellij.util.ui.JBUI;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
@@ -63,7 +63,7 @@ final class SubmissionDetailsPanel extends JPanel implements Disposable {
 	public void dispose() {
 		Disposer.dispose(this.editorPanel);
 	}
-
+	
 	/**
 	 * Initializes the components.
 	 */
@@ -74,19 +74,21 @@ final class SubmissionDetailsPanel extends JPanel implements Disposable {
 			HumanSubmissionStatus.forStatus(this.submissionInfo.getStatus()),
 			TimeUtils.fuzzy(this.submissionInfo.getCreatedAt())));
 		status.setIcon(SubmissionStatusIcon.forStatus(this.submissionInfo.getStatus()));
-
+		
 		// Create the submission link.
 		final JPanel dodonaLink = JBUI.Panels.simplePanel()
-			.addToCenter(ActionLink.create(
+			.addToCenter(new ActionLink(
 				DodonaBundle.message("dialog.submission_details.link"),
-				() -> BrowserUtil.browse(this.submissionInfo.getUrl())))
+				e -> {
+					BrowserUtil.browse(this.submissionInfo.getUrl());
+				}))
 			.addToRight(new JBLabel(AllIcons.Ide.External_link_arrow));
-
+		
 		// Create the top bar.
 		final JPanel topPanel = new JPanel(new BorderLayout(5, 0));
 		topPanel.add(status, BorderLayout.CENTER);
 		topPanel.add(dodonaLink, BorderLayout.LINE_END);
-
+		
 		this.add(topPanel, BorderLayout.PAGE_START);
 		this.add(this.editorPanel, BorderLayout.CENTER);
 	}
