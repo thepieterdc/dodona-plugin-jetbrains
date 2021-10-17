@@ -99,6 +99,9 @@ jacocoTestReport {
 
 patchPluginXml {
     changeNotes = """
+      <ul>
+        <li>Remove deprecated function calls to support newer versions of the JetBrains suite.</li> 
+      </ul>
       """
 
     pluginDescription = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
