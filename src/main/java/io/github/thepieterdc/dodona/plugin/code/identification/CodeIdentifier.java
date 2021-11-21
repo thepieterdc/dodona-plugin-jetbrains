@@ -29,6 +29,7 @@ public enum CodeIdentifier {
 	JAVASCRIPT(DodonaFileType.JAVASCRIPT, v -> String.format("// %s", v)),
 	PROLOG(DodonaFileType.PROLOG, v -> String.format("%% %s", v)),
 	PYTHON(DodonaFileType.PYTHON, v -> String.format("# %s", v));
+	SQL(DodonaFileType.SQL, v -> String.format("-- %s", v));
 	
 	private final Function<? super String, String> commentFn;
 	private final DodonaFileType fileType;
