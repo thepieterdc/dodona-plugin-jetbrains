@@ -25,7 +25,8 @@ public enum DodonaFileType {
 	JAVA("java"),
 	JAVASCRIPT("js"),
 	PROLOG("pl"),
-	PYTHON("py");
+	PYTHON("py"),
+	SQL("sql");
 	
 	private final String extension;
 	private final FileType fileType;
