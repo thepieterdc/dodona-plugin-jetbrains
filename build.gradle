@@ -9,7 +9,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.1.6-SNAPSHOT'
+version '2.1.6'
 
 sourceCompatibility = 11
 
