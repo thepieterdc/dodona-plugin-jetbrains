@@ -48,11 +48,10 @@ jobs:
         uses: EndBug/add-and-commit@v8.0.2
         with:
           add: 'build.gradle'
-          branch: release
+          commit: '--signoff'
           default_author: github_actions
           message: "Release v${{ steps.version.outputs.version }}"
           push: false
-          signoff: true
       - name: Create release
         id: release
         uses: actions/create-release@v1
@@ -90,10 +89,9 @@ jobs:
         uses: EndBug/add-and-commit@v8.0.2
         with:
           add: 'build.gradle'
-          branch: release
+          commit: '--signoff'
           default_author: github_actions
           message: "Prepare the next development cycle"
-          signoff: true
       - name: Open a pull request
         uses: repo-sync/pull-request@v2
         with:
