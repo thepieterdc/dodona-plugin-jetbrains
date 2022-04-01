@@ -45,7 +45,7 @@ jobs:
       - name: Build the package
         run: ./gradlew buildPlugin
       - name: Make the release commit
-        uses: EndBug/add-and-commit@v8.0.2
+        uses: EndBug/add-and-commit@v9
         with:
           add: 'build.gradle'
           commit: '--signoff'
@@ -86,7 +86,7 @@ jobs:
           sed -i "/<\/\?ul>/d" build.gradle
           sed -i "/<li>/d" build.gradle
       - name: Make the next development commit
-        uses: EndBug/add-and-commit@v8.0.2
+        uses: EndBug/add-and-commit@v9
         with:
           add: 'build.gradle'
           commit: '--signoff'
