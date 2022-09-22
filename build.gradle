@@ -9,7 +9,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.1.7-SNAPSHOT'
+version '2.1.8-SNAPSHOT'
 
 sourceCompatibility = 11
 
@@ -99,9 +99,6 @@ jacocoTestReport {
 
 patchPluginXml {
     changeNotes = """
-      <ul>
-        <li>[BUG] Support name change of blue-grey to blue-gray in course colours. This was blocking logging in.</li>
-      </ul>
       """
 
     pluginDescription = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
