@@ -26,14 +26,14 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.1'
-    implementation group: 'io.github.thepieterdc.dodona', name: 'impl', version: '2.0.1'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.2'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'impl', version: '2.0.2'
 
     implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.0.3'
 
     testImplementation group: 'junit', name: 'junit', version: '4.13.2'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.0'
-    testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '1.0.1'
+    testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '1.0.2'
 }
 
 task calculateNextVersion {
@@ -99,6 +99,9 @@ jacocoTestReport {
 
 patchPluginXml {
     changeNotes = """
+      <ul>
+        <li>[BUG] Support name change of blue-grey to blue-gray in course colours. This was blocking logging in.</li>
+      </ul>
       """
 
     pluginDescription = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
