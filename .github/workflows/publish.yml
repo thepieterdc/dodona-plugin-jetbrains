@@ -28,7 +28,7 @@ jobs:
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
       - name: Cache the dependencies
-        uses: actions/cache@v3.0.9
+        uses: actions/cache@v3.0.11
         with:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
