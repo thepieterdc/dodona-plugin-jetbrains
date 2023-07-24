@@ -47,7 +47,7 @@ public class IdentificationServiceTest {
 		final long seriesId = random.generate();
 		
 		// Generate the url to the exercise.
-		final String urlPattern = "https://dodona.ugent.be/nl/courses/%d/series/%d/activities/%d/";
+		final String urlPattern = "https://dodona.be/nl/courses/%d/series/%d/activities/%d/";
 		final String url = String.format(urlPattern, courseId, seriesId, exerciseId);
 		
 		// Generate some code.
@@ -76,7 +76,7 @@ public class IdentificationServiceTest {
 		final long exerciseId = random.generate();
 		
 		// Generate the url to the exercise.
-		final String urlPattern = "https://dodona.ugent.be/nl/activities/%d/";
+		final String urlPattern = "https://dodona.be/nl/activities/%d/";
 		final String url = String.format(urlPattern, exerciseId);
 		
 		// Generate some code.
