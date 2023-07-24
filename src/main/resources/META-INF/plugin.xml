@@ -3,7 +3,7 @@
   <id>be.ugent.piedcler.dodona</id>
   <name>Dodona</name>
 
-  <vendor email="piedcler.declercq@ugent.be" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah Lissens</vendor>
+  <vendor email="pieterdeclercq@outlook.com" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah Lissens</vendor>
 
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.platform</depends>

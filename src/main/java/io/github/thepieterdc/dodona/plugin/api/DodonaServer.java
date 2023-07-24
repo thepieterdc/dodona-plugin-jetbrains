@@ -20,7 +20,7 @@ import java.util.Arrays;
  * Dodona servers that are available with the plugin.
  */
 public enum DodonaServer {
-	DEFAULT("dodona.ugent.be", "https://dodona.ugent.be", Icons.AVATAR_DEFAULT),
+	DEFAULT("dodona.be", "https://dodona.be", Icons.AVATAR_DEFAULT),
 	NAOS("naos.ugent.be", "https://naos.ugent.be", Icons.AVATAR_NAOS),
 	LOCAL3000("localhost:3000", "http://localhost:3000", Icons.AVATAR_OTHER);
 	
