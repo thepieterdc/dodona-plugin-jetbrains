@@ -26,8 +26,8 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.2'
-    implementation group: 'io.github.thepieterdc.dodona', name: 'impl', version: '2.0.2'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.3'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'impl', version: '2.0.3'
 
     implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.0.3'
 
