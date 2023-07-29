@@ -5,13 +5,15 @@ plugins {
     id 'idea'
     id 'jacoco'
     id 'java'
-    id 'org.jetbrains.intellij' version '1.9.0'
+    id 'org.jetbrains.intellij' version '1.15.0'
 }
 
 group 'io.github.thepieterdc.dodona'
 version '2.1.9-SNAPSHOT'
 
-sourceCompatibility = 11
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+}
 
 repositories {
     mavenCentral()
@@ -31,8 +33,10 @@ dependencies {
 
     implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.0.3'
 
-    testImplementation group: 'junit', name: 'junit', version: '4.13.2'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.1'
+    testImplementation platform("org.junit:junit-bom:5.10.0")
+
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.0'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.4.0'
     testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '1.0.2'
 }
 
@@ -65,7 +69,7 @@ prepareKotlinBuildScriptModel.dependsOn generateBuildConfig
 
 static def getVerifiableVersions() {
     // FIXME: Re-enable PyCharm checks.
-    def versions = ["IC-203.6682.1.9-SNAPSHOT", /*"PC-203.6682.168" */]
+    def versions = ["IC-211.7628.21", /*"PC-203.6682.168" */]
 
     // Get the list of all versions.
     def versionUrl = new URL("https://data.services.jetbrains.com/products?code=IIC%2CPCC&fields=code%2Creleases.build%2Creleases.type")
@@ -83,17 +87,17 @@ static def getVerifiableVersions() {
 intellij {
     downloadSources.set(false)
     pluginName.set('dodona')
-    plugins.set(['java', 'PythonCore:203.6682.1.9-SNAPSHOT'])
+    plugins.set(['java', 'PythonCore:211.7628.24'])
     updateSinceUntilBuild.set(false)
-    version.set('203.6682.1.9-SNAPSHOT')
+    version.set('211.7628.21')
 }
 
 jacocoTestReport {
     dependsOn test
 
     reports {
-        html.enabled = true
-        xml.enabled = true
+        html.required = true
+        xml.required = true
     }
 }
 
@@ -103,7 +107,7 @@ patchPluginXml {
 
     pluginDescription = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
 
-    sinceBuild = '203.6682.1.9-SNAPSHOT'
+    sinceBuild = '211.7628.21'
 }
 
 publishPlugin {
@@ -117,5 +121,5 @@ runPluginVerifier {
 }
 
 wrapper {
-    gradleVersion = '7.0.0'
+    gradleVersion = '8.2.1'
 }
