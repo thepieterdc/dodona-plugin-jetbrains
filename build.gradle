@@ -31,8 +31,8 @@ dependencies {
 
     implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.0.3'
 
-    testImplementation group: 'junit', name: 'junit', version: '4.13.2'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '4.8.1'
+    testImplementation group: 'junit', name: 'junit', version: '5.10.0'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.4.0'
     testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '1.0.2'
 }
 
