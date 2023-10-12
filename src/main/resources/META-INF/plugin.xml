@@ -76,5 +76,12 @@
         <keyboard-shortcut first-keystroke="control shift F10" keymap="$default"/>
       </action>
     </group>
+    <group id="dodona.actions.DodonaActionsToolbarNewUI" text="Dodona" popup="false">
+      <add-to-group group-id="RunToolbarMainActionGroup" anchor="after" relative-to-action="RunToolbarTopLevelExecutorActionGroup" />
+      <action id="dodona.actions.DodonaActionsToolbar.submit"
+              class="io.github.thepieterdc.dodona.plugin.actions.SubmitAction">
+        <keyboard-shortcut first-keystroke="control shift F10" keymap="$default"/>
+      </action>
+    </group>
   </actions>
 </idea-plugin>
