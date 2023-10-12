@@ -1,0 +1,17 @@
+changelog:
+  categories:
+    - title: "Features :star:"
+      labels:
+        - "feature :star:"
+
+    - title: "Improvements :arrow_up:"
+      labels:
+        - "enhancement :arrow_up:"
+
+    - title: "Bugfixes :bug:"
+      labels:
+        - "bug :bug:"
+
+    - title: "Dependencies :construction_worker:"
+      labels:
+        - "dependencies"
