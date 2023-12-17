@@ -36,7 +36,7 @@ dependencies {
     testImplementation platform("org.junit:junit-bom:5.10.1")
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.10.1'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.7.0'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.8.0'
     testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '1.0.2'
 }
 
