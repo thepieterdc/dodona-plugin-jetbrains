@@ -11,29 +11,11 @@ package io.github.thepieterdc.dodona.plugin.notifications;
 import com.intellij.openapi.project.Project;
 
 import javax.annotation.Nonnull;
-import javax.swing.*;
 
 /**
  * Shows notifications.
  */
 public interface NotificationService {
-	/**
-	 * Shows an error notification.
-	 *
-	 * @param title   the title
-	 * @param message the message contents
-	 */
-	void error(final String title, final String message);
-	
-	/**
-	 * Shows an error notification.
-	 *
-	 * @param title   the title
-	 * @param icon    custom icon
-	 * @param message the message contents
-	 */
-	void error(final String title, final Icon icon, final String message);
-	
 	/**
 	 * Gets an instance of the NotificationService.
 	 *
@@ -44,30 +26,11 @@ public interface NotificationService {
 	static NotificationService getInstance(final Project project) {
 		return project.getService(NotificationService.class);
 	}
-	
+
 	/**
-	 * Shows an informational notification.
+	 * Sends the given notification.
 	 *
-	 * @param title   the title
-	 * @param icon    custom icon to display
-	 * @param message the message contents
+	 * @param notification the notification to send
 	 */
-	void info(final String title, final Icon icon, final String message);
-	
-	/**
-	 * Shows a warning notification.
-	 *
-	 * @param title   the title
-	 * @param message the message contents
-	 */
-	void warning(final String title, final String message);
-	
-	/**
-	 * Shows a warning notification.
-	 *
-	 * @param title   the title
-	 * @param icon    custom icon to display
-	 * @param message the message contents
-	 */
-	void warning(final String title, final Icon icon, final String message);
+	void send(SendableNotification notification);
 }
