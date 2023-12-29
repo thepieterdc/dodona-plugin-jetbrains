@@ -8,16 +8,13 @@
  */
 package io.github.thepieterdc.dodona.plugin.notifications.impl;
 
+import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationGroupManager;
-import com.intellij.notification.NotificationListener;
-import com.intellij.notification.NotificationType;
 import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.plugin.notifications.NotificationService;
+import io.github.thepieterdc.dodona.plugin.notifications.SendableNotification;
 import org.jetbrains.annotations.NonNls;
-
-import javax.annotation.Nullable;
-import javax.swing.*;
 
 /**
  * Default implementation of a NotificationService.
@@ -25,9 +22,9 @@ import javax.swing.*;
 public class NotificationServiceImpl implements NotificationService {
 	@NonNls
 	private static final String GROUP_ID = "Dodona Notifications";
-	
+
 	private final Project project;
-	
+
 	/**
 	 * NotificationServiceImpl constructor.
 	 *
@@ -36,55 +33,25 @@ public class NotificationServiceImpl implements NotificationService {
 	public NotificationServiceImpl(final Project project) {
 		this.project = project;
 	}
-	
+
 	@Override
-	public void error(final String title, final String message) {
-		this.notify(NotificationType.ERROR, null, title, message);
-	}
-	
-	@Override
-	public void error(final String title, final Icon icon,
-	                  final String message) {
-		this.notify(NotificationType.ERROR, icon, title, message);
-	}
-	
-	@Override
-	public void info(final String title, final Icon icon, final String message) {
-		this.notify(NotificationType.INFORMATION, icon, title, message);
-	}
-	
-	/**
-	 * Sends a notification.
-	 *
-	 * @param type    the type of the notification
-	 * @param icon    the icon
-	 * @param title   the title
-	 * @param message the contents of the notification
-	 */
-	private void notify(final NotificationType type,
-	                    @Nullable final Icon icon,
-	                    final String title,
-	                    final String message) {
+	public void send(final SendableNotification notification) {
 		// Get the group.
 		final NotificationGroup group = NotificationGroupManager.getInstance()
 			.getNotificationGroup(GROUP_ID);
-		
+
 		// Build the notification.
-		group.createNotification(message, type)
-			.setIcon(icon)
-			.setListener(NotificationListener.URL_OPENING_LISTENER)
-			.setTitle(title)
-			.notify(this.project);
-	}
-	
-	@Override
-	public void warning(final String title, final String message) {
-		this.notify(NotificationType.WARNING, null, title, message);
-	}
-	
-	@Override
-	public void warning(final String title, final Icon icon,
-	                    final String message) {
-		this.notify(NotificationType.WARNING, icon, title, message);
+		final Notification built = group
+			.createNotification(notification.getMessage(), notification.getType())
+			.setTitle(notification.getTitle());
+
+		// Add the action.
+		notification.getAction().ifPresent(built::addAction);
+
+		// Add the icon.
+		notification.getIcon().ifPresent(built::setIcon);
+
+		// Send the notification.
+		built.notify(this.project);
 	}
 }

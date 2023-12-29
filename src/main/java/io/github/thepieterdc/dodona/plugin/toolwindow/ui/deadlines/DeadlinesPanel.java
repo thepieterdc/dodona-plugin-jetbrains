@@ -13,11 +13,13 @@ import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
+import io.github.thepieterdc.dodona.plugin.notifications.NotificationService;
 import io.github.thepieterdc.dodona.plugin.ui.Deadline;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
 import io.github.thepieterdc.dodona.plugin.ui.TextColors;
 import io.github.thepieterdc.dodona.plugin.ui.cards.IconTextCard;
 import io.github.thepieterdc.dodona.plugin.ui.panels.async.StaticAsyncPanel;
+import io.github.thepieterdc.dodona.plugin.ui.resources.submission.SubmissionStatusIcon;
 import io.github.thepieterdc.dodona.resources.Course;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NonNls;
@@ -35,15 +37,15 @@ import java.util.stream.Collectors;
 public final class DeadlinesPanel extends StaticAsyncPanel<List<Deadline>, DeadlinesList> {
 	@NonNls
 	private static final String CARD_NONE = "DEADLINES_NONE";
-	
+
 	private static final JComponent ICON_NONE = Icons.toComponent(
 		Icons.DEADLINES_CHECK.color(TextColors.SECONDARY)
 	);
-	
+
 	private final DeadlinesList list;
-	
+
 	private final DodonaExecutorHolder executor;
-	
+
 	/**
 	 * DeadlinesPanel constructor.
 	 *
@@ -57,13 +59,13 @@ public final class DeadlinesPanel extends StaticAsyncPanel<List<Deadline>, Deadl
 		this.list = new DeadlinesList();
 		this.setBorder(BorderFactory.createEmptyBorder());
 	}
-	
+
 	@Nonnull
 	@Override
 	protected DeadlinesList createContentPane() {
 		return this.list;
 	}
-	
+
 	@Nonnull
 	@Override
 	protected CompletableFuture<List<Deadline>> getData() {
@@ -73,7 +75,7 @@ public final class DeadlinesPanel extends StaticAsyncPanel<List<Deadline>, Deadl
 				.getSubscribedCourses()
 				.stream()
 				.collect(Collectors.toMap(Course::getId, Course::getName));
-			
+
 			// Create a deadline object for every deadline.
 			return root.getDeadlineSeries().stream()
 				.map(series -> Deadline.parse(courseNames, series))
@@ -81,20 +83,23 @@ public final class DeadlinesPanel extends StaticAsyncPanel<List<Deadline>, Deadl
 				.collect(Collectors.toList());
 		});
 	}
-	
+
 	@Override
 	protected void initialize(@Nls final String loadingText) {
 		super.initialize(loadingText);
-		
+
 		// Create a card that is shown when no deadlines were found.
 		this.add(
 			CARD_NONE,
 			new IconTextCard(ICON_NONE, DodonaBundle.message("toolwindow.deadlines.none")).wrap()
 		);
 	}
-	
+
 	@Override
 	protected void showContentCard() {
+		NotificationService notifications = NotificationService.getInstance(this.project);
+		notifications.info("Test", SubmissionStatusIcon.QUEUED, "Test message");
+
 		if (this.list.listSize() > 0) {
 			super.showContentCard();
 		} else {

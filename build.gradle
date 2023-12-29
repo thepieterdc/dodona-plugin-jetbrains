@@ -40,14 +40,14 @@ dependencies {
     testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '1.0.2'
 }
 
-task calculateNextVersion {
+tasks.register('calculateNextVersion') {
     doLast {
         def version = (project.version as String).split('\\.').collect { Integer.parseInt(it) }
         println(String.format("%s.%s.%s", version[0], version[1], version[2] + 1))
     }
 }
 
-task generateBuildConfig {
+tasks.register('generateBuildConfig') {
     var outputDir = file("$projectDir/src/main/java/")
     doFirst {
         def srcFile = new File(outputDir, "io/github/thepieterdc/dodona/plugin/BuildConfig.java")
@@ -87,9 +87,9 @@ static def getVerifiableVersions() {
 intellij {
     downloadSources.set(false)
     pluginName.set('dodona')
-    plugins.set(['java', 'PythonCore:211.7628.24'])
+    plugins.set(['java', 'PythonCore:221.6008.17'])
     updateSinceUntilBuild.set(false)
-    version.set('211.7628.21')
+    version.set('221.6008.13')
 }
 
 jacocoTestReport {
@@ -107,7 +107,7 @@ patchPluginXml {
 
     pluginDescription = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
 
-    sinceBuild = '211.7628.21'
+    sinceBuild = '221.6008.13'
 }
 
 publishPlugin {

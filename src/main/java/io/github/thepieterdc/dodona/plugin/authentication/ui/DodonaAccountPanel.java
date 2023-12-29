@@ -39,12 +39,12 @@ import java.util.Optional;
 public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable {
 	private final CollectionListModel<DodonaAccount> accountListModel;
 	private final JBList<DodonaAccount> accountList;
-	
+
 	private boolean modified;
-	
+
 	@Nullable
 	private String newToken;
-	
+
 	/**
 	 * DodonaAccountPanel constructor.
 	 */
@@ -53,12 +53,12 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
 		this.accountListModel = new CollectionListModel<>();
 		this.accountList = this.createAccountsList();
 		this.modified = false;
-		
+
 		this.newToken = null;
-		
+
 		this.addToCenter(this.createCenterComponent());
 	}
-	
+
 	/**
 	 * Shows an add account dialog.
 	 */
@@ -68,35 +68,35 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
 			// Create a new account.
 			final DodonaAccount account = DodonaAccountManager
 				.createAccount(dialog.getServer(), dialog.getUser());
-			
+
 			// Remove the previous account.
 			this.removeAccount();
-			
+
 			// Store the token.
 			this.newToken = dialog.getToken();
-			
+
 			// Add the new account to the model.
 			this.accountListModel.add(account);
-			
+
 			// Set the modification status.
 			this.modified = true;
 		}
 	}
-	
+
 	/**
 	 * Clears the modification status.
 	 */
 	public void clearModified() {
 		this.modified = false;
 	}
-	
+
 	/**
 	 * Clears the map of new authentication data.
 	 */
 	public void clearNewData() {
 		this.newToken = null;
 	}
-	
+
 	/**
 	 * Creates the list of Dodona accounts.
 	 *
@@ -113,10 +113,10 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
 			.appendText(DodonaBundle.message("auth.accounts.empty"))
 			.appendSecondaryText(DodonaBundle.message("auth.accounts.add"), SimpleTextAttributes.LINK_ATTRIBUTES, e -> this.addAccount())
 			.appendSecondaryText(String.format(" (%s)", KeymapUtil.getFirstKeyboardShortcutText(CommonShortcuts.getNew())), StatusText.DEFAULT_ATTRIBUTES, null);
-		UIUtil.putClientProperty(this, UIUtil.NOT_IN_HIERARCHY_COMPONENTS, Collections.singletonList(renderer));
+		this.putClientProperty(UIUtil.NOT_IN_HIERARCHY_COMPONENTS, Collections.singletonList(renderer));
 		return ret;
 	}
-	
+
 	/**
 	 * Creates the center component of the panel.
 	 *
@@ -132,12 +132,12 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
 			.setPanelBorder(IdeBorderFactory.createBorder(SideBorder.TOP | SideBorder.BOTTOM))
 			.createPanel();
 	}
-	
+
 	@Override
 	public void dispose() {
 		// Not implemented.
 	}
-	
+
 	/**
 	 * Gets the account and its access token, if the account was newly added.
 	 *
@@ -150,14 +150,14 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
 		if (this.accountListModel.isEmpty()) {
 			return Pair.empty();
 		}
-		
+
 		// Return the account and its token.
 		return Pair.create(
 			this.accountListModel.getElementAt(0),
 			this.newToken
 		);
 	}
-	
+
 	/**
 	 * Gets whether the accounts were modified.
 	 *
@@ -166,7 +166,7 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
 	public boolean isModified() {
 		return this.modified;
 	}
-	
+
 	/**
 	 * Removes the selected account.
 	 */
@@ -176,7 +176,7 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
 			this.modified = true;
 		}
 	}
-	
+
 	/**
 	 * Sets the account from the settings.
 	 */
