@@ -9,7 +9,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.2.0-SNAPSHOT'
+version '2.2.1-SNAPSHOT'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -98,9 +98,6 @@ jacocoTestReport {
 
 patchPluginXml {
     changeNotes = """
-    <ul>
-        <li>[BUG] Fixed compatibility with IntelliJ/PyCharm 2024.1</li>
-    </ul>
       """
 
     pluginDescription = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
