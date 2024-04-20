@@ -68,28 +68,23 @@ compileJava.dependsOn generateBuildConfig
 prepareKotlinBuildScriptModel.dependsOn generateBuildConfig
 
 static def getVerifiableVersions() {
-    // FIXME: Re-enable PyCharm checks.
-    def versions = ["IC-222.4554.10", /*"PC-203.6682.168" */]
+    def versions = ["IC-241.14494.240"]
 
     // Get the list of all versions.
     def versionUrl = new URL("https://data.services.jetbrains.com/products?code=IIC%2CPCC&fields=code%2Creleases.build%2Creleases.type")
     def parsedJson = new JsonSlurper().parse(versionUrl)
 
-    // Find the latest EAP IntelliJ version.
-    versions.add(String.format("IC-%s", parsedJson.find { it -> it.code == "IIC" }.releases.find { it -> it.type == "eap" }.build))
-
-    // Find the latest EAP PyCharm version.
-    // FIXME: Re-enable PyCharm checks.
-//    versions.add(String.format("PC-%s", parsedJson.find { it -> it.code == "PCC" }.releases.find { it -> it.type == "eap" }.build))
+    // Find the latest release IntelliJ version.
+    versions.add(String.format("IC-%s", parsedJson.find { it -> it.code == "IIC" }.releases.find { it -> it.type == "release" }.build))
     return versions
 }
 
 intellij {
     downloadSources.set(false)
     pluginName.set('dodona')
-    plugins.set(['java', 'PythonCore:222.4459.24'])
+    plugins.set(['java', 'PythonCore:241.14494.17'])
     updateSinceUntilBuild.set(false)
-    version.set('222.4554.10')
+    version.set('241.14494.240')
 }
 
 jacocoTestReport {
@@ -103,11 +98,14 @@ jacocoTestReport {
 
 patchPluginXml {
     changeNotes = """
+    <ul>
+        <li>[BUG] Fixed compatibility with IntelliJ/PyCharm 2024.1</li>
+    </ul>
       """
 
     pluginDescription = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
 
-    sinceBuild = '222.4554.10'
+    sinceBuild = '241.14494.240'
 }
 
 publishPlugin {
@@ -121,5 +119,5 @@ runPluginVerifier {
 }
 
 wrapper {
-    gradleVersion = '8.7.0'
+    gradleVersion = '8.5.0'
 }
