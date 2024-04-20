@@ -69,7 +69,7 @@ prepareKotlinBuildScriptModel.dependsOn generateBuildConfig
 
 static def getVerifiableVersions() {
     // FIXME: Re-enable PyCharm checks.
-    def versions = ["IC-241.14494.240", /*"PC-203.6682.168" */]
+    def versions = ["IC-241.14494.240", "PC-241.14494.241"]
 
     // Get the list of all versions.
     def versionUrl = new URL("https://data.services.jetbrains.com/products?code=IIC%2CPCC&fields=code%2Creleases.build%2Creleases.type")
