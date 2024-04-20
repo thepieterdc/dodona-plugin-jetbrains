@@ -68,7 +68,6 @@ compileJava.dependsOn generateBuildConfig
 prepareKotlinBuildScriptModel.dependsOn generateBuildConfig
 
 static def getVerifiableVersions() {
-    // FIXME: Re-enable PyCharm checks.
     def versions = ["IC-241.14494.240", "PC-241.14494.241"]
 
     // Get the list of all versions.
@@ -79,8 +78,7 @@ static def getVerifiableVersions() {
     versions.add(String.format("IC-%s", parsedJson.find { it -> it.code == "IIC" }.releases.find { it -> it.type == "eap" }.build))
 
     // Find the latest EAP PyCharm version.
-    // FIXME: Re-enable PyCharm checks.
-//    versions.add(String.format("PC-%s", parsedJson.find { it -> it.code == "PCC" }.releases.find { it -> it.type == "eap" }.build))
+    versions.add(String.format("PC-%s", parsedJson.find { it -> it.code == "PCC" }.releases.find { it -> it.type == "eap" }.build))
     return versions
 }
 
