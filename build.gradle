@@ -9,7 +9,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.1.11-SNAPSHOT'
+version '2.2.0-SNAPSHOT'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
