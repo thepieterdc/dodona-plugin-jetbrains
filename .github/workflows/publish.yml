@@ -18,22 +18,19 @@ jobs:
         run: |
           git checkout -b release
           git push -u origin release
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 11
       - name: Configure git
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-      - name: Cache the dependencies
-        uses: actions/cache@v3
+      - name: Setup Java
+        uses: actions/setup-java@v4
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          distribution: 'zulu'
+          cache: 'gradle'
+          cache-dependency-path: |
+            ./.gradle*
+            ./**/gradle-wrapper.properties
+          java-version: 17.x.x
       - name: Get the release version
         id: version
         run: |
@@ -45,7 +42,7 @@ jobs:
       - name: Build the package
         run: ./gradlew buildPlugin
       - name: Make the release commit
-        uses: EndBug/add-and-commit@v9.1.3
+        uses: EndBug/add-and-commit@v9.1.4
         with:
           add: 'build.gradle'
           commit: '--signoff'
@@ -86,7 +83,7 @@ jobs:
           sed -i "/<\/\?ul>/d" build.gradle
           sed -i "/<li>/d" build.gradle
       - name: Make the next development commit
-        uses: EndBug/add-and-commit@v9.1.3
+        uses: EndBug/add-and-commit@v9.1.4
         with:
           add: 'build.gradle'
           commit: '--signoff'

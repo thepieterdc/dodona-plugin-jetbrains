@@ -21,7 +21,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        java: [11.x.x, 17.x.x, 20.x.x]
+        java: [17.x.x, 21.x.x]
         os: [ubuntu-latest]
 
     steps:
@@ -30,13 +30,11 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
+          cache: 'gradle'
+          cache-dependency-path: |
+            ./.gradle*
+            ./**/gradle-wrapper.properties
           java-version: ${{ matrix.java}}
-      - uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Build the plugin using Gradle
         run: ./gradlew buildPlugin
       - name: Run the tests
