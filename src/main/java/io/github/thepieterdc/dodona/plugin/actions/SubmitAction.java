@@ -9,6 +9,7 @@
 package io.github.thepieterdc.dodona.plugin.actions;
 
 import com.intellij.codeInsight.CodeSmellInfo;
+import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.editor.Document;
@@ -48,7 +49,7 @@ public class SubmitAction extends AnAction {
 			Icons.ACTION_SUBMIT
 		);
 	}
-	
+
 	@Override
 	public void actionPerformed(@NotNull final AnActionEvent e) {
 		final Project project = Objects.requireNonNull(e.getProject());
@@ -59,7 +60,7 @@ public class SubmitAction extends AnAction {
 			e.getPresentation().setEnabled(true);
 		}
 	}
-	
+
 	/**
 	 * Finds a syntax error in the code if it exists.
 	 *
@@ -77,7 +78,12 @@ public class SubmitAction extends AnAction {
 			.map(codeAnalysisSrv::errors)
 			.flatMap(smells -> smells.stream().findFirst());
 	}
-	
+
+	@Override
+	public @NotNull ActionUpdateThread getActionUpdateThread() {
+		return ActionUpdateThread.BGT;
+	}
+
 	/**
 	 * Gets the currently opened document, if available.
 	 *
@@ -91,7 +97,7 @@ public class SubmitAction extends AnAction {
 			.map(FileEditorManager::getSelectedTextEditor)
 			.map(Editor::getDocument);
 	}
-	
+
 	/**
 	 * Gets the PsiFile of the given document.
 	 *
@@ -106,7 +112,7 @@ public class SubmitAction extends AnAction {
 			.map(PsiDocumentManager::getInstance)
 			.map(mgr -> mgr.getPsiFile(document));
 	}
-	
+
 	/**
 	 * Submits the current file to Dodona.
 	 *
@@ -117,14 +123,14 @@ public class SubmitAction extends AnAction {
 	                           final boolean checkSyntax) {
 		// Get the document.
 		final Document document = getDocument(project).orElseThrow(RuntimeException::new);
-		
+
 		// Get the file.
 		final PsiFile file = getPsiFile(project, document).orElseThrow(RuntimeException::new);
-		
+
 		try {
 			// Get the code.
 			final String code = document.getText();
-			
+
 			// Validate the syntax.
 			if (checkSyntax) {
 				final Optional<CodeSmellInfo> syntaxError = findSyntaxError(project, file);
@@ -140,14 +146,14 @@ public class SubmitAction extends AnAction {
 					}
 				});
 			}
-			
+
 			// Create a new SubmitTask and execute it.
 			SubmitSolutionTask.create(project, code).execute();
 		} catch (final CancelledException ignored) {
 		} catch (final UnidentifiedCodeException ignored) {
 			// Create a bus to broadcast the event when the exercise is identified.
 			final MessageBus bus = project.getMessageBus();
-			
+
 			// Identify the exercise.
 			CodeIdentificationService.getInstance(project).identify(document).whenComplete((id, ex) -> {
 				if (id != null) {
@@ -158,7 +164,7 @@ public class SubmitAction extends AnAction {
 			});
 		}
 	}
-	
+
 	@Override
 	public void update(@NotNull final AnActionEvent e) {
 		e.getPresentation().setEnabled(getDocument(e.getProject()).isPresent());
