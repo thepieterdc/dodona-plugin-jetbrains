@@ -24,15 +24,13 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
+          cache: 'gradle'
+          cache-dependency-path: |
+            ./.gradle*
+            ./**/gradle-wrapper.properties
           java-version: 17.x.x
-      - uses: actions/cache@v3
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
       - name: Cache verifier IDEs
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.pluginVerifier/ides
           key: ${{ runner.os }}-plugin-verifier
