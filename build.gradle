@@ -12,7 +12,7 @@ group 'io.github.thepieterdc.dodona'
 version '2.1.11-SNAPSHOT'
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
