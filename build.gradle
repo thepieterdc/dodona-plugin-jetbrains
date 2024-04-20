@@ -74,11 +74,11 @@ static def getVerifiableVersions() {
     def versionUrl = new URL("https://data.services.jetbrains.com/products?code=IIC%2CPCC&fields=code%2Creleases.build%2Creleases.type")
     def parsedJson = new JsonSlurper().parse(versionUrl)
 
-    // Find the latest EAP IntelliJ version.
-    versions.add(String.format("IC-%s", parsedJson.find { it -> it.code == "IIC" }.releases.find { it -> it.type == "eap" }.build))
+    // Find the latest release IntelliJ version.
+    versions.add(String.format("IC-%s", parsedJson.find { it -> it.code == "IIC" }.releases.find { it -> it.type == "release" }.build))
 
-    // Find the latest EAP PyCharm version.
-    versions.add(String.format("PC-%s", parsedJson.find { it -> it.code == "PCC" }.releases.find { it -> it.type == "eap" }.build))
+    // Find the latest release PyCharm version.
+    versions.add(String.format("PC-%s", parsedJson.find { it -> it.code == "PCC" }.releases.find { it -> it.type == "release" }.build))
     return versions
 }
 
