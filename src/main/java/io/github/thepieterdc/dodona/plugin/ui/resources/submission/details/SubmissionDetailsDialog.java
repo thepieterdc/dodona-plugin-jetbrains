@@ -27,9 +27,9 @@ import java.awt.*;
  */
 public final class SubmissionDetailsDialog extends DialogWrapper {
 	private static final Action[] NO_ACTIONS = {};
-	
+
 	private final SubmissionDetailsPanel detailsPanel;
-	
+
 	/**
 	 * SubmissionCodeDialog constructor.
 	 *
@@ -42,29 +42,29 @@ public final class SubmissionDetailsDialog extends DialogWrapper {
 	                               final DodonaExecutorHolder executor,
 	                               final SubmissionInfo submissionInfo,
 	                               @Nullable final Component parent) {
-		super(project, parent, false, IdeModalityType.PROJECT);
+		super(project, parent, false, IdeModalityType.IDE);
 		this.detailsPanel = new SubmissionDetailsPanel(
 			project, executor, submissionInfo
 		);
-		
+
 		// Set the title of the dialog.
 		this.setTitle(DodonaBundle.message("dialog.submission_details.title"));
-		
+
 		this.init();
 	}
-	
+
 	@NotNull
 	@Override
 	protected Action[] createActions() {
 		return NO_ACTIONS;
 	}
-	
+
 	@Nonnull
 	@Override
 	protected JComponent createCenterPanel() {
 		return this.detailsPanel;
 	}
-	
+
 	@Override
 	public void dispose() {
 		Disposer.dispose(this.detailsPanel);

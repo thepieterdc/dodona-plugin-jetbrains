@@ -39,13 +39,13 @@ import java.util.List;
 public final class DodonaLoginDialog extends DialogWrapper {
 	@NonNls
 	private static final String API_TOKEN_URL = "https://dodona-edu.github.io/guides/creating-an-api-token/";
-	
+
 	private final DodonaLoginPanel loginPanel;
-	
+
 	private DodonaServer server;
 	private String token;
 	private User user;
-	
+
 	/**
 	 * DodonaLoginDialog constructor.
 	 *
@@ -54,21 +54,21 @@ public final class DodonaLoginDialog extends DialogWrapper {
 	 */
 	public DodonaLoginDialog(@Nullable final Project project,
 	                         @Nullable final Component parent) {
-		super(project, parent, false, IdeModalityType.PROJECT);
-		
+		super(project, parent, false, IdeModalityType.IDE);
+
 		this.loginPanel = new DodonaLoginPanel(project);
-		
+
 		this.setOKButtonText(DodonaBundle.message("auth.dialog.sign_in"));
 		this.setTitle(DodonaBundle.message("auth.dialog.title"));
 		this.init();
 	}
-	
+
 	@Nonnull
 	@Override
 	protected JComponent createCenterPanel() {
 		return this.loginPanel;
 	}
-	
+
 	@Nonnull
 	@Override
 	protected JPanel createSouthAdditionalPanel() {
@@ -80,7 +80,7 @@ public final class DodonaLoginDialog extends DialogWrapper {
 				}))
 			.addToRight(new JBLabel(AllIcons.Ide.External_link_arrow));
 	}
-	
+
 	@Override
 	protected void doOKAction() {
 		final EmptyProgressIndicator indicator = new EmptyProgressIndicator(ModalityState.stateForComponent(this.loginPanel));
@@ -96,18 +96,18 @@ public final class DodonaLoginDialog extends DialogWrapper {
 			}
 		});
 	}
-	
+
 	@NotNull
 	@Override
 	protected List<ValidationInfo> doValidateAll() {
 		return this.loginPanel.doValidateAll();
 	}
-	
+
 	@Override
 	public JComponent getPreferredFocusedComponent() {
 		return this.loginPanel.getPreferredFocus();
 	}
-	
+
 	/**
 	 * Gets the server url.
 	 *
@@ -117,7 +117,7 @@ public final class DodonaLoginDialog extends DialogWrapper {
 	public DodonaServer getServer() {
 		return this.server;
 	}
-	
+
 	/**
 	 * Gets the authentication token.
 	 *
@@ -126,7 +126,7 @@ public final class DodonaLoginDialog extends DialogWrapper {
 	public String getToken() {
 		return this.token;
 	}
-	
+
 	/**
 	 * Gets the authenticated user.
 	 *

@@ -1,5 +1,5 @@
 <!-- DO NOT ALTER THE INDENTATION OF THIS FILE AS THIS WILL BREAK THINGS -->
-<idea-plugin url="https://plugins.jetbrains.com/plugin/11166-dodona">
+<idea-plugin url="https://plugins.jetbrains.com/plugin/11166-dodona" requires-restart="false">
   <id>be.ugent.piedcler.dodona</id>
   <name>Dodona</name>
 
