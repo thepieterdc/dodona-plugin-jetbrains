@@ -22,7 +22,7 @@ jobs:
           cache-dependency-path: |
             ./.gradle*
             ./**/gradle-wrapper.properties
-          java-version: 21.x.x
+          java-version: 17.x.x
       - name: Append the current time to the snapshot version
         run: sed -i "s/^\(version.*-SNAPSHOT\)/\1-$(date +%s)/" build.gradle
       - name: Publish the snapshot
