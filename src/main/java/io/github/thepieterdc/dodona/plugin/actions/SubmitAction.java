@@ -8,7 +8,6 @@
  */
 package io.github.thepieterdc.dodona.plugin.actions;
 
-import com.intellij.codeInsight.CodeSmellInfo;
 import com.intellij.openapi.actionSystem.ActionUpdateThread;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -69,8 +68,8 @@ public class SubmitAction extends AnAction {
 	 * @return the error if any
 	 */
 	@Nonnull
-	private static Optional<CodeSmellInfo> findSyntaxError(final Project project,
-	                                                       final PsiFile psiFile) {
+	private static Optional<Integer> findSyntaxError(final Project project,
+												  final PsiFile psiFile) {
 		final CodeAnalysisService codeAnalysisSrv = CodeAnalysisService
 			.getInstance(project);
 		return Optional.of(psiFile)
@@ -133,11 +132,11 @@ public class SubmitAction extends AnAction {
 
 			// Validate the syntax.
 			if (checkSyntax) {
-				final Optional<CodeSmellInfo> syntaxError = findSyntaxError(project, file);
+				final Optional<Integer> syntaxError = findSyntaxError(project, file);
 				syntaxError.ifPresent(error -> {
 					final int result = Messages.showYesNoDialog(
 						project,
-						DodonaBundle.message("dialog.submit.syntax_errors.message", error.getStartLine() + 1),
+						DodonaBundle.message("dialog.submit.syntax_errors.message", error),
 						DodonaBundle.message("dialog.submit.syntax_errors.title"),
 						Messages.getWarningIcon()
 					);

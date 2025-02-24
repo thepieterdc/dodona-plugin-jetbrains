@@ -9,7 +9,6 @@
 
 package io.github.thepieterdc.dodona.plugin.code.analysis;
 
-import com.intellij.codeInsight.CodeSmellInfo;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 
@@ -27,7 +26,7 @@ public interface CodeAnalysisService {
 	 * @return the errors
 	 */
 	@Nonnull
-	Collection<CodeSmellInfo> errors(VirtualFile file);
+	Collection<Integer> errors(VirtualFile file);
 	
 	/**
 	 * Gets an instance of the CodeAnalysisService.

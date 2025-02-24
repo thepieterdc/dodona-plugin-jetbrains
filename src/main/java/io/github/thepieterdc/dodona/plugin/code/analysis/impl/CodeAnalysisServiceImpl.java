@@ -9,17 +9,21 @@
 
 package io.github.thepieterdc.dodona.plugin.code.analysis.impl;
 
-import com.intellij.codeInsight.CodeSmellInfo;
-import com.intellij.lang.annotation.HighlightSeverity;
+import com.intellij.openapi.editor.Document;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vcs.CodeSmellDetector;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiErrorElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
+import com.intellij.psi.PsiRecursiveElementVisitor;
 import io.github.thepieterdc.dodona.plugin.code.analysis.CodeAnalysisService;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 /**
  * Implementation of CodeAnalysisService.
@@ -38,11 +42,24 @@ public class CodeAnalysisServiceImpl implements CodeAnalysisService {
 	
 	@Nonnull
 	@Override
-	public Collection<CodeSmellInfo> errors(final VirtualFile file) {
-		return CodeSmellDetector.getInstance(this.project)
-			.findCodeSmells(Collections.singletonList(file))
-			.stream()
-			.filter(info -> info.getSeverity().equals(HighlightSeverity.ERROR))
-			.collect(Collectors.toSet());
+	public Collection<Integer> errors(final VirtualFile file) {
+		final PsiFile psiFile = PsiManager.getInstance(this.project).findFile(file);
+		if (psiFile == null) {
+			return Collections.emptySet();
+		}
+
+		final Document document = FileDocumentManager.getInstance().getDocument(file);
+
+		// Handle the errors.
+		final Collection<Integer> errors = new ArrayList<>();
+		psiFile.accept(new PsiRecursiveElementVisitor() {
+			@Override
+			public void visitErrorElement(@NotNull PsiErrorElement element) {
+				final Integer line = document != null ? document.getLineNumber(element.getTextOffset()) + 1 : 0;
+				errors.add(line);
+				super.visitErrorElement(element);
+			}
+		});
+		return errors;
 	}
 }
