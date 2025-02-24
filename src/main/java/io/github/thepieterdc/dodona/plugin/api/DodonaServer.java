@@ -21,7 +21,7 @@ import java.util.Arrays;
  */
 public enum DodonaServer {
 	DEFAULT("dodona.be", "https://dodona.be", Icons.AVATAR_DEFAULT),
-	NAOS("naos.ugent.be", "https://naos.ugent.be", Icons.AVATAR_NAOS),
+	NAOS("naos.dodona.be", "https://naos.dodona.be", Icons.AVATAR_NAOS),
 	LOCAL3000("localhost:3000", "http://localhost:3000", Icons.AVATAR_OTHER);
 	
 	@NonNls
