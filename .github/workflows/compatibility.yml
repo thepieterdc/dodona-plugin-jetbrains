@@ -28,7 +28,7 @@ jobs:
           cache-dependency-path: |
             ./.gradle*
             ./**/gradle-wrapper.properties
-          java-version: 17.x.x
+          java-version: 21.x.x
       - name: Cache verifier IDEs
         uses: actions/cache@v4
         with:
