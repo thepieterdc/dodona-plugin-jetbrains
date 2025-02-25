@@ -9,8 +9,9 @@
 package io.github.thepieterdc.dodona.plugin.api;
 
 import org.jetbrains.annotations.NonNls;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Tests DodonaServer.
@@ -25,7 +26,7 @@ public class DodonaServerTest {
 	@Test
 	public void testToDisplayNameKnown() {
 		for (final DodonaServer server : DodonaServer.values()) {
-			Assert.assertEquals(
+			assertEquals(
 				server.getDisplayName(),
 				DodonaServer.toDisplayName(server.getUrl())
 			);
@@ -37,7 +38,7 @@ public class DodonaServerTest {
 	 */
 	@Test
 	public void testToDisplayNameUnknown() {
-		Assert.assertEquals(
+		assertEquals(
 			URL,
 			DodonaServer.toDisplayName(URL)
 		);
@@ -49,7 +50,7 @@ public class DodonaServerTest {
 	@Test
 	public void testToIconKnown() {
 		for (final DodonaServer server : DodonaServer.values()) {
-			Assert.assertEquals(
+			assertEquals(
 				server.getIcon(),
 				DodonaServer.toIcon(server.getUrl())
 			);
@@ -61,7 +62,7 @@ public class DodonaServerTest {
 	 */
 	@Test
 	public void testToIconUnknown() {
-		Assert.assertEquals(
+		assertEquals(
 			DodonaServer.LOCAL3000.getIcon(),
 			DodonaServer.toIcon(URL)
 		);
@@ -73,7 +74,7 @@ public class DodonaServerTest {
 	@Test
 	public void testToString() {
 		for (final DodonaServer server : DodonaServer.values()) {
-			Assert.assertEquals(
+			assertEquals(
 				server.getDisplayName(),
 				server.toString()
 			);

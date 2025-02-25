@@ -13,13 +13,13 @@ import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import io.github.thepieterdc.dodona.resources.Resource;
 import io.github.thepieterdc.dodona.resources.Series;
 import io.github.thepieterdc.random.numerical.RandomLongGenerator;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -66,11 +66,11 @@ public class FullIdentificationTest {
 			.orElse(null);
 		
 		final Exercise exercise = mockResource(Exercise.class, exerciseId);
-		Assert.assertNotNull(exercise);
+		assertNotNull(exercise);
 		
 		final FullIdentification identification =
 			new FullIdentification(course, series, exercise);
-		Assert.assertNotNull(identification);
+		assertNotNull(identification);
 		return identification;
 	}
 	
@@ -82,12 +82,12 @@ public class FullIdentificationTest {
 		final long id = ids.generate();
 		final FullIdentification identification =
 			instance(id, ids.generate(), ids.generate());
-		Assert.assertTrue(identification.getCourse().isPresent());
-		Assert.assertEquals(id, identification.getCourse().get().getId());
+		assertTrue(identification.getCourse().isPresent());
+		assertEquals(id, identification.getCourse().get().getId());
 		
 		final FullIdentification identification2 =
 			instance(null, ids.generate(), ids.generate());
-		Assert.assertFalse(identification2.getCourse().isPresent());
+		assertFalse(identification2.getCourse().isPresent());
 	}
 	
 	/**
@@ -98,7 +98,7 @@ public class FullIdentificationTest {
 		final long id = ids.generate();
 		final FullIdentification identification =
 			instance(ids.generate(), ids.generate(), id);
-		Assert.assertEquals(id, identification.getExercise().getId());
+		assertEquals(id, identification.getExercise().getId());
 	}
 	
 	/**
@@ -109,11 +109,11 @@ public class FullIdentificationTest {
 		final long id = ids.generate();
 		final FullIdentification identification =
 			instance(ids.generate(), id, ids.generate());
-		Assert.assertTrue(identification.getSeries().isPresent());
-		Assert.assertEquals(id, identification.getSeries().get().getId());
+		assertTrue(identification.getSeries().isPresent());
+		assertEquals(id, identification.getSeries().get().getId());
 		
 		final FullIdentification identification2 =
 			instance(ids.generate(), null, ids.generate());
-		Assert.assertFalse(identification2.getSeries().isPresent());
+		assertFalse(identification2.getSeries().isPresent());
 	}
 }

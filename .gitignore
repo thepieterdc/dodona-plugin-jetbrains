@@ -79,6 +79,7 @@ hs_err_pid*
 *.iml
 
 build/
+.intellijPlatform
 
 # BuildConfig.
 BuildConfig.java

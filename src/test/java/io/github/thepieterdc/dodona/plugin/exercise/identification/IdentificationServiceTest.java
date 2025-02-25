@@ -12,11 +12,12 @@ import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.exercise.identification.impl.IdentificationServiceImpl;
 import io.github.thepieterdc.random.RandomGenerator;
 import io.github.thepieterdc.random.numerical.RandomLongGenerator;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests IdentificationService.
@@ -31,7 +32,7 @@ public class IdentificationServiceTest {
 	/**
 	 * Set-up the test environment.
 	 */
-	@Before
+	@BeforeEach
 	public void setUp() {
 		this.instance = new IdentificationServiceImpl();
 	}
@@ -58,11 +59,11 @@ public class IdentificationServiceTest {
 		final Optional<Identification> result = this.instance.identify(code);
 		
 		// Validate the result.
-		Assert.assertTrue(result.isPresent());
+		assertTrue(result.isPresent());
 		result.ifPresent(identification -> {
-			Assert.assertEquals(courseId, (long) identification.getCourseId().orElse(-1L));
-			Assert.assertEquals(seriesId, (long) identification.getSeriesId().orElse(-1L));
-			Assert.assertEquals(exerciseId, (long) identification.getExerciseId());
+			assertEquals(courseId, (long) identification.getCourseId().orElse(-1L));
+			assertEquals(seriesId, (long) identification.getSeriesId().orElse(-1L));
+			assertEquals(exerciseId, (long) identification.getExerciseId());
 		});
 	}
 	
@@ -87,11 +88,11 @@ public class IdentificationServiceTest {
 		final Optional<Identification> result = this.instance.identify(code);
 		
 		// Validate the result.
-		Assert.assertTrue(result.isPresent());
+		assertTrue(result.isPresent());
 		result.ifPresent(identification -> {
-			Assert.assertFalse(identification.getCourseId().isPresent());
-			Assert.assertFalse(identification.getSeriesId().isPresent());
-			Assert.assertEquals(exerciseId, (long) identification.getExerciseId());
+			assertFalse(identification.getCourseId().isPresent());
+			assertFalse(identification.getSeriesId().isPresent());
+			assertEquals(exerciseId, (long) identification.getExerciseId());
 		});
 	}
 	
@@ -100,6 +101,6 @@ public class IdentificationServiceTest {
 	 */
 	@Test
 	public void testEmptyCode() {
-		Assert.assertFalse(this.instance.identify("").isPresent());
+		assertFalse(this.instance.identify("").isPresent());
 	}
 }
