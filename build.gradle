@@ -1,6 +1,7 @@
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.intellij.platform.gradle.models.ProductRelease
+import groovy.json.JsonSlurper
 
 plugins {
     id 'idea'
@@ -105,22 +106,10 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            select {
-                it.channels = [ProductRelease.Channel.RELEASE]
-                it.sinceBuild = sinceBuild.split("\\.")[0]
-                it.types = [
-                    IntelliJPlatformType.IntellijIdeaCommunity,
-                    IntelliJPlatformType.IntellijIdeaUltimate,
-                    IntelliJPlatformType.PyCharmCommunity,
-                ]
-            }
-            select {
-                it.channels = [ProductRelease.Channel.EAP]
-                it.sinceBuild = sinceBuild.split("\\.")[0]
-                it.types = [
-                    IntelliJPlatformType.IntellijIdeaCommunity,
-                ]
-            }
+            ide IntelliJPlatformType.IntellijIdeaCommunity, sinceBuild
+            ide IntelliJPlatformType.IntellijIdeaCommunity, getLatestEAPBuild("IIC")
+            ide IntelliJPlatformType.PyCharmCommunity, sinceBuild
+            ide IntelliJPlatformType.PyCharmCommunity, getLatestEAPBuild("PCC")
         }
     }
 
@@ -141,4 +130,13 @@ jacocoTestReport {
 
 wrapper {
     gradleVersion = '8.5.0'
+}
+
+static def getLatestEAPBuild(String product) {
+    // Get the list of all versions.
+    def versionUrl = new URI("https://data.services.jetbrains.com/products?code=" + product + "&fields=code%2Creleases.build%2Creleases.type").toURL()
+    def parsedJson = new JsonSlurper().parse(versionUrl)
+
+    // Find the latest EAP version.
+    return parsedJson.find { it -> it.code == product }.releases.find { it -> it.type == "eap" }.build
 }
