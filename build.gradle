@@ -148,5 +148,5 @@ static def getSinceBuild(String product, String since) {
 
     // Find the latest version of the given major.
     final String sinceMajor = since.split("\\.")[0]
-    return parsedJson.find { it -> it.code == product }.releases.find { it -> it.type == "release" && it.build.split("\\.")[0] == sinceMajor }.build
+    return parsedJson.find { it -> it.code == product }.releases.find { it -> it.type == "release" && it.build.split("\\.")[0] == sinceMajor }.version
 }
