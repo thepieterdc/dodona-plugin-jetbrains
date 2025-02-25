@@ -35,4 +35,4 @@ jobs:
           path: ~/.pluginVerifier/ides
           key: ${{ runner.os }}-plugin-verifier
       - name: Build the plugin using Gradle
-        run: ./gradlew runPluginVerifier -Pplugin.verifier.home.dir=~/.pluginVerifier
+        run: ./gradlew verifyPlugin -Pplugin.verifier.home.dir=~/.pluginVerifier
