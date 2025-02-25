@@ -1,5 +1,6 @@
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.intellij.platform.gradle.models.ProductRelease
 
 plugins {
     id 'idea'
@@ -10,6 +11,8 @@ plugins {
 
 group 'io.github.thepieterdc.dodona'
 version '2.2.2-SNAPSHOT'
+
+final String sinceBuild = '242.24807.4'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -88,7 +91,7 @@ intellijPlatform {
         description = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
         id = "be.ugent.piedcler.dodona"
         ideaVersion {
-            sinceBuild = '242.24807.4'
+            sinceBuild
             untilBuild = provider { null }
         }
         name = "dodona"
@@ -102,9 +105,22 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            ide IntelliJPlatformType.IntellijIdeaCommunity, '2024.2.5'
-            ide IntelliJPlatformType.IntellijIdeaUltimate, '2024.2.5'
-            ide IntelliJPlatformType.PyCharmCommunity, '2024.2.5'
+            select {
+                it.channels = [ProductRelease.Channel.RELEASE]
+                it.sinceBuild = sinceBuild.split("\\.")[0]
+                it.types = [
+                    IntelliJPlatformType.IntellijIdeaCommunity,
+                    IntelliJPlatformType.IntellijIdeaUltimate,
+                    IntelliJPlatformType.PyCharmCommunity,
+                ]
+            }
+            select {
+                it.channels = [ProductRelease.Channel.EAP]
+                it.sinceBuild = sinceBuild.split("\\.")[0]
+                it.types = [
+                    IntelliJPlatformType.IntellijIdeaCommunity,
+                ]
+            }
         }
     }
 
