@@ -106,9 +106,9 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            ide IntelliJPlatformType.IntellijIdeaCommunity, getSinceBuild("IIC")
+            ide IntelliJPlatformType.IntellijIdeaCommunity, getSinceBuild("IIC", sinceBuild)
             ide IntelliJPlatformType.IntellijIdeaCommunity, getLatestEAPBuild("IIC")
-            ide IntelliJPlatformType.PyCharmCommunity, getSinceBuild("PCC")
+            ide IntelliJPlatformType.PyCharmCommunity, getSinceBuild("PCC", sinceBuild)
             ide IntelliJPlatformType.PyCharmCommunity, getLatestEAPBuild("PCC")
             }
     }
@@ -141,11 +141,12 @@ static def getLatestEAPBuild(String product) {
     return parsedJson.find { it -> it.code == product }.releases.find { it -> it.type == "eap" }.build
 }
 
-static def getSinceBuild(String product) {
+static def getSinceBuild(String product, String since) {
     // Get the list of all versions.
     def versionUrl = new URI("https://data.services.jetbrains.com/products?code=" + product + "&fields=code%2Creleases.build%2Creleases.type").toURL()
     def parsedJson = new JsonSlurper().parse(versionUrl)
 
-    // Find the latest EAP version.
-    return parsedJson.find { it -> it.code == product }.releases.find { it -> it.type == "release" && it.build.split("\\.")[0] == sinceBuild.split("\\.")[0] }.build
+    // Find the latest version of the given major.
+    final String sinceMajor = since.split("\\.")[0]
+    return parsedJson.find { it -> it.code == product }.releases.find { it -> it.type == "release" && it.build.split("\\.")[0] == sinceMajor }.build
 }
