@@ -106,11 +106,11 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            ide IntelliJPlatformType.IntellijIdeaCommunity, sinceBuild
+            ide IntelliJPlatformType.IntellijIdeaCommunity, getSinceBuild("IIC")
             ide IntelliJPlatformType.IntellijIdeaCommunity, getLatestEAPBuild("IIC")
-            ide IntelliJPlatformType.PyCharmCommunity, sinceBuild
+            ide IntelliJPlatformType.PyCharmCommunity, getSinceBuild("PCC")
             ide IntelliJPlatformType.PyCharmCommunity, getLatestEAPBuild("PCC")
-        }
+            }
     }
 
     publishing {
@@ -139,4 +139,13 @@ static def getLatestEAPBuild(String product) {
 
     // Find the latest EAP version.
     return parsedJson.find { it -> it.code == product }.releases.find { it -> it.type == "eap" }.build
+}
+
+static def getSinceBuild(String product) {
+    // Get the list of all versions.
+    def versionUrl = new URI("https://data.services.jetbrains.com/products?code=" + product + "&fields=code%2Creleases.build%2Creleases.type").toURL()
+    def parsedJson = new JsonSlurper().parse(versionUrl)
+
+    // Find the latest EAP version.
+    return parsedJson.find { it -> it.code == product }.releases.find { it -> it.type == "release" && it.build.split("\\.")[0] == sinceBuild.split("\\.")[0] }.build
 }
