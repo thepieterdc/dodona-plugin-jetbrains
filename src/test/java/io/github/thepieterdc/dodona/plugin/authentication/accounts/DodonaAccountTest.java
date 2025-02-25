@@ -9,8 +9,9 @@
 package io.github.thepieterdc.dodona.plugin.authentication.accounts;
 
 import io.github.thepieterdc.random.textual.RandomStringGenerator;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests DodonaAccount.
@@ -25,8 +26,8 @@ public class DodonaAccountTest {
 	public void testGetEmail() {
 		final String email = strings.generate();
 		final DodonaAccount account = new DodonaAccount(email, "", "");
-		Assert.assertNotNull(account);
-		Assert.assertEquals(email, account.getEmail());
+		assertNotNull(account);
+		assertEquals(email, account.getEmail());
 	}
 	
 	/**
@@ -36,8 +37,8 @@ public class DodonaAccountTest {
 	public void testGetFullName() {
 		final String fullName = strings.generate();
 		final DodonaAccount account = new DodonaAccount("", fullName, "");
-		Assert.assertNotNull(account);
-		Assert.assertEquals(fullName, account.getFullName());
+		assertNotNull(account);
+		assertEquals(fullName, account.getFullName());
 	}
 	
 	/**
@@ -47,8 +48,8 @@ public class DodonaAccountTest {
 	public void testGetServer() {
 		final String server = strings.generate();
 		final DodonaAccount account = new DodonaAccount("", "", server);
-		Assert.assertNotNull(account);
-		Assert.assertEquals(server, account.getServer());
+		assertNotNull(account);
+		assertEquals(server, account.getServer());
 	}
 	
 	/**
@@ -61,16 +62,16 @@ public class DodonaAccountTest {
 			strings.generate(),
 			strings.generate()
 		);
-		Assert.assertNotNull(account1);
+		assertNotNull(account1);
 		
 		final DodonaAccount account2 = new DodonaAccount(
 			strings.generate(),
 			strings.generate(),
 			strings.generate()
 		);
-		Assert.assertNotNull(account2);
+		assertNotNull(account2);
 		
-		Assert.assertNotEquals(account1.getId(), account2.getId());
-		Assert.assertNotEquals(account1, account2);
+		assertNotEquals(account1.getId(), account2.getId());
+		assertNotEquals(account1, account2);
 	}
 }

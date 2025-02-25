@@ -1,10 +1,5 @@
 <!-- DO NOT ALTER THE INDENTATION OF THIS FILE AS THIS WILL BREAK THINGS -->
 <idea-plugin url="https://plugins.jetbrains.com/plugin/11166-dodona">
-  <id>be.ugent.piedcler.dodona</id>
-  <name>Dodona</name>
-
-  <vendor email="pieterdeclercq@outlook.com" url="https://thepieterdc.github.io/dodona">Pieter De Clercq and Tobiah Lissens</vendor>
-
   <depends>com.intellij.modules.lang</depends>
   <depends>com.intellij.modules.platform</depends>
 

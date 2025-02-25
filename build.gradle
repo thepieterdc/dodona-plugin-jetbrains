@@ -1,21 +1,29 @@
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.intellij.platform.gradle.models.ProductRelease
 import groovy.json.JsonSlurper
-import org.jetbrains.intellij.tasks.RunPluginVerifierTask
 
 plugins {
     id 'idea'
     id 'jacoco'
     id 'java'
-    id 'org.jetbrains.intellij' version '1.17.3'
+    id 'org.jetbrains.intellij.platform' version '2.2.1'
 }
 
 group 'io.github.thepieterdc.dodona'
 version '2.2.2-SNAPSHOT'
 
+final String sinceBuild = '242.24807.4'
+
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
+    intellijPlatform {
+        defaultRepositories()
+    }
+
     mavenCentral()
 
     maven {
@@ -28,6 +36,15 @@ repositories {
 }
 
 dependencies {
+    intellijPlatform {
+        intellijIdeaCommunity '2024.2.5'
+
+        testFramework TestFrameworkType.JUnit5.INSTANCE
+
+        bundledPlugin 'com.intellij.java'
+        plugin 'PythonCore', '242.24807.4'
+    }
+
     implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.6'
     implementation group: 'io.github.thepieterdc.dodona', name: 'impl', version: '2.0.6'
 
@@ -67,24 +84,39 @@ public class BuildConfig {
 compileJava.dependsOn generateBuildConfig
 prepareKotlinBuildScriptModel.dependsOn generateBuildConfig
 
-static def getVerifiableVersions() {
-    def versions = ["IC-242.24807.4"]
+intellijPlatform {
+    pluginConfiguration {
+        changeNotes = """
 
-    // Get the list of all versions.
-    def versionUrl = new URL("https://data.services.jetbrains.com/products?code=IIC%2CPCC&fields=code%2Creleases.build%2Creleases.type")
-    def parsedJson = new JsonSlurper().parse(versionUrl)
+        """.stripIndent()
+        description = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
+        id = "be.ugent.piedcler.dodona"
+        ideaVersion {
+            sinceBuild
+            untilBuild = provider { null }
+        }
+        name = "dodona"
+        vendor {
+            email = "pieterdeclercq@outlook.com"
+            name = "Pieter De Clercq"
+            url = "https://thepieterdc.github.io/dodona"
+        }
+        version = project.version
+    }
 
-    // Find the latest release IntelliJ version.
-    versions.add(String.format("IC-%s", parsedJson.find { it -> it.code == "IIC" }.releases.find { it -> it.type == "release" }.build))
-    return versions
-}
+    pluginVerification {
+        ides {
+            ide IntelliJPlatformType.IntellijIdeaCommunity, getSinceBuild("IIC", sinceBuild)
+            ide IntelliJPlatformType.IntellijIdeaCommunity, getLatestEAPBuild("IIC")
+            ide IntelliJPlatformType.PyCharmCommunity, getSinceBuild("PCC", sinceBuild)
+            ide IntelliJPlatformType.PyCharmCommunity, getLatestEAPBuild("PCC")
+            }
+    }
 
-intellij {
-    downloadSources.set(false)
-    pluginName.set('dodona')
-    plugins.set(['java', 'PythonCore:242.24807.4'])
-    updateSinceUntilBuild.set(false)
-    version.set('242.24807.4')
+    publishing {
+        channels = [(project.version as String).contains("SNAPSHOT") ? "nightly" : "stable"]
+        token = System.getenv("JETBRAINS_MARKETPLACE_TOKEN")
+    }
 }
 
 jacocoTestReport {
@@ -96,25 +128,25 @@ jacocoTestReport {
     }
 }
 
-patchPluginXml {
-    changeNotes = """
-      """
-
-    pluginDescription = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
-
-    sinceBuild = '242.24807.4'
-}
-
-publishPlugin {
-    channels = [(project.version as String).contains("SNAPSHOT") ? "nightly" : "stable"]
-    token = System.getenv("JETBRAINS_MARKETPLACE_TOKEN")
-}
-
-runPluginVerifier {
-    failureLevel = [RunPluginVerifierTask.FailureLevel.COMPATIBILITY_PROBLEMS]
-    ideVersions = getVerifiableVersions()
-}
-
 wrapper {
     gradleVersion = '8.5.0'
+}
+
+static def getLatestEAPBuild(String product) {
+    // Get the list of all versions.
+    def versionUrl = new URI("https://data.services.jetbrains.com/products?code=" + product + "&fields=code%2Creleases.build%2Creleases.type").toURL()
+    def parsedJson = new JsonSlurper().parse(versionUrl)
+
+    // Find the latest EAP version.
+    return parsedJson.find { it -> it.code == product }.releases.find { it -> it.type == "eap" }.build
+}
+
+static def getSinceBuild(String product, String since) {
+    // Get the list of all versions.
+    def versionUrl = new URI("https://data.services.jetbrains.com/products?code=" + product + "&fields=code%2Creleases.build%2Creleases.type%2Creleases.version").toURL()
+    def parsedJson = new JsonSlurper().parse(versionUrl)
+
+    // Find the latest version of the given major.
+    final String sinceMajor = since.split("\\.")[0]
+    return parsedJson.find { it -> it.code == product }.releases.find { it -> it.type == "release" && it.build.split("\\.")[0] == sinceMajor }.version
 }
