@@ -45,8 +45,8 @@ dependencies {
         plugin 'PythonCore', '242.24807.4'
     }
 
-    implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.6'
-    implementation group: 'io.github.thepieterdc.dodona', name: 'impl', version: '2.0.6'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.7'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'impl', version: '2.0.7'
 
     implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.1.0'
 
