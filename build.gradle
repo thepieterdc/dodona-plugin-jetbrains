@@ -50,10 +50,10 @@ dependencies {
 
     implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.1.0'
 
-    testImplementation platform("org.junit:junit-bom:5.11.4")
+    testImplementation platform("org.junit:junit-bom:5.13.3")
 
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.11.4'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.15.2'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.13.3'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.18.0'
     testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '1.0.5'
 }
 
