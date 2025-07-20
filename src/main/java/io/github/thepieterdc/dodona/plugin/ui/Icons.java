@@ -11,7 +11,6 @@ package io.github.thepieterdc.dodona.plugin.ui;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.util.IconUtil;
 import com.intellij.util.ui.AnimatedIcon;
-import io.github.thepieterdc.dodona.data.CourseColor;
 import org.jetbrains.annotations.NonNls;
 
 import javax.annotation.Nonnull;
@@ -71,17 +70,6 @@ public enum Icons implements Icon {
 	@Nonnull
 	public Icon color(final Color colour) {
 		return IconUtil.colorize(this.icon, colour);
-	}
-	
-	/**
-	 * Colors the icon in the given colour.
-	 *
-	 * @param colour the colour
-	 * @return the colored icon
-	 */
-	@Nonnull
-	public Icon color(final CourseColor colour) {
-		return this.color(colour.getColor());
 	}
 	
 	/**
