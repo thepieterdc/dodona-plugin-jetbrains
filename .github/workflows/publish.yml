@@ -32,7 +32,7 @@ jobs:
         run: |
           VERSION_RAW=$(cat build.gradle | grep "^version" | egrep -o "([0-9].*)SNAPSHOT")
           VERSION="${VERSION_RAW//-SNAPSHOT/}"
-          echo "::set-output name=version::$VERSION"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       - name: Prepare the release
         run: sed -i "s/-SNAPSHOT//" build.gradle
       - name: Build the package
@@ -50,21 +50,13 @@ jobs:
           message: "Release v${{ steps.version.outputs.version }}"
           push: false
       - name: Create release
-        id: release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          draft: false
-          prerelease: false
-          release_name: v${{ steps.version.outputs.version }}
-          tag_name: v${{ steps.version.outputs.version }}
-      - name: Attach artifact to release
         uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          draft: false
           files: ./build/distributions/dodona-${{ steps.version.outputs.version }}.zip
+          prerelease: false
           tag_name: v${{ steps.version.outputs.version }}
       - name: Publish the version
         run: ./gradlew publishPlugin
@@ -74,7 +66,7 @@ jobs:
         id: nextversion
         run: |
           NEXT_VERSION=$(./gradlew --console plain -q calculateNextVersion)
-          echo "::set-output name=nextversion::$NEXT_VERSION"
+          echo "nextversion=$NEXT_VERSION" >> "$GITHUB_OUTPUT"
       - name: Prepare the next development cycle
         run: |
           sed -i "s/${{ steps.version.outputs.version }}/${{ steps.nextversion.outputs.nextversion }}-SNAPSHOT/" build.gradle
