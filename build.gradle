@@ -11,9 +11,9 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.2.2'
+version '2.2.3-SNAPSHOT'
 
-final String sinceBuild = '242.24807.4'
+final String sinceBuild = '2.2.3-SNAPSHOT4807.4'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -42,7 +42,7 @@ dependencies {
         testFramework TestFrameworkType.JUnit5.INSTANCE
 
         bundledPlugin 'com.intellij.java'
-        plugin 'PythonCore', '242.24807.4'
+        plugin 'PythonCore', '2.2.3-SNAPSHOT4807.4'
     }
 
     implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.7'
