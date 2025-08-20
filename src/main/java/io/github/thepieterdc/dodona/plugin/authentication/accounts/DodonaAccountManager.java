@@ -134,8 +134,7 @@ public class DodonaAccountManager implements PersistentStateComponent<DodonaAcco
 	public Optional<String> getToken() {
 		return this.getAccount()
 			.map(this::createCredentialAttributes)
-			.map(PasswordSafe.getInstance()::get)
-			.map(Credentials::getPasswordAsString);
+			.map(PasswordSafe.getInstance()::getPassword);
 	}
 	
 	/**
