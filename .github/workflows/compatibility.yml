@@ -30,7 +30,7 @@ jobs:
             ./**/gradle-wrapper.properties
           java-version: 21.x.x
       - name: Cache verifier IDEs
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.pluginVerifier/ides
           key: ${{ runner.os }}-plugin-verifier
