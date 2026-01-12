@@ -53,6 +53,7 @@ dependencies {
     testImplementation platform("org.junit:junit-bom:6.0.2")
 
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '6.0.2'
+    testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.11.3'
     testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.21.0'
     testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '1.0.5'
 }
@@ -117,6 +118,10 @@ intellijPlatform {
         channels = [(project.version as String).contains("SNAPSHOT") ? "nightly" : "stable"]
         token = System.getenv("JETBRAINS_MARKETPLACE_TOKEN")
     }
+}
+
+test {
+    useJUnitPlatform()
 }
 
 jacocoTestReport {
