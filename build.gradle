@@ -7,13 +7,13 @@ plugins {
     id 'idea'
     id 'jacoco'
     id 'java'
-    id 'org.jetbrains.intellij.platform' version '2.2.1'
+    id 'org.jetbrains.intellij.platform' version '2.10.5'
 }
 
 group 'io.github.thepieterdc.dodona'
 version '2.2.3-SNAPSHOT'
 
-final String sinceBuild = '2.2.3-SNAPSHOT4807.4'
+final String sinceBuild = '242.24807.4'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -42,18 +42,19 @@ dependencies {
         testFramework TestFrameworkType.JUnit5.INSTANCE
 
         bundledPlugin 'com.intellij.java'
-        plugin 'PythonCore', '2.2.3-SNAPSHOT4807.4'
+        plugin 'PythonCore', '242.24807.4'
     }
 
-    implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.7'
-    implementation group: 'io.github.thepieterdc.dodona', name: 'impl', version: '2.0.7'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.8'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'impl', version: '2.0.8'
 
-    implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.1.0'
+    implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.2.0'
 
-    testImplementation platform("org.junit:junit-bom:5.13.3")
+    testImplementation platform("org.junit:junit-bom:6.0.2")
 
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '5.13.3'
-    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.18.0'
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter', version: '6.0.2'
+    testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher', version: '1.11.3'
+    testImplementation group: 'org.mockito', name: 'mockito-core', version: '5.21.0'
     testImplementation group: 'io.github.thepieterdc.random', name: 'random', version: '1.0.5'
 }
 
@@ -87,6 +88,7 @@ prepareKotlinBuildScriptModel.dependsOn generateBuildConfig
 intellijPlatform {
     pluginConfiguration {
         changeNotes = """
+            - [BUGFIX] Cannot create new exercise with boilerplate code that contains \r\n newlines.
         """.stripIndent()
         description = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
         id = "be.ugent.piedcler.dodona"
@@ -105,10 +107,8 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            ide IntelliJPlatformType.IntellijIdeaCommunity, getSinceBuild("IIC", sinceBuild)
             ide IntelliJPlatformType.IntellijIdeaCommunity, getLatestEAPBuild("IIC")
             ide IntelliJPlatformType.PyCharmCommunity, getSinceBuild("PCC", sinceBuild)
-            ide IntelliJPlatformType.PyCharmCommunity, getLatestEAPBuild("PCC")
             }
     }
 
@@ -116,6 +116,10 @@ intellijPlatform {
         channels = [(project.version as String).contains("SNAPSHOT") ? "nightly" : "stable"]
         token = System.getenv("JETBRAINS_MARKETPLACE_TOKEN")
     }
+}
+
+test {
+    useJUnitPlatform()
 }
 
 jacocoTestReport {
@@ -128,7 +132,7 @@ jacocoTestReport {
 }
 
 wrapper {
-    gradleVersion = '8.5.0'
+    gradleVersion = '9.2.1'
 }
 
 static def getLatestEAPBuild(String product) {

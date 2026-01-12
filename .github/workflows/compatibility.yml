@@ -19,9 +19,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           cache: 'gradle'
@@ -29,10 +29,5 @@ jobs:
             ./.gradle*
             ./**/gradle-wrapper.properties
           java-version: 21.x.x
-      - name: Cache verifier IDEs
-        uses: actions/cache@v4
-        with:
-          path: ~/.pluginVerifier/ides
-          key: ${{ runner.os }}-plugin-verifier
       - name: Build the plugin using Gradle
         run: ./gradlew verifyPlugin -Pplugin.verifier.home.dir=~/.pluginVerifier
