@@ -11,7 +11,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.2.3-SNAPSHOT'
+version '2.2.3'
 
 final String sinceBuild = '242.24807.4'
 
