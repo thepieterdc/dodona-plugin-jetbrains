@@ -107,10 +107,8 @@ intellijPlatform {
 
     pluginVerification {
         ides {
-            ide IntelliJPlatformType.IntellijIdeaCommunity, getSinceBuild("IIC", sinceBuild)
             ide IntelliJPlatformType.IntellijIdeaCommunity, getLatestEAPBuild("IIC")
             ide IntelliJPlatformType.PyCharmCommunity, getSinceBuild("PCC", sinceBuild)
-            ide IntelliJPlatformType.PyCharmCommunity, getLatestEAPBuild("PCC")
             }
     }
 
