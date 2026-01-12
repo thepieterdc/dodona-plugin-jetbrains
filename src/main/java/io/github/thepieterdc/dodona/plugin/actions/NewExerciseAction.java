@@ -71,6 +71,8 @@ public class NewExerciseAction extends AnAction implements DumbAware {
 			FileEditorManager.getInstance(project).openFile(created, true);
 		} catch (final CancelledException ex) {
 			// Ignore.
+		} catch (final Exception ex) {
+			System.out.println(ex);
 		}
 	}
 

@@ -69,10 +69,15 @@ public class ExerciseCreationServiceImpl implements ExerciseCreationService {
 		final String contents = this.codeIdentificationService
 			.getIdentifier(filename)
 			.process(identification.getExercise(), rawContents);
-		
+
+		// Normalize line endings to Unix-style (\n) for PsiFile compatibility.
+		final String normalizedContents = contents
+			.replace("\r\n", "\n")
+			.replace("\r", "\n");
+
 		// Create the file.
 		final PsiFile file = this.fileFactory
-			.createFileFromText(filename, fileType, contents);
+			.createFileFromText(filename, fileType, normalizedContents);
 		
 		// Return the created file
 		return ActionsKt
