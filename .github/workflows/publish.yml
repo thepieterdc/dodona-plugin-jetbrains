@@ -42,7 +42,7 @@ jobs:
           git checkout -b release
           git push -u origin release
       - name: Make the release commit
-        uses: EndBug/add-and-commit@v9.1.4
+        uses: EndBug/add-and-commit@v10.0.0
         with:
           add: "build.gradle"
           commit: "--signoff"
@@ -73,7 +73,7 @@ jobs:
           sed -i "/<\/\?ul>/d" build.gradle
           sed -i "/<li>/d" build.gradle
       - name: Make the next development commit
-        uses: EndBug/add-and-commit@v9.1.4
+        uses: EndBug/add-and-commit@v10.0.0
         with:
           add: "build.gradle"
           commit: "--signoff"
