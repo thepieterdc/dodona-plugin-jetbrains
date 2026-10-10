@@ -118,6 +118,7 @@ intellijPlatform {
     }
 
     pluginVerification {
+        ignoredProblemsFile = layout.projectDirectory.file("verifier-ignored-problems.txt")
         ides {
             ide IntelliJPlatformType.IntellijIdea, getLatestEAPBuild("IIC")
             ide IntelliJPlatformType.PyCharmCommunity, getSinceBuild("PCC", sinceBuild)
