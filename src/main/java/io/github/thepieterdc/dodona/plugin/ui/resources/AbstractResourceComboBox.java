@@ -75,9 +75,6 @@ public abstract class AbstractResourceComboBox<T extends Resource> extends Combo
                 return;
             }
         }
-
-        // Clear the selection.
-        this.setSelectedItem(null);
     }
 
     @Override

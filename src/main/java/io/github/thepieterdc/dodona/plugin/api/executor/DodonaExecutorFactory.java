@@ -44,12 +44,19 @@ public enum DodonaExecutorFactory {
      * @return the request executor
      */
     public static DodonaExecutor create(final String server, final String token) {
-        final DodonaClient client = DodonaBuilder.builder()
-                .authenticate(token)
-                .setHost(server)
-                .setUserAgent(getUserAgent())
-                .build();
-        return new DodonaExecutorImpl(client);
+        final Thread thread = Thread.currentThread();
+        final ClassLoader previous = thread.getContextClassLoader();
+        thread.setContextClassLoader(DodonaExecutorFactory.class.getClassLoader());
+        try {
+            final DodonaClient client = DodonaBuilder.builder()
+                    .authenticate(token)
+                    .setHost(server)
+                    .setUserAgent(getUserAgent())
+                    .build();
+            return new DodonaExecutorImpl(client);
+        } finally {
+            thread.setContextClassLoader(previous);
+        }
     }
 
     /**

@@ -55,12 +55,12 @@ public final class DodonaLoginPanel extends Wrapper {
      * @param project the current project
      */
     public DodonaLoginPanel(@Nullable final Project project) {
-        this.cbServer = new ComboBox<>(DodonaServer.values(), 0);
+        this.cbServer = new ComboBox<>(DodonaServer.values());
         this.project = project;
         this.pwdToken = new JBPasswordField();
 
         this.setContent(this.createCenter());
-        this.cbServer.setSelectedItem(DodonaClient.DEFAULT_HOST);
+        this.cbServer.setSelectedItem(DodonaServer.DEFAULT);
         this.pwdToken.requestFocus();
     }
 
