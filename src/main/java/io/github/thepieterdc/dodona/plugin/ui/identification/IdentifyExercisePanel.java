@@ -18,225 +18,229 @@ import io.github.thepieterdc.dodona.plugin.ui.cards.NoConnectionCard;
 import io.github.thepieterdc.dodona.plugin.ui.cards.NoCourseSubscribedCard;
 import io.github.thepieterdc.dodona.plugin.ui.panels.ContentPanelBase;
 import io.github.thepieterdc.dodona.resources.Course;
-import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import io.github.thepieterdc.dodona.resources.Series;
-import org.jetbrains.annotations.NonNls;
-
+import io.github.thepieterdc.dodona.resources.activities.Exercise;
+import java.util.Collections;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
-import java.util.Collections;
-import java.util.Optional;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * Controller panel for exercise identification.
  */
 final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanelContent>
-	implements Disposable, IdentificationListener {
-	@NonNls
-	private static final String CARD_NO_COURSES = "CARD_NO_COURSES";
-	
-	private final DodonaExecutorHolder executor;
-	
-	private final IdentifyExercisePanelContent content;
-	
-	private final IdentificationListener listener;
-	
-	/**
-	 * IdentifyExercisePanel constructor.
-	 *
-	 * @param project      the current project
-	 * @param executor     request executor
-	 * @param listener     listener to call upon selection
-	 * @param confirmation handler to call upon confirmation
-	 */
-	IdentifyExercisePanel(final Project project,
-	                      final DodonaExecutorHolder executor,
-	                      final IdentificationListener listener,
-	                      final Runnable confirmation) {
-		super(project);
-		this.content = new IdentifyExercisePanelContent(this, confirmation);
-		this.executor = executor;
-		this.listener = listener;
-		this.initialize();
-		
-		// Refresh the contents when the default executor is updated.
-		ApplicationManager.getApplication().getMessageBus()
-			.connect(this)
-			.subscribe(ExecutorListener.UPDATED_TOPIC, this::updateCourses);
-	}
-	
-	@Nonnull
-	@Override
-	protected IdentifyExercisePanelContent createContentCard() {
-		return this.content;
-	}
-	
-	@Nonnull
-	@Override
-	protected NoConnectionCard createNoConnectionCard() {
-		return NoConnectionCard.create(this::updateCourses);
-	}
-	
-	@Override
-	public void dispose() {
-		// Required to dispose the message bus when this panel is no longer
-		// visible.
-	}
-	
-	private void handleNoCourses() {
-		this.showCard(CARD_NO_COURSES);
-	}
-	
-	@Override
-	protected void initialize() {
-		super.initialize();
-		
-		// Create a card that is shown when the user is not subscribed to any
-		// courses.
-		this.add(CARD_NO_COURSES, NoCourseSubscribedCard.create(this::updateCourses).wrap());
-		
-		this.updateCourses();
-	}
-	
-	@Override
-	public void onCourseSelected(@Nullable final Course course) {
-		// Inform the parent window.
-		this.listener.onCourseSelected(course);
-		
-		// Disable the series selection and clear the options.
-		this.content.getSeriesComboBox().setEnabled(false);
-		this.content.getSeriesComboBox().setResources(Collections.emptyList());
-		
-		// Disable the exercise selection and clear the options.
-		this.content.getExercisesList().setEnabled(false);
-		this.content.getExercisesList().setResources(Collections.emptyList());
-		
-		// No course was selected.
-		if (course == null) {
-			return;
-		}
-		
-		// Load the series.
-		this.updateSeries(course);
-	}
-	
-	@Override
-	public void onExerciseSelected(@Nullable final Exercise selected) {
-		this.listener.onExerciseSelected(selected);
-	}
-	
-	@Override
-	public void onSeriesSelected(@Nullable final Series selected) {
-		// Inform the parent window.
-		this.listener.onSeriesSelected(selected);
-		
-		// Disable the exercise selection and clear the options.
-		this.content.getExercisesList().setEnabled(false);
-		this.content.getExercisesList().setResources(Collections.emptyList());
-		
-		// No series was selected.
-		if (selected == null) {
-			return;
-		}
-		
-		// Load the exercises.
-		this.updateExercises(selected);
-	}
-	
-	/**
-	 * Updates the list of courses.
-	 */
-	private void updateCourses() {
-		// Show the content card.
-		this.showContentCard();
-		
-		// Show the loading cards.
-		this.content.setCoursesLoading(true);
-		this.content.setExercisesLoading(true);
-		this.content.setSeriesLoading(true);
-		
-		// Get the current course, if available.
-		final Optional<Long> optCourse = Optional.ofNullable(this.project)
-			.map(DodonaProjectSettings::getInstance)
-			.flatMap(DodonaProjectSettings::getCourseId);
-		
-		// Load the courses.
-		this.executor.getExecutor()
-			.execute(dodona -> dodona.me().getSubscribedCourses())
-			.whenComplete((courses, error) -> SwingUtilities.invokeLater(() -> {
-				if (error == null) {
-					if (courses.isEmpty()) {
-						this.handleNoCourses();
-					} else {
-						this.content.getCourseComboBox().setEnabled(true);
-						this.content.getCourseComboBox().setResources(courses);
-						this.content.setCoursesLoading(false);
-						this.content.getCourseComboBox().requestFocus();
-					}
-				} else {
-					this.handleError(error);
-				}
-			}))
-			.thenRun(() -> optCourse.ifPresent(courseId ->
-				this.content.getCourseComboBox().setSelectedResource(courseId)
-			));
-	}
-	
-	/**
-	 * Updates the list of exercises.
-	 *
-	 * @param series the selected series
-	 */
-	private void updateExercises(final Series series) {
-		// Show the loading card.
-		this.content.setExercisesLoading(true);
-		
-		// Load the exercises.
-		this.executor.getExecutor()
-			.execute(dodona -> dodona.exercises().getAll(series))
-			.whenComplete((exercises, error) -> SwingUtilities.invokeLater(() -> {
-				if (error == null) {
-					this.content.getExercisesList().setEnabled(true);
-					this.content.getExercisesList().setResources(exercises);
-					this.content.setExercisesLoading(false);
-					this.content.getExercisesList().requestFocus();
-				} else {
-					this.handleError(error);
-				}
-			}));
-	}
-	
-	/**
-	 * Updates the list of series.
-	 *
-	 * @param course the selected course
-	 */
-	private void updateSeries(final Course course) {
-		// Show the loading cards.
-		this.content.setExercisesLoading(true);
-		this.content.setSeriesLoading(true);
-		
-		// Get the current course, if available.
-		final Optional<Long> optSeries = Optional.ofNullable(this.project)
-			.map(DodonaProjectSettings::getInstance)
-			.flatMap(DodonaProjectSettings::getSeriesId);
-		
-		// Load the series.
-		this.executor.getExecutor()
-			.execute(dodona -> dodona.series().getAll(course))
-			.whenComplete((series, error) -> SwingUtilities.invokeLater(() -> {
-				if (error == null) {
-					this.content.getSeriesComboBox().setEnabled(true);
-					this.content.getSeriesComboBox().setResources(series);
-					this.content.setSeriesLoading(false);
-					this.content.getSeriesComboBox().requestFocus();
-				} else {
-					this.handleError(error);
-				}
-			}))
-			.thenRun(() -> optSeries.ifPresent(seriesId ->
-				this.content.getSeriesComboBox().setSelectedResource(seriesId)
-			));
-	}
+        implements Disposable, IdentificationListener {
+    @NonNls
+    private static final String CARD_NO_COURSES = "CARD_NO_COURSES";
+
+    private final DodonaExecutorHolder executor;
+
+    private final IdentifyExercisePanelContent content;
+
+    private final IdentificationListener listener;
+
+    /**
+     * IdentifyExercisePanel constructor.
+     *
+     * @param project      the current project
+     * @param executor     request executor
+     * @param listener     listener to call upon selection
+     * @param confirmation handler to call upon confirmation
+     */
+    IdentifyExercisePanel(
+            final Project project,
+            final DodonaExecutorHolder executor,
+            final IdentificationListener listener,
+            final Runnable confirmation) {
+        super(project);
+        this.content = new IdentifyExercisePanelContent(this, confirmation);
+        this.executor = executor;
+        this.listener = listener;
+        this.initialize();
+
+        // Refresh the contents when the default executor is updated.
+        ApplicationManager.getApplication()
+                .getMessageBus()
+                .connect(this)
+                .subscribe(ExecutorListener.UPDATED_TOPIC, this::updateCourses);
+    }
+
+    @Nonnull
+    @Override
+    protected IdentifyExercisePanelContent createContentCard() {
+        return this.content;
+    }
+
+    @Nonnull
+    @Override
+    protected NoConnectionCard createNoConnectionCard() {
+        return NoConnectionCard.create(this::updateCourses);
+    }
+
+    @Override
+    public void dispose() {
+        // Required to dispose the message bus when this panel is no longer
+        // visible.
+    }
+
+    private void handleNoCourses() {
+        this.showCard(CARD_NO_COURSES);
+    }
+
+    @Override
+    protected void initialize() {
+        super.initialize();
+
+        // Create a card that is shown when the user is not subscribed to any
+        // courses.
+        this.add(
+                CARD_NO_COURSES,
+                NoCourseSubscribedCard.create(this::updateCourses).wrap());
+
+        this.updateCourses();
+    }
+
+    @Override
+    public void onCourseSelected(@Nullable final Course course) {
+        // Inform the parent window.
+        this.listener.onCourseSelected(course);
+
+        // Disable the series selection and clear the options.
+        this.content.getSeriesComboBox().setEnabled(false);
+        this.content.getSeriesComboBox().setResources(Collections.emptyList());
+
+        // Disable the exercise selection and clear the options.
+        this.content.getExercisesList().setEnabled(false);
+        this.content.getExercisesList().setResources(Collections.emptyList());
+
+        // No course was selected.
+        if (course == null) {
+            return;
+        }
+
+        // Load the series.
+        this.updateSeries(course);
+    }
+
+    @Override
+    public void onExerciseSelected(@Nullable final Exercise selected) {
+        this.listener.onExerciseSelected(selected);
+    }
+
+    @Override
+    public void onSeriesSelected(@Nullable final Series selected) {
+        // Inform the parent window.
+        this.listener.onSeriesSelected(selected);
+
+        // Disable the exercise selection and clear the options.
+        this.content.getExercisesList().setEnabled(false);
+        this.content.getExercisesList().setResources(Collections.emptyList());
+
+        // No series was selected.
+        if (selected == null) {
+            return;
+        }
+
+        // Load the exercises.
+        this.updateExercises(selected);
+    }
+
+    /**
+     * Updates the list of courses.
+     */
+    private void updateCourses() {
+        // Show the content card.
+        this.showContentCard();
+
+        // Show the loading cards.
+        this.content.setCoursesLoading(true);
+        this.content.setExercisesLoading(true);
+        this.content.setSeriesLoading(true);
+
+        // Get the current course, if available.
+        final Optional<Long> optCourse = Optional.ofNullable(this.project)
+                .map(DodonaProjectSettings::getInstance)
+                .flatMap(DodonaProjectSettings::getCourseId);
+
+        // Load the courses.
+        this.executor
+                .getExecutor()
+                .execute(dodona -> dodona.me().getSubscribedCourses())
+                .whenComplete((courses, error) -> SwingUtilities.invokeLater(() -> {
+                    if (error == null) {
+                        if (courses.isEmpty()) {
+                            this.handleNoCourses();
+                        } else {
+                            this.content.getCourseComboBox().setEnabled(true);
+                            this.content.getCourseComboBox().setResources(courses);
+                            this.content.setCoursesLoading(false);
+                            this.content.getCourseComboBox().requestFocus();
+                        }
+                    } else {
+                        this.handleError(error);
+                    }
+                }))
+                .thenRun(() -> optCourse.ifPresent(
+                        courseId -> this.content.getCourseComboBox().setSelectedResource(courseId)));
+    }
+
+    /**
+     * Updates the list of exercises.
+     *
+     * @param series the selected series
+     */
+    private void updateExercises(final Series series) {
+        // Show the loading card.
+        this.content.setExercisesLoading(true);
+
+        // Load the exercises.
+        this.executor
+                .getExecutor()
+                .execute(dodona -> dodona.exercises().getAll(series))
+                .whenComplete((exercises, error) -> SwingUtilities.invokeLater(() -> {
+                    if (error == null) {
+                        this.content.getExercisesList().setEnabled(true);
+                        this.content.getExercisesList().setResources(exercises);
+                        this.content.setExercisesLoading(false);
+                        this.content.getExercisesList().requestFocus();
+                    } else {
+                        this.handleError(error);
+                    }
+                }));
+    }
+
+    /**
+     * Updates the list of series.
+     *
+     * @param course the selected course
+     */
+    private void updateSeries(final Course course) {
+        // Show the loading cards.
+        this.content.setExercisesLoading(true);
+        this.content.setSeriesLoading(true);
+
+        // Get the current course, if available.
+        final Optional<Long> optSeries = Optional.ofNullable(this.project)
+                .map(DodonaProjectSettings::getInstance)
+                .flatMap(DodonaProjectSettings::getSeriesId);
+
+        // Load the series.
+        this.executor
+                .getExecutor()
+                .execute(dodona -> dodona.series().getAll(course))
+                .whenComplete((series, error) -> SwingUtilities.invokeLater(() -> {
+                    if (error == null) {
+                        this.content.getSeriesComboBox().setEnabled(true);
+                        this.content.getSeriesComboBox().setResources(series);
+                        this.content.setSeriesLoading(false);
+                        this.content.getSeriesComboBox().requestFocus();
+                    } else {
+                        this.handleError(error);
+                    }
+                }))
+                .thenRun(() -> optSeries.ifPresent(
+                        seriesId -> this.content.getSeriesComboBox().setSelectedResource(seriesId)));
+    }
 }

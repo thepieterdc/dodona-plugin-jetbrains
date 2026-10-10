@@ -12,7 +12,6 @@ package io.github.thepieterdc.dodona.plugin.tasks;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
-
 import javax.annotation.Nonnull;
 
 /**
@@ -20,19 +19,17 @@ import javax.annotation.Nonnull;
  *
  * @param <T> type of the result
  */
-abstract class AbstractDodonaResultTask<T> extends Task.WithResult<T, RuntimeException>
-	implements DodonaResultTask<T> {
-	/**
-	 * AbstractDodonaTask constructor.
-	 */
-	AbstractDodonaResultTask(final Project project,
-	                         final String title) {
-		super(project, title, true);
-	}
-	
-	@Nonnull
-	@Override
-	public T execute() {
-		return ProgressManager.getInstance().run(this);
-	}
+abstract class AbstractDodonaResultTask<T> extends Task.WithResult<T, RuntimeException> implements DodonaResultTask<T> {
+    /**
+     * AbstractDodonaTask constructor.
+     */
+    AbstractDodonaResultTask(final Project project, final String title) {
+        super(project, title, true);
+    }
+
+    @Nonnull
+    @Override
+    public T execute() {
+        return ProgressManager.getInstance().run(this);
+    }
 }

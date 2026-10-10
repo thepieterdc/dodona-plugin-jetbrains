@@ -15,15 +15,15 @@ import io.github.thepieterdc.dodona.resources.Course;
  * Builder for Dodona projects.
  */
 public interface DodonaModuleBuilder extends ModuleBuilderListener {
-	/**
-	 * The weight of the module
-	 */
-	int WEIGHT = Integer.MAX_VALUE;
-	
-	/**
-	 * Sets the selected course.
-	 *
-	 * @param course the id of the course to set
-	 */
-	void setCourse(Course course);
+    /**
+     * The weight of the module
+     */
+    int WEIGHT = Integer.MAX_VALUE;
+
+    /**
+     * Sets the selected course.
+     *
+     * @param course the id of the course to set
+     */
+    void setCourse(Course course);
 }

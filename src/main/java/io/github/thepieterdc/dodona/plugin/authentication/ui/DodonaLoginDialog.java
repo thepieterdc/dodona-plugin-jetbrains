@@ -24,116 +24,113 @@ import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.DodonaFuture;
 import io.github.thepieterdc.dodona.plugin.api.DodonaServer;
 import io.github.thepieterdc.dodona.resources.User;
-import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.NotNull;
-
+import java.awt.*;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
-import java.awt.*;
-import java.util.List;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Dialog that prompts the user to authenticate.
  */
 public final class DodonaLoginDialog extends DialogWrapper {
-	@NonNls
-	private static final String API_TOKEN_URL = "https://dodona-edu.github.io/guides/creating-an-api-token/";
+    @NonNls
+    private static final String API_TOKEN_URL = "https://dodona-edu.github.io/guides/creating-an-api-token/";
 
-	private final DodonaLoginPanel loginPanel;
+    private final DodonaLoginPanel loginPanel;
 
-	private DodonaServer server;
-	private String token;
-	private User user;
+    private DodonaServer server;
+    private String token;
+    private User user;
 
-	/**
-	 * DodonaLoginDialog constructor.
-	 *
-	 * @param project the current project
-	 * @param parent  parent component
-	 */
-	public DodonaLoginDialog(@Nullable final Project project,
-	                         @Nullable final Component parent) {
-		super(project, parent, false, IdeModalityType.IDE);
+    /**
+     * DodonaLoginDialog constructor.
+     *
+     * @param project the current project
+     * @param parent  parent component
+     */
+    public DodonaLoginDialog(@Nullable final Project project, @Nullable final Component parent) {
+        super(project, parent, false, IdeModalityType.IDE);
 
-		this.loginPanel = new DodonaLoginPanel(project);
+        this.loginPanel = new DodonaLoginPanel(project);
 
-		this.setOKButtonText(DodonaBundle.message("auth.dialog.sign_in"));
-		this.setTitle(DodonaBundle.message("auth.dialog.title"));
-		this.init();
-	}
+        this.setOKButtonText(DodonaBundle.message("auth.dialog.sign_in"));
+        this.setTitle(DodonaBundle.message("auth.dialog.title"));
+        this.init();
+    }
 
-	@Nonnull
-	@Override
-	protected JComponent createCenterPanel() {
-		return this.loginPanel;
-	}
+    @Nonnull
+    @Override
+    protected JComponent createCenterPanel() {
+        return this.loginPanel;
+    }
 
-	@Nonnull
-	@Override
-	protected JPanel createSouthAdditionalPanel() {
-		return JBUI.Panels.simplePanel()
-			.addToCenter(new ActionLink(
-				DodonaBundle.message("auth.dialog.instructions"),
-				e -> {
-					BrowserUtil.browse(API_TOKEN_URL);
-				}))
-			.addToRight(new JBLabel(AllIcons.Ide.External_link_arrow));
-	}
+    @Nonnull
+    @Override
+    protected JPanel createSouthAdditionalPanel() {
+        return JBUI.Panels.simplePanel()
+                .addToCenter(new ActionLink(DodonaBundle.message("auth.dialog.instructions"), e -> {
+                    BrowserUtil.browse(API_TOKEN_URL);
+                }))
+                .addToRight(new JBLabel(AllIcons.Ide.External_link_arrow));
+    }
 
-	@Override
-	protected void doOKAction() {
-		final EmptyProgressIndicator indicator = new EmptyProgressIndicator(ModalityState.stateForComponent(this.loginPanel));
-		Disposer.register(this.myDisposable, indicator::cancel);
-		DodonaFuture.handleOnEdt(this.loginPanel.authenticate(indicator), (u, err) -> {
-			if (err != null && !DodonaFuture.cancelled(err)) {
-				this.startTrackingValidation();
-			} else if (u != null) {
-				this.server = this.loginPanel.getServer();
-				this.token = this.loginPanel.getToken();
-				this.user = u;
-				this.close(DialogWrapper.OK_EXIT_CODE, true);
-			}
-		});
-	}
+    @Override
+    protected void doOKAction() {
+        final EmptyProgressIndicator indicator =
+                new EmptyProgressIndicator(ModalityState.stateForComponent(this.loginPanel));
+        Disposer.register(this.myDisposable, indicator::cancel);
+        DodonaFuture.handleOnEdt(this.loginPanel.authenticate(indicator), (u, err) -> {
+            if (err != null && !DodonaFuture.cancelled(err)) {
+                this.startTrackingValidation();
+            } else if (u != null) {
+                this.server = this.loginPanel.getServer();
+                this.token = this.loginPanel.getToken();
+                this.user = u;
+                this.close(DialogWrapper.OK_EXIT_CODE, true);
+            }
+        });
+    }
 
-	@NotNull
-	@Override
-	protected List<ValidationInfo> doValidateAll() {
-		return this.loginPanel.doValidateAll();
-	}
+    @NotNull
+    @Override
+    protected List<ValidationInfo> doValidateAll() {
+        return this.loginPanel.doValidateAll();
+    }
 
-	@Override
-	public JComponent getPreferredFocusedComponent() {
-		return this.loginPanel.getPreferredFocus();
-	}
+    @Override
+    public JComponent getPreferredFocusedComponent() {
+        return this.loginPanel.getPreferredFocus();
+    }
 
-	/**
-	 * Gets the server url.
-	 *
-	 * @return the server
-	 */
-	@Nonnull
-	public DodonaServer getServer() {
-		return this.server;
-	}
+    /**
+     * Gets the server url.
+     *
+     * @return the server
+     */
+    @Nonnull
+    public DodonaServer getServer() {
+        return this.server;
+    }
 
-	/**
-	 * Gets the authentication token.
-	 *
-	 * @return the authentication token
-	 */
-	public String getToken() {
-		return this.token;
-	}
+    /**
+     * Gets the authentication token.
+     *
+     * @return the authentication token
+     */
+    public String getToken() {
+        return this.token;
+    }
 
-	/**
-	 * Gets the authenticated user.
-	 *
-	 * @return the authenticated user
-	 */
-	@Nonnull
-	public User getUser() {
-		return this.user;
-	}
+    /**
+     * Gets the authenticated user.
+     *
+     * @return the authenticated user
+     */
+    @Nonnull
+    public User getUser() {
+        return this.user;
+    }
 }

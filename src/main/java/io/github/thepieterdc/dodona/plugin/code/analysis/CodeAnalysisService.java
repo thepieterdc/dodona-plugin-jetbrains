@@ -11,31 +11,30 @@ package io.github.thepieterdc.dodona.plugin.code.analysis;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-
-import javax.annotation.Nonnull;
 import java.util.Collection;
+import javax.annotation.Nonnull;
 
 /**
  * Service that sets the analysis the code.
  */
 public interface CodeAnalysisService {
-	/**
-	 * Gets the errors in the given file.
-	 *
-	 * @param file input file
-	 * @return the errors
-	 */
-	@Nonnull
-	Collection<Integer> errors(VirtualFile file);
-	
-	/**
-	 * Gets an instance of the CodeAnalysisService.
-	 *
-	 * @param project current project
-	 * @return the instance
-	 */
-	@Nonnull
-	static CodeAnalysisService getInstance(final Project project) {
-		return project.getService(CodeAnalysisService.class);
-	}
+    /**
+     * Gets the errors in the given file.
+     *
+     * @param file input file
+     * @return the errors
+     */
+    @Nonnull
+    Collection<Integer> errors(VirtualFile file);
+
+    /**
+     * Gets an instance of the CodeAnalysisService.
+     *
+     * @param project current project
+     * @return the instance
+     */
+    @Nonnull
+    static CodeAnalysisService getInstance(final Project project) {
+        return project.getService(CodeAnalysisService.class);
+    }
 }

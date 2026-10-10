@@ -23,34 +23,34 @@ import io.github.thepieterdc.dodona.resources.Course;
  * Utilities for building a module.
  */
 enum BuilderUtils {
-	;
-	
-	/**
-	 * Creates a wizard step that allows the user to select a course.
-	 *
-	 * @param builder the module builder
-	 * @return the created step
-	 */
-	static ModuleWizardStep createCourseSelectionStep(final DodonaModuleBuilder builder) {
-		final DodonaAuthenticator auth = DodonaAuthenticator.getInstance();
-		final DodonaExecutorHolder executor = auth.getExecutor();
-		return new CourseWizardStep(builder, executor);
-	}
-	
-	/**
-	 * Finishes the creation of a module.
-	 *
-	 * @param module the created module
-	 * @param course the selected course
-	 */
-	static void finish(final Module module, final Course course) {
-		// Find the newly created project.
-		final Project project = module.getProject();
-		
-		// Set the course id.
-		DodonaProjectSettings.getInstance(project).setCourseId(course.getId());
-		
-		// Save the project.
-		project.save();
-	}
+    ;
+
+    /**
+     * Creates a wizard step that allows the user to select a course.
+     *
+     * @param builder the module builder
+     * @return the created step
+     */
+    static ModuleWizardStep createCourseSelectionStep(final DodonaModuleBuilder builder) {
+        final DodonaAuthenticator auth = DodonaAuthenticator.getInstance();
+        final DodonaExecutorHolder executor = auth.getExecutor();
+        return new CourseWizardStep(builder, executor);
+    }
+
+    /**
+     * Finishes the creation of a module.
+     *
+     * @param module the created module
+     * @param course the selected course
+     */
+    static void finish(final Module module, final Course course) {
+        // Find the newly created project.
+        final Project project = module.getProject();
+
+        // Set the course id.
+        DodonaProjectSettings.getInstance(project).setCourseId(course.getId());
+
+        // Save the project.
+        project.save();
+    }
 }

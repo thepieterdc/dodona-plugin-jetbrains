@@ -16,12 +16,12 @@ import io.github.thepieterdc.dodona.plugin.DodonaBundle;
  * Code is not yet identified.
  */
 public final class UnidentifiedCodeException extends DodonaException {
-	private static final long serialVersionUID = -3401236427063000618L;
-	
-	/**
-	 * UnidentifiedCodeException constructor.
-	 */
-	public UnidentifiedCodeException() {
-		super(DodonaBundle.message("exceptions.error.unidentified_code"));
-	}
+    private static final long serialVersionUID = -3401236427063000618L;
+
+    /**
+     * UnidentifiedCodeException constructor.
+     */
+    public UnidentifiedCodeException() {
+        super(DodonaBundle.message("exceptions.error.unidentified_code"));
+    }
 }

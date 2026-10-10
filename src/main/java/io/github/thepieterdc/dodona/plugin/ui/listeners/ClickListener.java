@@ -17,23 +17,23 @@ import java.awt.event.MouseListener;
  */
 @FunctionalInterface
 public interface ClickListener extends MouseListener {
-	@Override
-	default void mouseEntered(final MouseEvent e) {
-		// Not implemented.
-	}
-	
-	@Override
-	default void mouseExited(final MouseEvent e) {
-		// Not implemented.
-	}
-	
-	@Override
-	default void mousePressed(final MouseEvent e) {
-		// Not implemented.
-	}
-	
-	@Override
-	default void mouseReleased(final MouseEvent e) {
-		// Not implemented.
-	}
+    @Override
+    default void mouseEntered(final MouseEvent e) {
+        // Not implemented.
+    }
+
+    @Override
+    default void mouseExited(final MouseEvent e) {
+        // Not implemented.
+    }
+
+    @Override
+    default void mousePressed(final MouseEvent e) {
+        // Not implemented.
+    }
+
+    @Override
+    default void mouseReleased(final MouseEvent e) {
+        // Not implemented.
+    }
 }

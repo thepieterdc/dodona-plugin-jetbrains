@@ -26,41 +26,35 @@ import org.jetbrains.annotations.NotNull;
  * Manages the tool window.
  */
 public class DodonaToolWindowFactory implements DumbAware, ToolWindowFactory {
-	private static final int TW_ICON_SIZE = 13;
-	
-	@Override
-	public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
-		// Get a request executor.
-		final DodonaExecutorHolder executor =
-			DodonaAuthenticator.getInstance().getExecutor();
-		
-		// Set the title and auto close property.
-		toolWindow.setTitle(DodonaBundle.NAME);
-		toolWindow.setToHideOnEmptyContent(true);
-		
-		// Create the deadlines tab.
-		final DeadlinesTab deadlines = new DeadlinesTab(project, executor);
-		Disposer.register(project, deadlines);
-		
-		// Create the submissions tab.
-		final SubmissionsTab submissions = new SubmissionsTab(
-			project,
-			executor
-		);
-		Disposer.register(project, submissions);
-		
-		// Set the ToolWindow.
-		toolWindow.setTitle(DodonaBundle.message("toolwindow.title"));
-		
-		// Append all tabs to the content.
-		deadlines.setup(toolWindow);
-		submissions.setup(toolWindow);
-	}
-	
-	@Override
-	public boolean shouldBeAvailable(@NotNull Project project) {
-		return DodonaProjectSettings.getInstance(project)
-			.getCourseId()
-			.isPresent();
-	}
+    private static final int TW_ICON_SIZE = 13;
+
+    @Override
+    public void createToolWindowContent(@NotNull Project project, @NotNull ToolWindow toolWindow) {
+        // Get a request executor.
+        final DodonaExecutorHolder executor = DodonaAuthenticator.getInstance().getExecutor();
+
+        // Set the title and auto close property.
+        toolWindow.setTitle(DodonaBundle.NAME);
+        toolWindow.setToHideOnEmptyContent(true);
+
+        // Create the deadlines tab.
+        final DeadlinesTab deadlines = new DeadlinesTab(project, executor);
+        Disposer.register(project, deadlines);
+
+        // Create the submissions tab.
+        final SubmissionsTab submissions = new SubmissionsTab(project, executor);
+        Disposer.register(project, submissions);
+
+        // Set the ToolWindow.
+        toolWindow.setTitle(DodonaBundle.message("toolwindow.title"));
+
+        // Append all tabs to the content.
+        deadlines.setup(toolWindow);
+        submissions.setup(toolWindow);
+    }
+
+    @Override
+    public boolean shouldBeAvailable(@NotNull Project project) {
+        return DodonaProjectSettings.getInstance(project).getCourseId().isPresent();
+    }
 }

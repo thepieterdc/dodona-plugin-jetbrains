@@ -16,13 +16,12 @@ import com.intellij.util.messages.Topic;
  */
 @FunctionalInterface
 public interface ProjectCourseListener {
-	Topic<ProjectCourseListener> CHANGED_TOPIC =
-		Topic.create("Project course changed", ProjectCourseListener.class);
-	
-	/**
-	 * Called when the course of the project has been set.
-	 *
-	 * @param course the course
-	 */
-	void onCourseChanged(Long course);
+    Topic<ProjectCourseListener> CHANGED_TOPIC = Topic.create("Project course changed", ProjectCourseListener.class);
+
+    /**
+     * Called when the course of the project has been set.
+     *
+     * @param course the course
+     */
+    void onCourseChanged(Long course);
 }

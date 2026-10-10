@@ -9,25 +9,23 @@
 
 package io.github.thepieterdc.dodona.plugin.ui.util;
 
-import org.jetbrains.annotations.NonNls;
-
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * Utilities to create panels.
  */
 public enum PanelUtils {
-	;
-	
-	/**
-	 * Shows the card with the given name in the parent panel.
-	 *
-	 * @param parent the container to show the card in
-	 * @param card   the card to show
-	 */
-	public static void showCard(final JPanel parent,
-	                            @NonNls final String card) {
-		((CardLayout) parent.getLayout()).show(parent, card);
-	}
+    ;
+
+    /**
+     * Shows the card with the given name in the parent panel.
+     *
+     * @param parent the container to show the card in
+     * @param card   the card to show
+     */
+    public static void showCard(final JPanel parent, @NonNls final String card) {
+        ((CardLayout) parent.getLayout()).show(parent, card);
+    }
 }

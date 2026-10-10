@@ -17,15 +17,13 @@ import io.github.thepieterdc.dodona.resources.submissions.Submission;
  */
 @FunctionalInterface
 public interface SubmissionEvaluatedListener {
-	Topic<SubmissionEvaluatedListener> SUBMISSION_EVALUATED = Topic.create(
-		"Submission evaluated",
-		SubmissionEvaluatedListener.class
-	);
-	
-	/**
-	 * A new submission has been evaluated.
-	 *
-	 * @param submission the evaluated submission
-	 */
-	void onSubmissionEvaluated(Submission submission);
+    Topic<SubmissionEvaluatedListener> SUBMISSION_EVALUATED =
+            Topic.create("Submission evaluated", SubmissionEvaluatedListener.class);
+
+    /**
+     * A new submission has been evaluated.
+     *
+     * @param submission the evaluated submission
+     */
+    void onSubmissionEvaluated(Submission submission);
 }
