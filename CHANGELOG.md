@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Bumped all dependencies
+- Reworked the account manager to prevent breaking in a future IntelliJ version.
 
 ### Fixed
 

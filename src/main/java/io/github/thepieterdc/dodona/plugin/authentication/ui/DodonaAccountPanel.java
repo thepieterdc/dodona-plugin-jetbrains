@@ -9,9 +9,13 @@
 
 package io.github.thepieterdc.dodona.plugin.authentication.ui;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.Disposable;
+import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonShortcuts;
 import com.intellij.openapi.keymap.KeymapUtil;
+import com.intellij.openapi.project.DumbAwareAction;
 import com.intellij.openapi.util.Pair;
 import com.intellij.ui.CollectionListModel;
 import com.intellij.ui.IdeBorderFactory;
@@ -75,6 +79,7 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
 
             // Add the new account to the model.
             this.accountListModel.add(account);
+            this.accountList.setSelectedIndex(0);
 
             // Set the modification status.
             this.modified = true;
@@ -131,9 +136,33 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
         return ToolbarDecorator.createDecorator(this.accountList)
                 .disableAddAction()
                 .disableUpDownActions()
-                .setRemoveAction(btn -> this.removeAccount())
+                .disableRemoveAction()
+                .addExtraAction(this.createSignOutAction())
                 .setPanelBorder(IdeBorderFactory.createBorder(SideBorder.TOP | SideBorder.BOTTOM))
                 .createPanel();
+    }
+
+    /**
+     * Creates the toolbar button that signs out (removes) the account.
+     *
+     * @return the action
+     */
+    @Nonnull
+    private AnAction createSignOutAction() {
+        return new DumbAwareAction(
+                DodonaBundle.message("auth.accounts.remove"),
+                DodonaBundle.message("auth.accounts.remove"),
+                AllIcons.Actions.Exit) {
+            @Override
+            public void actionPerformed(@Nonnull final AnActionEvent e) {
+                DodonaAccountPanel.this.removeAccount();
+            }
+
+            @Override
+            public void update(@Nonnull final AnActionEvent e) {
+                e.getPresentation().setEnabled(!DodonaAccountPanel.this.accountListModel.isEmpty());
+            }
+        };
     }
 
     @Override
@@ -182,6 +211,9 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
      */
     public void setAccount(@Nullable final DodonaAccount account) {
         this.accountListModel.removeAll();
-        Optional.ofNullable(account).ifPresent(this.accountListModel::add);
+        Optional.ofNullable(account).ifPresent(acc -> {
+            this.accountListModel.add(acc);
+            this.accountList.setSelectedIndex(0);
+        });
     }
 }

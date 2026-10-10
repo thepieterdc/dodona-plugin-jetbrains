@@ -14,8 +14,6 @@
 
     <!-- Authentication -->
     <applicationService
-      serviceImplementation="io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccountManager"/>
-    <applicationService
       serviceImplementation="io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator"/>
 
     <!-- Code parsing/manipulation -->
