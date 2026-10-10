@@ -11,6 +11,7 @@ package io.github.thepieterdc.dodona.plugin.project.ui;
 
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
+import io.github.thepieterdc.dodona.plugin.ui.listeners.ItemSelectedListener;
 import io.github.thepieterdc.dodona.plugin.ui.panels.async.StaticAsyncPanel;
 import io.github.thepieterdc.dodona.plugin.ui.resources.course.TabbedCourseList;
 import io.github.thepieterdc.dodona.resources.Course;
@@ -51,12 +52,21 @@ public class CourseListPanel extends StaticAsyncPanel<List<Course>, TabbedCourse
     }
 
     /**
+     * Registers a listener that is notified when the selected course changes.
+     *
+     * @param listener the listener to register
+     */
+    public void addSelectionListener(final ItemSelectedListener<Course> listener) {
+        this.coursesList.addSelectionListener(listener);
+    }
+
+    /**
      * Gets the current selected course, if any.
      *
      * @return the current selected course
      */
     @Nonnull
-    Optional<Course> getSelectedCourse() {
+    public Optional<Course> getSelectedCourse() {
         return this.coursesList.getSelectedCourse();
     }
 }

@@ -63,6 +63,11 @@ public final class DodonaJavaBuilder extends JavaModuleBuilder implements Dodona
     }
 
     @Override
+    public boolean isAvailable() {
+        return true;
+    }
+
+    @Override
     public Icon getNodeIcon() {
         return Icons.DODONA;
     }
