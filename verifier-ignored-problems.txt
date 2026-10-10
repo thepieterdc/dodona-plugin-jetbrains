@@ -6,5 +6,3 @@ be.ugent.piedcler.dodona::Access to unresolved class com\.intellij\.ide\.util\.p
 be.ugent.piedcler.dodona::Package 'com\.intellij\.python' is not found.*
 # Reported inside PyCharm's own Python plugin, not caused by this plugin.
 be.ugent.piedcler.dodona::Access to unresolved class com\.intellij\.ide\.util\.projectWizard\.SourcePathsBuilder.*
-# PythonModuleBuilder is final and has no public alternative, so DodonaPythonBuilder deliberately delegates to it.
-be.ugent.piedcler.dodona::Internal (class|method|constructor) com\.intellij\.python\.community\.plugin\.java\.facet\.PythonModuleBuilder.*
