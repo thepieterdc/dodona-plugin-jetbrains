@@ -15,7 +15,7 @@ import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.ui.components.JBPasswordField;
 import com.intellij.ui.components.panels.Wrapper;
-import com.intellij.util.ui.UI;
+import com.intellij.util.ui.FormBuilder;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.exceptions.AuthenticationException;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
@@ -103,10 +103,10 @@ public final class DodonaLoginPanel extends Wrapper {
      */
     @Nonnull
     private JPanel createCenter() {
-        return UI.PanelFactory.grid()
-                .add(UI.PanelFactory.panel(this.cbServer).withLabel(DodonaBundle.message("auth.dialog.server")))
-                .add(UI.PanelFactory.panel(this.pwdToken).withLabel(DodonaBundle.message("auth.dialog.token")))
-                .createPanel();
+        return FormBuilder.createFormBuilder()
+                .addLabeledComponent(DodonaBundle.message("auth.dialog.server"), this.cbServer)
+                .addLabeledComponent(DodonaBundle.message("auth.dialog.token"), this.pwdToken)
+                .getPanel();
     }
 
     /**
