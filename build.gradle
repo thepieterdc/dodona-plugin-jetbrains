@@ -2,12 +2,14 @@ import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.intellij.platform.gradle.models.ProductRelease
 import groovy.json.JsonSlurper
+import org.jetbrains.changelog.Changelog
 
 plugins {
     id 'idea'
     id 'jacoco'
     id 'java'
     id 'org.jetbrains.intellij.platform' version '2.19.0'
+    id 'org.jetbrains.changelog' version '2.2.1'
     id 'com.diffplug.spotless' version '8.10.4'
 }
 
@@ -97,11 +99,22 @@ public class BuildConfig {
 compileJava.dependsOn generateBuildConfig
 prepareKotlinBuildScriptModel.dependsOn generateBuildConfig
 
+changelog {
+    groups = ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]
+    repositoryUrl = "https://github.com/thepieterdc/dodona-plugin-jetbrains"
+    version = project.version as String
+}
+
 intellijPlatform {
     pluginConfiguration {
-        changeNotes = """
-            - [IMPROVEMENT] Show an error reason when using the plugin during Exam Mode.
-        """.stripIndent()
+        changeNotes = provider {
+            changelog.renderItem(
+                    (changelog.getOrNull(project.version as String) ?: changelog.getUnreleased())
+                            .withHeader(false)
+                            .withEmptySections(false),
+                    Changelog.OutputType.HTML
+            )
+        }
         description = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
         id = "be.ugent.piedcler.dodona"
         ideaVersion {

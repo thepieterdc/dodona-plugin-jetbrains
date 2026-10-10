@@ -35,6 +35,10 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
       - name: Prepare the release
         run: sed -i "s/-SNAPSHOT//" build.gradle
+      - name: Release the changelog
+        run: ./gradlew patchChangelog
+      - name: Extract the release notes
+        run: ./gradlew --console plain -q getChangelog --no-header > release-notes.md
       - name: Build the package
         run: ./gradlew buildPlugin
       - name: Create a release branch
@@ -44,20 +48,19 @@ jobs:
       - name: Make the release commit
         uses: EndBug/add-and-commit@v11
         with:
-          add: "build.gradle"
+          add: "build.gradle CHANGELOG.md"
           commit: "--signoff"
           default_author: github_actions
           message: "Release v${{ steps.version.outputs.version }}"
           push: false
       - name: Create release
-        uses: softprops/action-gh-release@v3
+        run: |
+          gh release create "v${{ steps.version.outputs.version }}" \
+            "./build/distributions/dodona-${{ steps.version.outputs.version }}.zip" \
+            --title "v${{ steps.version.outputs.version }}" \
+            --notes-file release-notes.md
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          draft: false
-          files: ./build/distributions/dodona-${{ steps.version.outputs.version }}.zip
-          prerelease: false
-          tag_name: v${{ steps.version.outputs.version }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish the version
         run: ./gradlew publishPlugin
         env:
@@ -70,8 +73,6 @@ jobs:
       - name: Prepare the next development cycle
         run: |
           sed -i "s/${{ steps.version.outputs.version }}/${{ steps.nextversion.outputs.nextversion }}-SNAPSHOT/" build.gradle
-          sed -i "/<\/\?ul>/d" build.gradle
-          sed -i "/<li>/d" build.gradle
       - name: Make the next development commit
         uses: EndBug/add-and-commit@v11
         with:
