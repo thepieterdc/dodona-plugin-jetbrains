@@ -3,6 +3,3 @@
 be.ugent.piedcler.dodona::Access to unresolved class com\.intellij\.psi\.PsiClass.*
 be.ugent.piedcler.dodona::Access to unresolved class com\.intellij\.psi\.PsiElementFactory.*
 be.ugent.piedcler.dodona::Access to unresolved class com\.intellij\.ide\.util\.projectWizard\.JavaModuleBuilder.*
-be.ugent.piedcler.dodona::Package 'com\.intellij\.python' is not found.*
-# Reported inside PyCharm's own Python plugin, not caused by this plugin.
-be.ugent.piedcler.dodona::Access to unresolved class com\.intellij\.ide\.util\.projectWizard\.SourcePathsBuilder.*

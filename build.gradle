@@ -1,9 +1,7 @@
-import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
-import org.jetbrains.intellij.platform.gradle.TestFrameworkType
-import org.jetbrains.intellij.platform.gradle.models.ProductRelease
-import org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask
 import groovy.json.JsonSlurper
 import org.jetbrains.changelog.Changelog
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
     id 'idea'
@@ -140,8 +138,6 @@ intellijPlatform {
 
     pluginVerification {
         ignoredProblemsFile = layout.projectDirectory.file("verifier-ignored-problems.txt")
-        // PythonModuleBuilder is final and internal, so DodonaPythonBuilder deliberately delegates to it.
-        failureLevel = EnumSet.complementOf(EnumSet.of(VerifyPluginTask.FailureLevel.INTERNAL_API_USAGES))
         ides {
             create IntelliJPlatformType.IntellijIdea, eapBuild
             create IntelliJPlatformType.PyCharmProfessional, getSinceBuild("PCC", minBuild)

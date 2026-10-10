@@ -99,6 +99,15 @@ public class TabbedCourseList extends JBTabbedPane implements AsyncPanelContent<
     }
 
     /**
+     * Registers a listener that is notified when the selected course changes.
+     *
+     * @param listener the listener to register
+     */
+    public void addSelectionListener(final ItemSelectedListener<Course> listener) {
+        this.listeners.add(listener);
+    }
+
+    /**
      * Gets the selected course, empty if no course is selected.
      *
      * @return the selected course
