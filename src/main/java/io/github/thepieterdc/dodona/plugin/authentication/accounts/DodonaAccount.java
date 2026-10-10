@@ -66,7 +66,7 @@ public class DodonaAccount {
     @Override
     public boolean equals(final Object obj) {
         if (obj == this) return true;
-        return obj instanceof DodonaAccount && Objects.equals(this.id, ((DodonaAccount) obj).id);
+        return obj instanceof DodonaAccount other && Objects.equals(this.id, other.id);
     }
 
     /**

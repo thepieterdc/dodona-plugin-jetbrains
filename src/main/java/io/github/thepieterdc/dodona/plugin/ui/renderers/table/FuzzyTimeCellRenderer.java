@@ -19,8 +19,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class FuzzyTimeCellRenderer extends DefaultTableCellRenderer {
     @Override
     protected void setValue(final Object value) {
-        if (value instanceof ZonedDateTime) {
-            final ZonedDateTime dateTime = (ZonedDateTime) value;
+        if (value instanceof ZonedDateTime dateTime) {
             super.setValue(TimeUtils.fuzzy(dateTime));
         } else {
             super.setValue(value);

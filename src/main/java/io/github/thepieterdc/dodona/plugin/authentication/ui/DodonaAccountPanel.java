@@ -26,7 +26,7 @@ import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccount;
 import io.github.thepieterdc.dodona.plugin.authentication.accounts.DodonaAccountManager;
 import java.awt.*;
-import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -117,7 +117,7 @@ public class DodonaAccountPanel extends BorderLayoutPanel implements Disposable 
                         String.format(" (%s)", KeymapUtil.getFirstKeyboardShortcutText(CommonShortcuts.getNew())),
                         StatusText.DEFAULT_ATTRIBUTES,
                         null);
-        this.putClientProperty(UIUtil.NOT_IN_HIERARCHY_COMPONENTS, Collections.singletonList(renderer));
+        this.putClientProperty(UIUtil.NOT_IN_HIERARCHY_COMPONENTS, List.of(renderer));
         return ret;
     }
 

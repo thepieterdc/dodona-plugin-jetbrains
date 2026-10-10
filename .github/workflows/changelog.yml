@@ -1,0 +1,32 @@
+name: Changelog
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+
+jobs:
+  changelog:
+    name: Check the changelog
+
+    # Dependency updates and PRs explicitly labeled "skip-changelog" are exempt.
+    if: >-
+      github.actor != 'dependabot[bot]' &&
+      !contains(github.event.pull_request.labels.*.name, 'skip-changelog')
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Verify that the changelog is updated
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          if git diff --quiet "$BASE_SHA...$HEAD_SHA" -- CHANGELOG.md; then
+            echo "::error file=CHANGELOG.md::Add an entry under [Unreleased] in CHANGELOG.md (or add the 'skip-changelog' label if no entry is needed)."
+            exit 1
+          fi

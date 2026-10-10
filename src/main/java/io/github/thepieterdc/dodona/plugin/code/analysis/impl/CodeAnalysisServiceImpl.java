@@ -20,7 +20,7 @@ import com.intellij.psi.PsiRecursiveElementVisitor;
 import io.github.thepieterdc.dodona.plugin.code.analysis.CodeAnalysisService;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
+import java.util.Set;
 import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,7 +44,7 @@ public class CodeAnalysisServiceImpl implements CodeAnalysisService {
     public Collection<Integer> errors(final VirtualFile file) {
         final PsiFile psiFile = PsiManager.getInstance(this.project).findFile(file);
         if (psiFile == null) {
-            return Collections.emptySet();
+            return Set.of();
         }
 
         final Document document = FileDocumentManager.getInstance().getDocument(file);

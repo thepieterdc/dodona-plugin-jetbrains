@@ -14,27 +14,21 @@ on:
 
 jobs:
   build:
-    name: Build on jdk ${{ matrix.java }} and ${{ matrix.os }}
+    name: Build
 
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      fail-fast: true
-      matrix:
-        java: [21.x.x]
-        os: [ubuntu-latest]
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: 'zulu'
           cache: 'gradle'
           cache-dependency-path: |
             ./.gradle*
             ./**/gradle-wrapper.properties
-          java-version: ${{ matrix.java}}
+          java-version: 21.x.x
       - name: Check the formatting
         run: ./gradlew spotlessCheck
       - name: Build the plugin using Gradle
