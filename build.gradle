@@ -134,7 +134,7 @@ intellijPlatform {
         ignoredProblemsFile = layout.projectDirectory.file("verifier-ignored-problems.txt")
         ides {
             create IntelliJPlatformType.IntellijIdea, getLatestEAPBuild("IIC")
-            create IntelliJPlatformType.PyCharmCommunity, getSinceBuild("PCC", sinceBuild)
+            create IntelliJPlatformType.PyCharmProfessional, getSinceBuild("PCC", sinceBuild)
         }
     }
 
