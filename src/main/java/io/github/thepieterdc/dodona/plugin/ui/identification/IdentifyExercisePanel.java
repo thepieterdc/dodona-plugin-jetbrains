@@ -41,6 +41,12 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
 
     private final IdentificationListener listener;
 
+    @Nullable
+    private Course currentCourse;
+
+    @Nullable
+    private Series currentSeries;
+
     /**
      * IdentifyExercisePanel constructor.
      *
@@ -106,6 +112,8 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
     public void onCourseSelected(@Nullable final Course course) {
         // Inform the parent window.
         this.listener.onCourseSelected(course);
+        this.currentCourse = course;
+        this.currentSeries = null;
 
         // Disable the series selection and clear the options.
         this.content.getSeriesComboBox().setEnabled(false);
@@ -117,6 +125,8 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
 
         // No course was selected.
         if (course == null) {
+            this.content.setSeriesLoading(false);
+            this.content.setExercisesLoading(false);
             return;
         }
 
@@ -133,6 +143,7 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
     public void onSeriesSelected(@Nullable final Series selected) {
         // Inform the parent window.
         this.listener.onSeriesSelected(selected);
+        this.currentSeries = selected;
 
         // Disable the exercise selection and clear the options.
         this.content.getExercisesList().setEnabled(false);
@@ -140,6 +151,7 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
 
         // No series was selected.
         if (selected == null) {
+            this.content.setExercisesLoading(false);
             return;
         }
 
@@ -175,15 +187,15 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
                         } else {
                             this.content.getCourseComboBox().setEnabled(true);
                             this.content.getCourseComboBox().setResources(courses);
+                            optCourse.ifPresent(
+                                    id -> this.content.getCourseComboBox().setSelectedResource(id.longValue()));
                             this.content.setCoursesLoading(false);
                             this.content.getCourseComboBox().requestFocus();
                         }
                     } else {
                         this.handleError(error);
                     }
-                }))
-                .thenRun(() -> optCourse.ifPresent(
-                        courseId -> this.content.getCourseComboBox().setSelectedResource(courseId)));
+                }));
     }
 
     /**
@@ -200,6 +212,10 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
                 .getExecutor()
                 .execute(dodona -> dodona.exercises().getAll(series))
                 .whenComplete((exercises, error) -> SwingUtilities.invokeLater(() -> {
+                    if (this.currentSeries != series) {
+                        // Stale response: another series was selected in the meantime.
+                        return;
+                    }
                     if (error == null) {
                         this.content.getExercisesList().setEnabled(true);
                         this.content.getExercisesList().setResources(exercises);
@@ -231,16 +247,23 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
                 .getExecutor()
                 .execute(dodona -> dodona.series().getAll(course))
                 .whenComplete((series, error) -> SwingUtilities.invokeLater(() -> {
+                    if (this.currentCourse != course) {
+                        // Stale response: another course was selected in the meantime.
+                        return;
+                    }
                     if (error == null) {
                         this.content.getSeriesComboBox().setEnabled(true);
                         this.content.getSeriesComboBox().setResources(series);
+                        optSeries.ifPresent(
+                                id -> this.content.getSeriesComboBox().setSelectedResource(id.longValue()));
                         this.content.setSeriesLoading(false);
+                        if (series.isEmpty()) {
+                            this.content.setExercisesLoading(false);
+                        }
                         this.content.getSeriesComboBox().requestFocus();
                     } else {
                         this.handleError(error);
                     }
-                }))
-                .thenRun(() -> optSeries.ifPresent(
-                        seriesId -> this.content.getSeriesComboBox().setSelectedResource(seriesId)));
+                }));
     }
 }
