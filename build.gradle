@@ -1,6 +1,7 @@
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.intellij.platform.gradle.models.ProductRelease
+import org.jetbrains.intellij.platform.gradle.tasks.VerifyPluginTask
 import groovy.json.JsonSlurper
 import org.jetbrains.changelog.Changelog
 
@@ -16,7 +17,9 @@ plugins {
 group 'io.github.thepieterdc.dodona'
 version '2.2.5-SNAPSHOT'
 
-final String sinceBuild = '242.24807.4'
+final String minBuild = '251.23774.435'
+final String eapBuild = getLatestEAPBuild("IIU")
+final String pycharmEapBuild = getLatestEAPBuild("PCP")
 
 java {
     sourceCompatibility = JavaVersion.VERSION_21
@@ -51,12 +54,12 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        intellijIdeaCommunity '2024.2.5'
+        intellijIdea eapBuild
 
         testFramework TestFrameworkType.JUnit5.INSTANCE
 
         bundledPlugin 'com.intellij.java'
-        plugin 'PythonCore', '242.24807.4'
+        plugin 'PythonCore', eapBuild
     }
 
     implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.10'
@@ -115,10 +118,10 @@ intellijPlatform {
                     Changelog.OutputType.HTML
             )
         }
-        description = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/guides/pycharm-plugin/">https://docs.dodona.be/en/guides/pycharm-plugin/</a>'
+        description = 'Companion plugin for the Ghent University Dodona platform, which allows you to submit exercises right from your favourite JetBrains IDE. More information can be found at <a href="https://docs.dodona.be/en/faq/ide-plugins/">https://docs.dodona.be/en/faq/ide-plugins/</a>'
         id = "be.ugent.piedcler.dodona"
         ideaVersion {
-            sinceBuild
+            sinceBuild = minBuild
             untilBuild = provider { null }
         }
         name = "dodona"
@@ -132,15 +135,26 @@ intellijPlatform {
 
     pluginVerification {
         ignoredProblemsFile = layout.projectDirectory.file("verifier-ignored-problems.txt")
+        // PythonModuleBuilder is final and internal, so DodonaPythonBuilder deliberately delegates to it.
+        failureLevel = EnumSet.complementOf(EnumSet.of(VerifyPluginTask.FailureLevel.INTERNAL_API_USAGES))
         ides {
-            create IntelliJPlatformType.IntellijIdea, getLatestEAPBuild("IIC")
-            create IntelliJPlatformType.PyCharmProfessional, getSinceBuild("PCC", sinceBuild)
+            create IntelliJPlatformType.IntellijIdea, eapBuild
+            create IntelliJPlatformType.PyCharmProfessional, getSinceBuild("PCC", minBuild)
         }
     }
 
     publishing {
         channels = [(project.version as String).contains("SNAPSHOT") ? "nightly" : "stable"]
         token = System.getenv("JETBRAINS_MARKETPLACE_TOKEN")
+    }
+}
+
+intellijPlatformTesting {
+    runIde {
+        register("runPyCharm") {
+            type = IntelliJPlatformType.PyCharmProfessional
+            version = pycharmEapBuild
+        }
     }
 }
 

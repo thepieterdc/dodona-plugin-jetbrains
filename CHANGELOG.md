@@ -9,3 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Changed
 
 - Bumped all dependencies
+
+### Fixed
+
+- Plugin is now compatible with the latest EAP versions of IntelliJ and PyCharm.
