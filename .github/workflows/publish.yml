@@ -13,13 +13,13 @@ jobs:
       pull-requests: write
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Configure git
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
       - name: Setup Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v6
         with:
           distribution: "zulu"
           cache: "gradle"
@@ -42,7 +42,7 @@ jobs:
           git checkout -b release
           git push -u origin release
       - name: Make the release commit
-        uses: EndBug/add-and-commit@v9.1.4
+        uses: EndBug/add-and-commit@v11
         with:
           add: "build.gradle"
           commit: "--signoff"
@@ -50,7 +50,7 @@ jobs:
           message: "Release v${{ steps.version.outputs.version }}"
           push: false
       - name: Create release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -73,7 +73,7 @@ jobs:
           sed -i "/<\/\?ul>/d" build.gradle
           sed -i "/<li>/d" build.gradle
       - name: Make the next development commit
-        uses: EndBug/add-and-commit@v9.1.4
+        uses: EndBug/add-and-commit@v11
         with:
           add: "build.gradle"
           commit: "--signoff"

@@ -19,7 +19,6 @@ import java.awt.*;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -138,7 +137,7 @@ public class TabbedCourseList extends JBTabbedPane implements AsyncPanelContent<
         // Failsafe in case no courses were subscribed to.
         if (courses.isEmpty()) {
             final String year = getAcademicYear();
-            this.add(year, this.createTab(year, Collections.emptyList()));
+            this.add(year, this.createTab(year, List.of()));
         }
     }
 }

@@ -20,7 +20,7 @@ import io.github.thepieterdc.dodona.plugin.ui.panels.ContentPanelBase;
 import io.github.thepieterdc.dodona.resources.Course;
 import io.github.thepieterdc.dodona.resources.Series;
 import io.github.thepieterdc.dodona.resources.activities.Exercise;
-import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -109,11 +109,11 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
 
         // Disable the series selection and clear the options.
         this.content.getSeriesComboBox().setEnabled(false);
-        this.content.getSeriesComboBox().setResources(Collections.emptyList());
+        this.content.getSeriesComboBox().setResources(List.of());
 
         // Disable the exercise selection and clear the options.
         this.content.getExercisesList().setEnabled(false);
-        this.content.getExercisesList().setResources(Collections.emptyList());
+        this.content.getExercisesList().setResources(List.of());
 
         // No course was selected.
         if (course == null) {
@@ -136,7 +136,7 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
 
         // Disable the exercise selection and clear the options.
         this.content.getExercisesList().setEnabled(false);
-        this.content.getExercisesList().setResources(Collections.emptyList());
+        this.content.getExercisesList().setResources(List.of());
 
         // No series was selected.
         if (selected == null) {

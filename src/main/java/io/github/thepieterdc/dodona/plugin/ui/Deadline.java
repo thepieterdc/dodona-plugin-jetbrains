@@ -54,10 +54,10 @@ public final class Deadline implements Comparable<Deadline> {
 
     @Override
     public boolean equals(final Object obj) {
-        return obj instanceof Deadline
-                && this.courseId == ((Deadline) obj).courseId
-                && this.seriesName.equals(((Deadline) obj).seriesName)
-                && this.deadline == ((Deadline) obj).deadline;
+        return obj instanceof Deadline other
+                && this.courseId == other.courseId
+                && this.seriesName.equals(other.seriesName)
+                && this.deadline == other.deadline;
     }
 
     /**
