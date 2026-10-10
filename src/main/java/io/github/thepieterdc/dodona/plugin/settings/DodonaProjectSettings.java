@@ -12,6 +12,7 @@ package io.github.thepieterdc.dodona.plugin.settings;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
+import com.intellij.openapi.components.StoragePathMacros;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.messages.MessageBus;
 import io.github.thepieterdc.dodona.plugin.settings.listeners.ProjectCourseListener;
@@ -23,13 +24,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Project-specific plugin settings.
  */
-@State(name = DodonaProjectSettings.STATE_NAME, storages = @Storage(DodonaProjectSettings.STORAGE_FILE))
+@State(name = DodonaProjectSettings.STATE_NAME, storages = @Storage(StoragePathMacros.WORKSPACE_FILE))
 public class DodonaProjectSettings implements PersistentStateComponent<DodonaProjectSettings.State> {
     @NonNls
     static final String STATE_NAME = "DodonaProjectSettings";
-
-    @NonNls
-    static final String STORAGE_FILE = "dodona.xml";
 
     private State state = new State();
 
@@ -103,7 +101,6 @@ public class DodonaProjectSettings implements PersistentStateComponent<DodonaPro
      */
     public void setSeriesId(final long id) {
         this.state.series_id = id;
-        this.bus.syncPublisher(ProjectCourseListener.CHANGED_TOPIC).onCourseChanged(id);
     }
 
     /**

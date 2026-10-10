@@ -155,6 +155,13 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
             return;
         }
 
+        // Remember the selection for the next time.
+        if (this.project != null && this.currentCourse != null) {
+            final DodonaProjectSettings settings = DodonaProjectSettings.getInstance(this.project);
+            settings.setCourseId(this.currentCourse.getId());
+            settings.setSeriesId(selected.getId());
+        }
+
         // Load the exercises.
         this.updateExercises(selected);
     }

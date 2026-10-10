@@ -9,6 +9,7 @@
 
 package io.github.thepieterdc.dodona.plugin.project.builders;
 
+import com.intellij.configurationStore.StoreUtil;
 import com.intellij.ide.util.projectWizard.ModuleWizardStep;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
@@ -51,6 +52,6 @@ enum BuilderUtils {
         DodonaProjectSettings.getInstance(project).setCourseId(course.getId());
 
         // Save the project.
-        project.save();
+        StoreUtil.saveSettings(project);
     }
 }

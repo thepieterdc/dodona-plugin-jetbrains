@@ -1,9 +1,11 @@
 package io.github.thepieterdc.dodona.plugin.project;
 
+import com.intellij.configurationStore.StoreUtil;
 import com.intellij.facet.ui.ValidationResult;
 import com.intellij.ide.util.projectWizard.SettingsStep;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.platform.DirectoryProjectGeneratorBase;
@@ -51,7 +53,7 @@ public final class DodonaPythonProjectGenerator extends DirectoryProjectGenerato
             @NotNull final Course course,
             @NotNull final Module module) {
         DodonaProjectSettings.getInstance(project).setCourseId(course.getId());
-        project.save();
+        StoreUtil.saveSettings(project);
     }
 
     @Override
@@ -90,6 +92,13 @@ public final class DodonaPythonProjectGenerator extends DirectoryProjectGenerato
 
         @Override
         public @NotNull JComponent getComponent() {
+            return this.panel;
+        }
+
+        @Override
+        public @NotNull JComponent getComponent(
+                @NotNull final TextFieldWithBrowseButton locationField, @NotNull final Runnable checkValid) {
+            this.panel.addSelectionListener(course -> checkValid.run());
             return this.panel;
         }
 
