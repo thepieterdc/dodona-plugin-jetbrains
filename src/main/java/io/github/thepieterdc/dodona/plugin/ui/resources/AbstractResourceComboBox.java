@@ -12,79 +12,76 @@ package io.github.thepieterdc.dodona.plugin.ui.resources;
 import com.intellij.openapi.ui.ComboBox;
 import io.github.thepieterdc.dodona.plugin.ui.listeners.ItemSelectedListener;
 import io.github.thepieterdc.dodona.resources.Resource;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import javax.swing.*;
 import java.util.Collection;
 import java.util.Optional;
 import java.util.function.Predicate;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.swing.*;
 
 /**
  * A combo box containing resources.
  */
-public abstract class AbstractResourceComboBox<T extends Resource> extends ComboBox<T>
-	implements ResourceSelector<T> {
-	private final DefaultComboBoxModel<T> model;
-	
-	/**
-	 * AbstractResourceComboBox constructor.
-	 *
-	 * @param renderer the value renderer
-	 * @param listener the selection listener
-	 */
-	protected AbstractResourceComboBox(final ListCellRenderer<T> renderer,
-	                                   final ItemSelectedListener<? super T> listener) {
-		super(0);
-		this.model = new DefaultComboBoxModel<>();
-		this.addActionListener(e -> listener.onItemSelected(
-			this.getSelectedResource().orElse(null)
-		));
-		this.setModel(this.model);
-		this.setRenderer(renderer);
-	}
-	
-	@Nonnull
-	@Override
-	public Optional<T> getSelectedResource() {
-		return Optional.ofNullable(this.getItemAt(this.getSelectedIndex()));
-	}
-	
-	@Override
-	public void setResources(final Collection<? extends T> resources) {
-		// Remove the previous items.
-		this.model.removeAllElements();
-		
-		// Set the new items.
-		resources.forEach(this.model::addElement);
-		
-		// Auto-select the first item.
-		if (!resources.isEmpty()) {
-			this.setSelectedIndex(0);
-		}
-	}
-	
-	@Override
-	public void setSelectedResource(final long id) {
-		this.setSelectedResource(resource -> resource.getId() == id);
-	}
-	
-	@Override
-	public void setSelectedResource(final Predicate<? super T> predicate) {
-		final int items = this.model.getSize();
-		for (int i = 0; i < items; ++i) {
-			if (predicate.test(this.model.getElementAt(i))) {
-				this.setSelectedIndex(i);
-				return;
-			}
-		}
-		
-		// Clear the selection.
-		this.setSelectedItem(null);
-	}
-	
-	@Override
-	public void setSelectedResource(@Nullable final T resource) {
-		Optional.ofNullable(resource).ifPresent(this::setSelectedItem);
-	}
+public abstract class AbstractResourceComboBox<T extends Resource> extends ComboBox<T> implements ResourceSelector<T> {
+    private final DefaultComboBoxModel<T> model;
+
+    /**
+     * AbstractResourceComboBox constructor.
+     *
+     * @param renderer the value renderer
+     * @param listener the selection listener
+     */
+    protected AbstractResourceComboBox(
+            final ListCellRenderer<T> renderer, final ItemSelectedListener<? super T> listener) {
+        super(0);
+        this.model = new DefaultComboBoxModel<>();
+        this.addActionListener(
+                e -> listener.onItemSelected(this.getSelectedResource().orElse(null)));
+        this.setModel(this.model);
+        this.setRenderer(renderer);
+    }
+
+    @Nonnull
+    @Override
+    public Optional<T> getSelectedResource() {
+        return Optional.ofNullable(this.getItemAt(this.getSelectedIndex()));
+    }
+
+    @Override
+    public void setResources(final Collection<? extends T> resources) {
+        // Remove the previous items.
+        this.model.removeAllElements();
+
+        // Set the new items.
+        resources.forEach(this.model::addElement);
+
+        // Auto-select the first item.
+        if (!resources.isEmpty()) {
+            this.setSelectedIndex(0);
+        }
+    }
+
+    @Override
+    public void setSelectedResource(final long id) {
+        this.setSelectedResource(resource -> resource.getId() == id);
+    }
+
+    @Override
+    public void setSelectedResource(final Predicate<? super T> predicate) {
+        final int items = this.model.getSize();
+        for (int i = 0; i < items; ++i) {
+            if (predicate.test(this.model.getElementAt(i))) {
+                this.setSelectedIndex(i);
+                return;
+            }
+        }
+
+        // Clear the selection.
+        this.setSelectedItem(null);
+    }
+
+    @Override
+    public void setSelectedResource(@Nullable final T resource) {
+        Optional.ofNullable(resource).ifPresent(this::setSelectedItem);
+    }
 }

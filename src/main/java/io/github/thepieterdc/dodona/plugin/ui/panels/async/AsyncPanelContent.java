@@ -15,10 +15,10 @@ package io.github.thepieterdc.dodona.plugin.ui.panels.async;
  */
 @FunctionalInterface
 public interface AsyncPanelContent<T> {
-	/**
-	 * Updates the data in the panel.
-	 *
-	 * @param data the new data
-	 */
-	void update(T data);
+    /**
+     * Updates the data in the panel.
+     *
+     * @param data the new data
+     */
+    void update(T data);
 }

@@ -16,13 +16,10 @@ import com.intellij.util.messages.Topic;
  */
 @FunctionalInterface
 public interface AccountListener {
-	Topic<AccountListener> UPDATED_TOPIC = Topic.create(
-		"The default account has been changed",
-		AccountListener.class
-	);
-	
-	/**
-	 * Called when the default account has been changed.
-	 */
-	void updated();
+    Topic<AccountListener> UPDATED_TOPIC = Topic.create("The default account has been changed", AccountListener.class);
+
+    /**
+     * Called when the default account has been changed.
+     */
+    void updated();
 }

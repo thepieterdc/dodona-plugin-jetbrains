@@ -15,11 +15,11 @@ import javax.annotation.Nonnull;
  */
 @FunctionalInterface
 public interface DodonaResultTask<T> {
-	/**
-	 * Executes the given task.
-	 *
-	 * @return the result
-	 */
-	@Nonnull
-	T execute();
+    /**
+     * Executes the given task.
+     *
+     * @return the result
+     */
+    @Nonnull
+    T execute();
 }

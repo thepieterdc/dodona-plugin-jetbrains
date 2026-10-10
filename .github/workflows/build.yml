@@ -35,6 +35,8 @@ jobs:
             ./.gradle*
             ./**/gradle-wrapper.properties
           java-version: ${{ matrix.java}}
+      - name: Check the formatting
+        run: ./gradlew spotlessCheck
       - name: Build the plugin using Gradle
         run: ./gradlew buildPlugin
       - name: Run the tests

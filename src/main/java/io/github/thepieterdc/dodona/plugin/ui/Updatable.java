@@ -13,8 +13,8 @@ package io.github.thepieterdc.dodona.plugin.ui;
  */
 @FunctionalInterface
 public interface Updatable {
-	/**
-	 * Requests an update of the content.
-	 */
-	void requestUpdate();
+    /**
+     * Requests an update of the content.
+     */
+    void requestUpdate();
 }

@@ -10,21 +10,19 @@ package io.github.thepieterdc.dodona.plugin.ui;
 
 import com.intellij.ui.JBColor;
 import com.intellij.util.ui.UIUtil;
-import org.jetbrains.annotations.NonNls;
-
 import java.awt.*;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * Default colours used in the plugin.
  */
 public enum TextColors {
-	;
-	@NonNls
-	public static final Color PRIMARY = JBColor.namedColor(
-		"Table.foreground", UIUtil.getListForeground()
-	);
-	@NonNls
-	public static final Color SECONDARY = JBColor.namedColor(
-		"Component.infoForeground", UIUtil.getContextHelpForeground()
-	);
+    ;
+
+    @NonNls
+    public static final Color PRIMARY = JBColor.namedColor("Table.foreground", UIUtil.getListForeground());
+
+    @NonNls
+    public static final Color SECONDARY =
+            JBColor.namedColor("Component.infoForeground", UIUtil.getContextHelpForeground());
 }

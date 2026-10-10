@@ -18,20 +18,15 @@ import io.github.thepieterdc.dodona.resources.submissions.Submission;
  * A submission took too long to evaluate.
  */
 public final class SubmissionTimeoutException extends DodonaException {
-	private static final long serialVersionUID = 794725189590066942L;
-	
-	/**
-	 * SubmissionTimeoutException constructor.
-	 *
-	 * @param exercise   the exercise
-	 * @param submission the submission
-	 */
-	public SubmissionTimeoutException(final Exercise exercise,
-	                                  final Submission submission) {
-		super(DodonaBundle.message(
-			"exceptions.warnings.submission_timeout",
-			exercise.getName(),
-			submission.getId()
-		));
-	}
+    private static final long serialVersionUID = 794725189590066942L;
+
+    /**
+     * SubmissionTimeoutException constructor.
+     *
+     * @param exercise   the exercise
+     * @param submission the submission
+     */
+    public SubmissionTimeoutException(final Exercise exercise, final Submission submission) {
+        super(DodonaBundle.message("exceptions.warnings.submission_timeout", exercise.getName(), submission.getId()));
+    }
 }

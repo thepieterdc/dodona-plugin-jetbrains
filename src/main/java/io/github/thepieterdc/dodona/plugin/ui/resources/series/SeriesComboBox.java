@@ -17,12 +17,12 @@ import io.github.thepieterdc.dodona.resources.Series;
  * A combo box containing series.
  */
 public class SeriesComboBox extends AbstractResourceComboBox<Series> {
-	/**
-	 * SeriesComboBox constructor.
-	 *
-	 * @param listener the listener
-	 */
-	public SeriesComboBox(final ItemSelectedListener<? super Series> listener) {
-		super(new SeriesNameRenderer(), listener);
-	}
+    /**
+     * SeriesComboBox constructor.
+     *
+     * @param listener the listener
+     */
+    public SeriesComboBox(final ItemSelectedListener<? super Series> listener) {
+        super(new SeriesNameRenderer(), listener);
+    }
 }

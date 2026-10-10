@@ -15,59 +15,57 @@ import com.intellij.openapi.util.Disposer;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.api.executor.DodonaExecutorHolder;
 import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
-import org.jetbrains.annotations.NotNull;
-
+import java.awt.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
-import java.awt.*;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Dialog that shows the details of a submission.
  */
 public final class SubmissionDetailsDialog extends DialogWrapper {
-	private static final Action[] NO_ACTIONS = {};
+    private static final Action[] NO_ACTIONS = {};
 
-	private final SubmissionDetailsPanel detailsPanel;
+    private final SubmissionDetailsPanel detailsPanel;
 
-	/**
-	 * SubmissionCodeDialog constructor.
-	 *
-	 * @param project        the current project
-	 * @param executor       holder for the request executor
-	 * @param submissionInfo the submission details
-	 * @param parent         parent component
-	 */
-	public SubmissionDetailsDialog(final Project project,
-	                               final DodonaExecutorHolder executor,
-	                               final SubmissionInfo submissionInfo,
-	                               @Nullable final Component parent) {
-		super(project, parent, false, IdeModalityType.IDE);
-		this.detailsPanel = new SubmissionDetailsPanel(
-			project, executor, submissionInfo
-		);
+    /**
+     * SubmissionCodeDialog constructor.
+     *
+     * @param project        the current project
+     * @param executor       holder for the request executor
+     * @param submissionInfo the submission details
+     * @param parent         parent component
+     */
+    public SubmissionDetailsDialog(
+            final Project project,
+            final DodonaExecutorHolder executor,
+            final SubmissionInfo submissionInfo,
+            @Nullable final Component parent) {
+        super(project, parent, false, IdeModalityType.IDE);
+        this.detailsPanel = new SubmissionDetailsPanel(project, executor, submissionInfo);
 
-		// Set the title of the dialog.
-		this.setTitle(DodonaBundle.message("dialog.submission_details.title"));
+        // Set the title of the dialog.
+        this.setTitle(DodonaBundle.message("dialog.submission_details.title"));
 
-		this.init();
-	}
+        this.init();
+    }
 
-	@NotNull
-	@Override
-	protected Action[] createActions() {
-		return NO_ACTIONS;
-	}
+    @NotNull
+    @Override
+    protected Action[] createActions() {
+        return NO_ACTIONS;
+    }
 
-	@Nonnull
-	@Override
-	protected JComponent createCenterPanel() {
-		return this.detailsPanel;
-	}
+    @Nonnull
+    @Override
+    protected JComponent createCenterPanel() {
+        return this.detailsPanel;
+    }
 
-	@Override
-	public void dispose() {
-		Disposer.dispose(this.detailsPanel);
-		super.dispose();
-	}
+    @Override
+    public void dispose() {
+        Disposer.dispose(this.detailsPanel);
+        super.dispose();
+    }
 }

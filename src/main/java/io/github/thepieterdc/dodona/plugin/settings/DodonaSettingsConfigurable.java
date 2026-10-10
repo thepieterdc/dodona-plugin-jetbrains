@@ -20,31 +20,32 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Controller that handles changing plugin settings.
  */
-public class DodonaSettingsConfigurable extends ConfigurableBase<DodonaSettingsPanel, DodonaSettingsHolder> implements Configurable.NoMargin {
-	@NonNls
-	private static final String HELP_TOPIC = DodonaSettingsConfigurable.SETTINGS_ID;
-	
-	@NonNls
-	private static final String SETTINGS_ID = "settings.dodona";
-	
-	private final DodonaAccountManager accountManager;
-	
-	/**
-	 * SettingsConfigurable constructor.
-	 */
-	DodonaSettingsConfigurable() {
-		super(SETTINGS_ID, DodonaBundle.NAME, HELP_TOPIC);
-		this.accountManager = DodonaAccountManager.getInstance();
-	}
-	
-	@Override
-	protected DodonaSettingsPanel createUi() {
-		return new DodonaSettingsPanel();
-	}
-	
-	@NotNull
-	@Override
-	protected DodonaSettingsHolder getSettings() {
-		return new DodonaSettingsHolder(this.accountManager);
-	}
+public class DodonaSettingsConfigurable extends ConfigurableBase<DodonaSettingsPanel, DodonaSettingsHolder>
+        implements Configurable.NoMargin {
+    @NonNls
+    private static final String HELP_TOPIC = DodonaSettingsConfigurable.SETTINGS_ID;
+
+    @NonNls
+    private static final String SETTINGS_ID = "settings.dodona";
+
+    private final DodonaAccountManager accountManager;
+
+    /**
+     * SettingsConfigurable constructor.
+     */
+    DodonaSettingsConfigurable() {
+        super(SETTINGS_ID, DodonaBundle.NAME, HELP_TOPIC);
+        this.accountManager = DodonaAccountManager.getInstance();
+    }
+
+    @Override
+    protected DodonaSettingsPanel createUi() {
+        return new DodonaSettingsPanel();
+    }
+
+    @NotNull
+    @Override
+    protected DodonaSettingsHolder getSettings() {
+        return new DodonaSettingsHolder(this.accountManager);
+    }
 }

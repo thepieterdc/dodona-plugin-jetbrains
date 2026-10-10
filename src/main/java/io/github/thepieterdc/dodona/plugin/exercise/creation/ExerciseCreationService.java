@@ -13,7 +13,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
-
 import javax.annotation.Nonnull;
 
 /**
@@ -21,24 +20,23 @@ import javax.annotation.Nonnull;
  */
 @FunctionalInterface
 public interface ExerciseCreationService {
-	/**
-	 * Creates an exercise file.
-	 *
-	 * @param directory      the directory in which the file should be created
-	 * @param identification the exercise identification
-	 * @return the created file
-	 */
-	VirtualFile create(final PsiDirectory directory,
-	                   final FullIdentification identification);
-	
-	/**
-	 * Gets an instance of the ExerciseCreationService.
-	 *
-	 * @param project the active project
-	 * @return the instance
-	 */
-	@Nonnull
-	static ExerciseCreationService getInstance(final Project project) {
-		return project.getService(ExerciseCreationService.class);
-	}
+    /**
+     * Creates an exercise file.
+     *
+     * @param directory      the directory in which the file should be created
+     * @param identification the exercise identification
+     * @return the created file
+     */
+    VirtualFile create(final PsiDirectory directory, final FullIdentification identification);
+
+    /**
+     * Gets an instance of the ExerciseCreationService.
+     *
+     * @param project the active project
+     * @return the instance
+     */
+    @Nonnull
+    static ExerciseCreationService getInstance(final Project project) {
+        return project.getService(ExerciseCreationService.class);
+    }
 }

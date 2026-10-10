@@ -17,18 +17,17 @@ import com.intellij.openapi.project.Project;
  * An abstract task that runs in the background.
  */
 abstract class AbstractDodonaBackgroundTask extends Task.Backgroundable implements DodonaBackgroundTask {
-	/**
-	 * AbstractDodonaBackgroundTask constructor.
-	 */
-	AbstractDodonaBackgroundTask(final Project project,
-	                             final String title) {
-		super(project, title);
-	}
-	
-	/**
-	 * Executes the given task in the background.
-	 */
-	public void execute() {
-		ProgressManager.getInstance().run(this);
-	}
+    /**
+     * AbstractDodonaBackgroundTask constructor.
+     */
+    AbstractDodonaBackgroundTask(final Project project, final String title) {
+        super(project, title);
+    }
+
+    /**
+     * Executes the given task in the background.
+     */
+    public void execute() {
+        ProgressManager.getInstance().run(this);
+    }
 }

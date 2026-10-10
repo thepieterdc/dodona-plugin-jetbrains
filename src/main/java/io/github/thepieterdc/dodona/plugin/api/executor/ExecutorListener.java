@@ -16,13 +16,10 @@ import com.intellij.util.messages.Topic;
  */
 @FunctionalInterface
 public interface ExecutorListener {
-	Topic<ExecutorListener> UPDATED_TOPIC = Topic.create(
-		"The executor has been updated",
-		ExecutorListener.class
-	);
-	
-	/**
-	 * Called when the executor has been replaced in the holder.
-	 */
-	void updated();
+    Topic<ExecutorListener> UPDATED_TOPIC = Topic.create("The executor has been updated", ExecutorListener.class);
+
+    /**
+     * Called when the executor has been replaced in the holder.
+     */
+    void updated();
 }

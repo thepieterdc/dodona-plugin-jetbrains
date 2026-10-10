@@ -16,24 +16,24 @@ import org.slf4j.LoggerFactory;
  * Displays error notifications and logs them.
  */
 public final class ErrorReporter {
-	private static final Logger logger = LoggerFactory.getLogger(ErrorReporter.class);
-	
-	/**
-	 * Displays an error message and logs the error.
-	 *
-	 * @param message the error message to log
-	 * @param cause   the error cause
-	 */
-	public static void report(final String message, final Throwable cause) {
-		logger.error(message, cause);
-	}
-	
-	/**
-	 * Displays an error message and logs the error.
-	 *
-	 * @param cause the error cause
-	 */
-	public static void report(final Throwable cause) {
-		report(cause.getMessage(), cause);
-	}
+    private static final Logger logger = LoggerFactory.getLogger(ErrorReporter.class);
+
+    /**
+     * Displays an error message and logs the error.
+     *
+     * @param message the error message to log
+     * @param cause   the error cause
+     */
+    public static void report(final String message, final Throwable cause) {
+        logger.error(message, cause);
+    }
+
+    /**
+     * Displays an error message and logs the error.
+     *
+     * @param cause the error cause
+     */
+    public static void report(final Throwable cause) {
+        report(cause.getMessage(), cause);
+    }
 }

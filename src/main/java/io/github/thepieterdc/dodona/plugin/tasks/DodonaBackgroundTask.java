@@ -13,8 +13,8 @@ package io.github.thepieterdc.dodona.plugin.tasks;
  */
 @FunctionalInterface
 public interface DodonaBackgroundTask {
-	/**
-	 * Executes the given task.
-	 */
-	void execute();
+    /**
+     * Executes the given task.
+     */
+    void execute();
 }

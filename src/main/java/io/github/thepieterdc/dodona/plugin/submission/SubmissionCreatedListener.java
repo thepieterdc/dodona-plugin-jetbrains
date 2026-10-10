@@ -17,15 +17,13 @@ import io.github.thepieterdc.dodona.resources.submissions.Submission;
  */
 @FunctionalInterface
 public interface SubmissionCreatedListener {
-	Topic<SubmissionCreatedListener> SUBMISSION_CREATED = Topic.create(
-		"Submission created",
-		SubmissionCreatedListener.class
-	);
-	
-	/**
-	 * A new submission has been created.
-	 *
-	 * @param submission the created submission
-	 */
-	void onSubmissionCreated(Submission submission);
+    Topic<SubmissionCreatedListener> SUBMISSION_CREATED =
+            Topic.create("Submission created", SubmissionCreatedListener.class);
+
+    /**
+     * A new submission has been created.
+     *
+     * @param submission the created submission
+     */
+    void onSubmissionCreated(Submission submission);
 }

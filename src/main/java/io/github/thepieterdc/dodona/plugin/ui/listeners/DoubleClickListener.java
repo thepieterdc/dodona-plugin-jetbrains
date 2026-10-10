@@ -16,15 +16,15 @@ import java.awt.event.MouseEvent;
  */
 @FunctionalInterface
 public interface DoubleClickListener extends ClickListener {
-	@Override
-	default void mouseClicked(final MouseEvent e) {
-		if (e.getClickCount() == 2) {
-			this.onDoubleClick(e);
-		}
-	}
-	
-	/**
-	 * Called when a double click event is detected.
-	 */
-	void onDoubleClick(MouseEvent e);
+    @Override
+    default void mouseClicked(final MouseEvent e) {
+        if (e.getClickCount() == 2) {
+            this.onDoubleClick(e);
+        }
+    }
+
+    /**
+     * Called when a double click event is detected.
+     */
+    void onDoubleClick(MouseEvent e);
 }

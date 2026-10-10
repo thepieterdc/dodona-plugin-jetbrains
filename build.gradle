@@ -8,6 +8,7 @@ plugins {
     id 'jacoco'
     id 'java'
     id 'org.jetbrains.intellij.platform' version '2.10.5'
+    id 'com.diffplug.spotless' version '8.10.4'
 }
 
 group 'io.github.thepieterdc.dodona'
@@ -19,12 +20,23 @@ java {
     sourceCompatibility = JavaVersion.VERSION_21
 }
 
+spotless {
+    java {
+        target 'src/**/*.java'
+        targetExclude '**/BuildConfig.java'
+        palantirJavaFormat('2.102.0')
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
 repositories {
+    mavenCentral()
+
     intellijPlatform {
         defaultRepositories()
     }
-
-    mavenCentral()
 
     maven {
         url = "https://maven.pkg.github.com/thepieterdc/dodona-api-java"
@@ -106,8 +118,9 @@ intellijPlatform {
     }
 
     pluginVerification {
+        ignoredProblemsFile = layout.projectDirectory.file("verifier-ignored-problems.txt")
         ides {
-            ide IntelliJPlatformType.IntellijIdeaCommunity, getLatestEAPBuild("IIC")
+            ide IntelliJPlatformType.IntellijIdea, getLatestEAPBuild("IIC")
             ide IntelliJPlatformType.PyCharmCommunity, getSinceBuild("PCC", sinceBuild)
             }
     }

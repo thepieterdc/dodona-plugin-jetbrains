@@ -11,7 +11,6 @@ package io.github.thepieterdc.dodona.plugin.feedback;
 import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
-
 import javax.annotation.Nonnull;
 
 /**
@@ -19,22 +18,22 @@ import javax.annotation.Nonnull;
  */
 @FunctionalInterface
 public interface FeedbackService {
-	/**
-	 * Gets an instance of the FeedbackService.
-	 *
-	 * @param project the current project
-	 * @return the instance
-	 */
-	@Nonnull
-	static FeedbackService getInstance(final Project project) {
-		return project.getService(FeedbackService.class);
-	}
-	
-	/**
-	 * Notifies the user about the submission result.
-	 *
-	 * @param exercise   the exercise
-	 * @param submission the submission
-	 */
-	void notify(Exercise exercise, SubmissionInfo submission);
+    /**
+     * Gets an instance of the FeedbackService.
+     *
+     * @param project the current project
+     * @return the instance
+     */
+    @Nonnull
+    static FeedbackService getInstance(final Project project) {
+        return project.getService(FeedbackService.class);
+    }
+
+    /**
+     * Notifies the user about the submission result.
+     *
+     * @param exercise   the exercise
+     * @param submission the submission
+     */
+    void notify(Exercise exercise, SubmissionInfo submission);
 }
