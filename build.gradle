@@ -14,7 +14,7 @@ plugins {
 }
 
 group 'io.github.thepieterdc.dodona'
-version '2.2.5-SNAPSHOT'
+version '2.3.0-SNAPSHOT'
 
 final String minBuild = '251.23774.435'
 final String eapBuild = getLatestEAPBuild("IIU")
