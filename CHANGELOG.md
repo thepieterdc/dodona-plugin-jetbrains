@@ -1,10 +1,23 @@
 # Changelog
 
 All notable changes to this plugin are documented in this file.
-
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
+
+### Added
+
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [2.3.0] - 2026-10-11
 
 ### Added
 
@@ -22,3 +35,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Plugin is now compatible with the latest EAP versions of IntelliJ and PyCharm.
 - Fixed a potential race condition with loading series.
 - Plugin now sends the correct language of the user to Dodona.
+
+[Unreleased]: https://github.com/thepieterdc/dodona-plugin-jetbrains/compare/v2.3.0...HEAD
+[2.3.0]: https://github.com/thepieterdc/dodona-plugin-jetbrains/commits/v2.3.0
