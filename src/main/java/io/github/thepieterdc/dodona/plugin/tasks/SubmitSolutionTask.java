@@ -231,7 +231,10 @@ public final class SubmitSolutionTask extends AbstractDodonaBackgroundTask {
             progress.setText(DodonaBundle.message("tasks.submit_solution.evaluated"));
 
             // Provide feedback to the user.
-            this.feedback.notify(exercise, evaluated.getInfo());
+            this.feedback.notify(
+                    exercise,
+                    evaluated.getInfo(),
+                    this.identification.getLocale().orElse(null));
         } catch (final AuthenticationException ex) {
             this.showError(DodonaBundle.message("tasks.submit_solution.error.auth"));
             ApplicationManager.getApplication()

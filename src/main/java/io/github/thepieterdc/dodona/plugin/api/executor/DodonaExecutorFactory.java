@@ -13,6 +13,7 @@ import io.github.thepieterdc.dodona.DodonaBuilder;
 import io.github.thepieterdc.dodona.DodonaClient;
 import io.github.thepieterdc.dodona.plugin.BuildConfig;
 import io.github.thepieterdc.dodona.plugin.api.DodonaServer;
+import java.util.Locale;
 import javax.annotation.Nonnull;
 import org.jetbrains.annotations.NonNls;
 
@@ -51,6 +52,7 @@ public enum DodonaExecutorFactory {
             final DodonaClient client = DodonaBuilder.builder()
                     .authenticate(token)
                     .setHost(server)
+                    .setLocale(Locale.getDefault())
                     .setUserAgent(getUserAgent())
                     .build();
             return new DodonaExecutorImpl(client);
