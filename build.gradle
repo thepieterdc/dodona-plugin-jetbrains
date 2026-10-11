@@ -65,8 +65,8 @@ dependencies {
         plugin 'PythonCore', eapBuild
     }
 
-    implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.10'
-    implementation group: 'io.github.thepieterdc.dodona', name: 'impl', version: '2.0.10'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'api', version: '2.0.11'
+    implementation group: 'io.github.thepieterdc.dodona', name: 'impl', version: '2.0.11'
 
     implementation group: 'com.github.marlonlom', name: 'timeago', version: '4.3.0'
 

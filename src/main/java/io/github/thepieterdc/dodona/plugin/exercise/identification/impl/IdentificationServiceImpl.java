@@ -13,6 +13,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiManager;
+import io.github.thepieterdc.dodona.plugin.api.LocaleUrls;
 import io.github.thepieterdc.dodona.plugin.exercise.Identification;
 import io.github.thepieterdc.dodona.plugin.exercise.identification.IdentificationService;
 import io.github.thepieterdc.dodona.plugin.notifications.ErrorReporter;
@@ -38,9 +39,10 @@ public class IdentificationServiceImpl implements IdentificationService {
         final Long course = firstLine.flatMap(Course::getId).orElse(null);
         final Long series = firstLine.flatMap(Series::getId).orElse(null);
         final Optional<Long> exercise = firstLine.flatMap(Activity::getId);
+        final String locale = firstLine.flatMap(LocaleUrls::extract).orElse(null);
 
         // Get the identification.
-        return exercise.map(id -> new Identification(course, series, id));
+        return exercise.map(id -> new Identification(course, series, id, locale));
     }
 
     @Nonnull

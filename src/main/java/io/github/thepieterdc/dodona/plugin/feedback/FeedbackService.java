@@ -12,6 +12,7 @@ import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
  * Renders feedback about submissions.
@@ -34,6 +35,7 @@ public interface FeedbackService {
      *
      * @param exercise   the exercise
      * @param submission the submission
+     * @param locale     the locale to link the result page in, or null for the default
      */
-    void notify(Exercise exercise, SubmissionInfo submission);
+    void notify(Exercise exercise, SubmissionInfo submission, @Nullable String locale);
 }

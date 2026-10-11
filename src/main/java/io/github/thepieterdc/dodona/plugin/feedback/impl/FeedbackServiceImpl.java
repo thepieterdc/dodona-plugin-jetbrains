@@ -14,6 +14,7 @@ import static io.github.thepieterdc.dodona.plugin.notifications.SendableNotifica
 import com.intellij.openapi.project.Project;
 import io.github.thepieterdc.dodona.data.SubmissionStatus;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
+import io.github.thepieterdc.dodona.plugin.api.LocaleUrls;
 import io.github.thepieterdc.dodona.plugin.feedback.FeedbackService;
 import io.github.thepieterdc.dodona.plugin.notifications.NotificationService;
 import io.github.thepieterdc.dodona.plugin.ui.resources.submission.SubmissionStatusIcon;
@@ -22,12 +23,16 @@ import io.github.thepieterdc.dodona.resources.submissions.SubmissionInfo;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiConsumer;
+import javax.annotation.Nullable;
 
 public class FeedbackServiceImpl implements FeedbackService {
+    @FunctionalInterface
+    private interface Provider {
+        void accept(Exercise exercise, SubmissionInfo submission, String url);
+    }
+
     private final NotificationService notifications;
-    private final Map<SubmissionStatus, BiConsumer<Exercise, SubmissionInfo>> providers =
-            new EnumMap<>(SubmissionStatus.class);
+    private final Map<SubmissionStatus, Provider> providers = new EnumMap<>(SubmissionStatus.class);
 
     /**
      * FeedbackService constructor.
@@ -37,7 +42,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
         this.providers.put(SubmissionStatus.COMPILATION_ERROR, this::compilationError);
         this.providers.put(SubmissionStatus.CORRECT, this::correct);
-        this.providers.put(SubmissionStatus.INTERNAL_ERROR, (ex, sub) -> this.internalError(ex));
+        this.providers.put(SubmissionStatus.INTERNAL_ERROR, (ex, sub, url) -> this.internalError(ex));
         this.providers.put(SubmissionStatus.MEMORY_LIMIT_EXCEEDED, this::memoryLimitExceeded);
         this.providers.put(SubmissionStatus.OUTPUT_LIMIT_EXCEEDED, this::outputLimitExceeded);
         this.providers.put(SubmissionStatus.RUNTIME_ERROR, this::runtimeError);
@@ -51,12 +56,12 @@ public class FeedbackServiceImpl implements FeedbackService {
      * @param exercise   the exercise
      * @param submission the submission
      */
-    private void compilationError(final Exercise exercise, final SubmissionInfo submission) {
+    private void compilationError(final Exercise exercise, final SubmissionInfo submission, final String url) {
         this.notifications.send(error(
                         DodonaBundle.message("feedback.compile_error.title"),
                         DodonaBundle.message("feedback.compile_error.message", exercise.getName()))
                 .withIcon(SubmissionStatusIcon.COMPILATION_ERROR)
-                .withLink(DodonaBundle.message("feedback.compile_error.link_label"), submission.getUrl()));
+                .withLink(DodonaBundle.message("feedback.compile_error.link_label"), url));
     }
 
     /**
@@ -64,12 +69,12 @@ public class FeedbackServiceImpl implements FeedbackService {
      *
      * @param exercise the exercise
      */
-    private void correct(final Exercise exercise, final SubmissionInfo submission) {
+    private void correct(final Exercise exercise, final SubmissionInfo submission, final String url) {
         this.notifications.send(info(
                         DodonaBundle.message("feedback.correct.title"),
                         DodonaBundle.message("feedback.correct.message", exercise.getName()))
                 .withIcon(SubmissionStatusIcon.CORRECT)
-                .withLink(DodonaBundle.message("feedback.correct.link_label"), submission.getUrl()));
+                .withLink(DodonaBundle.message("feedback.correct.link_label"), url));
     }
 
     /**
@@ -89,12 +94,12 @@ public class FeedbackServiceImpl implements FeedbackService {
      * @param exercise   the exercise
      * @param submission the submission
      */
-    private void memoryLimitExceeded(final Exercise exercise, final SubmissionInfo submission) {
+    private void memoryLimitExceeded(final Exercise exercise, final SubmissionInfo submission, final String url) {
         this.notifications.send(error(
                         DodonaBundle.message("feedback.memory_limit.title"),
                         DodonaBundle.message("feedback.memory_limit.message", exercise.getName()))
                 .withIcon(SubmissionStatusIcon.MEMORY_LIMIT_EXCEEDED)
-                .withLink(DodonaBundle.message("feedback.memory_limit.link_label"), submission.getUrl()));
+                .withLink(DodonaBundle.message("feedback.memory_limit.link_label"), url));
     }
 
     /**
@@ -103,17 +108,19 @@ public class FeedbackServiceImpl implements FeedbackService {
      * @param exercise   the exercise
      * @param submission the submission
      */
-    private void outputLimitExceeded(final Exercise exercise, final SubmissionInfo submission) {
+    private void outputLimitExceeded(final Exercise exercise, final SubmissionInfo submission, final String url) {
         this.notifications.send(error(
                         DodonaBundle.message("feedback.output_limit.title"),
                         DodonaBundle.message("feedback.output_limit.message", exercise.getName()))
                 .withIcon(SubmissionStatusIcon.OUTPUT_LIMIT_EXCEEDED)
-                .withLink(DodonaBundle.message("feedback.output_limit.link_label"), submission.getUrl()));
+                .withLink(DodonaBundle.message("feedback.output_limit.link_label"), url));
     }
 
     @Override
-    public void notify(final Exercise exercise, final SubmissionInfo submission) {
-        Optional.ofNullable(this.providers.get(submission.getStatus())).ifPresent(p -> p.accept(exercise, submission));
+    public void notify(final Exercise exercise, final SubmissionInfo submission, @Nullable final String locale) {
+        final String url = LocaleUrls.apply(submission.getUrl(), locale);
+        Optional.ofNullable(this.providers.get(submission.getStatus()))
+                .ifPresent(p -> p.accept(exercise, submission, url));
     }
 
     /**
@@ -122,12 +129,12 @@ public class FeedbackServiceImpl implements FeedbackService {
      * @param exercise   the exercise
      * @param submission the submission
      */
-    private void runtimeError(final Exercise exercise, final SubmissionInfo submission) {
+    private void runtimeError(final Exercise exercise, final SubmissionInfo submission, final String url) {
         this.notifications.send(error(
                         DodonaBundle.message("feedback.runtime_error.title"),
                         DodonaBundle.message("feedback.runtime_error.message", exercise.getName()))
                 .withIcon(SubmissionStatusIcon.RUNTIME_ERROR)
-                .withLink(DodonaBundle.message("feedback.runtime_error.link_label"), submission.getUrl()));
+                .withLink(DodonaBundle.message("feedback.runtime_error.link_label"), url));
     }
 
     /**
@@ -136,12 +143,12 @@ public class FeedbackServiceImpl implements FeedbackService {
      * @param exercise   the exercise
      * @param submission the submission
      */
-    private void timeLimitExceeded(final Exercise exercise, final SubmissionInfo submission) {
+    private void timeLimitExceeded(final Exercise exercise, final SubmissionInfo submission, final String url) {
         this.notifications.send(error(
                         DodonaBundle.message("feedback.time_limit.title"),
                         DodonaBundle.message("feedback.time_limit.message", exercise.getName()))
                 .withIcon(SubmissionStatusIcon.TIME_LIMIT_EXCEEDED)
-                .withLink(DodonaBundle.message("feedback.time_limit.link_label"), submission.getUrl()));
+                .withLink(DodonaBundle.message("feedback.time_limit.link_label"), url));
     }
 
     /**
@@ -150,11 +157,11 @@ public class FeedbackServiceImpl implements FeedbackService {
      * @param exercise   the exercise
      * @param submission the submission
      */
-    private void wrong(final Exercise exercise, final SubmissionInfo submission) {
+    private void wrong(final Exercise exercise, final SubmissionInfo submission, final String url) {
         this.notifications.send(warning(
                         DodonaBundle.message("feedback.wrong.title"),
                         DodonaBundle.message("feedback.wrong.message", exercise.getName(), submission.getSummary()))
                 .withIcon(SubmissionStatusIcon.COMPILATION_ERROR)
-                .withLink(DodonaBundle.message("feedback.wrong.link_label"), submission.getUrl()));
+                .withLink(DodonaBundle.message("feedback.wrong.link_label"), url));
     }
 }

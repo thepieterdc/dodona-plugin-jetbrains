@@ -12,6 +12,7 @@ package io.github.thepieterdc.dodona.plugin.ui.panels.async;
 import com.intellij.openapi.Disposable;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.util.messages.MessageBusConnection;
 import io.github.thepieterdc.dodona.plugin.api.executor.ExecutorListener;
 import io.github.thepieterdc.dodona.plugin.ui.Updatable;
 import io.github.thepieterdc.dodona.plugin.ui.cards.LoadingCard;
@@ -33,6 +34,9 @@ abstract class AsyncPanelBase<T> extends CardPanelBase implements Disposable, Up
     @NonNls
     private static final String CARD_LOADING = "ASYNC_LOADING";
 
+    @Nullable
+    private MessageBusConnection connection;
+
     /**
      * AsyncPanel constructor.
      *
@@ -42,12 +46,34 @@ abstract class AsyncPanelBase<T> extends CardPanelBase implements Disposable, Up
     protected AsyncPanelBase(@Nullable final Project project, @Nls final String loadingText) {
         super(project);
         this.initialize(loadingText);
+    }
 
-        // Refresh the contents when the default executor is updated.
-        ApplicationManager.getApplication()
-                .getMessageBus()
-                .connect(this)
-                .subscribe(ExecutorListener.UPDATED_TOPIC, this::requestUpdate);
+    @Override
+    public void addNotify() {
+        super.addNotify();
+
+        // Refresh the contents when the default executor is updated. The connection is only held
+        // while the panel is displayable, so that it is never leaked when nobody disposes the panel.
+        this.disconnect();
+        this.connection = ApplicationManager.getApplication().getMessageBus().connect();
+        this.connection.subscribe(ExecutorListener.UPDATED_TOPIC, () -> {
+            if (this.isDisplayable()) {
+                this.requestUpdate();
+            }
+        });
+    }
+
+    @Override
+    public void removeNotify() {
+        this.disconnect();
+        super.removeNotify();
+    }
+
+    private void disconnect() {
+        if (this.connection != null) {
+            this.connection.disconnect();
+            this.connection = null;
+        }
     }
 
     @Nonnull
@@ -58,8 +84,7 @@ abstract class AsyncPanelBase<T> extends CardPanelBase implements Disposable, Up
 
     @Override
     public void dispose() {
-        // Required to dispose the message bus when this panel is no longer
-        // visible.
+        this.disconnect();
     }
 
     /**

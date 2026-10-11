@@ -10,7 +10,6 @@ import com.intellij.openapi.ui.ValidationInfo;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.platform.DirectoryProjectGeneratorBase;
 import com.intellij.platform.ProjectGeneratorPeer;
-import com.intellij.platform.WebProjectGenerator;
 import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.authentication.DodonaAuthenticator;
 import io.github.thepieterdc.dodona.plugin.project.ui.CourseListPanel;
@@ -69,13 +68,11 @@ public final class DodonaPythonProjectGenerator extends DirectoryProjectGenerato
                 new CourseListPanel(DodonaAuthenticator.getInstance().getExecutor());
 
         private final List<ProjectGeneratorPeer.SettingsListener> listeners = new ArrayList<>(2);
-        private final List<WebProjectGenerator.SettingsStateListener> stateListeners = new ArrayList<>(2);
 
         private CoursePeer() {
             this.panel.addSelectionListener(course -> {
                 // Let the wizard validate again, so that the create button gets enabled.
                 this.listeners.forEach(l -> l.stateChanged(course != null));
-                this.stateListeners.forEach(l -> l.stateChanged(course != null));
             });
             this.panel.requestUpdate();
         }
@@ -83,16 +80,6 @@ public final class DodonaPythonProjectGenerator extends DirectoryProjectGenerato
         @Override
         public void addSettingsListener(@NotNull final ProjectGeneratorPeer.SettingsListener listener) {
             this.listeners.add(listener);
-        }
-
-        @Override
-        public void addSettingsStateListener(@NotNull final WebProjectGenerator.SettingsStateListener listener) {
-            this.stateListeners.add(listener);
-        }
-
-        @Override
-        public @NotNull JComponent getComponent() {
-            return this.panel;
         }
 
         @Override
