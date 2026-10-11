@@ -23,7 +23,7 @@ internal class SeriesNameRenderer : ColoredListCellRenderer<Series>() {
         value: Series?,
         index: Int,
         selected: Boolean,
-        hasFocus: Boolean
+        hasFocus: Boolean,
     ) {
         append(value?.name ?: DodonaBundle.message("dialog.select_exercise.series.placeholder"))
     }

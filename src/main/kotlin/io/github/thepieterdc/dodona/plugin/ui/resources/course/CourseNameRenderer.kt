@@ -22,7 +22,7 @@ internal class CourseNameRenderer : ColoredListCellRenderer<Course>() {
         value: Course?,
         index: Int,
         selected: Boolean,
-        hasFocus: Boolean
+        hasFocus: Boolean,
     ) {
         if (value != null) {
             append("[${value.year}] ${value.name}")
