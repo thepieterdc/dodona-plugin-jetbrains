@@ -18,7 +18,8 @@ import io.github.thepieterdc.dodona.resources.Course;
 import io.github.thepieterdc.dodona.resources.Series;
 import io.github.thepieterdc.dodona.resources.activities.Exercise;
 import java.awt.*;
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.swing.*;
@@ -28,13 +29,13 @@ import javax.swing.*;
  */
 public final class IdentifyExerciseDialog extends DialogWrapper implements IdentificationListener {
     private static final int HEIGHT = 250;
+    private static final int HEIGHT_MULTIPLE = 280;
     private static final int WIDTH = 400;
 
     @Nullable
     private Course selectedCourse;
 
-    @Nullable
-    private Exercise selectedExercise;
+    private List<? extends Exercise> selectedExercises = List.of();
 
     @Nullable
     private Series selectedSeries;
@@ -48,9 +49,20 @@ public final class IdentifyExerciseDialog extends DialogWrapper implements Ident
      * @param executor request executor
      */
     public IdentifyExerciseDialog(final Project project, final DodonaExecutorHolder executor) {
+        this(project, executor, false);
+    }
+
+    /**
+     * IdentifyExerciseDialog constructor.
+     *
+     * @param project  the current project
+     * @param executor request executor
+     * @param multiple whether multiple exercises can be selected
+     */
+    public IdentifyExerciseDialog(final Project project, final DodonaExecutorHolder executor, final boolean multiple) {
         super(project, true);
-        this.root = new IdentifyExercisePanel(project, executor, this, this::doOKAction);
-        this.root.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.root = new IdentifyExercisePanel(project, executor, this, this::doOKAction, multiple);
+        this.root.setPreferredSize(new Dimension(WIDTH, multiple ? HEIGHT_MULTIPLE : HEIGHT));
         this.setTitle(DodonaBundle.message("dialog.select_exercise.title"));
         this.verifyOKAction();
         this.init();
@@ -74,16 +86,18 @@ public final class IdentifyExerciseDialog extends DialogWrapper implements Ident
     }
 
     /**
-     * Gets the selected exercise.
+     * Gets the selected exercises.
      *
-     * @return the exercise if selected
+     * @return the identified exercises, empty if nothing is selected
      */
     @Nonnull
-    public Optional<FullIdentification> getSelectedExercise() {
-        return Optional.ofNullable(this.selectedCourse)
-                .flatMap(course -> Optional.ofNullable(this.selectedSeries)
-                        .flatMap(series -> Optional.ofNullable(this.selectedExercise)
-                                .map(exercise -> new FullIdentification(course, series, exercise))));
+    public List<FullIdentification> getSelectedExercises() {
+        if (this.selectedCourse == null || this.selectedSeries == null) {
+            return List.of();
+        }
+        return this.selectedExercises.stream()
+                .map(exercise -> new FullIdentification(this.selectedCourse, this.selectedSeries, exercise))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -93,8 +107,8 @@ public final class IdentifyExerciseDialog extends DialogWrapper implements Ident
     }
 
     @Override
-    public void onExerciseSelected(@Nullable final Exercise selected) {
-        this.selectedExercise = selected;
+    public void onExercisesSelected(final List<? extends Exercise> selected) {
+        this.selectedExercises = selected;
         this.verifyOKAction();
     }
 
@@ -109,6 +123,6 @@ public final class IdentifyExerciseDialog extends DialogWrapper implements Ident
      */
     private void verifyOKAction() {
         this.setOKActionEnabled(
-                this.selectedCourse != null && this.selectedExercise != null && this.selectedSeries != null);
+                this.selectedCourse != null && !this.selectedExercises.isEmpty() && this.selectedSeries != null);
     }
 }

@@ -54,14 +54,16 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
      * @param executor     request executor
      * @param listener     listener to call upon selection
      * @param confirmation handler to call upon confirmation
+     * @param multiple     whether multiple exercises can be selected
      */
     IdentifyExercisePanel(
             final Project project,
             final DodonaExecutorHolder executor,
             final IdentificationListener listener,
-            final Runnable confirmation) {
+            final Runnable confirmation,
+            final boolean multiple) {
         super(project);
-        this.content = new IdentifyExercisePanelContent(this, confirmation);
+        this.content = new IdentifyExercisePanelContent(this, confirmation, multiple);
         this.executor = executor;
         this.listener = listener;
         this.initialize();
@@ -135,8 +137,9 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
     }
 
     @Override
-    public void onExerciseSelected(@Nullable final Exercise selected) {
-        this.listener.onExerciseSelected(selected);
+    public void onExercisesSelected(final List<? extends Exercise> selected) {
+        this.content.syncSelectAll();
+        this.listener.onExercisesSelected(selected);
     }
 
     @Override
@@ -148,6 +151,7 @@ final class IdentifyExercisePanel extends ContentPanelBase<IdentifyExercisePanel
         // Disable the exercise selection and clear the options.
         this.content.getExercisesList().setEnabled(false);
         this.content.getExercisesList().setResources(List.of());
+        this.content.syncSelectAll();
 
         // No series was selected.
         if (selected == null) {

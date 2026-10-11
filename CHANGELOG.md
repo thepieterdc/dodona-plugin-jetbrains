@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- When creating exercises, multiple exercises (or all exercises of a series) can now be selected at once.
+
 ### Changed
 
 - Bumped all dependencies

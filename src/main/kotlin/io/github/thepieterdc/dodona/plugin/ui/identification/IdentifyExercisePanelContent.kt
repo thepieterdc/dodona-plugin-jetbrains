@@ -10,6 +10,7 @@
 package io.github.thepieterdc.dodona.plugin.ui.identification
 
 import com.intellij.ui.ScrollPaneFactory
+import com.intellij.ui.components.JBCheckBox
 import com.intellij.ui.dsl.builder.Align
 import com.intellij.ui.dsl.builder.AlignX
 import com.intellij.ui.dsl.builder.AlignY
@@ -33,12 +34,14 @@ import javax.swing.SwingConstants
 /**
  * Panel that contains comboboxes to identify an exercise.
  */
-internal class IdentifyExercisePanelContent(listener: IdentificationListener, confirmation: Runnable) :
+internal class IdentifyExercisePanelContent(listener: IdentificationListener, confirmation: Runnable, multiple: Boolean) :
     JPanel(BorderLayout()),
     Scrollable {
     val courseComboBox = CourseComboBox(listener::onCourseSelected)
-    val exercisesList = ExercisesList(confirmation, listener::onExerciseSelected)
+    val exercisesList = ExercisesList(confirmation::run, listener::onExercisesSelected, multiple)
     val seriesComboBox = SeriesComboBox(listener::onSeriesSelected)
+
+    private val selectAllCheckBox = JBCheckBox(DodonaBundle.message("dialog.select_exercise.select_all"))
 
     private val courseSelectionPanel = JPanel(CardLayout())
     private val exerciseSelectionPanel = JPanel(CardLayout())
@@ -54,6 +57,11 @@ internal class IdentifyExercisePanelContent(listener: IdentificationListener, co
         seriesSelectionPanel.add(seriesComboBox, SELECT_SERIES)
         seriesSelectionPanel.add(createLoadingPanel(), SELECT_LOADING)
 
+        selectAllCheckBox.isEnabled = false
+        selectAllCheckBox.addActionListener {
+            if (selectAllCheckBox.isSelected) exercisesList.selectAll() else exercisesList.clearSelection()
+        }
+
         add(
             panel {
                 row {
@@ -68,6 +76,12 @@ internal class IdentifyExercisePanelContent(listener: IdentificationListener, co
                     label(DodonaBundle.message("dialog.select_exercise.exercise")).align(AlignY.TOP)
                     cell(exerciseSelectionPanel).align(Align.FILL)
                 }.layout(RowLayout.PARENT_GRID).resizableRow()
+                if (multiple) {
+                    row {
+                        label("")
+                        cell(selectAllCheckBox)
+                    }.layout(RowLayout.PARENT_GRID)
+                }
             },
             BorderLayout.CENTER,
         )
@@ -85,6 +99,12 @@ internal class IdentifyExercisePanelContent(listener: IdentificationListener, co
 
     override fun getScrollableTracksViewportHeight() = true
 
+    /** Synchronises the "select all" checkbox with the current selection. */
+    fun syncSelectAll() {
+        selectAllCheckBox.isEnabled = exercisesList.isEnabled && exercisesList.model.size > 0
+        selectAllCheckBox.isSelected = exercisesList.isAllSelected
+    }
+
     /** Creates a small loading panel. */
     private fun createLoadingPanel(): JComponent {
         val loadingPanel = JPanel(BorderLayout())
@@ -98,7 +118,9 @@ internal class IdentifyExercisePanelContent(listener: IdentificationListener, co
 
     /** Sets the loading status of the exercises. */
     fun setExercisesLoading(loading: Boolean) =
-        PanelUtils.showCard(exerciseSelectionPanel, if (loading) SELECT_LOADING else SELECT_EXERCISES)
+        PanelUtils.showCard(exerciseSelectionPanel, if (loading) SELECT_LOADING else SELECT_EXERCISES).also {
+            syncSelectAll()
+        }
 
     /** Sets the loading status of the series. */
     fun setSeriesLoading(loading: Boolean) =

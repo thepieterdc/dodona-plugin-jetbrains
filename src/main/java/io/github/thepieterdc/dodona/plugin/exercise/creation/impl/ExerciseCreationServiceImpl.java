@@ -26,6 +26,7 @@ import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
 import io.github.thepieterdc.dodona.plugin.exercise.creation.ExerciseCreationService;
 import io.github.thepieterdc.dodona.plugin.exercise.naming.ExerciseNamingService;
 import io.github.thepieterdc.dodona.resources.activities.Exercise;
+import java.util.Optional;
 import javax.annotation.Nonnull;
 import org.jetbrains.annotations.Nls;
 
@@ -50,9 +51,31 @@ public class ExerciseCreationServiceImpl implements ExerciseCreationService {
 
     @Override
     public VirtualFile create(final PsiDirectory directory, final FullIdentification identification) {
-        // Generate a filename.
-        final String filename = this.getFileName(directory, identification.getExercise());
+        return this.createFile(directory, identification, this.getFileName(directory, identification.getExercise()));
+    }
 
+    @Nonnull
+    @Override
+    public Optional<VirtualFile> createWithoutPrompt(
+            final PsiDirectory directory, final FullIdentification identification) {
+        final String filename =
+                this.naming.generateFileName(identification.getExercise()).orElse(null);
+        if (filename == null || filename.trim().isEmpty() || directory.findFile(filename) != null) {
+            return Optional.empty();
+        }
+        return Optional.of(this.createFile(directory, identification, filename));
+    }
+
+    /**
+     * Creates the file with the given name.
+     *
+     * @param directory      the directory in which the file should be created
+     * @param identification the exercise identification
+     * @param filename       the name of the file
+     * @return the created file
+     */
+    private VirtualFile createFile(
+            final PsiDirectory directory, final FullIdentification identification, final String filename) {
         // Determine the file type.
         final FileType fileType = FileTypeRegistry.getInstance().getFileTypeByFileName(filename);
 

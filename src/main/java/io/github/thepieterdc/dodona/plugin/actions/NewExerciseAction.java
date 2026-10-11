@@ -23,8 +23,12 @@ import io.github.thepieterdc.dodona.plugin.DodonaBundle;
 import io.github.thepieterdc.dodona.plugin.exceptions.CancelledException;
 import io.github.thepieterdc.dodona.plugin.exercise.FullIdentification;
 import io.github.thepieterdc.dodona.plugin.exercise.creation.ExerciseCreationService;
+import io.github.thepieterdc.dodona.plugin.notifications.NotificationService;
+import io.github.thepieterdc.dodona.plugin.notifications.SendableNotification;
 import io.github.thepieterdc.dodona.plugin.tasks.IdentifyTask;
 import io.github.thepieterdc.dodona.plugin.ui.Icons;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.jetbrains.annotations.NotNull;
@@ -49,21 +53,52 @@ public class NewExerciseAction extends AnAction implements DumbAware {
         final IdeView view = Objects.requireNonNull(e.getData(LangDataKeys.IDE_VIEW));
 
         try {
-            // Prompt the user to identify the exercise.
-            final FullIdentification identification = IdentifyTask.create(Objects.requireNonNull(e.getProject()))
-                    .execute()
-                    .orElseThrow(CancelledException::new);
+            // Prompt the user to identify the exercise(s).
+            final List<FullIdentification> identifications =
+                    IdentifyTask.createMultiple(project).execute();
+            if (identifications.isEmpty()) {
+                throw new CancelledException();
+            }
 
             // Get the current directory.
             final PsiDirectory directory =
                     Optional.ofNullable(view.getOrChooseDirectory()).orElseThrow(CancelledException::new);
 
-            // Create the file.
-            final VirtualFile created =
-                    ExerciseCreationService.getInstance(project).create(directory, identification);
+            final ExerciseCreationService creation = ExerciseCreationService.getInstance(project);
+            final FileEditorManager editors = FileEditorManager.getInstance(project);
 
-            // Open the created file.
-            FileEditorManager.getInstance(project).openFile(created, true);
+            if (identifications.size() == 1) {
+                // Create the file, prompting for a name.
+                editors.openFile(creation.create(directory, identifications.get(0)), true);
+                return;
+            }
+
+            // Create all files, skipping the ones that already exist.
+            final List<VirtualFile> created = new ArrayList<>();
+            final List<String> skipped = new ArrayList<>();
+            for (final FullIdentification identification : identifications) {
+                final Optional<VirtualFile> file = creation.createWithoutPrompt(directory, identification);
+                if (file.isPresent()) {
+                    created.add(file.get());
+                } else {
+                    skipped.add(identification.getExercise().getName());
+                }
+            }
+
+            if (!created.isEmpty()) {
+                editors.openFile(created.get(0), true);
+            }
+
+            final String title = DodonaBundle.message("creation.series.title");
+            final NotificationService notifications = NotificationService.getInstance(project);
+            if (skipped.isEmpty()) {
+                notifications.send(SendableNotification.info(
+                        title, DodonaBundle.message("creation.series.success", created.size())));
+            } else {
+                notifications.send(SendableNotification.error(
+                        title,
+                        DodonaBundle.message("creation.series.skipped", skipped.size(), String.join(", ", skipped))));
+            }
         } catch (final CancelledException ex) {
             // Ignore.
         } catch (final Exception ex) {
