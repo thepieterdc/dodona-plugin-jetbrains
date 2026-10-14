@@ -53,7 +53,7 @@ class ExercisesList(confirmed: () -> Unit, selected: (List<Exercise>) -> Unit, m
 
     override fun getSelectedResource(): Optional<Exercise> = Optional.ofNullable(selectedValue)
 
-    override fun setResources(resources: Collection<out Exercise>) {
+    override fun setResources(resources: Collection<Exercise>) {
         // Change the empty text based on the current state.
         setEmptyText(
             DodonaBundle.message(
