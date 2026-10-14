@@ -18,7 +18,7 @@ import io.github.thepieterdc.dodona.resources.Course
  */
 class CourseComboBox(listener: ItemSelectedListener<in Course>) :
     AbstractResourceComboBox<Course>(CourseNameRenderer(), listener) {
-    override fun setResources(resources: Collection<out Course>) {
+    override fun setResources(resources: Collection<Course>) {
         super.setResources(resources.sortedDescending())
     }
 }
