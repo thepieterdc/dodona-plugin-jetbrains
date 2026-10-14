@@ -12,7 +12,7 @@ jobs:
 
     # Dependency updates and PRs explicitly labeled "skip-changelog" are exempt.
     if: >-
-      github.actor != 'dependabot[bot]' &&
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
       !contains(github.event.pull_request.labels.*.name, 'skip-changelog')
 
     runs-on: ubuntu-latest
