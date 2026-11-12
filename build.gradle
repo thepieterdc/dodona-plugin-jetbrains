@@ -8,9 +8,9 @@ plugins {
     id 'jacoco'
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '2.4.21'
-    id 'org.jetbrains.intellij.platform' version '2.19.0'
+    id 'org.jetbrains.intellij.platform' version '2.20.1'
     id 'org.jetbrains.changelog' version '2.5.0'
-    id 'com.diffplug.spotless' version '8.10.4'
+    id 'com.diffplug.spotless' version '8.11.0'
 }
 
 group 'io.github.thepieterdc.dodona'
@@ -33,7 +33,7 @@ spotless {
     java {
         target 'src/**/*.java'
         targetExclude '**/BuildConfig.java'
-        palantirJavaFormat('2.102.0')
+        palantirJavaFormat('2.103.0')
         removeUnusedImports()
         trimTrailingWhitespace()
         endWithNewline()
@@ -174,7 +174,7 @@ jacocoTestReport {
 }
 
 wrapper {
-    gradleVersion = '9.8.1'
+    gradleVersion = '9.9.1'
 }
 
 static def getLatestEAPBuild(String product) {
