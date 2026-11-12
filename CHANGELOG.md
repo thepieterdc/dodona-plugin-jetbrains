@@ -15,6 +15,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- Keep the submit button in the main toolbar after restarting the IDE.
+
 ### Security
 
 ## [2.3.0] - 2026-10-11
