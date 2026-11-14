@@ -15,9 +15,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
-- Keep the submit button in the main toolbar after restarting the IDE.
-
 ### Security
+
+## [2.3.1] - 2026-11-12
+
+### Fixed
+
+- Keep the submit button in the main toolbar after restarting the IDE.
 
 ## [2.3.0] - 2026-10-11
 
@@ -38,5 +42,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Fixed a potential race condition with loading series.
 - Plugin now sends the correct language of the user to Dodona.
 
-[Unreleased]: https://github.com/thepieterdc/dodona-plugin-jetbrains/compare/v2.3.0...HEAD
+[Unreleased]: https://github.com/thepieterdc/dodona-plugin-jetbrains/compare/v2.3.1...HEAD
+[2.3.1]: https://github.com/thepieterdc/dodona-plugin-jetbrains/compare/v2.3.0...v2.3.1
 [2.3.0]: https://github.com/thepieterdc/dodona-plugin-jetbrains/commits/v2.3.0
